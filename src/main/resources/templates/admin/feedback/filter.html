@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content" th:remove="tag">
+            <div id="sys_filter" class="form-inline" style="padding-bottom:10px;">
+                <div class="input-group">
+                    <span class="input-group-addon">内容</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_content'/>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">类型</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_type'>
+                        <option value="">=全部=</option>
+                        <option value="text">文本</option>
+                        <option value="image">图片</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">状态</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_status'>
+                        <option value="">=全部=</option>
+                        <option value="1">显示</option>
+                        <option value="0">隐藏</option>
+                    </select>
+                </div>
+
+                <span><button type="button" class="btn btn-primary btn-sm" id="beginFilter">查询</button></span>
+            </div>
+        </div>
+    </body>
+</html>

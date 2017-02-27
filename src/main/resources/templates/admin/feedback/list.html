@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>微信反馈列表</title>
+		<script type="text/javascript">
+			$(function() {
+				$(".delete-obj-href").deleteFun();
+			});
+		</script>
+		<style>
+			.head-img {border-radius:5px; width:50px;}
+		</style>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;微信反馈列表<small>（<span th:text="${datas.getTotalElements()}"></span>）</small></h3>
+			<div th:replace="admin/feedback/nav :: content" th:remove="tag"></div>
+		</div>
+
+		<div th:replace="admin/feedback/filter :: content" th:remove="tag"></div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>头像</th>
+						<th>昵称</th>
+						<th>内容</th>
+						<th>状态</th>
+						<th>回复</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+
+				<tr th:each="obj : ${datas}">
+					<td><a th:href="${obj.headimgurl}" target="_blank"><img th:src="${obj.headimgurl}" class="head-img"/></a></td>
+					<td th:text="${obj.nickname}"></td>
+					<td>
+						<p th:text="${obj.createTime}"></p>
+						<span th:if="${obj.type eq 'text'}" th:utext="${obj.content}"></span>
+						<span th:if="${obj.type eq 'image'}">
+							<a th:href="${obj.picUrl}" target="_blank"><img th:src="${obj.picUrl}" class="head-img" style="width:150px;"/></a>
+						</span>
+					</td>
+					<td>
+						<div th:remove="tag" th:switch="${obj.status}">
+							<span th:case="'1'">显示</span>
+							<span th:case="'0'" style="color:#F00">隐藏</span>
+						</div>
+					</td>
+					<td>
+						<span th:if="${obj.reply eq null}" style="color:#F00">未回复</span>
+						<span th:if="${obj.reply ne null}" th:remove="tag">
+							<p th:text="${obj.replyTime}"></p>
+							<span th:utext="${obj.reply}"></span>
+						</span>
+					</td>
+					<td>
+						<div class="action-buttons">
+							<a class="green auth" sn="AdminFeedbackController.update" title="修改" th:href="'/admin/feedback/update/'+${obj.id}">
+								<i class="fa fa-pencil"></i>
+							</a>
+						</div>
+					</td>
+				</tr>
+			</table>
+
+			<div th:include="fragments/page :: pager" th:remove="tag"></div>
+		</div>
+	</div>
+</body>
+</html>

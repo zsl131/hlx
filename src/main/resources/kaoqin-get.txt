@@ -1,0 +1,1 @@
+{status:1,info:"ok",data:[{id:"1001",do:"update",data:"user",ccid:1,name:"钟述林",passwd:"e10adc3949ba59abbe56e057f20f883e",card:"65852",deptid:2,auth:14, faceexist:1}]}

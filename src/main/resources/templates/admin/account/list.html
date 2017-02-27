@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>微信用户列表</title>
+		<script type="text/javascript">
+			$(function() {
+				$(".delete-obj-href").deleteFun();
+			});
+		</script>
+		<style>
+			.head-img {border-radius:5px; width:50px;}
+		</style>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;微信用户列表<small>（<span th:text="${parent eq null ? '根菜单': parent.name}"></span>）</small></h3>
+			<div th:replace="admin/account/nav :: content" th:remove="tag"></div>
+		</div>
+
+		<div th:replace="admin/account/filter :: content" th:remove="tag"></div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>头像</th>
+						<th>昵称</th>
+						<th>状态</th>
+						<th>类型</th>
+						<th>日期</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+
+				<tr th:each="obj : ${datas}">
+					<td><a th:href="${obj.headimgurl}" target="_blank"><img th:src="${obj.headimgurl}" class="head-img"/></a></td>
+					<td th:text="${obj.nickname}"></td>
+					<td>
+						<div th:remove="tag" th:switch="${obj.status}">
+							<span th:case="'1'">关注</span>
+							<span th:case="'0'" style="color:#F00">取消</span>
+						</div>
+					</td>
+					<td>
+						<div th:remove="tag" th:switch="${obj.type}">
+							<span th:case="'0'">网友</span>
+							<span th:case="'1'">学生</span>
+							<span th:case="'2'">科任老师</span>
+							<span th:case="'5'">班主任</span>
+							<span th:case="'6'">家长</span>
+							<span th:case="'10'">管理员</span>
+						</div>
+					</td>
+					<td th:text="${obj.createTime}"></td>
+					<td>
+						<div class="action-buttons">
+							<a class="delete-obj-href red auth" sn="AdminAccountController.update" th:title="'确定同步【'+${obj.nickname}+'】吗？'" th:href="'/admin/account/update/'+${obj.id}">
+								<i class="fa fa-pencil"></i>
+							</a>
+						</div>
+					</td>
+				</tr>
+			</table>
+
+			<div th:include="fragments/page :: pager" th:remove="tag"></div>
+		</div>
+	</div>
+</body>
+</html>

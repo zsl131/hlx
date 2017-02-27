@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+	<title>回复微信反馈</title>
+	<style>
+		.head-img {border-radius:5px; width:30px;}
+	</style>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+	<div class="header lighter smaller blue">
+		<h3><i class="fa fa-plus"></i>&nbsp;回复微信反馈</h3>
+		<div th:replace="admin/feedback/nav :: content" th:remove="tag"></div>
+	</div>
+
+	<form method="POST" th:object="${feedback}" id="dataForm">
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">反馈者：</div>
+				<div class="form-control">
+					<a th:href="${feedback.headimgurl}" target="_blank"><img th:src="${feedback.headimgurl}" class="head-img"/></a>
+					<span th:text="${feedback.nickname}"></span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">反馈内容：</div>
+				<div class="form-control" th:utext="${feedback.content}"></div>
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">回复：</div>
+				<input name="reply" type="text" class="form-control" th:value="${feedback.reply}" placeholder="请输入回复内容" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group input-group-lg">
+				<div class="input-group-addon">状态：</div>
+				<div class="form-control">
+					<input type="radio" name="status" value="1" id="status_1" th:checked="${feedback.status == '1'}?'checked'"/><label for="status_1">显示</label>
+					<input type="radio" name="status" value="0" id="status_0" th:checked="${feedback.status == '0'}?'checked'"/><label for="status_0">隐藏</label>
+				</div>
+			</div>
+		</div>
+
+		<input type="hidden" name="token" value="${session.token}"/>
+		<button type="submit" class="btn btn-primary">确定提交</button>
+	</form>
+</div>
+</body>
+</html>

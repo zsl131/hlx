@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>微信首页</title>
+    <script src="/weixin/weixin-index.js"></script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    ===========
+    <button id="abc">点击分享</button>
+    <button id="getPic">取照片</button>
+    <button id="getLocation">获取当前地理位置</button>
+
+    <button id="openLocation">打开地图（显示当前位置）</button>
+    <button id="qrCode">微信扫一扫</button>
+
+
+    <div class="weui-tab" style="border:1px red solid;width:100%; margin:0px;">
+        <div class="weui-tab__panel">
+
+        </div>
+        <div class="weui-tabbar">
+            <a href="javascript:;" class="weui-tabbar__item weui-bar__item_on">
+                <img src="./images/icon_tabbar.png" alt="" class="weui-tabbar__icon"/>
+                <p class="weui-tabbar__label">微信</p>
+            </a>
+            <a href="javascript:;" class="weui-tabbar__item">
+                <img src="./images/icon_tabbar.png" alt="" class="weui-tabbar__icon"/>
+                <p class="weui-tabbar__label">通讯录</p>
+            </a>
+            <a href="javascript:;" class="weui-tabbar__item">
+                <img src="./images/icon_tabbar.png" alt="" class="weui-tabbar__icon"/>
+                <p class="weui-tabbar__label">发现</p>
+            </a>
+            <a href="javascript:;" class="weui-tabbar__item">
+                <img src="./images/icon_tabbar.png" alt="" class="weui-tabbar__icon"/>
+                <p class="weui-tabbar__label">我</p>
+            </a>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

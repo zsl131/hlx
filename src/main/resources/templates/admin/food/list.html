@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>食品列表</title>
+		<script type="text/javascript">
+			$(function() {
+				$(".delete-obj-href").deleteFun();
+			});
+		</script>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;食品列表（<span th:value="${datas.getTotalElements()}"></span>）</h3>
+			<div th:replace="admin/food/nav :: content" th:remove="tag"></div>
+		</div>
+
+		<div th:replace="admin/food/filter :: content" th:remove="tag"></div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>图片</th>
+						<th>所在分类</th>
+						<th>名称</th>
+						<th>点评</th>
+						<th>点赞</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+
+				<tr th:each="obj : ${datas}">
+					<td>
+						<a th:href="${obj.picPath}" target="_blank"><img th:src="${obj.picPath}" style="width:120px"/></a>
+					</td>
+					<td>
+						<a th:href="'/admin/food/list?filter_cateId=eq-'+${obj.cateId}" th:text="${obj.cateName}"></a>
+					</td>
+					<td th:text="${obj.name}"></td>
+					<td th:text="${obj.commentCount}">0</td>
+					<td th:text="${obj.goodCount}">0</td>
+					<td>
+						<div class="action-buttons">
+							<a class="green auth" sn="AdminFoodController.update" title="修改" th:href="'/admin/food/update/'+${obj.id}">
+								<i class="fa fa-pencil"></i>
+							</a>
+
+							<a class="delete-obj-href red auth" sn="AdminFoodController.delete" th:title="'此操作不可逆，确定删除【'+${obj.name}+'】吗？'" th:href="'/admin/food/delete/'+${obj.id}">
+								<i class="fa fa-remove"></i>
+							</a>
+						</div>
+					</td>
+				</tr>
+			</table>
+
+			<div th:include="fragments/page :: pager" th:remove="tag"></div>
+		</div>
+	</div>
+</body>
+</html>

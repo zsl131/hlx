@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content">
+            <div class="ace-settings-container" id="ace-settings-container">
+                <ul class="pagination">
+                    <li><a class="auth" sn="AdminWxMenuController.gen" href="/admin/wxMenu/gen"><span class="glyphicon glyphicon-th-list"></span> 生成微信菜单</a></li>
+                    <li><a class="auth" sn="AdminWxMenuController.list" href="/admin/wxMenu/list"><span class="glyphicon glyphicon-th-list"></span> 微信菜单列表</a></li>
+                    <li th:if="${parent ne null}"><a class="auth" sn="AdminWxMenuController.add" th:href="@{/admin/wxMenu/add(pid=${parent.id})}"><span class="fa fa-plus"></span> 添加微信菜单</a></li>
+                    <li th:if="${parent eq null}"><a class="auth" sn="AdminWxMenuController.add" th:href="@{/admin/wxMenu/add}"><span class="fa fa-plus"></span> 添加微信菜单</a></li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>

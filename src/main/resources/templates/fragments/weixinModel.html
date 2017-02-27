@@ -1,0 +1,55 @@
+<!DOCTYPE html >
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="mymodel" style="background:#FFF;">
+
+<head th:fragment="head">
+    <title>微信首页</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link rel="icon" type="image/x-icon" href="/favicon.png"/>
+    <!-- 默认360 兼容模式 -->
+    <meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <script type="text/javascript" src="/basic/js-lib/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="/basic/bootstrap3/js/bootstrap.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/basic/bootstrap3/css/bootstrap.min.css"/>
+
+    <script type="text/javascript" src="/basic/admin/myself/public.js"></script>
+
+    <!-- Font Awesome-->
+    <link rel="stylesheet" href="/basic/font-awesome-4.7.0/css/font-awesome.min.css" />
+
+    <script type="text/javascript" src="/basic/admin/myself/delete.js"></script>
+    <script type="text/javascript" src="/basic/admin/myself/auth.js"></script>
+    <script type="text/javascript" src="/basic/admin/myself/cms.admin.js"></script>
+    <script type="text/javascript" src="/basic/admin/myself/my_filter.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="/basic/admin/main.css"/>
+    <link type="text/css" rel="stylesheet" href="/basic/admin/form-page.css"/>
+    <link type="text/css" rel="stylesheet" href="/basic/admin/list-page.css"/>
+    <link type="text/css" rel="stylesheet" href="/basic/admin/nav.css"/>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script type="text/javascript" src="/weixin/wxjs-config.js"></script>
+    <script type="text/javascript" src="/weixin/wxjs-fun.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="/weixin/weui-1.1.1/weui.min.css"/>
+
+    <script type="text/javascript">
+        $(function() {
+            $(".logout-href").deleteFun({title:'退出提示',msg:'确定退出系统吗？'});
+        });
+    </script>
+</head>
+<body style="background:#FFF;">
+<div class="container-fluid" style="padding:0px;">
+        <div th:include="this :: content"></div>
+</div>
+
+<div th:each="arg : ${args}" class="search-filter-div">
+    <input th:value="${arg.value}" type="hidden" th:attr="targetId=${arg.key}"/>
+</div>
+</body>
+</html>

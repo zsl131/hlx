@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content">
+            <div class="ace-settings-container" id="ace-settings-container">
+                <ul class="pagination">
+                    <li><a class="auth" sn="AdminFoodController.list" href="/admin/food/list"><span class="glyphicon glyphicon-th-list"></span> 食品列表</a></li>
+                    <li><a class="auth" sn="AdminFoodController.add" href="/admin/food/add"><span class="fa fa-plus"></span> 添加食品</a></li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>
