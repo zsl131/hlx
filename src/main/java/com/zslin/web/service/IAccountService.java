@@ -28,4 +28,6 @@ public interface IAccountService extends BaseRepository<Account, Integer>, JpaSp
     @Modifying
     @Transactional
     void updateFollow(Integer id, Integer followId, String followName);
+
+    Account findByPhone(String phone);
 }

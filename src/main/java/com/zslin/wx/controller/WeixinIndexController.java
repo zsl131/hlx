@@ -1,5 +1,6 @@
 package com.zslin.wx.controller;
 
+import com.zslin.web.service.ICategoryService;
 import com.zslin.web.service.IGalleryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,9 +20,13 @@ public class WeixinIndexController {
     @Autowired
     private IGalleryService galleryService;
 
+    @Autowired
+    private ICategoryService categoryService;
+
     @GetMapping(value = "index")
     public String index(Model model, HttpServletRequest request) {
 
+        model.addAttribute("categoryList", categoryService.findByOrder()); //分类
         model.addAttribute("galleryList", galleryService.findShow()); //微信画廊
         return "weixin/index/index";
     }

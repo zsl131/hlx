@@ -4,6 +4,7 @@ import com.zslin.basic.tools.NormalTools;
 import com.zslin.kaoqin.model.Company;
 import com.zslin.kaoqin.model.Worker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +39,27 @@ public class GetJsonTools {
             if(index++<workerList.size()-1) {sb.append(",");}
         }
         return sb.toString();
+    }
+
+    public static String buildDeleteWorkerJson(Integer... ids) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("{id:\"1006\",do:\"delete\",data:[\"user\",\"fingerprint\",\"face\",\"headpic\",\"clockin\",\"pic\"],ccid:[");
+        int i=0;
+        for(Integer id:ids) {
+            sb.append(id);
+            if(i++<ids.length-1) {sb.append(",");}
+        }
+        sb.append("]}");
+        return sb.toString();
+    }
+
+    public static String buildWorkerJson(Worker... workers) {
+        if(workers==null || workers.length<=0) {return null;}
+        List<Worker> list = new ArrayList<>();
+        for(Worker w : workers) {
+            list.add(w);
+        }
+        return buildWorkerJson(list);
     }
 
     /** 生成部门Json数据，写死，只有这两个部门 */

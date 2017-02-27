@@ -18,12 +18,12 @@ public class Company {
     /**
      * 表示无新数据请求服务器间隔，单位秒
      */
-    private Integer delay;
+    private Integer delay=50;
 
     /**
      * 当请求服务器发生错误时，再次发送请求的间隔，单位秒
      */
-    private Integer errdelay;
+    private Integer errdelay=10;
 
     public Integer getId() {
         return id;

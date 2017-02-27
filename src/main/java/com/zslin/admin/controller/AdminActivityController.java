@@ -3,6 +3,7 @@ package com.zslin.admin.controller;
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.annotations.Token;
 import com.zslin.basic.repository.SimplePageBuilder;
+import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
@@ -27,7 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 @AdminAuth(name = "活动管理", psn = "应用管理", orderNum = 4, porderNum = 1, pentity = 0, icon = "fa fa-gamepad")
 public class AdminActivityController {
 
-
     @Autowired
     private IActivityService activityService;
 
@@ -35,7 +35,7 @@ public class AdminActivityController {
     @AdminAuth(name = "活动管理", type = "1", orderNum = 1, icon = "fa fa-gamepad")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<Activity> datas = activityService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
-                SimplePageBuilder.generate(page));
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
         model.addAttribute("datas", datas);
         return "admin/activity/list";
     }

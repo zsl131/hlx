@@ -1,15 +1,14 @@
 package com.zslin.kaoqin.controller;
 
-import com.zslin.kaoqin.model.Company;
 import com.zslin.kaoqin.service.ICompanyService;
 import com.zslin.kaoqin.tools.GetJsonTools;
 import com.zslin.kaoqin.tools.KaoqinFileTools;
+import com.zslin.kaoqin.tools.PostJsonTools;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/2/26 22:37.
@@ -19,20 +18,23 @@ import javax.servlet.http.HttpServletRequest;
 public class MainController {
 
     @Autowired
+    private PostJsonTools postJsonTools;
+
+    @Autowired
     private ICompanyService companyService;
 
+    //设备向服务端推送数据
+    @PostMapping(value = "post")
+    public String post(String sn, @RequestBody String json) {
+        System.out.println("=======sn:"+sn);
+        System.out.println(json);
+        String res = postJsonTools.handlerPost(json);
+        return res;
+    }
+
+    //设备从服务端下载数据
     @GetMapping(value = "get")
     public String get(String sn, String requesttime, HttpServletRequest request) {
-
-//        System.out.println(requesttime+"==========="+sn);
-//        Company company = new Company();
-//        company.setId(1);
-//        company.setName("玉盘珍");
-//        company.setCompany("昭通市玉盘珍餐饮有限公司");
-//        company.setDelay(20);
-//        company.setErrdelay(30);
-//        String configJson = GetJsonTools.buildConfigJson(company);
-//        System.out.println(configJson);
 
         String configJson = GetJsonTools.buildDataJson(GetJsonTools.buildConfigJson(companyService.loadOne()));
 
@@ -45,10 +47,6 @@ public class MainController {
         System.out.println(json);
         KaoqinFileTools.setFileContext(configJson);
         return json;
-
-//        return configJson;
-//        return "{status:1,info:\"ok\",data:[{id:\"1004\",do:\"update\",data:\"dept\",dept:[{id:10,pid:0,name:\"财务部\"},{id:11,pid:0,name:\"研发部\"}]}]";
-//        return "{status:1,info:\\\"ok\\\",data:[{{id:\"1001\",do:\"update\",data:\"user\",ccid:1236,name:\"张三\",passwd:\"123456\",card:\"65852\",deptid:11,auth:14, faceexist:1}]";
     }
 
     //获取Unix时间戳

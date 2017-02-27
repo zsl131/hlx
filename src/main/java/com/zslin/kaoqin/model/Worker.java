@@ -21,7 +21,11 @@ public class Worker {
     @Column(name = "dep_id")
     private Integer depId;
 
-    private Integer auth;
+    private Integer auth=0;
+
+    private String identity;
+
+    private String phone;
 
     @Lob
     private String finger1;
@@ -34,6 +38,54 @@ public class Worker {
 
     @Lob
     private String face2;
+
+    private String openid;
+
+    public String getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    @Column(name = "account_id")
+    private Integer accountId;
+
+    /** 微信端头像 */
+    private String headimgurl;
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
+
+    public Integer getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
+    }
+
+    public String getHeadimgurl() {
+        return headimgurl;
+    }
+
+    public void setHeadimgurl(String headimgurl) {
+        this.headimgurl = headimgurl;
+    }
 
     public Integer getId() {
         return id;

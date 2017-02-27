@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content">
+            <div class="page__bd page__bd_spacing">
+                <div class="weui-flex" style="margin-top:10px;">
+                    <div class="weui-flex__item" th:each="cate, cateVs : ${categoryList}" th:if="${cateVs.count le 3}">
+                        <div class="single-cate">
+                            <a href="">
+                                <img th:src="${cate.picPath}"/>
+                                <p th:text="${cate.name}"></p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="weui-flex">
+                    <div class="weui-flex__item" th:each="cate, cateVs : ${categoryList}" th:if="${cateVs.count gt 3}">
+                        <div class="single-cate">
+                            <a href="">
+                                <img th:src="${cate.picPath}"/>
+                                <p th:text="${cate.name}"></p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

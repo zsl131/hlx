@@ -6,66 +6,22 @@
       layout:decorator="fragments/weixinModel">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>微信首页</title>
+    <title>昭通汉丽轩</title>
     <script src="/weixin/weixin-index.js"></script>
+    <script src="/weixin/gallery/jssor.slider-22.2.10.mini.js"></script>
+    <script src="/weixin/gallery/main.js"></script>
+    <link type="text/css" rel="stylesheet" href="/weixin/main-index.css"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/gallery/main.css"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/wx-category.css"/>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
 
-    <div th:each="gallery : ${galleryList}">
-        <h1>====</h1>
-        <span class="weui-gallery__img" th:style="'background-image: url('+${gallery.picPath}+');'"></span>
-        <div class="weui-gallery__opr">
-            <a th:href="${gallery.url}" class="weui-gallery__del">
-                <i class="weui-icon-delete weui-icon_gallery-delete"></i>
-            </a>
-        </div>
-    </div>
+    <div th:replace="weixin/index/index-gallery :: content" th:remove="tag"></div>
+    <div th:replace="weixin/index/index-flex :: content" th:remove="tag"></div>
+    <div class="single-line"></div>
 
-    <h1 th:text="${#lists.size(galleryList)}"> </h1>
-    <div class="weui-flex">
-        <div class="weui-flex__item">
-            <div class="weui-gallery" style="width:100%; height:300px;">
-                <div th:each="gallery : ${galleryList}">
-                    <h1>====</h1>
-                    <span class="weui-gallery__img" th:style="'background-image: url('+${gallery.picPath}+');'"></span>
-                    <div class="weui-gallery__opr">
-                        <a th:href="${gallery.url}" class="weui-gallery__del">
-                            <i class="weui-icon-delete weui-icon_gallery-delete"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div class="weui-flex">
-        <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-        <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-    </div>
-    <div class="weui-flex">
-        <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-        <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-        <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-    </div>
-    <div class="weui-flex">
-        <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-        <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-        <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-        <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-    </div>
-
-
-
-
-    <!--===========
-    <button id="abc">点击分享</button>
-    <button id="getPic">取照片</button>
-    <button id="getLocation">获取当前地理位置</button>
-
-    <button id="openLocation">打开地图（显示当前位置）</button>
-    <button id="qrCode">微信扫一扫</button>-->
-
+    <div th:replace="weixin/wx-tabbar :: content" th:remove="tag"></div>
 </div>
 </body>
 </html>
