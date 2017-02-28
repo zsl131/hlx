@@ -16,7 +16,7 @@
 <body>
 	<div th:fragment="content" th:remove="tag">
 		<div class="header lighter smaller blue">
-			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;员工列表（<span th:value="${datas.getTotalElements()}"></span>）</h3>
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;员工列表（<span th:text="${datas.getTotalElements()}"></span>）</h3>
 			<div th:replace="admin/worker/nav :: content" th:remove="tag"></div>
 		</div>
 
@@ -37,7 +37,8 @@
 
 				<tr th:each="obj : ${datas}">
 					<td>
-						<a th:href="${obj.headimgurl}" target="_blank"><img th:src="${obj.headimgurl}" style="width:120px"/></a>
+						<a th:if="${obj.headimgurl ne NULL and obj.headimgurl ne ''}" th:href="${obj.headimgurl}" target="_blank"><img th:src="${obj.headimgurl}" style="width:120px"/></a>
+						<span th:if="${obj.openid eq NULL or obj.openid eq ''}" style="color:#F00;">未绑定微信</span>
 					</td>
 					<td th:text="${obj.name}"></td>
 					<td th:text="${obj.depId eq 1 ? '前厅':'后厨'}"></td>

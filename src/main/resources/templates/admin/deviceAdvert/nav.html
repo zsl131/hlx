@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content">
+            <div class="ace-settings-container" id="ace-settings-container">
+                <ul class="pagination">
+                    <li><a class="auth" sn="AdminDeviceAdvertController.list" href="/admin/deviceAdvert/list"><span class="glyphicon glyphicon-th-list"></span> 设备广告图片列表</a></li>
+                    <li><a class="auth" sn="AdminDeviceAdvertController.add" href="/admin/deviceAdvert/add"><span class="fa fa-plus"></span> 添加设备广告图片</a></li>
+                    <li><a class="delete-obj-href auth" sn="AdminDeviceAdvertController.send" th:title="'此操作不可逆，确定推送到设备吗？吗？'" href="/admin/deviceAdvert/send">
+                        <i class="fa fa-send"></i> 推送到设备
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>

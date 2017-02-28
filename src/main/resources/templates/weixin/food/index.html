@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>昭通汉丽轩</title>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-food.css"/>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="left-div">
+        <ul class="cate-ul">
+            <li th:class="${args[filter_cateId] eq NULL?'curClass':''}"><a href="/weixin/food/index">
+                <img src="/weixin/images/all.jpg"/>
+                <span>全部</span></a>
+            </li>
+            <li th:each="cate : ${cateList}" th:class="${cate.id+'' eq args[filter_cateId]?'curClass':''}">
+                <a th:href="'/weixin/food/index?filter_cateId=eq-'+${cate.id}">
+                    <img th:src="${cate.picPath}"/>
+                    <span th:text="${cate.name}"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="right-div">
+        <ul class="food-list">
+            <li th:each="food : ${datas}">
+                <div class="pic-div">
+                    <a th:href="@{/weixin/food/detail(id=${food.id})}"><img th:src="${food.picPath}"/></a>
+                </div>
+                <div class="name-div">
+                    <a th:href="@{/weixin/food/detail(id=${food.id})}" th:text="${food.name}"></a>
+                    <p class="remark">阿斯顿发</p>
+                    <p class="money">￥免费</p>
+                </div>
+                <div class="opt-div">====</div>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

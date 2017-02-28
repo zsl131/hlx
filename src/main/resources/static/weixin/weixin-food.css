@@ -1,0 +1,73 @@
+.left-div {
+    width:22%; background:#F3F3F3; height:100%; position:fixed; top:0px; left:0px;
+}
+
+.right-div {
+    width:76%; min-height:100%; overflow:auto; position:absolute; right:0px; top:0px;
+}
+
+ul.cate-ul {
+    width:100%; height:100%;
+}
+ul.cate-ul li {
+    height:16.6666%; border-bottom:1px #ddd solid; border-right:1px #ddd solid;
+}
+
+
+ul.cate-ul li a {
+    text-decoration:none;
+}
+ul.cate-ul li a img {
+    width:70%; margin-left:15%; border-radius:10px; margin-top:8px;
+}
+ul.cate-ul li a span {
+    width:100%; text-align:center; color:#777; float:left; margin-top:3px;
+}
+
+ul.cate-ul li.curClass {
+    background:#FFF; border-right:none;
+}
+
+ul.cate-ul li.curClass span {
+    font-weight:bold;
+}
+
+
+ul.food-list {
+
+}
+
+ul.food-list li {
+    width:100%; list-style:none; float:left; border-bottom:1px #e8e8e8 solid; margin-top:10px; padding-bottom:9px;
+}
+
+ul.food-list li a {
+    text-decoration:none;
+}
+
+ul.food-list li a img {
+    width:90%; border-radius:8px;
+}
+
+ul.food-list li div.pic-div {
+    width:40%; float:left;
+}
+ul.food-list li div.name-div {
+    width:40%; float:left;
+}
+
+ul.food-list li div.name-div a {
+    font-size:18px; color:#373838; font-family: "Microsoft YaHei" !important;font-family: '微软雅黑'; margin-top:4px; float:left; width:100%;
+}
+
+ul.food-list li div.name-div p.remark {
+    padding-top:8px; color:#9c9c9c; float:left; width:100%;
+}
+ul.food-list li div.name-div p.money {
+    color:#ff425d; float:left; width:100%;
+}
+
+
+ul.food-list li div.opt-div {
+    width:20%; float:left;
+}

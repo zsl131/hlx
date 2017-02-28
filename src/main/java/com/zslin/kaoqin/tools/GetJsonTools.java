@@ -2,6 +2,7 @@ package com.zslin.kaoqin.tools;
 
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.kaoqin.model.Company;
+import com.zslin.kaoqin.model.DeviceAdvert;
 import com.zslin.kaoqin.model.Worker;
 
 import java.util.ArrayList;
@@ -20,12 +21,10 @@ public class GetJsonTools {
     public static String buildConfigJson(Company company) {
         if(company==null) {return "";}
         StringBuffer sb = new StringBuffer();
-//        sb.append("{status:1,info:\"ok\",data:[");
         sb.append("{id:\"0\",do:\"update\",data:\"config\",name:\"").append(company.getName()).
-                append("\",company:\"").append(company.getCompany()).append("\",companyid:").
+                append("\",company:\"").append(company.getLongName()).append("\",companyid:").
                 append(company.getId()).append(",max:3000,function:65535,delay:").append(company.getDelay()).
-                append(",errdelay:").append(company.getErrdelay()).append(",timezone:+8,encrypt:0,expired:\"2055-12-10 12:10:10\"}}");
-//        sb.append("]}");
+                append(",errdelay:").append(company.getErrdelay()).append(",timezone:+8,encrypt:0,expired:\"2055-12-10 12:10:10\"}");
         return sb.toString();
     }
 
@@ -41,6 +40,18 @@ public class GetJsonTools {
         return sb.toString();
     }
 
+    public static String buildAdvertJson(List<DeviceAdvert> list, String path) {
+        StringBuffer sb = new StringBuffer();
+        //{id:\"1005\",do:\"update\",data:\"advert\",index:1,advert:\"base64\"}
+        int i = 0;
+        for(DeviceAdvert da : list) {
+            sb.append("{id:\"1005\",do:\"update\",data:\"advert\",index:").append(da.getOrderNo()).
+                    append(",advert:\"").append(PicTools.getPicBase64(path+da.getPicPath())).append("\"}");
+            if(i++<list.size()-1) {sb.append(",");}
+        }
+        return sb.toString();
+    }
+
     public static String buildDeleteWorkerJson(Integer... ids) {
         StringBuffer sb = new StringBuffer();
         sb.append("{id:\"1006\",do:\"delete\",data:[\"user\",\"fingerprint\",\"face\",\"headpic\",\"clockin\",\"pic\"],ccid:[");
@@ -51,6 +62,11 @@ public class GetJsonTools {
         }
         sb.append("]}");
         return sb.toString();
+    }
+
+    //重启设备
+    public static String buildRebootDeviceJson() {
+        return "{id:\"1010\",do:\"cmd\",cmd:\"reboot\"}";
     }
 
     public static String buildWorkerJson(Worker... workers) {

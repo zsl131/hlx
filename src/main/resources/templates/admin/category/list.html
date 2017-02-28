@@ -16,7 +16,7 @@
 <body>
 	<div th:fragment="content" th:remove="tag">
 		<div class="header lighter smaller blue">
-			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;分类列表（<span th:value="${datas.getTotalElements()}"></span>）</h3>
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;分类列表（<span th:text="${datas.getTotalElements()}"></span>）</h3>
 			<div th:replace="admin/category/nav :: content" th:remove="tag"></div>
 		</div>
 

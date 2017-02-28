@@ -18,12 +18,15 @@ import javax.servlet.http.HttpServletRequest;
  * Created by 钟述林 393156105@qq.com on 2017/2/27 16:29.
  */
 @Controller
-@RequestMapping(value="admin/appConfig")
+@RequestMapping(value="admin/company")
 @AdminAuth(name="公司信息维护", orderNum=10, psn="考勤管理", pentity=0, porderNum=20)
 public class AdminCompanyController {
 
     @Autowired
     private ICompanyService companyService;
+
+    @Autowired
+    private KaoqinFileTools kaoqinFileTools;
 
     @AdminAuth(name="公司信息维护", orderNum=1, icon="fa fa-cog", type="1")
     @RequestMapping(value="index", method= RequestMethod.GET)
@@ -51,6 +54,6 @@ public class AdminCompanyController {
     //将公司数据发送到设备
     private void send2Device(Company c) {
         String content = GetJsonTools.buildDataJson(GetJsonTools.buildConfigJson(c));
-        KaoqinFileTools.setFileContext(content);
+        kaoqinFileTools.setConfigContext(content);
     }
 }

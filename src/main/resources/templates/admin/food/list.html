@@ -16,7 +16,7 @@
 <body>
 	<div th:fragment="content" th:remove="tag">
 		<div class="header lighter smaller blue">
-			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;食品列表（<span th:value="${datas.getTotalElements()}"></span>）</h3>
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;食品列表（<span th:text="${datas.getTotalElements()}"></span>）</h3>
 			<div th:replace="admin/food/nav :: content" th:remove="tag"></div>
 		</div>
 
@@ -29,6 +29,7 @@
 						<th>图片</th>
 						<th>所在分类</th>
 						<th>名称</th>
+						<th>序号</th>
 						<th>点评</th>
 						<th>点赞</th>
 						<th>操作</th>
@@ -43,6 +44,7 @@
 						<a th:href="'/admin/food/list?filter_cateId=eq-'+${obj.cateId}" th:text="${obj.cateName}"></a>
 					</td>
 					<td th:text="${obj.name}"></td>
+					<td th:text="${obj.orderNo}">序号</td>
 					<td th:text="${obj.commentCount}">0</td>
 					<td th:text="${obj.goodCount}">0</td>
 					<td>

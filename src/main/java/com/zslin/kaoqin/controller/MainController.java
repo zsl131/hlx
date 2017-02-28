@@ -23,12 +23,16 @@ public class MainController {
     @Autowired
     private ICompanyService companyService;
 
+    @Autowired
+    private KaoqinFileTools kaoqinFileTools;
+
     //设备向服务端推送数据
     @PostMapping(value = "post")
     public String post(String sn, @RequestBody String json) {
         System.out.println("=======sn:"+sn);
         System.out.println(json);
         String res = postJsonTools.handlerPost(json);
+        System.out.println("=============post:"+res);
         return res;
     }
 
@@ -36,16 +40,17 @@ public class MainController {
     @GetMapping(value = "get")
     public String get(String sn, String requesttime, HttpServletRequest request) {
 
-        String configJson = GetJsonTools.buildDataJson(GetJsonTools.buildConfigJson(companyService.loadOne()));
+//        String configJson = GetJsonTools.buildDataJson(GetJsonTools.buildConfigJson(companyService.loadOne()));
 
         System.out.println(System.currentTimeMillis()/1000);
 
-        String json = KaoqinFileTools.getFileContext();
+        String json = kaoqinFileTools.getChangeContext();
         if(json==null || "".equals(json.trim())) {
-            json = configJson;
+//            json = configJson;
+            json = kaoqinFileTools.getConfigContext();
         }
         System.out.println(json);
-        KaoqinFileTools.setFileContext(configJson);
+        kaoqinFileTools.setChangeContext("", false); //处理完成后清空内容
         return json;
     }
 

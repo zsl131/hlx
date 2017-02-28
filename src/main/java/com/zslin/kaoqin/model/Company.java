@@ -14,7 +14,8 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
-    private String company;
+    @Column(name = "long_name")
+    private String longName;
     /**
      * 表示无新数据请求服务器间隔，单位秒
      */
@@ -24,6 +25,14 @@ public class Company {
      * 当请求服务器发生错误时，再次发送请求的间隔，单位秒
      */
     private Integer errdelay=10;
+
+    public String getLongName() {
+        return longName;
+    }
+
+    public void setLongName(String longName) {
+        this.longName = longName;
+    }
 
     public Integer getId() {
         return id;
@@ -39,14 +48,6 @@ public class Company {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
     }
 
     public Integer getDelay() {

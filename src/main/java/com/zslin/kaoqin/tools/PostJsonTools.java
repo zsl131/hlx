@@ -26,6 +26,18 @@ public class PostJsonTools {
 
     private Integer handlerJsonObj(JSONObject jsonObj) {
         Integer id = jsonObj.getInt("id");
+
+        String data = jsonObj.getString("data");
+        if("clockin".equals(data)) { //打卡记录
+            Integer ccid = jsonObj.getInt("ccid"); //员工id
+            String time = jsonObj.getString("time"); //打卡时间
+        }
+
+        return id;
+    }
+
+    /*private Integer handlerJsonObj(JSONObject jsonObj) {
+        Integer id = jsonObj.getInt("id");
         switch (id) {
             case 1: //推送员工数据 //{ id:1, data:"user",ccid:123456,name:"张三",passwd:"md5",auth:0,deptid:0,card:123456}
             case 2: //推送指纹数据 //{ id:2, data:"fingerprint",ccid:123456,fingerprint:[”base64”,”base64”]}
@@ -36,5 +48,5 @@ public class PostJsonTools {
             case 7: //推送处理结果 //{ id:7, data:"return",return:[{id:1001,result:0},{id:1002, result:0},{id:1003, result:”shell return msg”}] }
         }
         return id;
-    }
+    }*/
 }

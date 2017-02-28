@@ -3,6 +3,7 @@ package com.zslin.admin.controller;
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.annotations.Token;
 import com.zslin.basic.repository.SimplePageBuilder;
+import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.tools.ConfigTools;
 import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.NormalTools;
@@ -44,7 +45,7 @@ public class AdminCategoryController {
     @AdminAuth(name = "分类管理", orderNum = 1, type = "1", icon = "fa fa-tasks")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<Category> datas = categoryService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
-                SimplePageBuilder.generate(page));
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("orderNo")));
         model.addAttribute("datas", datas);
         return "admin/category/list";
     }

@@ -2,6 +2,7 @@ package com.zslin.kaoqin.controller;
 
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.annotations.Token;
+import com.zslin.basic.exception.SystemException;
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.tools.MyBeanUtils;
@@ -29,7 +30,7 @@ import java.security.NoSuchAlgorithmException;
  * Created by 钟述林 393156105@qq.com on 2017/2/27 16:47.
  */
 @Controller
-@RequestMapping(value="admin/appConfig")
+@RequestMapping(value="admin/worker")
 @AdminAuth(name="员工信息维护", orderNum=10, psn="考勤管理", pentity=0, porderNum=20)
 public class AdminWorkerController {
 
@@ -41,6 +42,9 @@ public class AdminWorkerController {
 
     @Autowired
     private EventTools eventTools;
+
+    @Autowired
+    private KaoqinFileTools kaoqinFileTools;
 
     @GetMapping(value = "list")
     @AdminAuth(name = "员工信息列表", type = "1", orderNum = 1, icon = "fa fa-users")
@@ -63,6 +67,10 @@ public class AdminWorkerController {
     @RequestMapping(value="add", method=RequestMethod.POST)
     public String add(Model model, Worker worker, HttpServletRequest request) {
         if(TokenTools.isNoRepeat(request)) { //不是重复提交
+            Worker w = workerService.findByPhone(worker.getPhone());
+            if(w!=null) {
+                throw new SystemException("手机号码【"+worker.getPhone()+"】已经存在");
+            }
             try {
                 worker.setPassword(SecurityUtil.md5("123456789")); //所有员工默认密码为123456789
             } catch (NoSuchAlgorithmException e) {
@@ -90,6 +98,12 @@ public class AdminWorkerController {
     public String update(Model model, @PathVariable Integer id, Worker worker, HttpServletRequest request) {
         if(TokenTools.isNoRepeat(request)) {
             Worker w = workerService.findOne(id);
+
+            Worker wTemp = workerService.findByPhone(worker.getPhone());
+            if(wTemp!=null && !wTemp.getId().equals(id)) {
+                throw new SystemException("手机号码【"+worker.getPhone()+"】已经存在");
+            }
+
             MyBeanUtils.copyProperties(worker, w);
 
             bind(w);
@@ -129,11 +143,11 @@ public class AdminWorkerController {
     //写员工数据到设备
     private void sendWorker2Device(Worker w) {
         String content = GetJsonTools.buildDataJson(GetJsonTools.buildWorkerJson(w));
-        KaoqinFileTools.setFileContext(content);
+        kaoqinFileTools.setChangeContext(content, true);
     }
 
     private void sendDelWorker2Device(Integer id) {
         String content = GetJsonTools.buildDataJson(GetJsonTools.buildDeleteWorkerJson(id));
-        KaoqinFileTools.setFileContext(content);
+        kaoqinFileTools.setChangeContext(content, true);
     }
 }

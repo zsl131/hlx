@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-java -jar /app.jar
+java -Duser.timezone=Asia/Shanghai -jar /app.jar
