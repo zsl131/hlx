@@ -1,9 +1,9 @@
 .left-div {
-    width:22%; background:#F3F3F3; height:100%; position:fixed; top:0px; left:0px;
+    width:18%; background:#F3F3F3; height:100%; position:fixed; top:0px; left:0px;
 }
 
 .right-div {
-    width:76%; min-height:100%; overflow:auto; position:absolute; right:0px; top:0px;
+    width:80%; overflow:auto; position:absolute; right:0px; top:0px;
 }
 
 ul.cate-ul {
@@ -38,7 +38,7 @@ ul.food-list {
 }
 
 ul.food-list li {
-    width:100%; list-style:none; float:left; border-bottom:1px #e8e8e8 solid; margin-top:10px; padding-bottom:9px;
+    width:100%; list-style:none; float:left; border-bottom:1px #e8e8e8 solid; margin-top:10px; padding-bottom:0px;
 }
 
 ul.food-list li a {
@@ -50,24 +50,37 @@ ul.food-list li a img {
 }
 
 ul.food-list li div.pic-div {
-    width:40%; float:left;
+    width:28%; float:left;
 }
 ul.food-list li div.name-div {
     width:40%; float:left;
 }
 
 ul.food-list li div.name-div a {
-    font-size:18px; color:#373838; font-family: "Microsoft YaHei" !important;font-family: '微软雅黑'; margin-top:4px; float:left; width:100%;
+    font-size:18px; color:#373838; font-family: "Microsoft YaHei" !important;font-family: '微软雅黑';  float:left; width:100%;
 }
 
 ul.food-list li div.name-div p.remark {
-    padding-top:8px; color:#9c9c9c; float:left; width:100%;
+    padding-top:4px; color:#9c9c9c; float:left; width:100%;
 }
 ul.food-list li div.name-div p.money {
-    color:#ff425d; float:left; width:100%;
+    color:#ff425d; float:left; width:100%; margin-top:-4px;
+}
+
+.count-b {
+    font-size:16px; padding:0px 2px;
+    color:#ff425d;
+}
+
+.normal-b {
+padding:0px 2px;
 }
 
 
 ul.food-list li div.opt-div {
-    width:20%; float:left;
+    width:32%; float:left; text-align:right; padding-right:10px;
+}
+
+ul.food-list li div.opt-div .btn {
+    margin-top:8px;
 }

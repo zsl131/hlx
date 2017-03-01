@@ -36,6 +36,18 @@ public class WalletDetail extends BaseEntity {
     /** 数量，如果是现金，单位为分 */
     private Integer amount;
 
+    /** 交易类型 */
+    @Column(name = "tran_type")
+    private String tranType;
+
+    public String getTranType() {
+        return tranType;
+    }
+
+    public void setTranType(String tranType) {
+        this.tranType = tranType;
+    }
+
     public String getOpenid() {
         return openid;
     }

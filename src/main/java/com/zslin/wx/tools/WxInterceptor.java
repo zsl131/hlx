@@ -15,11 +15,10 @@ public class WxInterceptor extends HandlerInterceptorAdapter {
                              HttpServletResponse response, Object handler) throws Exception {
         String openid = SessionTools.getOpenid(request);
 
-        BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
-        ExchangeTools exchangeTools = (ExchangeTools) factory.getBean("exchangeTools");
-
         String realpath = fullPath(request); //获取全路径
         if(openid==null || "".equals(openid)) {
+            BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
+            ExchangeTools exchangeTools = (ExchangeTools) factory.getBean("exchangeTools");
             String code = request.getParameter("code");
             String state = request.getParameter("state");  //正确值：hztOauth2，参考授权跳转地址
             if(code!=null && !"".equals(code) && state!=null && state.equals("hztOauth2")) { //如果code存在
@@ -40,7 +39,7 @@ public class WxInterceptor extends HandlerInterceptorAdapter {
                 response.sendRedirect(authPath);
             }
         }
-        System.out.println("==========currentOpenid:"+openid);
+        //System.out.println("==========currentOpenid:"+openid);
         return super.preHandle(request, response, handler);
     }
 

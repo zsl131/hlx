@@ -93,6 +93,32 @@ public class EventTools {
 	}
 
 	/**
+	 * 事件提醒
+	 * @param users 接收者
+	 * @param title 事件标题
+	 * @param titleColor 标题颜色
+	 * @param eventType 事件类型
+	 * @param typeColor 类型颜色
+	 * @param date 日期
+	 * @param dateColor 日期颜色
+	 * @param remark 提醒具体内容
+	 * @param remarkColor 内容颜色
+	 * @param url 链接地址
+	 * @return
+	 */
+	public boolean eventRemind(List<String> users,
+							   String title, String titleColor,
+							   String eventType, String typeColor,
+							   String date, String dateColor,
+							   String remark, String remarkColor,
+							   String url) {
+		for(String toUser : users) {
+			eventRemind(toUser, title, titleColor, eventType, typeColor, date, dateColor, remark, remarkColor, url);
+		}
+		return true;
+	}
+
+	/**
      * 事件提醒
 	 * @param toUser 接收者
 	 * @param title 事件标题
@@ -138,6 +164,28 @@ public class EventTools {
 							   String url) {
 		return eventRemind(toUser, title, "#0000FF", eventType, "#888888"
 		, date, "#888888", remark, "#666666", url);
+	}
+
+	/**
+	 * 事件提醒
+	 * @param users 接收者
+	 * @param title 事件标题
+	 * @param eventType 事件类型
+	 * @param date 日期
+	 * @param remark 提醒具体内容
+	 * @param url 链接地址
+	 * @return
+	 */
+	public boolean eventRemind(List<String> users,
+							   String title,
+							   String eventType,
+							   String date,
+							   String remark,
+							   String url) {
+		for(String toUser : users) {
+			eventRemind(toUser, title, eventType, date, remark, url);
+		}
+		return true;
 	}
 
 	/**
@@ -200,6 +248,9 @@ public class EventTools {
 				append("\"template_id\":\"").append(tempId).append("\",");
 
 		if(url!=null && !"".equals(url.trim())) {
+			if(!url.toLowerCase().startsWith("http://") && !url.toLowerCase().startsWith("https://")) {
+				url = wxConfig.getUrl()+url;
+			}
 			sb.append("\"url\":\"").append(url).append("\",");
 		}
 

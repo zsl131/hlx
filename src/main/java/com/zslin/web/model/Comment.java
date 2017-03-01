@@ -32,7 +32,7 @@ public class Comment extends BaseEntity {
 
     /** 点评者Id */
     @Column(name = "account_id")
-    private String accountId;
+    private Integer accountId;
 
     /** 点评者昵称 */
     private String nickname;
@@ -44,7 +44,7 @@ public class Comment extends BaseEntity {
     private String content;
 
     /** 状态，1-显示；0-隐藏 */
-    private String status;
+    private String status="1";
 
     /** 觉得赞，1-赞；0-默认 */
     @Column(name = "is_good")
@@ -98,11 +98,11 @@ public class Comment extends BaseEntity {
         this.openid = openid;
     }
 
-    public String getAccountId() {
+    public Integer getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(String accountId) {
+    public void setAccountId(Integer accountId) {
         this.accountId = accountId;
     }
 

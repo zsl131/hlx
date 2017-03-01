@@ -9,11 +9,20 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(locations = "classpath:wx.properties")
 public class WxConfig {
+    private String url;
     private String appid;
     private String secret;
     private String token;
     private String aeskey;
     private String eventTemp;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public String getEventTemp() {
         return eventTemp;

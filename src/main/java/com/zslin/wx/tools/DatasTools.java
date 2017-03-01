@@ -1,10 +1,11 @@
 package com.zslin.wx.tools;
 
 import com.zslin.basic.tools.DateTools;
+import com.zslin.basic.tools.NormalTools;
 import com.zslin.web.model.Account;
 import com.zslin.web.model.Feedback;
-import com.zslin.web.service.IAccountService;
-import com.zslin.web.service.IFeedbackService;
+import com.zslin.web.model.Wallet;
+import com.zslin.web.service.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,18 @@ public class DatasTools {
 
     @Autowired
     private ExchangeTools exchangeTools;
+
+    @Autowired
+    private IWalletService walletService;
+
+    @Autowired
+    private ICommentService commentService;
+
+    @Autowired
+    private IActivityRecordService activityRecordService;
+
+    @Autowired
+    private IWalletDetailService walletDetailService;
 
     /** 当用户取消关注时 */
     public void onUnsubscribe(String openid) {
@@ -75,7 +88,7 @@ public class DatasTools {
     /** 当用户关注时 */
     public void onSubscribe(String openid) {
         Integer id = (Integer) accountService.queryByHql("SELECT a.id FROM Account a WHERE a.openid=?", openid);
-        Account a = null;
+        Account a ;
         if(id==null || id<=0) { //说明初次关注
             a = new Account();
             a.setStatus("1");
@@ -107,6 +120,25 @@ public class DatasTools {
             }
         }
         accountService.save(a);
+
+        addWallet(a); //添加钱包
+    }
+
+    private void addWallet(Account account) {
+        Wallet w = walletService.findByOpenid(account.getOpenid());
+        if(w==null) {
+            w = new Wallet();
+            w.setOpenid(account.getOpenid());
+            w.setAccountId(account.getId());
+            w.setAccountName(account.getNickname());
+            w.setMoney(0);
+            w.setScore(0);
+            w.setCreateDate(new Date());
+            w.setCreateLong(System.currentTimeMillis());
+            w.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
+            w.setCreateTime(NormalTools.curDate("yyyy-MM-dd HH:mm:ss"));
+            walletService.save(w);
+        }
     }
 
     /** 同步更新微信用户信息，主要是昵称、头像、性别 */
@@ -128,5 +160,14 @@ public class DatasTools {
             }
         }
         accountService.save(a);
+
+        updateRelation(a); //更新所有关联数据
+    }
+
+    private void updateRelation(Account a) {
+        commentService.update(a.getNickname(), a.getHeadimgurl(), a.getOpenid());
+        feedbackService.update(a.getNickname(), a.getHeadimgurl(), a.getOpenid());
+        activityRecordService.update(a.getNickname(), a.getHeadimgurl(), a.getOpenid());
+        walletDetailService.update(a.getNickname(), a.getOpenid());
     }
 }

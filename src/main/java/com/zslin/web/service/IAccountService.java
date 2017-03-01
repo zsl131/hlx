@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by 钟述林 393156105@qq.com on 2017/1/24 22:27.
  */
@@ -30,4 +32,7 @@ public interface IAccountService extends BaseRepository<Account, Integer>, JpaSp
     void updateFollow(Integer id, Integer followId, String followName);
 
     Account findByPhone(String phone);
+
+    @Query("SELECT a.openid FROM Account a WHERE a.type=?1")
+    List<String> findOpenid(String type);
 }
