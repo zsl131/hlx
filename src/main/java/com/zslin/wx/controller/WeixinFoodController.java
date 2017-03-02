@@ -5,9 +5,16 @@ import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.repository.SimpleSpecificationBuilder;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.utils.ParamFilterUtil;
-import com.zslin.web.model.*;
-import com.zslin.web.service.*;
-import com.zslin.wx.dbtools.WalletDetailTools;
+import com.zslin.web.model.Account;
+import com.zslin.web.model.Comment;
+import com.zslin.web.model.Food;
+import com.zslin.web.model.ScoreRule;
+import com.zslin.web.service.IAccountService;
+import com.zslin.web.service.ICategoryService;
+import com.zslin.web.service.ICommentService;
+import com.zslin.web.service.IFoodService;
+import com.zslin.wx.dbtools.ScoreAdditionalDto;
+import com.zslin.wx.dbtools.ScoreTools;
 import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.EventTools;
 import com.zslin.wx.tools.SessionTools;
@@ -50,21 +57,10 @@ public class WeixinFoodController {
     private AccountTools accountTools;
 
     @Autowired
-    private IWalletDetailService walletDetailService;
-
-    @Autowired
-    private IWalletService walletService;
-
-    @Autowired
-    private IScoreRuleService scoreRuleService;
-
-    @Autowired
-    private WalletDetailTools walletDetailTools;
+    private ScoreTools scoreTools;
 
     @GetMapping(value = "index")
     public String index(Model model, Integer page, HttpServletRequest request) {
-
-        System.out.println("======curOPenid:=="+ SessionTools.getOpenid(request));
 
         model.addAttribute("cateList", categoryService.findByOrder());
         Page<Food> datas = foodService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
@@ -80,9 +76,9 @@ public class WeixinFoodController {
             foodService.plusGoodCount(id);
 
             String openid = SessionTools.getOpenid(request);
-            Account a = accountService.findByOpenid(openid);
             Food f = foodService.findOne(id);
-            processScore(a, f.getName()); //处理积分和通知用户
+//            processScore(a, f.getName()); //处理积分和通知用户
+            scoreTools.processScore(openid, ScoreRule.GOOD_FOOD, new ScoreAdditionalDto("点赞食品", f.getName()));
             return "1";
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,6 +95,7 @@ public class WeixinFoodController {
         builder.add("status", "eq", "1", "and").add("openid", "eq", openid, "or");
         Page<Comment> datas = commentService.findAll(builder.generate(), SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
         model.addAttribute("datas", datas);
+        model.addAttribute("goodCount", commentService.queryGoodCount(id)); //好评数量
         return "weixin/food/detail";
     }
 
@@ -125,6 +122,10 @@ public class WeixinFoodController {
             comment.setCreateTime(NormalTools.curDate("yyyy-MM-dd HH:mm:ss"));
             commentService.save(comment);
 
+            f.setCommentCount(f.getCommentCount()+1);
+
+            foodService.save(f);
+
             //TODO 事件通知管理人员，再通知点评者获得积分
             List<String> openidList = accountTools.getOpenid(AccountTools.ADMIN, AccountTools.MANAGER, AccountTools.PARTNER); //获取管理员、经理、股东
             StringBuffer sb = new StringBuffer();
@@ -134,29 +135,14 @@ public class WeixinFoodController {
                 .append("点评内容：").append(content);
             eventTools.eventRemind(openidList, "食品评论提醒", f.getName()+"被评论", NormalTools.curDate("yyyy-MM-dd HH:mm"), sb.toString(), "/wx/food/detail?id="+foodId);
 
+            scoreTools.processScore(openid, ScoreRule.COMMENT_FOOD,
+                    new ScoreAdditionalDto("评价食品", f.getName()),
+                    new ScoreAdditionalDto("评价级别", isGood==1?"好评":"差评"),
+                    new ScoreAdditionalDto("评价内容", content));
             return "1";
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "0";
-    }
-
-    private void processScore(Account a, String foodName) {
-        ScoreRule sr = scoreRuleService.findByCode(ScoreRule.GOOD_FOOD); //
-        if(sr!=null) {
-            Integer count = walletDetailService.queryCount(ScoreRule.GOOD_FOOD, NormalTools.curDate("yyyy-MM-dd"), a.getOpenid());
-            if(count<sr.getAmount()) {
-                Integer score = sr.getScore();
-                walletDetailTools.addWalletDetailScore(score, a.getOpenid(), a.getId(), a.getNickname(), ScoreRule.GOOD_FOOD, sr.getName());
-                walletService.plusScore(score, a.getOpenid());
-
-                StringBuffer sb = new StringBuffer();
-                sb.append("积分增加：").append(score).append(" 分\\n")
-                        .append("当前剩余：").append(walletService.queryScore(a.getOpenid())).append(" 分\\n")
-                        .append("变化原因：").append(sr.getName()).append("\\n")
-                        .append("点赞食品：").append(foodName);
-                eventTools.eventRemind(a.getOpenid(), "积分变化提醒", "积分又增加了~~", NormalTools.curDate("yyyy-MM-dd HH:mm"), sb.toString(), "/wx/account/me");
-            }
-        }
     }
 }

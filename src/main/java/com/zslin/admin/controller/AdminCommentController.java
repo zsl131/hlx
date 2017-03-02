@@ -67,8 +67,7 @@ public class AdminCommentController {
             commentService.save(c);
 
             eventTools.eventRemind(c.getOpenid(), "点评得到回复了",
-                    "反馈回复", c.getReplyTime(), "你的点评："+c.getContent()+"\\n回复内容："+c.getReply(), "");
-
+                    "点评回复", c.getReplyTime(), "菜品名称："+c.getFoodName()+"\\n你的点评："+c.getContent()+"\\n回复内容："+c.getReply(), "/wx/food/detail?id="+c.getFoodId());
         }
         return "redirect:/admin/comment/list";
     }

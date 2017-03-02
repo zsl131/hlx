@@ -49,4 +49,14 @@ public class AdminAccountController {
             return "0";
         }
     }
+
+    @PostMapping(value = "updateType")
+    public @ResponseBody String updateType(Integer id, String type) {
+        try {
+            accountService.updateType(id, type);
+        } catch (Exception e) {
+            return "0";
+        }
+        return "1";
+    }
 }

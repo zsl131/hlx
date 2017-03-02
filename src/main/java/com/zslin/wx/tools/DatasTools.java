@@ -4,8 +4,10 @@ import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.web.model.Account;
 import com.zslin.web.model.Feedback;
+import com.zslin.web.model.ScoreRule;
 import com.zslin.web.model.Wallet;
 import com.zslin.web.service.*;
+import com.zslin.wx.dbtools.ScoreTools;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,6 +40,9 @@ public class DatasTools {
 
     @Autowired
     private IWalletDetailService walletDetailService;
+
+    @Autowired
+    private ScoreTools scoreTools;
 
     /** 当用户取消关注时 */
     public void onUnsubscribe(String openid) {
@@ -122,6 +127,8 @@ public class DatasTools {
         accountService.save(a);
 
         addWallet(a); //添加钱包
+
+        scoreTools.processScore(openid, ScoreRule.INIT); //关注时送积分
     }
 
     private void addWallet(Account account) {

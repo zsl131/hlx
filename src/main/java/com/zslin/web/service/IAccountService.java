@@ -19,6 +19,11 @@ public interface IAccountService extends BaseRepository<Account, Integer>, JpaSp
     @Transactional
     void updateStatus(Integer id, String status);
 
+    @Query("UPDATE Account a SET a.type=?2 WHERE a.id=?1")
+    @Modifying
+    @Transactional
+    void updateType(Integer id, String type);
+
     @Query("UPDATE Account a SET a.status=?2 WHERE a.openid=?1")
     @Modifying
     @Transactional

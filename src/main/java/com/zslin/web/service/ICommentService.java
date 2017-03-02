@@ -16,4 +16,7 @@ public interface ICommentService extends BaseRepository<Comment, Integer>, JpaSp
     @Modifying
     @Transactional
     void update(String name, String headimg, String openid);
+
+    @Query("SELECT COUNT(id) FROM Comment c WHERE c.isGood=1 AND c.foodId=?1")
+    Integer queryGoodCount(Integer foodId);
 }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>昭通汉丽轩</title>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-food-detail.css"/>
+    <script type="text/javascript" src="/weixin/weixin-food-detail.js"></script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="top-div">
+        <div class="img">
+            <img th:src="${food.picPath}"/>
+        </div>
+        <div class="remark">
+            <p class="title" th:text="${food.name}"></p>
+            <div class="amount" th:with="goodCount=${goodCount}, totalCount=${datas.getTotalElements()}, goodClick=${food.goodCount}, plusCount=${goodCount+food.goodCount}">
+                <div class="percent">
+                    <div th:with="resCount=${plusCount*1.0/(totalCount*1.0+1.0*goodClick)*100}" th:if="${(totalCount+goodClick) gt 0}" th:remove="tag">
+                        <p class="percent" th:if="${resCount lt 100}" th:text="${(#numbers.formatDecimal(resCount, 0, 'COMMA', 2, 'POINT'))} + '%'"></p>
+                        <p class="percent" th:if="${resCount ge 100}">100%</p>
+                    </div>
+                    <div th:if="${(totalCount+goodClick) le 0}" th:remove="tag">
+                        <p class="percent" th:if="${plusCount gt (totalCount+goodClick)}">100.00%</p>
+                    </div>
+                    <span class="word">好评</span>
+                </div>
+                <div class="amount-detail">
+                    <p>评论：<b th:text="${totalCount}"></b></p>
+                    <p>点赞：<b th:text="${goodClick}"></b></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="line-div"></div>
+    <div class="add-comment-div">
+        <span class="title">其实你应该说两句：</span>
+        <button class="btn btn-info add-comment-btn" th:attr="foodId=${food.id}"><i class="fa fa-commenting"></i> 现在点评这道菜</button>
+    </div>
+    <div class="line-div"></div>
+    <div class="comment-list-div">
+        <ul>
+            <li th:each="comment : ${datas}">
+                <div class="headimg"><img th:src="${comment.headimgurl}"/></div>
+                <div class="content">
+                    <div class="head"><span class="nickname" th:text="${comment.nickname}"></span><span class="date" th:text="${comment.createTime}"></span></div>
+                    <div class="isGood" th:if="${comment.isGood eq 1}"><i class="fa fa-thumbs-up"></i> 我觉得不错，值得推荐！</div>
+                    <div class="con" th:text="${comment.content}"></div>
+                    <div class="reply" th:if="${comment.reply ne null and comment.reply ne ''}" th:text="'掌柜回复：'+${comment.reply}"></div>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+    <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
+</div>
+</body>
+</html>

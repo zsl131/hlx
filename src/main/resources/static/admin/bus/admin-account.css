@@ -1,0 +1,10 @@
+.set-type-div {
+    position:relative; height:30px; cursor:pointer;
+}
+
+.type-ul {
+    position:absolute; width:120px; left:0px; top:30px; cursor:pointer; background:#FFF; display:none;
+}
+.type-ul li {
+    float:left; width:100%; list-style:none; text-align:left; line-height:30px;
+}

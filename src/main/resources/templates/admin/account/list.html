@@ -7,6 +7,8 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<title>微信用户列表</title>
+		<link type="text/css" rel="stylesheet" href="/admin/bus/admin-account.css"/>
+		<script src="/admin/bus/admin-account.js"></script>
 		<script type="text/javascript">
 			$(function() {
 				$(".delete-obj-href").deleteFun();
@@ -48,13 +50,19 @@
 						</div>
 					</td>
 					<td>
-						<div th:remove="tag" th:switch="${obj.type}">
-							<span th:case="'0'">网友</span>
-							<span th:case="'1'">学生</span>
-							<span th:case="'2'">科任老师</span>
-							<span th:case="'5'">班主任</span>
-							<span th:case="'6'">家长</span>
+						<div class="set-type-div" th:switch="${obj.type}">
+							<span th:case="'0'">顾客</span>
+							<span th:case="'1'">店员</span>
+							<span th:case="'2'">经理</span>
+							<span th:case="'5'">股东</span>
 							<span th:case="'10'">管理员</span>
+							<ul class="type-ul" th:attr="accountId=${obj.id}">
+								<li val="0">设为顾客</li>
+								<li val="1">设为店员</li>
+								<li val="2">设为经理</li>
+								<li val="5">设为股东</li>
+								<li val="10">设为管理员</li>
+							</ul>
 						</div>
 					</td>
 					<td th:text="${obj.createTime}"></td>
