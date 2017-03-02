@@ -134,7 +134,6 @@ public class WeixinFoodController {
                 .append("点评内容：").append(content);
             eventTools.eventRemind(openidList, "食品评论提醒", f.getName()+"被评论", NormalTools.curDate("yyyy-MM-dd HH:mm"), sb.toString(), "/wx/food/detail?id="+foodId);
 
-
             return "1";
         } catch (Exception e) {
             e.printStackTrace();
