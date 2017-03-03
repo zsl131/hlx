@@ -2,10 +2,7 @@ package com.zslin.wx.tools;
 
 import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
-import com.zslin.web.model.Account;
-import com.zslin.web.model.Feedback;
-import com.zslin.web.model.ScoreRule;
-import com.zslin.web.model.Wallet;
+import com.zslin.web.model.*;
 import com.zslin.web.service.*;
 import com.zslin.wx.dbtools.ScoreTools;
 import org.json.JSONObject;
@@ -13,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/1/24 22:26.
@@ -42,7 +40,13 @@ public class DatasTools {
     private IWalletDetailService walletDetailService;
 
     @Autowired
+    private IArticleService articleService;
+
+    @Autowired
     private ScoreTools scoreTools;
+
+    @Autowired
+    private WxConfig wxConfig;
 
     /** 当用户取消关注时 */
     public void onUnsubscribe(String openid) {
@@ -169,6 +173,12 @@ public class DatasTools {
         accountService.save(a);
 
         updateRelation(a); //更新所有关联数据
+    }
+
+    /** 构建关注时的数据 */
+    public String buildSubscribeStr(String toUser, String fromUser) {
+        List<Article> articleList = articleService.findFirst();
+        return WeixinXmlTools.buildSubscribeStr(toUser, fromUser, articleList, wxConfig.getUrl());
     }
 
     private void updateRelation(Account a) {

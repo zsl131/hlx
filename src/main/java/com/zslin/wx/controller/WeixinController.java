@@ -72,6 +72,7 @@ public class WeixinController {
             Node event = root.getElementsByTagName("Event").item(0);
             Node eventKey = root.getElementsByTagName("EventKey").item(0);
             Node msgId = root.getElementsByTagName("MsgId").item(0);
+            String builderName = root.getElementsByTagName("ToUserName").item(0).getTextContent(); //开发者微信号
 
             String fromOpenid = fromUser.getTextContent(); //用户的openid
             String cTime = createTime.getTextContent(); //创建时间
@@ -109,6 +110,7 @@ public class WeixinController {
                     String eventStr = event.getTextContent(); //事件
                     if("subscribe".equalsIgnoreCase(eventStr)) { //关注
                         datasTools.onSubscribe(fromOpenid);
+                        docSend = datasTools.buildSubscribeStr(fromOpenid, builderName);
                     } else if("unsubscribe".equalsIgnoreCase(eventStr)) { //取消关注
                         datasTools.onUnsubscribe(fromOpenid);
                     } else if("LOCATION".equalsIgnoreCase(eventStr)) { //定位

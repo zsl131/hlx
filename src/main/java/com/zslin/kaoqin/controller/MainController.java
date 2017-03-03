@@ -29,10 +29,10 @@ public class MainController {
     //设备向服务端推送数据
     @PostMapping(value = "post")
     public String post(String sn, @RequestBody String json) {
-        System.out.println("=======sn:"+sn);
-        System.out.println(json);
+//        System.out.println("=======sn:"+sn);
+//        System.out.println(json);
         String res = postJsonTools.handlerPost(json);
-        System.out.println("=============post:"+res);
+//        System.out.println("=============post:"+res);
         return res;
     }
 

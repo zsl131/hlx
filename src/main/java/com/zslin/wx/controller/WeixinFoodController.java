@@ -92,8 +92,9 @@ public class WeixinFoodController {
         model.addAttribute("food", foodService.findOne(id));
         //评论数据
         SimpleSpecificationBuilder builder = new SimpleSpecificationBuilder("foodId", "eq", id);
-        builder.add("status", "eq", "1", "and").add("openid", "eq", openid, "or");
-        Page<Comment> datas = commentService.findAll(builder.generate(), SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
+        builder.add("status", "eq", "1");//.addOr("openid", "eq", openid);
+//        Page<Comment> datas = commentService.findAll(builder.generate(), SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
+        Page<Comment> datas = commentService.findAll(openid, id, SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
         model.addAttribute("datas", datas);
         model.addAttribute("goodCount", commentService.queryGoodCount(id)); //好评数量
         return "weixin/food/detail";

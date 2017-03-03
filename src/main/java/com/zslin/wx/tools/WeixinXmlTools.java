@@ -1,5 +1,9 @@
 package com.zslin.wx.tools;
 
+import com.zslin.web.model.Article;
+
+import java.util.List;
+
 /**
  * Created by 钟述林 393156105@qq.com on 2017/2/23 0:08.
  */
@@ -41,6 +45,37 @@ public class WeixinXmlTools {
                 append("<Title><![CDATA[").append(title).append("]]></Title>").
                 append("<Url><![CDATA[").append(url).append("]]></Url>").
                 append("<Description><![CDATA[").append(content).append("]]></Description>");
+        sb.append("</xml>");
+        return sb.toString();
+    }
+
+    /**
+     * 构建关注时的数据
+     * @param toUser 接收用户Openid
+     * @param fromUser 发送方
+     * @param articleList 文章列表
+     * @param baseUrl 文章链接基础地址
+     * @return
+     */
+    public static String buildSubscribeStr(String toUser, String fromUser, List<Article> articleList, String baseUrl) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("<xml>");
+        sb.append("<ToUserName><![CDATA[").append(toUser).append("]]></ToUserName>").
+                append("<FromUserName><![CDATA[").append(fromUser).append("]]></FromUserName>").
+                append("<CreateTime>").append(System.currentTimeMillis()/1000).append("</CreateTime>").
+                append("<MsgType><![CDATA[news]]></MsgType>").
+                append("<ArticleCount>"+articleList.size()+"</ArticleCount>"). //TODO 这里设置文章条数
+                append("<Articles>");
+
+        for(Article dto : articleList) {
+            sb.append("<item>").
+                    append("<Title><![CDATA[").append(dto.getTitle()).append("]]></Title>").
+                    append("<Description><![CDATA[").append(dto.getGuide()).append("]]></Description>").
+                    append("<PicUrl><![CDATA[").append(baseUrl+dto.getPicPath()).append("]]></PicUrl>").
+                    append("<Url><![CDATA[").append(baseUrl+"/wx/article/detail?id"+dto.getId()).append("]]></Url>").
+                    append("</item>");
+        }
+        sb.append("</Articles>");
         sb.append("</xml>");
         return sb.toString();
     }

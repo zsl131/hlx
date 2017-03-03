@@ -37,9 +37,10 @@ public class WxInterceptor extends HandlerInterceptorAdapter {
                 String authPath = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=snsapi_base&state=hztOauth2#wechat_redirect";
                 authPath = authPath.replace("APPID", appId).replace("REDIRECT_URI", fullPath);
                 response.sendRedirect(authPath);
+                return false;
             }
         }
-        //System.out.println("==========currentOpenid:"+openid);
+//        System.out.println("==========currentOpenid:"+openid);
         return super.preHandle(request, response, handler);
     }
 
