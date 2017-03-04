@@ -43,7 +43,12 @@ public class ScoreTools {
                 Account a = accountService.findByOpenid(openid);
                 ScoreRule sr = scoreRuleService.findByCode(scoreRuleType); //
                 if(sr!=null) {
-                    Integer count = walletDetailService.queryCount(scoreRuleType, NormalTools.curDate("yyyy-MM-dd"), a.getOpenid());
+                    Integer count = 0;
+                    if(ScoreRule.INIT.equals(scoreRuleType)) {
+                        count = walletDetailService.queryCount(scoreRuleType, a.getOpenid());
+                    } else {
+                        count = walletDetailService.queryCount(scoreRuleType, NormalTools.curDate("yyyy-MM-dd"), a.getOpenid());
+                    }
                     if(count<sr.getAmount()) {
                         Integer score = sr.getScore();
                         walletDetailTools.addWalletDetailScore(score, a.getOpenid(), a.getId(), a.getNickname(), scoreRuleType, sr.getName());

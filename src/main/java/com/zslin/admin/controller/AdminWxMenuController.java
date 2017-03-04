@@ -118,9 +118,7 @@ public class AdminWxMenuController {
     String gen() {
         try {
             String json = createMenuJson();
-            System.out.println(json);
             String url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token="+accessTokenTools.getAccessToken();
-            System.out.println(url);
             JSONObject jsonObj = WeixinUtil.httpRequest(url, "POST", json);
             String code = JsonTools.getJsonParam(jsonObj.toString(), "errcode");
             if("0".equals(code)) {

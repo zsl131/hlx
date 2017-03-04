@@ -72,7 +72,7 @@ public class WeixinXmlTools {
                     append("<Title><![CDATA[").append(dto.getTitle()).append("]]></Title>").
                     append("<Description><![CDATA[").append(dto.getGuide()).append("]]></Description>").
                     append("<PicUrl><![CDATA[").append(baseUrl+dto.getPicPath()).append("]]></PicUrl>").
-                    append("<Url><![CDATA[").append(baseUrl+"/wx/article/detail?id"+dto.getId()).append("]]></Url>").
+                    append("<Url><![CDATA[").append(baseUrl+"/wx/article/detail?id="+dto.getId()).append("]]></Url>").
                     append("</item>");
         }
         sb.append("</Articles>");

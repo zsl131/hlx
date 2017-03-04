@@ -19,4 +19,7 @@ public interface IWalletDetailService extends BaseRepository<WalletDetail, Integ
 
     @Query("SELECT COUNT(id) FROM WalletDetail wd WHERE wd.type='2' AND wd.tranType=?1 AND wd.createDay=?2 AND wd.openid=?3")
     Integer queryCount(String tranType, String date, String openid);
+
+    @Query("SELECT COUNT(id) FROM WalletDetail wd WHERE wd.type='2' AND wd.tranType=?1 AND wd.openid=?2")
+    Integer queryCount(String tranType, String openid);
 }

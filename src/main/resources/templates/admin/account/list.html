@@ -33,6 +33,7 @@
 					<tr>
 						<th>头像</th>
 						<th>昵称</th>
+						<th>上线</th>
 						<th>状态</th>
 						<th>类型</th>
 						<th>日期</th>
@@ -43,6 +44,7 @@
 				<tr th:each="obj : ${datas}">
 					<td><a th:href="${obj.headimgurl}" target="_blank"><img th:src="${obj.headimgurl}" class="head-img"/></a></td>
 					<td th:text="${obj.nickname}"></td>
+					<td th:text="${obj.followUserName ne null ? obj.followUserName:'-'}"></td>
 					<td>
 						<div th:remove="tag" th:switch="${obj.status}">
 							<span th:case="'1'">关注</span>

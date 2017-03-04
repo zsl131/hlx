@@ -40,4 +40,8 @@ public interface IAccountService extends BaseRepository<Account, Integer>, JpaSp
 
     @Query("SELECT a.openid FROM Account a WHERE a.type=?1")
     List<String> findOpenid(String type);
+
+    //获取用户所拉进来的用户数量
+    @Query("SELECT COUNT(id) FROM Account a WHERE a.followUserId=?1")
+    Integer findPullCount(Integer id);
 }
