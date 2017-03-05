@@ -19,38 +19,76 @@
                     <span class="head-img"><img th:src="${account.headimgurl}"/></span>
                     <span class="head-info">
                         <span th:text="${account.nickname}" class="nickname"></span>
-                        <span th:switch="${account.type}" th:remove="tag">
-                            <span th:case="0">顾客</span>
-                            <span th:case="1">员工</span>
-                            <span th:case="2">经理</span>
-                            <span th:case="5">股东</span>
-                            <span th:case="10">管理员</span>
+                        <span th:switch="${account.type}">
+                            用户类型：
+                            <span th:case="0" th:remove="tag">顾客</span>
+                            <span th:case="1" th:remove="tag">员工</span>
+                            <span th:case="2" th:remove="tag">经理</span>
+                            <span th:case="5" th:remove="tag">股东</span>
+                            <span th:case="10" th:remove="tag">管理员</span>
+                            <b th:if="${account.hasCard eq '1'}" style="color:#06F">（会员）</b>
+                            <i th:if="${account.hasCard eq '2'}" style="color:#F60">（会员过期）</i>
                         </span>
-                        <span>我的邀请人：<b th:remove="tag" th:text="${(account.followUserName ne null and account.followUserName ne '')?account.followUserName:'无'}"></b></span>
+                        <span>邀请人：<b th:remove="tag" th:text="${(account.followUserName ne null and account.followUserName ne '')?account.followUserName:'无'}"></b>
+                        <a href="/wx/account/qr"><i class="fa fa-info"></i> 邀请人赚积分！</a>
+                        </span>
                     </span>
                 </div>
                 <div class="line-div"></div>
+
+                <div class="weui-cells">
+                    <a class="weui-cell weui-cell_access" href="/wx/account/score" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-cubes"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>我的积分</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${wallet.score}"></span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" href="/wx/account/own" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-gift"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>我的物品</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${ownCount}"></span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" href="/wx/account/commentList" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-comments-o"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>我的评论</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${commentCount}"></span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" href="/wx/account/feedbackList" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-commenting"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>我的消息</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${feedbackCount}"></span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" href="/wx/account/own" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-cart-arrow-down"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>消费记录</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${ownCount}"></span>
+                        </div>
+                    </a>
+                </div>
+
             </div>
-        </div>
-        <div class="weui-flex">
-            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-        </div>
-        <div class="weui-flex">
-            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-        </div>
-        <div class="weui-flex">
-            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-        </div>
-        <div class="weui-flex">
-            <div><div class="placeholder">weui</div></div>
-            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
-            <div><div class="placeholder">weui</div></div>
         </div>
     </div>
 </div>

@@ -2,7 +2,7 @@
 <html lang="zh-CN"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      th:fragment="mymodel" style="background:#FFF;">
+      th:fragment="mymodel" >
 
 <head th:fragment="head">
     <title>昭通汉丽轩</title>
@@ -45,8 +45,13 @@
             $(".logout-href").deleteFun({title:'退出提示',msg:'确定退出系统吗？'});
         });
     </script>
+    <style>
+        html, body {
+            background:#FFF;
+        }
+    </style>
 </head>
-<body style="background:#FFF;">
+<body>
 <div class="container-fluid" style="padding:0px;">
         <div th:include="this :: content"></div>
 </div>

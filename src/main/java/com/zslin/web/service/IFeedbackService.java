@@ -16,4 +16,7 @@ public interface IFeedbackService extends BaseRepository<Feedback, Integer>, Jpa
     @Modifying
     @Transactional
     void update(String name, String headimg, String openid);
+
+    @Query("SELECT COUNT(id) FROM Feedback f WHERE f.openid=?1")
+    Integer findCount(String opeind);
 }

@@ -51,7 +51,7 @@
 								<i class="fa fa-pencil"></i>
 							</a>
 
-							<a class="delete-obj-href red auth" sn="AdminArticleController.delete" th:title="'此操作不可逆，确定删除【'+${obj.title}+'】吗？'" th:href="'/admin/article/delete/'+${obj.id}">
+							<a th:if="${obj.id ne 1 and obj.id ne 2}" class="delete-obj-href red auth" sn="AdminArticleController.delete" th:title="'此操作不可逆，确定删除【'+${obj.title}+'】吗？'" th:href="'/admin/article/delete/'+${obj.id}">
 								<i class="fa fa-remove"></i>
 							</a>
 						</div>

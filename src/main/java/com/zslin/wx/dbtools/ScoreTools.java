@@ -63,7 +63,7 @@ public class ScoreTools {
                             sb.append("\\n").append(dto.getName()).append("：").append(dto.getValue());
                         }
 //                        .append("点赞食品：").append(foodName);
-                        eventTools.eventRemind(a.getOpenid(), "积分变化提醒", "积分发生变化啦~~", NormalTools.curDate("yyyy-MM-dd HH:mm"), sb.toString(), "/wx/account/me");
+                        eventTools.eventRemind(a.getOpenid(), "积分变化提醒", "积分发生变化啦~~", NormalTools.curDate("yyyy-MM-dd HH:mm"), sb.toString(), "/wx/account/score");
                     }
                 }
             }

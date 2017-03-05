@@ -92,8 +92,8 @@ public class WeixinController {
                     String mediaId = root.getElementsByTagName("MediaId").item(0).getTextContent(); //媒体ID
 
                     datasTools.onEventImage(fromOpenid, picUrl, mediaId); //添加图片信息
-//                    System.out.println(picUrl);
-//                    System.out.println(mediaId);
+                    System.out.println(picUrl);
+                    System.out.println(mediaId);
                 } else if("voice".equalsIgnoreCase(msgTypeStr)) { //语音信息
 
                 } else if("video".equalsIgnoreCase(msgTypeStr)) { //视频信息

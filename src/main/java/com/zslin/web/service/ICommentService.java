@@ -25,4 +25,7 @@ public interface ICommentService extends BaseRepository<Comment, Integer>, JpaSp
 
     @Query("FROM Comment c WHERE c.foodId=?2 AND (c.status='1' OR c.openid=?1)")
     Page<Comment> findAll(String openid, Integer foodId, Pageable pageable);
+
+    @Query("SELECT COUNT(id) FROM Comment c WHERE c.openid=?1")
+    Integer findCount(String opeind);
 }

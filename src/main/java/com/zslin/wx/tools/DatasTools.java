@@ -1,5 +1,6 @@
 package com.zslin.wx.tools;
 
+import com.zslin.basic.tools.ConfigTools;
 import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.web.model.*;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/1/24 22:26.
@@ -48,6 +50,9 @@ public class DatasTools {
     @Autowired
     private WxConfig wxConfig;
 
+    @Autowired
+    private ConfigTools configTools;
+
     /** 当用户取消关注时 */
     public void onUnsubscribe(String openid) {
         accountService.updateStatus(openid, "0");
@@ -71,6 +76,8 @@ public class DatasTools {
             f.setHeadimgurl(a.getHeadimgurl());
         }
         feedbackService.save(f);
+
+        scoreTools.processScore(openid, ScoreRule.SEND_MESSAGE); //关注时送积分
     }
 
     /** 添加图片内容 */
@@ -85,6 +92,7 @@ public class DatasTools {
         f.setType("image");
         f.setPicUrl(picPath);
         f.setMediaId(mediaId);
+        f.setFilePath(exchangeTools.saveMedia(mediaId, configTools.getUploadPath("feedback/")+ UUID.randomUUID().toString()).replace(configTools.getUploadPath(), "\\"));
         Account a = accountService.findByOpenid(openid);
         if(a!=null) {
             f.setAccountId(a.getId());
@@ -92,6 +100,8 @@ public class DatasTools {
             f.setHeadimgurl(a.getHeadimgurl());
         }
         feedbackService.save(f);
+
+        scoreTools.processScore(openid, ScoreRule.SEND_MESSAGE); //关注时送积分
     }
 
     /** 当用户关注时 */
