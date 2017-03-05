@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-account-me.css"/>
+    <script src="/weixin/weixin-account-me.js"></script>
+    <title>昭通汉丽轩</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="page__bd page__bd_spacing">
+        <div class="weui-flex">
+            <div class="weui-flex__item">
+                <div class="center-head">
+                    <span class="head-img"><img th:src="${account.headimgurl}"/></span>
+                    <span class="head-info">
+                        <span th:text="${account.nickname}" class="nickname"></span>
+                        <span th:switch="${account.type}" th:remove="tag">
+                            <span th:case="0">顾客</span>
+                            <span th:case="1">员工</span>
+                            <span th:case="2">经理</span>
+                            <span th:case="5">股东</span>
+                            <span th:case="10">管理员</span>
+                        </span>
+                        <span>我的邀请人：<b th:remove="tag" th:text="${(account.followUserName ne null and account.followUserName ne '')?account.followUserName:'无'}"></b></span>
+                    </span>
+                </div>
+                <div class="line-div"></div>
+            </div>
+        </div>
+        <div class="weui-flex">
+            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
+            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
+        </div>
+        <div class="weui-flex">
+            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
+            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
+            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
+        </div>
+        <div class="weui-flex">
+            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
+            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
+            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
+            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
+        </div>
+        <div class="weui-flex">
+            <div><div class="placeholder">weui</div></div>
+            <div class="weui-flex__item"><div class="placeholder">weui</div></div>
+            <div><div class="placeholder">weui</div></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

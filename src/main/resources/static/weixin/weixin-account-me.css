@@ -1,0 +1,32 @@
+.head-bg {
+
+}
+
+.center-head {
+    width:100%;
+}
+.head-img {
+    width:30%;
+}
+.head-img img {
+    width:80px; height:80px; border-radius:50px; margin:12px;
+    box-shadow: 5px 3px 5px #ddd; border:1px #ddd solid;
+}
+.head-info {
+    width:70%; float:right; height:80px; padding:10px;
+}
+
+.head-info span {
+    color:#777; width:100%;  float:left;
+}
+
+.head-info .nickname {
+    width:100%; font-size:20px; color:#343434; font-family: "Microsoft YaHei" !important;font-family: '微软雅黑';
+}
+
+
+
+
+div.line-div {
+    width:100%; height:10px; background:#eee;
+}

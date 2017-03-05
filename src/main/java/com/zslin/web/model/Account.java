@@ -50,6 +50,18 @@ public class Account extends BaseEntity {
     @Column(name = "follow_user_name")
     private String followUserName;
 
+    /** 是否为办卡用户 */
+    @Column(name = "has_card")
+    private String hasCard;
+
+    public String getHasCard() {
+        return hasCard;
+    }
+
+    public void setHasCard(String hasCard) {
+        this.hasCard = hasCard;
+    }
+
     public String getFollowUserName() {
         return followUserName;
     }
