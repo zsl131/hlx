@@ -85,8 +85,7 @@ public class WeixinController {
                 return;
             } else {
                 if("text".equalsIgnoreCase(msgTypeStr)) { //文本信息
-                    datasTools.onEventText(fromOpenid, content.getTextContent());
-
+                    docSend = datasTools.onEventText(fromOpenid, builderName, content.getTextContent());
                 } else if("image".equalsIgnoreCase(msgTypeStr)) { //图片信息
                     String picUrl = root.getElementsByTagName("PicUrl").item(0).getTextContent(); //图片地址
                     String mediaId = root.getElementsByTagName("MediaId").item(0).getTextContent(); //媒体ID

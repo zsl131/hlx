@@ -5,6 +5,7 @@ import com.zslin.web.vo.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.Date;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/1/23 11:31.
@@ -52,7 +53,19 @@ public class Account extends BaseEntity {
 
     /** 是否为办卡用户 */
     @Column(name = "has_card")
-    private String hasCard;
+    private String hasCard="0";
+
+    /** 关注日期 */
+    @Column(name = "follow_date")
+    private Date followDate;
+
+    public Date getFollowDate() {
+        return followDate;
+    }
+
+    public void setFollowDate(Date followDate) {
+        this.followDate = followDate;
+    }
 
     public String getHasCard() {
         return hasCard;

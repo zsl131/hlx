@@ -44,4 +44,13 @@ public interface IAccountService extends BaseRepository<Account, Integer>, JpaSp
     //获取用户所拉进来的用户数量
     @Query("SELECT COUNT(id) FROM Account a WHERE a.followUserId=?1")
     Integer findPullCount(Integer id);
+
+    @Query("SELECT COUNT(id) FROM Account ")
+    Integer findAllCount();
+
+    @Query("SELECT COUNT(id) FROM Account a WHERE a.status='1'")
+    Integer findFollowCount();
+
+    @Query("SELECT COUNT(id) FROM Account a WHERE a.createDay=?1 AND a.status='1'")
+    Integer findFollowCountByDay(String day);
 }

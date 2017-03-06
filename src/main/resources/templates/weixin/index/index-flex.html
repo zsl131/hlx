@@ -7,7 +7,7 @@
                 <div class="weui-flex" style="margin-top:10px;">
                     <div class="weui-flex__item" th:each="cate, cateVs : ${categoryList}">
                         <div class="single-cate">
-                            <a th:href="'/wx/food/index?filter_cateId=eq-'+${cate.id}">
+                            <a th:href="'/weixin/food/index?filter_cateId=eq-'+${cate.id}">
                                 <img th:src="${cate.picPath}"/>
                                 <p th:text="${cate.name}"></p>
                             </a>

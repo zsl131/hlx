@@ -2,6 +2,7 @@ package com.zslin.wx.tools;
 
 import com.zslin.web.model.Article;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,6 +51,20 @@ public class WeixinXmlTools {
     }
 
     /**
+     * 构建文章推送数据
+     * @param toUser 接收用户openid
+     * @param fromUser 开发者
+     * @param article 文章
+     * @param baseUrl 基础链接地址
+     * @return
+     */
+    public static String buildArticleStr(String toUser, String fromUser, Article article, String baseUrl) {
+        List<Article> list = new ArrayList<>();
+        list.add(article);
+        return buildSubscribeStr(toUser, fromUser, list, baseUrl);
+    }
+
+    /**
      * 构建关注时的数据
      * @param toUser 接收用户Openid
      * @param fromUser 发送方
@@ -72,7 +87,7 @@ public class WeixinXmlTools {
                     append("<Title><![CDATA[").append(dto.getTitle()).append("]]></Title>").
                     append("<Description><![CDATA[").append(dto.getGuide()).append("]]></Description>").
                     append("<PicUrl><![CDATA[").append(baseUrl+dto.getPicPath()).append("]]></PicUrl>").
-                    append("<Url><![CDATA[").append(baseUrl+"/wx/article/detail?id="+dto.getId()).append("]]></Url>").
+                    append("<Url><![CDATA[").append(baseUrl+"/weixin/article/detail?id="+dto.getId()).append("]]></Url>").
                     append("</item>");
         }
         sb.append("</Articles>");

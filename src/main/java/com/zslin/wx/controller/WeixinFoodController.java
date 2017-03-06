@@ -35,7 +35,7 @@ import java.util.List;
  * Created by 钟述林 393156105@qq.com on 2017/2/28 16:45.
  */
 @Controller
-@RequestMapping(value = "wx/food")
+@RequestMapping(value = "weixin/food")
 public class WeixinFoodController {
 
     @Autowired

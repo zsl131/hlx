@@ -30,7 +30,7 @@
                             <i th:if="${account.hasCard eq '2'}" style="color:#F60">（会员过期）</i>
                         </span>
                         <span>邀请人：<b th:remove="tag" th:text="${(account.followUserName ne null and account.followUserName ne '')?account.followUserName:'无'}"></b>
-                        <a href="/wx/account/qr"><i class="fa fa-info"></i> 邀请人赚积分！</a>
+                        <a th:href="@{/weixin/qr(id=${account.id})}"><i class="fa fa-info"></i> 邀请人赚积分！</a>
                         </span>
                     </span>
                 </div>

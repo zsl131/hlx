@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by 钟述林 393156105@qq.com on 2017/3/4 0:37.
  */
 @Controller
-@RequestMapping(value = "wx/article")
+@RequestMapping(value = "weixin/article")
 public class WeixinArticleController {
 
     @Autowired
