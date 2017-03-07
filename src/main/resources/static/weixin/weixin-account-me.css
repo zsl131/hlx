@@ -3,25 +3,25 @@
 }
 
 .center-head {
-    width:100%;
+    width:100%; background:#44444d;
 }
 .head-img {
     width:30%;
 }
 .head-img img {
     width:80px; height:80px; border-radius:50px; margin:12px;
-    box-shadow: 5px 3px 5px #ddd; border:1px #ddd solid;
+    border:1px #ddd solid;/*box-shadow: 5px 3px 5px #ddd;*/
 }
 .head-info {
-    width:70%; float:right; height:80px; padding:10px;
+    width:70%; float:right; height:80px; padding:10px;font-family: "Microsoft YaHei" !important;font-family: '微软雅黑';
 }
 
 .head-info span {
-    color:#777; width:100%;  float:left;
+    color:#FFF; width:100%;  float:left;
 }
 
 .head-info .nickname {
-    width:100%; font-size:20px; color:#343434; font-family: "Microsoft YaHei" !important;font-family: '微软雅黑';
+    width:100%; font-size:20px; color:#FF0;
 }
 
 .list-icon {
