@@ -1,0 +1,12 @@
+.head-part {
+    width:100%; text-align:center;
+}
+.head-img {
+    width:100%; padding:30px; padding-bottom:0px;
+}
+.head-img img {
+    width:35%; border-radius:30px; border:1px #ddd solid;
+}
+.head-part .nickname {
+    width:100%; text-align:center; padding:10px;font-family: "Microsoft YaHei" !important;font-family: '微软雅黑'; font-size:16px;
+}

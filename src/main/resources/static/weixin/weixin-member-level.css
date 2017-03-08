@@ -9,53 +9,24 @@ html, body {
     width:40%; float:left;
 }
 .head-part .img img {
-    width:80%; margin:30px 10%;
+    width:80%; margin:5px 10%;
 }
 .head-part .info {
     width:60%; float:left; color:#FFF;font-family: "Microsoft YaHei" !important;font-family: '微软雅黑'; font-size:16px;
 }
 .head-part .info .title {
-    font-size:28px; font-weight:bold;
-}
-
-.head-part .info .name {
-
-}
-.head-part .info .name b {
-    color:#FF0; padding-left:4px;
+    font-size:22px; font-weight:bold; margin-top:12px; text-align:center; width:100%;
 }
 
 .head-part .info .text {
     color:#aaa;
 }
 
-.show-info {
-    width:90%; float:left; margin-left:5%; color:#eee;
-}
-
-.show-info b {
-    font-size:16px; color:#FF0;
-}
 
 .line-div {
     height:1px; width:90%; margin-left:5%; background:#606069; float:left; margin-top:10px; margin-bottom:20px;
 }
 
-.qr-div {
-    float:left
-}
-.qr-div .img {
-    float:left;
-}
-.qr-div .img img {
-    width:70%; margin-left:15%;
-}
-.qr-div .info {
-    float:left; width:90%; margin-left:5%; color:#eee;font-family: "Microsoft YaHei" !important;font-family: '微软雅黑'; font-size:14px; margin-top:5px;
-}
-.qr-div .info p {
-    margin-top:5px;
-}
 
 div.bottom {
     float:left; width:100%; text-align:center; color:#888;
@@ -63,4 +34,46 @@ div.bottom {
 
 .update-name-href {
     color:#FFF; padding-left:5px;
+}
+
+.level-div {
+    float:left; width:100%;
+}
+.level-ul {
+    float:left; width:100%;
+}
+.level-ul li {
+    float:left; width:90%; margin-left:5%; list-style:none; background:#eee; padding:8px; margin-top:8px; border-radius:8px 0px 8px 0px;
+}
+
+.level-ul li p.name {
+    width:100%; float:left; font-size:18px; color:#F60; border-bottom:1px #ddd solid; padding:5px 0px;
+}
+.level-ul li p.con {
+    float:left; width:100%;
+}
+.level-ul li p.con span {
+    float:left; width:100%; line-height:28px;
+}
+
+.level-ul li p.con span b {
+
+}
+
+.level-ul li p.btn {
+    width:100%; float:right; text-align:right; border-top:1px #ddd solid;
+}
+
+
+.show-info {
+    width:100%;border-bottom:1px #ddd solid; padding:5px 0px;
+}
+.show-info b.name {
+    font-size:16px; color:#F60; padding:5px;
+}
+.show-info span b {
+    color:#F60;
+}
+.opt-btn {
+    width:100%; text-align:center;
 }

@@ -29,9 +29,15 @@ public interface IWalletService extends BaseRepository<Wallet, Integer>, JpaSpec
     @Transactional
     void plusScore(Integer score, String openid);
 
+    @Query("UPDATE Wallet w SET w.phone=?1 WHERE w.openid=?2")
+    @Modifying
+    @Transactional
+    void modifyPhone(String phone, String openid);
+
     @Query("SELECT w.score FROM Wallet w WHERE w.openid=?1")
     Integer queryScore(String openid);
 
     @Query("SELECT w.money FROM Wallet w WHERE w.openid=?1")
     Integer queryMoney(String openid);
+
 }

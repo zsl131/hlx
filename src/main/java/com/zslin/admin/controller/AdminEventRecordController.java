@@ -2,9 +2,10 @@ package com.zslin.admin.controller;
 
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.repository.SimplePageBuilder;
+import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.utils.ParamFilterUtil;
-import com.zslin.web.model.Own;
-import com.zslin.web.service.IOwnService;
+import com.zslin.web.model.EventRecord;
+import com.zslin.web.service.IEventRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -18,19 +19,19 @@ import javax.servlet.http.HttpServletRequest;
  * Created by 钟述林 393156105@qq.com on 2017/1/25 23:41.
  */
 @Controller
-@RequestMapping(value = "admin/own")
-@AdminAuth(name = "礼品管理", psn = "应用管理", orderNum = 10, porderNum = 1, pentity = 0, icon = "fa fa-cubes")
+@RequestMapping(value = "admin/eventRecord")
+@AdminAuth(name = "事件推送记录", psn = "应用管理", orderNum = 10, porderNum = 1, pentity = 0, icon = "fa fa-book")
 public class AdminEventRecordController {
 
     @Autowired
-    private IOwnService ownService;
+    private IEventRecordService eventRecordService;
 
     @GetMapping(value = "list")
-    @AdminAuth(name = "礼品管理", type = "1", orderNum = 1, icon = "fa fa-comment")
+    @AdminAuth(name = "事件推送记录", type = "1", orderNum = 1, icon = "fa fa-book")
     public String list(Model model, Integer page, HttpServletRequest request) {
-        Page<Own> datas = ownService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
-                SimplePageBuilder.generate(page));
+        Page<EventRecord> datas = eventRecordService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
         model.addAttribute("datas", datas);
-        return "admin/own/list";
+        return "admin/eventRecord/list";
     }
 }

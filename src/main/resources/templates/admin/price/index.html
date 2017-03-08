@@ -6,7 +6,8 @@
 	  layout:decorator="fragments/adminModel">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<title>网站配置管理</title>
+		<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+	<title>价格配置管理</title>
 	<script type="text/javascript">
 		$(function() {
 			//$("#addForm").platformvalidate();
@@ -16,42 +17,62 @@
 	<body>
 		<div th:fragment="content" th:remove="tag">
 			<div class="header lighter smaller blue">
-				<h3><span class="glyphicon glyphicon-th-list"></span><i class="icon-setting"></i>&nbsp;网站配置管理<small>&nbsp;</small></h3>
+				<h3><span class="glyphicon glyphicon-th-list"></span><i class="icon-setting"></i>&nbsp;价格配置管理<small>&nbsp;</small></h3>
 			</div>
 
-			<form method="POST" th:object="${appConfig}">
+			<form method="POST" th:object="${price}" id="dataForm">
 				<div class="form-group form-group-lg">
 					<div class="input-group">
-					  <div class="input-group-addon">系统名称：</div>
-					  <input name="appName" type="text" class="form-control" th:value="${appConfig.appName}" placeholder="请输入网站名称" />
+					  <div class="input-group-addon">早餐单价：</div>
+					  <input name="breakfastPrice" id="breakfastPrice" type="text" class="form-control" th:value="${price.breakfastPrice}" placeholder="请输入早餐单价，单位：元" />
 					</div>
 				</div>
 				<div class="form-group form-group-lg">
 					<div class="input-group">
-					  <div class="input-group-addon">当前版本：</div>
-					  <input name="appVersion" type="text" class="form-control" th:value="${appConfig.appVersion}" placeholder="请输入当前版本" />
-					</div>
-				</div>
-				<div class="form-group form-group-lg">
-					<div class="input-group">
-					  <div class="input-group-addon">首页地址：</div>
-					  <input name="indexPage" type="text" class="form-control" th:value="${appConfig.indexPage}" placeholder="请输入前台首页地址" />
-					</div>
-				</div>
-				<div class="form-group form-group-lg">
-					<div class="input-group">
-						<div class="input-group-addon">联系人：</div>
-						<input name="contant" type="text" class="form-control" th:value="${appConfig.contant}" placeholder="网站联系人" />
-					</div>
-				</div>
-				<div class="form-group form-group-lg">
-					<div class="input-group">
-						<div class="input-group-addon">管理员邮箱：</div>
-						<input name="adminEmail" type="text" class="form-control" th:value="${appConfig.adminEmail}" placeholder="管理员邮箱地址，多个用英文逗号隔开" />
+						<div class="input-group-addon">晚餐单价：</div>
+						<input name="dinnerPrice" id="dinnerPrice" type="text" class="form-control" th:value="${price.dinnerPrice}" placeholder="请输入晚餐单价，单位：元" />
 					</div>
 				</div>
 				<button type="submit" class="btn btn-primary submit-update-btn">保存设置</button>
 			</form>
+
+			<script type="text/javascript">
+				jQuery(function($) {
+					$('#dataForm').bootstrapValidator({
+		//		        live: 'disabled',
+						message: '验证不通过',
+						feedbackIcons: {
+							valid: 'glyphicon glyphicon-ok',
+							invalid: 'glyphicon glyphicon-remove',
+							validating: 'glyphicon glyphicon-refresh'
+						},
+						fields: {
+							breakfastPrice: {
+								validators: {
+									notEmpty: {
+										message: '请输入早餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							},
+							dinnerPrice: {
+								validators: {
+									notEmpty: {
+										message: '请输入晚餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							}
+						}
+					});
+				});
+			</script>
 		</div>
 	</body>
 </html>

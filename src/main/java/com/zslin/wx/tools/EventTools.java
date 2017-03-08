@@ -1,6 +1,9 @@
 package com.zslin.wx.tools;
 
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;
+import com.zslin.basic.tools.NormalTools;
+import com.zslin.web.model.EventRecord;
+import com.zslin.web.service.IEventRecordService;
 import com.zslin.wx.dto.TempParamDto;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,6 +37,9 @@ public class EventTools {
 
 	@Autowired
 	private AccessTokenTools accessTokenTools;
+
+	@Autowired
+	private IEventRecordService eventRecordService;
 
 	/**
 	 * 获取事件消息的元素对象
@@ -143,7 +150,37 @@ public class EventTools {
 		paramList.add(new TempParamDto("keyword1", eventType, typeColor));
 		paramList.add(new TempParamDto("keyword2", date, dateColor));
 		paramList.add(new TempParamDto("remark", remark, remarkColor));
+
+		//添加事件推送记录
+		addEventRecord(toUser, title, eventType, date, remark, url);
+
 		return sendMsg(toUser, wxConfig.getEventTemp(), url, "#FF0000", paramList);
+	}
+
+	/**
+	 * 添加事件通知记录
+	 * @param openid
+	 * @param title
+	 * @param titleRemark
+	 * @param eventDate
+	 * @param remark
+	 * @param url
+	 */
+	private void addEventRecord(String openid, String title, String titleRemark,
+								String eventDate, String remark, String url) {
+		EventRecord er = new EventRecord();
+		er.setOpenid(openid);
+		er.setEventDate(eventDate);
+		er.setRemark(remark);
+		er.setTitle(title);
+		er.setTitleRemark(titleRemark);
+		er.setUrl(url);
+		er.setCreateTime(NormalTools.curDate("yyyy-MM-dd HH:mm:ss"));
+		er.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
+		er.setCreateDate(new Date());
+		er.setCreateLong(System.currentTimeMillis());
+
+		eventRecordService.save(er);
 	}
 
 	/**

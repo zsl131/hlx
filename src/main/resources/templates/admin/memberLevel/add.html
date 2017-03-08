@@ -7,45 +7,126 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
-		<title>添加积分规则</title>
+		<title>添加会员等级</title>
 	</head>
 	<body>
 		<div th:fragment="content" th:remove="tag">
 			<div class="header lighter smaller blue">
-				<h3><i class="fa fa-plus"></i>&nbsp;添加积分规则</h3>
-				<div th:replace="admin/scoreRule/nav :: content" th:remove="tag"></div>
+				<h3><i class="fa fa-plus"></i>&nbsp;添加会员等级</h3>
+				<div th:replace="admin/memberLevel/nav :: content" th:remove="tag"></div>
 			</div>
 
-			<form method="POST" th:object="${scoreRule}" id="dataForm">
+			<form method="POST" th:object="${memberLevel}" id="dataForm">
 				<div class="form-group form-group-lg">
 					<div class="input-group">
-						<div class="input-group-addon">积分编码：</div>
-						<input name="code" type="text" class="form-control" th:value="${scoreRule.code}" placeholder="请输入编码，必须唯一" />
+						<div class="input-group-addon">等级：</div>
+						<input name="level" id="level" type="text" class="form-control" th:value="${memberLevel.level}" placeholder="请输入等级" />
 					</div>
 				</div>
 				<div class="form-group form-group-lg">
 					<div class="input-group">
-						<div class="input-group-addon">积分名称：</div>
-						<input name="name" type="text" class="form-control" th:value="${scoreRule.name}" placeholder="请输入名称" />
+						<div class="input-group-addon">名称：</div>
+						<input name="name" id="name" type="text" class="form-control" th:value="${memberLevel.name}" placeholder="请输入等级名称" />
+					</div>
+				</div>
+				<!--<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">折扣：</div>
+						<input name="discount" id="discount" type="text" class="form-control" th:value="${memberLevel.discount}" placeholder="请输入折扣，只需要输入除以100之前的正整数" />
+					</div>
+				</div>-->
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">充值：</div>
+						<input name="chargeMoney" id="chargeMoney" type="text" class="form-control" th:value="${memberLevel.chargeMoney}" placeholder="请输入充值金额" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">赠送：</div>
+						<input name="giveMoney" id="giveMoney" type="text" class="form-control" th:value="${memberLevel.giveMoney}" placeholder="请输入赠送金额" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group input-group-lg">
+						<div class="input-group-addon">状态</div>
+						<div class="form-control">
+							<input type="radio" name="status" value="1" id="status_1" th:checked="${memberLevel.status == '1'}?'checked'"/><label for="status_1">启用</label>
+							<input type="radio" name="status" value="0" id="status_0" th:checked="${memberLevel.status == '0'}?'checked'"/><label for="status_0">停用</label>
+						</div>
 					</div>
 				</div>
 
-				<div class="form-group form-group-lg">
-					<div class="input-group">
-						<div class="input-group-addon">单次记分：</div>
-						<input name="score" type="text" class="form-control" th:value="${scoreRule.score}" placeholder="请输入单次记分，必须为正整数" />
-					</div>
-				</div>
-
-				<div class="form-group form-group-lg">
-					<div class="input-group">
-						<div class="input-group-addon">每日次数：</div>
-						<input name="amount" type="text" class="form-control" th:value="${scoreRule.amount}" placeholder="请输入每日可得分次数，必须为正整数" />
-					</div>
-				</div>
 				<input type="hidden" name="token" value="${session.token}"/>
 				<button type="submit" class="btn btn-primary">确定提交</button>
 			</form>
+
+			<script type="text/javascript">
+				jQuery(function($) {
+					$('#dataForm').bootstrapValidator({
+		//		        live: 'disabled',
+						message: '验证不通过',
+						feedbackIcons: {
+							valid: 'glyphicon glyphicon-ok',
+							invalid: 'glyphicon glyphicon-remove',
+							validating: 'glyphicon glyphicon-refresh'
+						},
+						fields: {
+							level: {
+								validators: {
+									notEmpty: {
+										message: '请输入等级'
+									},
+									regexp: {
+										regexp: "^[1-9][0-9]*$",
+            							message: '等级必须是正整数'
+									}
+								}
+							},
+							name: {
+								validators: {
+									notEmpty: {
+										message: '请输入等级名称'
+									}
+								}
+							},
+							discount: {
+								validators: {
+									notEmpty: {
+										message: '请输入折扣，只需要输入除以100前的正整数'
+									},
+									regexp: {
+										regexp: "^[1-9][0-9]*$",
+            							message: '折扣必须是正整数'
+									}
+								}
+							},
+							chargeMoney: {
+								validators: {
+									notEmpty: {
+										message: '请输入充值金额'
+									},
+									regexp: {
+										regexp: "^[1-9][0-9]*$",
+            							message: '充值金额必须是正整数'
+									}
+								}
+							},
+							giveMoney: {
+								validators: {
+									notEmpty: {
+										message: '请输入赠送金额'
+									},
+									regexp: {
+										regexp: "^[1-9][0-9]*$",
+            							message: '赠送金额必须是正整数'
+									}
+								}
+							},
+						}
+					});
+				});
+			</script>
 		</div>
 	</body>
 </html>

@@ -6,7 +6,7 @@
 	  layout:decorator="fragments/adminModel">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<title>积分规则列表</title>
+		<title>会员等级列表</title>
 		<script type="text/javascript">
 			$(function() {
 				$(".delete-obj-href").deleteFun();
@@ -16,30 +16,34 @@
 <body>
 	<div th:fragment="content" th:remove="tag">
 		<div class="header lighter smaller blue">
-			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;积分规则列表（<span th:text="${datas.getTotalElements()}"></span>）</h3>
-			<div th:replace="admin/scoreRule/nav :: content" th:remove="tag"></div>
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;会员等级列表（<span th:text="${datas.getTotalElements()}"></span>）</h3>
+			<div th:replace="admin/memberLevel/nav :: content" th:remove="tag"></div>
 		</div>
 
 		<div class="table-responsive">
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th>编码</th>
+						<th>等级</th>
 						<th>名称</th>
-						<th>单次记分</th>
-						<th>每日次数</th>
+						<!--<th>折扣</th>-->
+						<th>充值</th>
+						<th>赠送</th>
+						<th>操作</th>
 						<th>操作</th>
 					</tr>
 				</thead>
 
 				<tr th:each="obj : ${datas}">
-					<td th:text="${obj.code}"></td>
+					<td th:text="${obj.level}"></td>
 					<td th:text="${obj.name}"></td>
-					<td th:text="${obj.score}"></td>
-					<td th:text="${obj.amount}"></td>
+					<!--<td th:text="${obj.discount}+' %'"></td>-->
+					<td th:text="${obj.chargeMoney}+' 元'"></td>
+					<td th:text="${obj.giveMoney}+' 元'"></td>
+					<td th:text="${obj.status eq '1'?'启用':'停用'}"></td>
 					<td>
 						<div class="action-buttons">
-							<a class="green auth" sn="AdminScoreRuleController.update" title="修改" th:href="'/admin/scoreRule/update/'+${obj.id}">
+							<a class="green auth" sn="AdminMemberLevelController.update" title="修改" th:href="'/admin/memberLevel/update/'+${obj.id}">
 								<i class="fa fa-pencil"></i>
 							</a>
 						</div>

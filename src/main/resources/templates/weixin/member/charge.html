@@ -6,39 +6,47 @@
       layout:decorator="fragments/weixinModel">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link type="text/css" rel="stylesheet" href="/weixin/weixin-member-level.css"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-member-charge.css"/>
     <title>昭通汉丽轩</title>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
-    <div>
+    <div class="page">
+        <!--<div class="page__hd" style="padding:15px;">
+            <h1 class="page__title">会员充值确认</h1>
+            <p class="page__desc">会员充值预览</p>
+        </div>-->
         <div class="head-part">
-            <div class="img"><img src="/logo-500.png"/></div>
-            <div class="info">
-                <p class="title">昭通汉丽轩会员</p>
+            <div class="head-img"><img th:src="${account.headimgurl}"/></div>
+            <div class="nickname"><b th:text="${account.nickname}"></b> <span style="color:#aaa;">- 办理会员中…</span></div>
+        </div>
+        <div class="weui-form-preview">
+            <div class="weui-form-preview__hd">
+                <label class="weui-form-preview__label">支付金额</label>
+                <em class="weui-form-preview__value">¥<span th:remove="tag" th:text="${level.chargeMoney}"></span></em>
             </div>
-        </div>
-
-        <div class="line-div"></div>
-
-        <div class="level-div">
-            <ul class="level-ul">
-                <li th:each="level : ${datas}">
-                    <p class="name" th:text="${level.name}"></p>
-                    <p class="con">
-                        <span><i class="fa fa-plug"></i> 充值：<b th:text="${level.chargeMoney}"></b> 元</span>
-                        <span><i class="fa fa-coffee"></i> 赠送：<b th:text="${level.giveMoney}"></b> 元</span>
-                        <!--<span><i class="fa fa-percent"></i> 享受：<b th:text="${level.discount*1.0/10}"></b> 折优惠</span>-->
-                    </p>
-                    <p class="btn"><a th:href="@{/wx/member/charge(id=${level.id})}" class="btn btn-warning"><i class="fa fa-unlock"></i> 申请成功<span th:remove="tag" th:text="${level.name}"></span></a></p>
-                </li>
-            </ul>
-        </div>
-
-        <div class="line-div"></div>
-
-        <div class="bottom">
-            <p>昭通汉丽轩全体员工欢迎您的到来！</p>
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">会员名称</label>
+                    <span class="weui-form-preview__value" th:text="${level.name}"></span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">充值金额</label>
+                    <span class="weui-form-preview__value" th:text="${level.chargeMoney} + ' 元'">名字名字名字</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">赠送金额</label>
+                    <span class="weui-form-preview__value" th:text="${level.giveMoney} + ' 元'">名字名字名字</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">说明</label>
+                    <span class="weui-form-preview__value">您的账户将增加 <b th:text="${level.chargeMoney + level.giveMoney}" style="color:#F60"></b> 元，并且成为<span th:text="${level.name}" th:remove="tag"></span></span>
+                </div>
+            </div>
+            <div class="weui-form-preview__ft">
+                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:history.back(-1)">返回重选</a>
+                <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">确定操作</button>
+            </div>
         </div>
     </div>
 </div>

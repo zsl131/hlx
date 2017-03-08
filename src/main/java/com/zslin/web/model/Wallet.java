@@ -30,6 +30,28 @@ public class Wallet extends BaseEntity {
     /** 剩余积分 */
     private Integer score;
 
+    /** 支付密码 */
+    private String password;
+
+    /** 手机号码 */
+    private String phone;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getOpenid() {
         return openid;
     }
