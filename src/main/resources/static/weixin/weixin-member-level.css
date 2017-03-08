@@ -1,0 +1,66 @@
+html, body {
+    background:#44444d;font-family: "Microsoft YaHei" !important;font-family: '微软雅黑';
+}
+
+.head-part {
+    width:100%; float:left; margin-top:20px;
+}
+.head-part .img {
+    width:40%; float:left;
+}
+.head-part .img img {
+    width:80%; margin:30px 10%;
+}
+.head-part .info {
+    width:60%; float:left; color:#FFF;font-family: "Microsoft YaHei" !important;font-family: '微软雅黑'; font-size:16px;
+}
+.head-part .info .title {
+    font-size:28px; font-weight:bold;
+}
+
+.head-part .info .name {
+
+}
+.head-part .info .name b {
+    color:#FF0; padding-left:4px;
+}
+
+.head-part .info .text {
+    color:#aaa;
+}
+
+.show-info {
+    width:90%; float:left; margin-left:5%; color:#eee;
+}
+
+.show-info b {
+    font-size:16px; color:#FF0;
+}
+
+.line-div {
+    height:1px; width:90%; margin-left:5%; background:#606069; float:left; margin-top:10px; margin-bottom:20px;
+}
+
+.qr-div {
+    float:left
+}
+.qr-div .img {
+    float:left;
+}
+.qr-div .img img {
+    width:70%; margin-left:15%;
+}
+.qr-div .info {
+    float:left; width:90%; margin-left:5%; color:#eee;font-family: "Microsoft YaHei" !important;font-family: '微软雅黑'; font-size:14px; margin-top:5px;
+}
+.qr-div .info p {
+    margin-top:5px;
+}
+
+div.bottom {
+    float:left; width:100%; text-align:center; color:#888;
+}
+
+.update-name-href {
+    color:#FFF; padding-left:5px;
+}

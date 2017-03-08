@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>积分规则列表</title>
+		<script type="text/javascript">
+			$(function() {
+				$(".delete-obj-href").deleteFun();
+			});
+		</script>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;积分规则列表（<span th:text="${datas.getTotalElements()}"></span>）</h3>
+			<div th:replace="admin/scoreRule/nav :: content" th:remove="tag"></div>
+		</div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>编码</th>
+						<th>名称</th>
+						<th>单次记分</th>
+						<th>每日次数</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+
+				<tr th:each="obj : ${datas}">
+					<td th:text="${obj.code}"></td>
+					<td th:text="${obj.name}"></td>
+					<td th:text="${obj.score}"></td>
+					<td th:text="${obj.amount}"></td>
+					<td>
+						<div class="action-buttons">
+							<a class="green auth" sn="AdminScoreRuleController.update" title="修改" th:href="'/admin/scoreRule/update/'+${obj.id}">
+								<i class="fa fa-pencil"></i>
+							</a>
+						</div>
+					</td>
+				</tr>
+			</table>
+
+			<div th:include="fragments/page :: pager" th:remove="tag"></div>
+		</div>
+	</div>
+</body>
+</html>

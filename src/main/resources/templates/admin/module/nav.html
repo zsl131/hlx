@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content">
+            <div class="ace-settings-container" id="ace-settings-container">
+                <ul class="pagination">
+                    <li><a class="auth" sn="AdminModuleController.list" href="/admin/module/list"><span class="glyphicon glyphicon-th-list"></span> 短信模板列表</a></li>
+                    <li><a class="auth" sn="AdminModuleController.add" href="/admin/module/add"><span class="fa fa-plus"></span> 添加短信模板</a></li>
+                    <li>
+                        <a class="delete-obj-href red auth" sn="AdminModuleController.synch" title="确定与接口中心同步短信模板吗？" href="/admin/module/synch">
+                            <i class="fa fa-inbox"></i> 同步短信模板
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>

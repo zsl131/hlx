@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>菜品点评列表</title>
+		<script type="text/javascript">
+			$(function() {
+				$(".delete-obj-href").deleteFun();
+			});
+		</script>
+		<style>
+			.head-img {border-radius:5px; width:50px;}
+		</style>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;微信反馈列表<small>（<span th:text="${datas.getTotalElements()}"></span>）</small></h3>
+			<div th:replace="admin/comment/nav :: content" th:remove="tag"></div>
+		</div>
+
+		<div th:replace="admin/comment/filter :: content" th:remove="tag"></div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>菜品图片</th>
+						<th>菜品名称</th>
+						<th>点评者</th>
+						<th>内容</th>
+						<th>赞</th>
+						<th>状态</th>
+						<th>回复</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+
+				<tr th:each="obj : ${datas}">
+					<td><a th:href="${obj.foodPic}" target="_blank"><img th:src="${obj.foodPic}" style="width:120px"/></a></td>
+					<td th:text="${obj.foodName}"></td>
+					<td>
+						<a th:href="${obj.headimgurl}" target="_blank"><img th:src="${obj.headimgurl}" style="width:120px"/></a>
+						<p th:text="${obj.nickname}"></p>
+					</td>
+					<td>
+						<p th:text="${obj.createTime}"></p>
+						<span th:utext="${obj.content}"></span>
+					</td>
+					<td th:text="${obj.isGood eq 1?'是':'否'}"></td>
+					<td>
+						<div th:remove="tag" th:switch="${obj.status}">
+							<span th:case="'1'">显示</span>
+							<span th:case="'0'" style="color:#F00">隐藏</span>
+						</div>
+					</td>
+					<td>
+						<span th:if="${obj.reply eq null}" style="color:#F00">未回复</span>
+						<span th:if="${obj.reply ne null}" th:remove="tag">
+							<p th:text="${obj.replyTime}"></p>
+							<span th:utext="${obj.reply}"></span>
+						</span>
+					</td>
+					<td>
+						<div class="action-buttons">
+							<a class="green auth" sn="AdminCommentController.update" title="修改" th:href="'/admin/comment/update/'+${obj.id}">
+								<i class="fa fa-pencil"></i>
+							</a>
+						</div>
+					</td>
+				</tr>
+			</table>
+
+			<div th:include="fragments/page :: pager" th:remove="tag"></div>
+		</div>
+	</div>
+</body>
+</html>
