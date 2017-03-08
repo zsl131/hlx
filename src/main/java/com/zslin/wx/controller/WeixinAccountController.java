@@ -4,6 +4,8 @@ import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.repository.SimpleSpecificationBuilder;
 import com.zslin.basic.tools.NormalTools;
+import com.zslin.sms.tools.RandomTools;
+import com.zslin.sms.tools.SmsTools;
 import com.zslin.web.model.*;
 import com.zslin.web.service.*;
 import com.zslin.wx.tools.QrTools;
@@ -50,6 +52,9 @@ public class WeixinAccountController {
 
     @Autowired
     private QrTools qrTools;
+
+    @Autowired
+    private SmsTools smsTools;
 
     //微信用户个人中心
     @GetMapping(value = "me")
@@ -133,5 +138,38 @@ public class WeixinAccountController {
             qrcodeService.updateName(name, openid);
         }
         return "1";
+    }
+
+    @GetMapping(value = "modifyPhone")
+    public String modifyPhone(Model model, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        Account a = accountService.findByOpenid(openid);
+        model.addAttribute("account", a);
+        return "weixin/account/modifyPhone";
+    }
+
+    @PostMapping(value = "sendCode")
+    public @ResponseBody String sendCode(String phone, HttpServletRequest request) {
+        try {
+            String code = RandomTools.randomNum4();
+            request.getSession().setAttribute("sms_code", code);
+            smsTools.sendMsg(29613, phone, "code", code);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "0";
+        }
+        return "1";
+    }
+
+    @PostMapping(value = "modifyPhone")
+    public @ResponseBody String modifyPhone(String phone, String code, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        String sessionCode = (String) request.getSession().getAttribute("sms_code");
+        if(code.equals(sessionCode)) {
+
+            return "1";
+        } else {
+            return "0";
+        }
     }
 }

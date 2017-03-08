@@ -41,6 +41,8 @@ public class WxInterceptor extends HandlerInterceptorAdapter {
             }
         }
 //        System.out.println("==========currentOpenid:"+openid);
+//        request.removeAttribute("code"); //移除这两个参数，以免session过期时还使用这个参数获取openid
+        request.removeAttribute("state"); //移除这两个参数，以免session过期时还使用这个参数获取openid
         return super.preHandle(request, response, handler);
     }
 

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>短信发送记录</title>
+		<script type="text/javascript">
+			$(function() {
+				$(".delete-obj-href").deleteFun();
+			});
+		</script>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;短信发送记录<small>（<span th:text="${datas.getTotalElements()}"></span>）</small></h3>
+			<div th:replace="admin/sendRecord/nav :: content" th:remove="tag"></div>
+		</div>
+
+        <div th:replace="admin/sendRecord/filter :: content" th:remove="tag"></div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>状态</th>
+						<th>手机号</th>
+						<th>内容</th>
+						<th>原因</th>
+						<th>日期</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:each="obj : ${datas}">
+						<td>
+							<div th:switch="${obj.status}" th:remove="tag">
+								<span style="color:blue" th:case="'0'">成功</span>
+								<span th:case="*" th:text="${obj.msg}"></span>
+							</div>
+						</td>
+						<td th:text="${obj.phone}">amount</td>
+						<td th:text="${obj.content}"></td>
+						<td th:text="${obj.msg}"></td>
+						<td th:text="${obj.createTime}"></td>
+					</tr>
+				</tbody>
+			</table>
+			<div th:include="fragments/page :: pager" th:remove="tag"></div>
+		</div>
+	</div>
+</body>
+</html>

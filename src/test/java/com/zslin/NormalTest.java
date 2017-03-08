@@ -3,6 +3,7 @@ package com.zslin;
 import com.zslin.kaoqin.tools.GetJsonTools;
 import com.zslin.kaoqin.tools.KaoqinFileTools;
 import com.zslin.kaoqin.tools.PicTools;
+import com.zslin.sms.tools.RandomTools;
 import com.zslin.wx.tools.WxConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,5 +76,12 @@ public class NormalTest {
     public void test07() {
         String con = GetJsonTools.buildRebootDeviceJson();
         kaoqinFileTools.setChangeContext(GetJsonTools.buildDataJson(con), false);
+    }
+
+    @Test
+    public void test08() {
+        for(int i=0;i<20;i++) {
+            System.out.println(RandomTools.randomNum4());
+        }
     }
 }

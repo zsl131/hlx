@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+	<title>价格配置管理</title>
+	<script type="text/javascript">
+		$(function() {
+			//$("#addForm").platformvalidate();
+		});
+	</script>
+	</head>
+	<body>
+		<div th:fragment="content" th:remove="tag">
+			<div class="header lighter smaller blue">
+				<h3><span class="glyphicon glyphicon-th-list"></span><i class="icon-setting"></i>&nbsp;价格配置管理<small>&nbsp;</small></h3>
+			</div>
+
+			<form method="POST" th:object="${price}" id="dataForm">
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+					  <div class="input-group-addon">早餐单价：</div>
+					  <input name="breakfastPrice" id="breakfastPrice" type="text" class="form-control" th:value="${price.breakfastPrice}" placeholder="请输入早餐单价，单位：元" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">晚餐单价：</div>
+						<input name="dinnerPrice" id="dinnerPrice" type="text" class="form-control" th:value="${price.dinnerPrice}" placeholder="请输入晚餐单价，单位：元" />
+					</div>
+				</div>
+				<button type="submit" class="btn btn-primary submit-update-btn">保存设置</button>
+			</form>
+
+			<script type="text/javascript">
+				jQuery(function($) {
+					$('#dataForm').bootstrapValidator({
+		//		        live: 'disabled',
+						message: '验证不通过',
+						feedbackIcons: {
+							valid: 'glyphicon glyphicon-ok',
+							invalid: 'glyphicon glyphicon-remove',
+							validating: 'glyphicon glyphicon-refresh'
+						},
+						fields: {
+							breakfastPrice: {
+								validators: {
+									notEmpty: {
+										message: '请输入早餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							},
+							dinnerPrice: {
+								validators: {
+									notEmpty: {
+										message: '请输入晚餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							}
+						}
+					});
+				});
+			</script>
+		</div>
+	</body>
+</html>
