@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+	<title>客户端信息维护</title>
+	<script type="text/javascript">
+		$(function() {
+			//$("#addForm").platformvalidate();
+		});
+	</script>
+	</head>
+	<body>
+		<div th:fragment="content" th:remove="tag">
+			<div class="header lighter smaller blue">
+				<h3><span class="glyphicon glyphicon-th-list"></span><i class="icon-setting"></i>&nbsp;客户端信息维护</h3>
+			</div>
+
+			<form method="POST" th:object="${clientConfig}" id="dataForm">
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">客户端公司简称：</div>
+						<input name="name" type="text" class="form-control" th:value="${clientConfig.name}" placeholder="请输入客户端公司简称" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">客户端公司全称：</div>
+						<input name="longName" type="text" class="form-control" th:value="${clientConfig.longName}" placeholder="请输入客户端公司全称" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">上传时间间隔：</div>
+						<input name="uploadTime" type="text" class="form-control" th:value="${clientConfig.uploadTime}" placeholder="请输入上传时间间隔，单位秒，整数" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">下载时间间隔：</div>
+						<input name="downloadTime" type="text" class="form-control" th:value="${clientConfig.downloadTime}" placeholder="请输入下载时间间隔，单位秒，整数" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">用餐时间：</div>
+						<input name="haveTime" type="text" class="form-control" th:value="${clientConfig.haveTime}" placeholder="顾客用餐时长，单位分钟" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">平均用餐时间：</div>
+						<input name="averageHaveTime" type="text" class="form-control" th:value="${clientConfig.averageHaveTime}" placeholder="顾客平均用餐时长，单位分钟" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">联系电话：</div>
+						<input name="phone" type="text" class="form-control" th:value="${clientConfig.phone}" placeholder="联系电话，用于显示到小票上" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">餐厅地址：</div>
+						<input name="address" type="text" class="form-control" th:value="${clientConfig.address}" placeholder="餐厅地址，用于显示到小票上" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group input-group-lg">
+						<div class="input-group-addon">状态：</div>
+						<div class="form-control">
+							<input type="radio" name="status" value="1" id="status_1" th:checked="${clientConfig.status == '1'}?'checked'"/><label for="status_1">启用</label>
+							<input type="radio" name="status" value="0" id="status_0" th:checked="${clientConfig.status == '0'}?'checked'"/><label for="status_0">停用</label>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" name="token" value="${session.token}"/>
+				<button type="submit" class="btn btn-primary submit-update-btn">保存设置</button>
+			</form>
+		</div>
+	</body>
+</html>

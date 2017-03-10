@@ -42,14 +42,14 @@ public class MainController {
 
 //        String configJson = GetJsonTools.buildDataJson(GetJsonTools.buildConfigJson(companyService.loadOne()));
 
-        System.out.println(System.currentTimeMillis()/1000);
+//        System.out.println(System.currentTimeMillis()/1000);
 
         String json = kaoqinFileTools.getChangeContext();
         if(json==null || "".equals(json.trim())) {
 //            json = configJson;
             json = kaoqinFileTools.getConfigContext();
         }
-        System.out.println(json);
+//        System.out.println(json);
         kaoqinFileTools.setChangeContext("", false); //处理完成后清空内容
         return json;
     }
