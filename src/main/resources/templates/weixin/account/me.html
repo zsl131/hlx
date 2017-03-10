@@ -7,8 +7,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-account-me.css"/>
+    <script type="text/javascript" src="/weixin/weixin-bind-phone.js"></script>
     <script src="/weixin/weixin-account-me.js"></script>
     <title>昭通汉丽轩</title>
+
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
@@ -37,8 +39,17 @@
                 <div class="line-div"></div>
 
                 <div class="weui-cells">
+                    <a class="weui-cell weui-cell_access" href="/wx/account/money" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-rmb"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>账户余额</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${wallet.money*1.0/100} + ' 元'"></span>
+                        </div>
+                    </a>
                     <a class="weui-cell weui-cell_access" href="/wx/account/score" >
-                        <div class="weui-cell__hd"><i class="list-icon fa fa-cubes"></i></div>
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-cube"></i></div>
                         <div class="weui-cell__bd">
                             <span>我的积分</span>
                         </div>
@@ -46,14 +57,23 @@
                             <span th:text="${wallet.score}"></span>
                         </div>
                     </a>
-
-                    <a class="weui-cell weui-cell_access" href="/wx/account/own" >
-                        <div class="weui-cell__hd"><i class="list-icon fa fa-gift"></i></div>
+                    <a class="weui-cell weui-cell_access" href="/wx/member/chargeList" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-plug"></i></div>
                         <div class="weui-cell__bd">
-                            <span>我的物品</span>
+                            <span>充值明细</span>
                         </div>
                         <div class="weui-cell__ft">
-                            <span th:text="${ownCount}"></span>
+                            <span th:text="${chargeCount}"></span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" th:href="${(account.phone eq null || account.phone eq '')?'javascript:bindPhone()':'javascript:showPhone()'}" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-phone"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>手机号码</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span id="phone" th:text="${(account.phone eq null || account.phone eq '')?'未绑定':account.phone}"></span>
                         </div>
                     </a>
 
@@ -86,6 +106,16 @@
                             <span th:text="${ownCount}"></span>
                         </div>
                     </a>
+
+                    <!--<a class="weui-cell weui-cell_access" href="/wx/account/own" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-gift"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>我的物品</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${ownCount}"></span>
+                        </div>
+                    </a>-->
                 </div>
 
             </div>

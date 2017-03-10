@@ -66,6 +66,18 @@ public class Comment extends BaseEntity {
     @Column(name = "reply_time")
     private String replyTime;
 
+    /** 是否为优秀，需要由管理员设置，优秀的可以加积分 */
+    @Column(name = "is_excellet")
+    private Integer isExcellet = 0;
+
+    public Integer getIsExcellet() {
+        return isExcellet;
+    }
+
+    public void setIsExcellet(Integer isExcellet) {
+        this.isExcellet = isExcellet;
+    }
+
     public Integer getFoodId() {
         return foodId;
     }

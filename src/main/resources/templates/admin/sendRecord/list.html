@@ -16,7 +16,9 @@
 <body>
 	<div th:fragment="content" th:remove="tag">
 		<div class="header lighter smaller blue">
-			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;短信发送记录<small>（<span th:text="${datas.getTotalElements()}"></span>）</small></h3>
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;短信发送记录<small>（<span th:text="${datas.getTotalElements()}"></span>）</small>
+			<strong style="color:#F60;">（剩余&nbsp;<span th:remove="tag" th:text="${surplus}"></span>&nbsp;条）</strong>
+			</h3>
 			<div th:replace="admin/sendRecord/nav :: content" th:remove="tag"></div>
 		</div>
 

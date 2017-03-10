@@ -6,9 +6,13 @@ package com.zslin.wx.dbtools;
  */
 public class ScoreAdditionalDto {
 
-    private String name;
+    private String name="";
 
     private String value;
+
+    public ScoreAdditionalDto(String value) {
+        this.name = ""; this.value = value;
+    }
 
     public ScoreAdditionalDto(String name, String value) {
         this.name = name;

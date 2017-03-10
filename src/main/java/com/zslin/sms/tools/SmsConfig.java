@@ -16,6 +16,15 @@ public class SmsConfig {
     private String listModulesCode;
     private String surplusCode;
     private String sendMsgCode;
+    private String sendCodeIid;
+
+    public String getSendCodeIid() {
+        return sendCodeIid;
+    }
+
+    public void setSendCodeIid(String sendCodeIid) {
+        this.sendCodeIid = sendCodeIid;
+    }
 
     public String getUrl() {
         return url;

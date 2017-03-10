@@ -26,6 +26,9 @@ public class Account extends BaseEntity {
 
     private String identity;
 
+    @Column(name = "bind_phone")
+    private String bindPhone="0";
+
     /** 状态：0-取消关注；1-关注中 */
     private String status;
 
@@ -51,13 +54,21 @@ public class Account extends BaseEntity {
     @Column(name = "follow_user_name")
     private String followUserName;
 
-    /** 是否为办卡用户 */
+    /** 是否为办卡用户,0-非会员；1-会员；2-会员过期，即账户余额为0 */
     @Column(name = "has_card")
     private String hasCard="0";
 
     /** 关注日期 */
     @Column(name = "follow_date")
     private Date followDate;
+
+    public String getBindPhone() {
+        return bindPhone;
+    }
+
+    public void setBindPhone(String bindPhone) {
+        this.bindPhone = bindPhone;
+    }
 
     public Date getFollowDate() {
         return followDate;

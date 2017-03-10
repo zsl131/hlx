@@ -15,7 +15,7 @@
         <div class="head-part">
             <div class="img"><img src="/logo-500.png"/></div>
             <div class="info">
-                <p class="title">昭通汉丽轩会员</p>
+                <p class="title">会员充值明细</p>
             </div>
         </div>
 
@@ -23,14 +23,16 @@
 
         <div class="level-div">
             <ul class="level-ul">
-                <li th:each="level : ${datas}">
-                    <p class="show-info">
-                        <b class="name" th:text="${level.name}"></b>
-                        <span><i class="fa fa-plug"></i> 充值：<b th:text="${level.chargeMoney}"></b> 元</span>
-                        <span>赠送：<b th:text="${level.giveMoney}"></b> 元</span>
+                <li th:each="obj : ${datas}">
+                    <p class="name" th:text="${obj.createTime}" style="color:#777; font-size:13px;">
+                    </p>
+                    <p class="con">
+                        <span>充值：<b th:text="${obj.chargeMoney}"></b> 元</span>
+                        <span>赠送：<b th:text="${obj.giveMoney}"></b> 元</span>
                     </p>
                     <p class="opt-btn">
-                        <a th:href="@{/wx/member/charge(id=${level.id})}" class="btn btn-info"><i class="fa fa-unlock"></i> 立即办理该会员</a>
+                        <button type="button" class="btn">状态：<span th:if="${obj.status eq '0'}" th:remove="tag">待付款</span><span th:if="${obj.status eq '-1'}" th:remove="tag">已取消</span><span th:if="${obj.status eq '1'}" th:remove="tag">已完成</span></button>
+                        <a th:href="@{/wx/member/showCharge(id=${obj.id})}" class="btn btn-info"><i class="fa fa-eye"></i> 查看详情</a>
                     </p>
                 </li>
                 <!--<li th:each="level : ${datas}">

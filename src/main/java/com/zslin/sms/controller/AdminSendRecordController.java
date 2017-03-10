@@ -6,6 +6,7 @@ import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.sms.model.SendRecord;
 import com.zslin.sms.service.ISendRecordService;
+import com.zslin.sms.tools.SmsTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -26,12 +27,16 @@ public class AdminSendRecordController {
     @Autowired
     private ISendRecordService sendRecordService;
 
+    @Autowired
+    private SmsTools smsTools;
+
     @GetMapping(value = "list")
     @AdminAuth(name = "短信发送记录", orderNum = 1, type = "1", icon = "fa fa-file-text-o")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<SendRecord> datas = sendRecordService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
         model.addAttribute("datas", datas);
+        model.addAttribute("surplus", smsTools.surplus());
         return "admin/sendRecord/list";
     }
 }

@@ -130,7 +130,7 @@ public class AdminWorkerController {
     private void bind(Worker w) {
         try {
             Account a = accountService.findByPhone(w.getPhone());
-            if(a!=null) {
+            if(a!=null && (w.getOpenid()==null || "".equals(w.getOpenid()))) {
                 w.setAccountId(a.getId());
                 w.setOpenid(a.getOpenid());
                 w.setHeadimgurl(a.getHeadimgurl());

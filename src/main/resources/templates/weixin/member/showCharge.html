@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-member-charge.css"/>
+    <script src="/weixin/weixin-member-show-charge.js"></script>
+    <script style="/weixin/weixin-member-show-charge.js"></script>
+    <title>昭通汉丽轩</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="page">
+        <!--<div class="page__hd" style="padding:15px;">
+            <h1 class="page__title">会员充值确认</h1>
+            <p class="page__desc">会员充值预览</p>
+        </div>-->
+        <div class="head-part">
+            <div class="head-img"><img th:src="${charge.headimg}"/></div>
+            <div class="nickname"><b th:text="${charge.nickname}"></b> <span style="color:#aaa;"><span th:if="${charge.status eq '0'}" th:remove="tag">- 办理会员中…</span><span th:if="${charge.status eq '-1'}" th:remove="tag">- 会员卡办理已取消</span><span th:if="${charge.status eq '1'}" th:remove="tag">- 会员卡办理完成</span></span></div>
+        </div>
+        <div class="weui-form-preview">
+            <div class="weui-form-preview__hd">
+                <label class="weui-form-preview__label">应付金额</label>
+                <em class="weui-form-preview__value">¥<span th:remove="tag" th:text="${charge.chargeMoney}"></span></em>
+            </div>
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">充值金额</label>
+                    <span class="weui-form-preview__value" th:text="${charge.chargeMoney} + ' 元'">名字名字名字</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">赠送金额</label>
+                    <span class="weui-form-preview__value" th:text="${charge.giveMoney} + ' 元'">名字名字名字</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">手机号码</label>
+                    <span class="weui-form-preview__value" th:text="${charge.phone}" style="color:#F60"></span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">办理时间</label>
+                    <span class="weui-form-preview__value" th:text="${charge.createTime}"></span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">说明</label>
+                    <span class="weui-form-preview__value">完成后账户将增加 <b th:text="${charge.chargeMoney + charge.giveMoney}" style="color:#F60"></b> 元</span>
+                </div>
+            </div>
+            <div class="weui-form-preview__ft" th:if="${charge.openid eq account.openid and charge.status eq '0'}">
+                <a class="weui-form-preview__btn weui-form-preview__btn_default cancel-btn" href="javascript:;">取消办理</a>
+                <a href="javascript:;" class="weui-form-preview__btn weui-form-preview__btn_primary wait-btn">等待收银员确认...</a>
+            </div>
+
+            <div class="weui-form-preview__ft" th:if="${account.type ne '0' and charge.status eq '0'}">
+                <button type="button" class="weui-form-preview__btn weui-form-preview__btn_primary verfiy-btn">确认已收到顾客<b th:text="${charge.chargeMoney}"></b>元，就点这里</button>
+            </div>
+
+            <div class="weui-form-preview__ft" th:if="${charge.status eq '-1'}">
+                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:;">此次业务已取消</a>
+            </div>
+
+            <div class="weui-form-preview__ft" th:if="${charge.status eq '1'}">
+                <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:;">此次业务已完成</a>
+            </div>
+
+
+            <input id="chargeId" th:value="${charge.id}" type="hidden"/>
+            <input id="chargeStatus" th:value="${charge.status}" type="hidden"/>
+        </div>
+        <div class="" style="text-align:center; color:#aaa; font-size:12px; padding:15px 10px;">
+            建议到店完成会员办理业务，目前只支持<b style="color:#F60">到店支付</b>！
+        </div>
+        <div th:if="${account.type ne '0' and charge.status eq '0'}" class="" style="text-align:center; color:#aaa; font-size:12px; padding:5px 10px;">
+            点击“确认已收款”前请确认已收取人民币<b style="color:#F60" th:text="${charge.chargeMoney}"></b>元！
+        </div>
+    </div>
+</div>
+</body>
+</html>

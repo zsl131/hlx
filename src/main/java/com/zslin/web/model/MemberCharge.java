@@ -5,6 +5,7 @@ import com.zslin.web.vo.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.Date;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/7 10:46.
@@ -48,6 +49,84 @@ public class MemberCharge extends BaseEntity {
     /** 每次充值加1 */
     @Column(name = "order_no")
     private Integer orderNo=1;
+
+    /** 状态，0-待处理，1-已收款确认，-1-用户取消 */
+    private String status;
+
+    /** 审核人员Id */
+    @Column(name = "verify_account_id")
+    private Integer verifyAccountId;
+
+    /** 审核人员名称 */
+    @Column(name = "verify_account_name")
+    private String verifyAccountName;
+
+    /** 审核人员Openid */
+    @Column(name = "verify_account_openid")
+    private String verifyAccountOpenid;
+
+    /** 审核人员电话 */
+    @Column(name = "verify_account_phone")
+    private String verifyAccountPhone;
+
+    @Column(name = "verify_date")
+    private Date verifyDate;
+
+    public Integer getVerifyAccountId() {
+        return verifyAccountId;
+    }
+
+    public void setVerifyAccountId(Integer verifyAccountId) {
+        this.verifyAccountId = verifyAccountId;
+    }
+
+    public String getVerifyAccountName() {
+        return verifyAccountName;
+    }
+
+    public void setVerifyAccountName(String verifyAccountName) {
+        this.verifyAccountName = verifyAccountName;
+    }
+
+    public String getVerifyAccountOpenid() {
+        return verifyAccountOpenid;
+    }
+
+    public void setVerifyAccountOpenid(String verifyAccountOpenid) {
+        this.verifyAccountOpenid = verifyAccountOpenid;
+    }
+
+    public String getVerifyAccountPhone() {
+        return verifyAccountPhone;
+    }
+
+    public void setVerifyAccountPhone(String verifyAccountPhone) {
+        this.verifyAccountPhone = verifyAccountPhone;
+    }
+
+    public Date getVerifyDate() {
+        return verifyDate;
+    }
+
+    public void setVerifyDate(Date verifyDate) {
+        this.verifyDate = verifyDate;
+    }
+
+    public Integer getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(Integer orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Integer getLevel() {
         return level;

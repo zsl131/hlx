@@ -28,7 +28,9 @@
     padding-right:5px; color:#8f929d;
 }
 
-
+.list-icon {
+    font-size:18px; width:25px; text-align:center;
+}
 
 
 div.line-div {

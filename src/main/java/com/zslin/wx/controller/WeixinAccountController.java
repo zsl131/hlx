@@ -4,10 +4,15 @@ import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.repository.SimpleSpecificationBuilder;
 import com.zslin.basic.tools.NormalTools;
+import com.zslin.kaoqin.model.Worker;
+import com.zslin.kaoqin.service.IWorkerService;
 import com.zslin.sms.tools.RandomTools;
+import com.zslin.sms.tools.SmsConfig;
 import com.zslin.sms.tools.SmsTools;
 import com.zslin.web.model.*;
 import com.zslin.web.service.*;
+import com.zslin.wx.dbtools.ScoreAdditionalDto;
+import com.zslin.wx.dbtools.ScoreTools;
 import com.zslin.wx.tools.QrTools;
 import com.zslin.wx.tools.SessionTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +61,18 @@ public class WeixinAccountController {
     @Autowired
     private SmsTools smsTools;
 
+    @Autowired
+    private SmsConfig smsConfig;
+
+    @Autowired
+    private ScoreTools scoreTools;
+
+    @Autowired
+    private IWorkerService workerService;
+
+    @Autowired
+    private IMemberChargeService memberChargeService;
+
     //微信用户个人中心
     @GetMapping(value = "me")
     public String me(Model model, HttpServletRequest request) {
@@ -67,6 +84,7 @@ public class WeixinAccountController {
         model.addAttribute("ownCount", ownService.findCount(openid)); //礼物数量
         model.addAttribute("commentCount", commentService.findCount(openid)); //评论数量
         model.addAttribute("feedbackCount", feedbackService.findCount(openid)); //消息数量
+        model.addAttribute("chargeCount", memberChargeService.findCount(openid)); //充值次数
         return "weixin/account/me";
     }
 
@@ -80,6 +98,18 @@ public class WeixinAccountController {
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
         model.addAttribute("datas", datas);
         return "weixin/account/score";
+    }
+
+    @GetMapping(value = "money")
+    public String money(Model model, Integer page, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        SimpleSpecificationBuilder builder = new SimpleSpecificationBuilder("openid", "eq", openid);
+        builder.add("type", "eq", "1");
+        model.addAttribute("wallet", walletService.findByOpenid(openid));
+        Page<WalletDetail> datas = walletDetailService.findAll(builder.generate(),
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
+        model.addAttribute("datas", datas);
+        return "weixin/account/money";
     }
 
     @GetMapping(value = "commentList")
@@ -151,9 +181,11 @@ public class WeixinAccountController {
     @PostMapping(value = "sendCode")
     public @ResponseBody String sendCode(String phone, HttpServletRequest request) {
         try {
+            Account a = accountService.findByPhone(phone);
+            if(a!=null) {return "-1";}
             String code = RandomTools.randomNum4();
             request.getSession().setAttribute("sms_code", code);
-            smsTools.sendMsg(29613, phone, "code", code);
+            smsTools.sendMsg(Integer.parseInt(smsConfig.getSendCodeIid()), phone, "code", code);
         } catch (Exception e) {
             e.printStackTrace();
             return "0";
@@ -166,10 +198,36 @@ public class WeixinAccountController {
         String openid = SessionTools.getOpenid(request);
         String sessionCode = (String) request.getSession().getAttribute("sms_code");
         if(code.equals(sessionCode)) {
-
+            walletService.modifyPhone(phone, openid);
+            updateData(phone, openid);
+            //处理积分
+            scoreTools.processScore(openid, ScoreRule.BIND_PHONE, new ScoreAdditionalDto("手机号码", phone));
             return "1";
         } else {
             return "0";
+        }
+    }
+
+    //修改员工数据和微信用户数据
+    private void updateData(String phone, String openid) {
+        Worker w = workerService.findByPhone(phone);
+        if(w!=null) {
+            Account a = accountService.findByOpenid(openid);
+            w.setHeadimgurl(a.getHeadimgurl());
+            w.setOpenid(openid);
+            w.setAccountId(a.getId());
+            workerService.save(w);
+
+            a.setName(w.getName());
+            a.setIdentity(w.getIdentity());
+            a.setPhone(phone);
+            a.setBindPhone("1");
+            if("0".equals(a.getType())) {
+                a.setType("1");
+            }
+            accountService.save(a);
+        } else {
+            accountService.modifyPhone(phone, openid);
         }
     }
 }

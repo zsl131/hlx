@@ -4,6 +4,7 @@ import com.zslin.kaoqin.tools.GetJsonTools;
 import com.zslin.kaoqin.tools.KaoqinFileTools;
 import com.zslin.kaoqin.tools.PicTools;
 import com.zslin.sms.tools.RandomTools;
+import com.zslin.web.tools.CommonTools;
 import com.zslin.wx.tools.WxConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,5 +84,11 @@ public class NormalTest {
         for(int i=0;i<20;i++) {
             System.out.println(RandomTools.randomNum4());
         }
+    }
+
+    @Test
+    public void test09() {
+        System.out.println(CommonTools.keep2Point(33d/10));
+        System.out.println(CommonTools.daysOfTwo("2017-03-09", "2017-03-18"));
     }
 }

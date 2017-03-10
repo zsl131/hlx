@@ -21,6 +21,11 @@ public class ScoreRule {
     public static final String SHARE = "SHARE";
     //拉取用户
     public static final String PULL_USER = "PULL-USER";
+    //绑定手机号码
+    public static final String BIND_PHONE = "BIND-PHONE";
+
+    //优秀评论
+    public static final String EXCELLET_COMMENT = "EXCELLET-COMMENT";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
