@@ -1,8 +1,6 @@
 package com.zslin.client.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/10 10:18.
@@ -12,6 +10,8 @@ import javax.persistence.Table;
 @Table(name = "c_client_config")
 public class ClientConfig {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     /** 公司简称 */

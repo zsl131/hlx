@@ -10,6 +10,7 @@ import com.zslin.client.service.IClientCodeService;
 import com.zslin.client.service.IClientConfigService;
 import com.zslin.client.service.ICodeService;
 import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +26,7 @@ import java.util.List;
  * Created by 钟述林 393156105@qq.com on 2017/2/5 15:03.
  */
 @Controller
-@RequestMapping(value = "admin/url")
+@RequestMapping(value = "admin/clientConfig")
 @AdminAuth(name = "客户端管理", orderNum = 1, porderNum = 1, psn = "客户端管理", pentity = 0, icon = "fa fa-chain")
 public class AdminClientConfigController {
 
@@ -56,10 +57,11 @@ public class AdminClientConfigController {
         ClientConfig c = clientConfigService.loadOne();
         if(c==null) {
             clientConfigService.save(clientConfig);
+            send2Client(clientConfig);
         } else {
             MyBeanUtils.copyProperties(clientConfig, c, new String[]{"id", "token"});
             clientConfigService.save(c);
-//            send2Device(c);
+            send2Client(c);
         }
 
         return "redirect:/admin/clientConfig/index";
@@ -102,5 +104,10 @@ public class AdminClientConfigController {
             return "0";
         }
         return "1";
+    }
+
+    private void send2Client(ClientConfig cc) {
+        String json = ClientJsonTools.buildDataJson(ClientJsonTools.buildConfig(cc));
+        clientFileTools.setConfigContext(json);
     }
 }

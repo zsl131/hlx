@@ -15,7 +15,7 @@ public interface IClientConfigService extends BaseRepository<ClientConfig, Integ
     @Query("SELECT c.status FROM ClientConfig c WHERE c.token=?1")
     String queryStatus(String token);
 
-    @Query("FROM Company ")
+    @Query("FROM ClientConfig ")
     @Cacheable(cacheNames = "client-one")
     ClientConfig loadOne();
 

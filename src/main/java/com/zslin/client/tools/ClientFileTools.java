@@ -18,21 +18,21 @@ public class ClientFileTools {
     @Autowired
     private ConfigTools configTools;
 
-    private File getConfigFile(String token) {
-        return getFile(token, CONF_FILE);
+    private File getConfigFile() {
+        return getFile(CONF_FILE);
     }
 
-    private File getChangeFile(String token) {
-        return getFile(token, GET_FILE);
+    private File getChangeFile() {
+        return getFile(GET_FILE);
     }
 
-    public void setConfigContext(String token, String content) {
-        setFileContext(getConfigFile(token), content);
+    public void setConfigContext(String content) {
+        setFileContext(getConfigFile(), content);
     }
 
-    public void setChangeContext(String token, String content, boolean isAppend) {
+    public void setChangeContext(String content, boolean isAppend) {
         if(isAppend) { //如果是追加则需要修改里面的内容
-            String con = getChangeContext(token);
+            String con = getChangeContext();
             if(con!=null && !"".equals(con.trim())) {
                 int minus =2;
                 if(con.endsWith("\n")) {minus+=1;}
@@ -40,19 +40,19 @@ public class ClientFileTools {
                 content = con.substring(0, con.length() - minus) + "," + content.replace(temp, "");
             }
         }
-        setFileContext(getChangeFile(token), content);
+        setFileContext(getChangeFile(), content);
     }
 
-    public String getConfigContext(String token) {
-        return getFileContext(getConfigFile(token));
+    public String getConfigContext() {
+        return getFileContext(getConfigFile());
     }
 
-    public String getChangeContext(String token) {
-        return getFileContext(getChangeFile(token));
+    public String getChangeContext() {
+        return getFileContext(getChangeFile());
     }
 
-    private File getFile(String token, String fileName) {
-        File file = new File(configTools.getUploadPath("/client/"+token)+fileName);
+    private File getFile(String fileName) {
+        File file = new File(configTools.getUploadPath("/client/")+fileName);
         if(!file.exists()) {createFile(fileName);}
         return file;
     }

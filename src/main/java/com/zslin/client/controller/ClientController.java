@@ -6,6 +6,7 @@ import com.zslin.client.model.Code;
 import com.zslin.client.service.IClientCodeService;
 import com.zslin.client.service.IClientConfigService;
 import com.zslin.client.service.ICodeService;
+import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.SmsException;
 import com.zslin.client.tools.SmsSucException;
 import org.springframework.beans.factory.BeanFactory;
@@ -36,6 +37,9 @@ public class ClientController {
 
     @Autowired
     private ICodeService codeService;
+
+    @Autowired
+    private ClientFileTools clientFileTools;
 
     @GetMapping(value = "upload")
     public ResDto upload(HttpServletRequest request) {
@@ -98,5 +102,18 @@ public class ClientController {
         } catch (Exception e) {
             return new ResDto(ResDto.ERR, "", e.getMessage());
         }
+    }
+
+    //设备从服务端下载数据
+    @GetMapping(value = "download")
+    public String download(String token, HttpServletRequest request) {
+
+        String json = clientFileTools.getChangeContext();
+        if(json==null || "".equals(json.trim())) {
+            json = clientFileTools.getConfigContext();
+        }
+//        System.out.println(json);
+        clientFileTools.setChangeContext("", false); //处理完成后清空内容
+        return json;
     }
 }

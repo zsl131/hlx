@@ -1,5 +1,10 @@
 package com.zslin.client.tools;
 
+import com.alibaba.fastjson.JSON;
+import com.zslin.client.dto.JsonDto;
+import com.zslin.client.model.ClientConfig;
+import com.zslin.kaoqin.model.Worker;
+
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/10 11:29.
  */
@@ -17,4 +22,15 @@ public class ClientJsonTools {
         sb.append("]}");
         return sb.toString();
     }
+
+    public static String buildConfig(ClientConfig cc) {
+        JsonDto jd = new JsonDto("config", "update", cc);
+        return JSON.toJSONString(jd);
+    }
+
+    public static String buildWorker(String action, Worker w) {
+        JsonDto jd = new JsonDto("worker", action, w);
+        return JSON.toJSONString(jd);
+    }
+
 }
