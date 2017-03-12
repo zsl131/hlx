@@ -11,6 +11,7 @@ import com.zslin.client.service.IClientConfigService;
 import com.zslin.client.service.ICodeService;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.ClientJsonTools;
+import com.zslin.sms.tools.RandomTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,6 +57,7 @@ public class AdminClientConfigController {
 
         ClientConfig c = clientConfigService.loadOne();
         if(c==null) {
+            clientConfig.setToken(RandomTools.randomString(10));
             clientConfigService.save(clientConfig);
             send2Client(clientConfig);
         } else {

@@ -50,6 +50,10 @@
 								<i class="fa fa-pencil"></i>
 							</a>
 
+							<a class="delete-obj-href red auth" sn="AdminWorkerController.initPwd" th:title="'此操作不可逆，确定初始化【'+${obj.name}+'】的密码为【123456789】吗？'" th:href="'/admin/worker/initPwd/'+${obj.id}">
+								<i class="fa fa-key"></i>
+							</a>
+
 							<a class="delete-obj-href red auth" sn="AdminWorkerController.delete" th:title="'此操作不可逆，确定删除【'+${obj.name}+'】吗？'" th:href="'/admin/worker/delete/'+${obj.id}">
 								<i class="fa fa-remove"></i>
 							</a>

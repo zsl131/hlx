@@ -2,6 +2,8 @@ package com.zslin.admin.controller;
 
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.tools.MyBeanUtils;
+import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
 import com.zslin.web.model.Price;
 import com.zslin.web.service.IPriceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class AdminPriceController {
     @Autowired
     private IPriceService priceService;
 
+    @Autowired
+    private ClientFileTools clientFileTools;
+
     @AdminAuth(name="价格配置管理", orderNum=1, icon="fa fa-rmb", type="1")
     @RequestMapping(value="index", method= RequestMethod.GET)
     public String index(Model model, HttpServletRequest request) {
@@ -38,12 +43,19 @@ public class AdminPriceController {
         Price p = priceService.loadOne();
         if(p==null) {
             priceService.save(price);
+            send2Client(price);
         } else {
             MyBeanUtils.copyProperties(price, p, new String[]{"id"});
             priceService.save(p);
+            send2Client(p);
         }
 
         request.getSession().setAttribute("price", price); //修改后需要修改一次Session中的值
         return "redirect:/admin/price/index";
+    }
+
+    private void send2Client(Price p) {
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildPrice(p));
+        clientFileTools.setChangeContext(content, true);
     }
 }

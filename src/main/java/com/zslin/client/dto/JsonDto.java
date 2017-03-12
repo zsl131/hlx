@@ -1,5 +1,7 @@
 package com.zslin.client.dto;
 
+import com.zslin.web.model.Price;
+
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/11 22:27.
  */
@@ -14,10 +16,23 @@ public class JsonDto {
     //具体的操作对象
     private Object data;
 
-    public JsonDto(String type, String action, Object data) {
+    private Integer dataId;
+
+    public JsonDto(String type, String action, Integer dataId, Object data) {
         this.type = type;
         this.action = action;
+        this.dataId = dataId;
         this.data = data;
+    }
+
+    
+
+    public void setDataId(Integer dataId) {
+        this.dataId = dataId;
+    }
+
+    public Integer getDataId() {
+        return dataId;
     }
 
     public String getType() {
