@@ -33,6 +33,12 @@
 						<input name="dinnerPrice" id="dinnerPrice" type="text" class="form-control" th:value="${price.dinnerPrice}" placeholder="请输入晚餐单价，单位：元" />
 					</div>
 				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">压金金额：</div>
+						<input name="bondMoney" id="bondMoney" type="text" class="form-control" th:value="${price.bondMoney}" placeholder="请输入压金金额，单位：元" />
+					</div>
+				</div>
 				<button type="submit" class="btn btn-primary submit-update-btn">保存设置</button>
 			</form>
 
@@ -62,6 +68,17 @@
 								validators: {
 									notEmpty: {
 										message: '请输入晚餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							},
+							bondMoney: {
+								validators: {
+									notEmpty: {
+										message: '请输入压金金额，单位：元'
 									},
 									regexp: {
 										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",

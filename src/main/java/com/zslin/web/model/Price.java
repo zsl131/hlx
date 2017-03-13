@@ -22,6 +22,18 @@ public class Price {
     @Column(name = "dinner_price")
     private Float dinnerPrice;
 
+    /** 压金金额 */
+    @Column(name = "bond_money")
+    private Float bondMoney;
+
+    public Float getBondMoney() {
+        return bondMoney;
+    }
+
+    public void setBondMoney(Float bondMoney) {
+        this.bondMoney = bondMoney;
+    }
+
     public Integer getId() {
         return id;
     }

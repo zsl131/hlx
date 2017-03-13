@@ -44,6 +44,20 @@
 
 				<div class="form-group form-group-lg">
 					<div class="input-group">
+						<div class="input-group-addon">餐桌数量：</div>
+						<input name="deskCount" type="text" class="form-control" th:value="${clientConfig.deskCount}" placeholder="请输入餐桌数量" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">坐位数量：</div>
+						<input name="siteCount" type="text" class="form-control" th:value="${clientConfig.siteCount}" placeholder="请输入坐位数量" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
 						<div class="input-group-addon">上传时间间隔：</div>
 						<input name="uploadTime" type="text" class="form-control" th:value="${clientConfig.uploadTime}" placeholder="请输入上传时间间隔，单位秒，整数" />
 					</div>

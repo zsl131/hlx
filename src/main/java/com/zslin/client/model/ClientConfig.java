@@ -49,6 +49,30 @@ public class ClientConfig {
     /** 地址，主要显示在小票上 */
     private String address;
 
+    /** 桌子数量 */
+    @Column(name = "desk_count")
+    private Integer deskCount;
+
+    /** 坐位数量 */
+    @Column(name = "site_count")
+    private Integer siteCount;
+
+    public Integer getDeskCount() {
+        return deskCount;
+    }
+
+    public void setDeskCount(Integer deskCount) {
+        this.deskCount = deskCount;
+    }
+
+    public Integer getSiteCount() {
+        return siteCount;
+    }
+
+    public void setSiteCount(Integer siteCount) {
+        this.siteCount = siteCount;
+    }
+
     public Integer getHaveTime() {
         return haveTime;
     }
