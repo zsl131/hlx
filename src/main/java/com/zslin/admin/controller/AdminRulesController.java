@@ -2,6 +2,8 @@ package com.zslin.admin.controller;
 
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.tools.MyBeanUtils;
+import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
 import com.zslin.web.model.Rules;
 import com.zslin.web.service.IRulesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class AdminRulesController {
     @Autowired
     private IRulesService rulesService;
 
+    @Autowired
+    private ClientFileTools clientFileTools;
+
     @AdminAuth(name="全局配置管理", orderNum=1, icon="fa fa-cog", type="1")
     @RequestMapping(value="index", method= RequestMethod.GET)
     public String index(Model model, HttpServletRequest request) {
@@ -34,15 +39,25 @@ public class AdminRulesController {
 
     @RequestMapping(value="index", method=RequestMethod.POST)
     public String index(Model model, Rules rules, HttpServletRequest request) {
-
+        String spe = rules.getSpe();
+        if(spe==null || "".equalsIgnoreCase(spe)) {spe = "15:30";}
+        spe = spe.replace("：",":");
+        rules.setSpe(spe);
         Rules r = rulesService.loadOne();
         if(r==null) {
             rulesService.save(rules);
+            send2Client(rules);
         } else {
             MyBeanUtils.copyProperties(rules, r, new String[]{"id"});
             rulesService.save(r);
+            send2Client(r);
         }
 
         return "redirect:/admin/rules/index";
+    }
+
+    private void send2Client(Rules r) {
+        String json = ClientJsonTools.buildDataJson(ClientJsonTools.buildRules(r));
+        clientFileTools.setChangeContext(json, true);
     }
 }

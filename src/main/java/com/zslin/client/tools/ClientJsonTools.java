@@ -4,7 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.zslin.client.dto.JsonDto;
 import com.zslin.client.model.ClientConfig;
 import com.zslin.kaoqin.model.Worker;
+import com.zslin.web.dto.AdminPhoneDto;
+import com.zslin.web.model.Account;
 import com.zslin.web.model.Price;
+import com.zslin.web.model.Rules;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/10 11:29.
@@ -29,6 +32,11 @@ public class ClientJsonTools {
         return JSON.toJSONString(jd);
     }
 
+    public static String buildRules(Rules r) {
+        JsonDto jd = new JsonDto("rules", "update", r.getId(), r);
+        return JSON.toJSONString(jd);
+    }
+
     public static String buildWorker(String action, Worker w) {
         JsonDto jd = new JsonDto("worker", action, w.getId(), w);
         return JSON.toJSONString(jd);
@@ -36,6 +44,12 @@ public class ClientJsonTools {
 
     public static String buildPrice(Price p) {
         JsonDto jd = new JsonDto("price", "update", p.getId(), p);
+        return JSON.toJSONString(jd);
+    }
+
+    public static String buildAdminPhone(String action, Account account) {
+        JsonDto jd = new JsonDto("adminPhone", action, account.getId(),
+                new AdminPhoneDto(account.getPhone(), account.getName(), account.getOpenid(), account.getId()));
         return JSON.toJSONString(jd);
     }
 }

@@ -49,6 +49,21 @@
 						<span class="input-group-addon">&nbsp;%&nbsp;</span>
 					</div>
 				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">早晚餐时间间隔：</div>
+						<input name="spe" id="spe" type="text" class="form-control" th:value="${rules.spe}" placeholder="午餐和晚餐的时间分隔点，如：15:00" />
+						<span class="input-group-addon">HH:mm</span>
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">退票时长（分钟）：</div>
+						<input name="refundMin" id="refundMin" type="text" class="form-control" th:value="${rules.refundMin}" placeholder="入场后多少分钟内可退票" />
+						<span class="input-group-addon">分钟</span>
+					</div>
+				</div>
 				<button type="submit" class="btn btn-primary submit-update-btn">保存设置</button>
 			</form>
 
@@ -78,6 +93,17 @@
 								validators: {
 									notEmpty: {
 										message: '请输入充值赠送积分比例，未除100的整数'
+									},
+									regexp: {
+										regexp: "^[1-9][0-9]*$",
+            							message: '整数'
+									}
+								}
+							},
+							refundMin: {
+								validators: {
+									notEmpty: {
+										message: '请输入入场多少分钟内可退票'
 									},
 									regexp: {
 										regexp: "^[1-9][0-9]*$",

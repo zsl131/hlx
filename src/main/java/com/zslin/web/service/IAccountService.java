@@ -63,4 +63,7 @@ public interface IAccountService extends BaseRepository<Account, Integer>, JpaSp
 
     @Query("SELECT COUNT(id) FROM Account a WHERE a.createDay=?1 AND a.status='1'")
     Integer findFollowCountByDay(String day);
+
+    @Query("SELECT a.openid FROM Account a WHERE a.phone=?1")
+    String findOpenidByPhone(String phone);
 }

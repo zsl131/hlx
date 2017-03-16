@@ -29,6 +29,32 @@ public class Rules {
     @Column(name = "friend_percent")
     private String friendPercent;
 
+    /**
+     * 午餐晚餐的分隔时间点
+     * 格式：HH:mm
+     */
+    private String spe;
+
+    /** 入场多长时间后可退款，单位分钟 */
+    @Column(name = "refund_min")
+    private Integer refundMin;
+
+    public Integer getRefundMin() {
+        return refundMin;
+    }
+
+    public void setRefundMin(Integer refundMin) {
+        this.refundMin = refundMin;
+    }
+
+    public String getSpe() {
+        return spe;
+    }
+
+    public void setSpe(String spe) {
+        this.spe = spe;
+    }
+
     public Integer getId() {
         return id;
     }

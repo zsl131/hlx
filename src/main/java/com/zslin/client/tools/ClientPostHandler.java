@@ -16,6 +16,9 @@ public class ClientPostHandler {
     @Autowired
     private IWorkerService workerService;
 
+    @Autowired
+    private ProcessOrdersHandler processOrdersHandler;
+
     public void handler(String json) {
         Integer status = Integer.parseInt(JsonTools.getJsonParam(json, "status"));
         if(status!=null && status==1) { //表示获取成功
@@ -39,6 +42,8 @@ public class ClientPostHandler {
         JSONObject dataObj = jsonObj.getJSONObject("data"); //具体对象的Json数据
         if("worker".equals(type)) { //修改员工密码
             updateWorkerPwd(dataId, dataObj);
+        } else if("orders".equalsIgnoreCase(type)) { //订单
+            processOrdersHandler.updateOrders(dataObj);
         }
     }
 

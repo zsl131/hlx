@@ -4,6 +4,7 @@ import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.web.model.EventRecord;
 import com.zslin.web.service.IEventRecordService;
+import com.zslin.wx.dto.EventRemarkDto;
 import com.zslin.wx.dto.TempParamDto;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,6 +202,22 @@ public class EventTools {
 							   String url) {
 		return eventRemind(toUser, title, "#0000FF", eventType, "#888888"
 		, date, "#888888", remark, "#666666", url);
+	}
+
+	public boolean eventRemind(String toUser, String title, String eventType, String date, String url, EventRemarkDto... dtos) {
+		StringBuffer sb = new StringBuffer();
+		for(EventRemarkDto dto : dtos) {
+			sb.append("\\n").append(dto.getName()).append((dto.getName()==null || "".equals(dto.getName()))?"":"：").append(dto.getValue());
+		}
+		return eventRemind(toUser, title, eventType, date, sb.toString(), url);
+	}
+
+	public boolean eventRemind(List<String> users, String title, String eventType, String date, String url, EventRemarkDto... dtos) {
+		StringBuffer sb = new StringBuffer();
+		for(EventRemarkDto dto : dtos) {
+			sb.append("\\n").append(dto.getName()).append((dto.getName()==null || "".equals(dto.getName()))?"":"：").append(dto.getValue());
+		}
+		return eventRemind(users, title, eventType, date, sb.toString(), url);
 	}
 
 	/**
