@@ -64,6 +64,7 @@ public class Orders {
      * 6-老板确认，可以付款
      * -1-已退票（收银员操作）
      * -2-已取消
+     * -3-被老板驳回
      */
     private String status;
 
@@ -103,7 +104,7 @@ public class Orders {
     @Column(name = "discount_money")
     private Float discountMoney=0f;
 
-    /** 优惠原因，如果是友情价，则是股东电话号码 */
+    /** 优惠原因，如果是友情价，则是股东电话号码(必须) */
     @Column(name = "discount_reason")
     private String discountReason;
 

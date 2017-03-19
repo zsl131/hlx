@@ -13,19 +13,19 @@
  */
 package com.qq.weixin.mp.aes;
 
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.Random;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-
+import com.zslin.web.model.WeixinConfig;
 import com.zslin.wx.tools.AccessTokenTools;
 import com.zslin.wx.tools.SignTools;
 import com.zslin.wx.tools.WxConfig;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  * 提供接收和推送给公众平台消息的加解密接口(UTF8编码的字符串).
@@ -78,13 +78,14 @@ public class WXBizMsgCrypt {
 	}
 	
 	public WXBizMsgCrypt() throws AesException {
-		if (wxConfig.getAeskey().length() != 43) {
+		WeixinConfig config = wxConfig.getConfig();
+		if (config.getAeskey().length() != 43) {
 			throw new AesException(AesException.IllegalAesKey);
 		}
 
 		this.token = accessTokenTools.getAccessToken();
-		this.appId = wxConfig.getAppid();
-		aesKey = Base64.decodeBase64(wxConfig.getAeskey() + "=");
+		this.appId = config.getAppid();
+		aesKey = Base64.decodeBase64(config.getAeskey() + "=");
 	}
 
 	// 生成4个字节的网络字节序

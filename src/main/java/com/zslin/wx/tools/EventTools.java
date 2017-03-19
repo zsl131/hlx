@@ -3,6 +3,7 @@ package com.zslin.wx.tools;
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.web.model.EventRecord;
+import com.zslin.web.model.WeixinConfig;
 import com.zslin.web.service.IEventRecordService;
 import com.zslin.wx.dto.EventRemarkDto;
 import com.zslin.wx.dto.TempParamDto;
@@ -48,13 +49,14 @@ public class EventTools {
 	 * @return
 	 */
 	public Element getMessageEle(HttpServletRequest request) {
+		WeixinConfig config = wxConfig.getConfig();
 		Element root = null;
 		try {
 			String signature = request.getParameter("signature"); //微信加密签名
 			String timestamp = request.getParameter("timestamp"); //时间戳
 			String nonce = request.getParameter("nonce"); //随机数
 			
-			WXBizMsgCrypt pc = new WXBizMsgCrypt(wxConfig.getToken(), wxConfig.getAeskey(), wxConfig.getAppid());
+			WXBizMsgCrypt pc = new WXBizMsgCrypt(config.getToken(), config.getAeskey(), config.getAppid());
 			
 			InputStream in =  request.getInputStream();
 			InputStreamReader inputStreamReader = new InputStreamReader(
@@ -155,7 +157,7 @@ public class EventTools {
 		//添加事件推送记录
 		addEventRecord(toUser, title, eventType, date, remark, url);
 
-		return sendMsg(toUser, wxConfig.getEventTemp(), url, "#FF0000", paramList);
+		return sendMsg(toUser, wxConfig.getConfig().getEventTemp(), url, "#FF0000", paramList);
 	}
 
 	/**
@@ -303,7 +305,7 @@ public class EventTools {
 
 		if(url!=null && !"".equals(url.trim())) {
 			if(!url.toLowerCase().startsWith("http://") && !url.toLowerCase().startsWith("https://")) {
-				url = wxConfig.getUrl()+url;
+				url = wxConfig.getConfig().getUrl()+url;
 			}
 			sb.append("\"url\":\"").append(url).append("\",");
 		}

@@ -4,6 +4,7 @@ import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.repository.SimpleSpecificationBuilder;
 import com.zslin.basic.tools.NormalTools;
+import com.zslin.client.service.IOrdersService;
 import com.zslin.kaoqin.model.Worker;
 import com.zslin.kaoqin.service.IWorkerService;
 import com.zslin.sms.tools.RandomTools;
@@ -13,6 +14,7 @@ import com.zslin.web.model.*;
 import com.zslin.web.service.*;
 import com.zslin.wx.dbtools.ScoreAdditionalDto;
 import com.zslin.wx.dbtools.ScoreTools;
+import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.QrTools;
 import com.zslin.wx.tools.SessionTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +75,9 @@ public class WeixinAccountController {
     @Autowired
     private IMemberChargeService memberChargeService;
 
+    @Autowired
+    private IOrdersService ordersService;
+
     //微信用户个人中心
     @GetMapping(value = "me")
     public String me(Model model, HttpServletRequest request) {
@@ -85,6 +90,10 @@ public class WeixinAccountController {
         model.addAttribute("commentCount", commentService.findCount(openid)); //评论数量
         model.addAttribute("feedbackCount", feedbackService.findCount(openid)); //消息数量
         model.addAttribute("chargeCount", memberChargeService.findCount(openid)); //充值次数
+
+        if(AccountTools.isPartner(account.getType())) {
+            model.addAttribute("friendOrdersCount", ordersService.findFriendCount(account.getPhone())); //友情折扣的次数
+        }
         return "weixin/account/me";
     }
 

@@ -79,6 +79,7 @@ public class WeixinFoodController {
             Food f = foodService.findOne(id);
 //            processScore(a, f.getName()); //处理积分和通知用户
             scoreTools.processScore(openid, ScoreRule.GOOD_FOOD, new ScoreAdditionalDto("点赞食品", f.getName()));
+            System.out.println("==="+openid);
             return "1";
         } catch (Exception e) {
             e.printStackTrace();

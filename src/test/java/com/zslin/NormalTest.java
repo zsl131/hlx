@@ -4,6 +4,7 @@ import com.zslin.kaoqin.tools.GetJsonTools;
 import com.zslin.kaoqin.tools.KaoqinFileTools;
 import com.zslin.kaoqin.tools.PicTools;
 import com.zslin.sms.tools.RandomTools;
+import com.zslin.web.model.WeixinConfig;
 import com.zslin.web.tools.CommonTools;
 import com.zslin.wx.tools.WxConfig;
 import org.junit.Test;
@@ -30,7 +31,8 @@ public class NormalTest {
 
     @Test
     public void test() {
-        System.out.println(wxConfig.getAppid()+"======"+wxConfig.getSecret()+"========="+wxConfig.getToken());
+        WeixinConfig config = wxConfig.getConfig();
+        System.out.println(config.getAppid()+"======"+config.getSecret()+"========="+config.getToken());
     }
 
     @Test

@@ -27,7 +27,7 @@ public class Rules {
      * 值是未除100的整数
      */
     @Column(name = "friend_percent")
-    private String friendPercent;
+    private Integer friendPercent;
 
     /**
      * 午餐晚餐的分隔时间点
@@ -79,11 +79,11 @@ public class Rules {
         this.chargePercent = chargePercent;
     }
 
-    public String getFriendPercent() {
+    public Integer getFriendPercent() {
         return friendPercent;
     }
 
-    public void setFriendPercent(String friendPercent) {
+    public void setFriendPercent(Integer friendPercent) {
         this.friendPercent = friendPercent;
     }
 }

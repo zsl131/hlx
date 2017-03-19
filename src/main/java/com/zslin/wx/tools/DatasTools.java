@@ -75,6 +75,7 @@ public class DatasTools {
      * @return
      */
     public String onEventText(String openid, String builderName, String content) {
+        WeixinConfig config = wxConfig.getConfig();
         if(content==null || "".equals(content.trim()) || "?".equals(content.trim())
                 || "？".equals(content.trim()) || "1".equals(content.trim())
                 || "help".equals(content.toLowerCase().trim())) { //帮助
@@ -83,11 +84,11 @@ public class DatasTools {
                 "guanyu".equals(content.toLowerCase().trim()) || "about".equals(content.toLowerCase().trim())||
                 "关于".equals(content.trim())) { //关于
             Article article = articleService.findOne(1);
-            return WeixinXmlTools.buildArticleStr(openid, builderName, article, wxConfig.getUrl());
+            return WeixinXmlTools.buildArticleStr(openid, builderName, article, config.getUrl());
         } else if("2".equals(content.trim()) || "jf".equals(content.toLowerCase().trim()) ||
                 "jifen".equals(content.toLowerCase().trim()) || "积分".equals(content.trim())) { //ID为2的文章
             Article article = articleService.findOne(2);
-            return WeixinXmlTools.buildArticleStr(openid, builderName, article, wxConfig.getUrl());
+            return WeixinXmlTools.buildArticleStr(openid, builderName, article, config.getUrl());
         } else if("hlx".equals(content.toLowerCase())) { //关注情况
             eventTools.eventRemind(openid, "查询提醒", "关注情况如下", DateTools.date2Str(new Date(), "yyyy-MM-dd"), accountTools.buildAccountStr(), "");
             return "";
@@ -232,7 +233,7 @@ public class DatasTools {
     /** 构建关注时的数据 */
     public String buildSubscribeStr(String toUser, String fromUser) {
         List<Article> articleList = articleService.findFirst();
-        return WeixinXmlTools.buildSubscribeStr(toUser, fromUser, articleList, wxConfig.getUrl());
+        return WeixinXmlTools.buildSubscribeStr(toUser, fromUser, articleList, wxConfig.getConfig().getUrl());
     }
 
     private void updateRelation(Account a) {

@@ -10,10 +10,8 @@ import com.zslin.web.model.MemberLevel;
 import com.zslin.web.service.IAccountService;
 import com.zslin.web.service.IMemberChargeService;
 import com.zslin.web.service.IMemberLevelService;
-import com.zslin.web.service.IWalletService;
 import com.zslin.web.tools.CashierTools;
 import com.zslin.wx.dbtools.MoneyTools;
-import com.zslin.wx.dbtools.ScoreAdditionalDto;
 import com.zslin.wx.tools.EventTools;
 import com.zslin.wx.tools.SessionTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +107,7 @@ public class WeixinMemberController {
         return status;
     }
 
-    //审核通过，只能是非顾客人员操作
+    /*//审核通过，只能是非顾客人员操作
     @PostMapping(value = "verifyCharge")
     public @ResponseBody String verifyCharge(Integer id, HttpServletRequest request) {
         try {
@@ -139,7 +137,7 @@ public class WeixinMemberController {
         } catch (Exception e) {
         }
         return "0";
-    }
+    }*/
 
     @PostMapping(value = "addCharge")
     public @ResponseBody String addCharge(Integer id, HttpServletRequest request) {
@@ -154,8 +152,8 @@ public class WeixinMemberController {
             mc.setPhone(a.getPhone());
             mc.setName(a.getName());
             mc.setBalance(ml.getChargeMoney()+ml.getGiveMoney());
-            mc.setChargeMoney(ml.getChargeMoney());
-            mc.setGiveMoney(ml.getGiveMoney());
+            mc.setChargeMoney(ml.getChargeMoney()*1.0f);
+            mc.setGiveMoney(ml.getGiveMoney()*1.0f);
             mc.setHeadimg(a.getHeadimgurl());
             mc.setNickname(a.getNickname());
             mc.setLevel(ml.getLevel());

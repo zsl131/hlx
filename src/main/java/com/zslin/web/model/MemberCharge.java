@@ -26,11 +26,11 @@ public class MemberCharge extends BaseEntity {
 
     /** 充值金额，单位：元 */
     @Column(name = "charge_money")
-    private Integer chargeMoney=0;
+    private Float chargeMoney=0f;
 
     /** 赠送金额，单位，元 */
     @Column(name = "give_money")
-    private Integer giveMoney=0;
+    private Float giveMoney=0f;
 
     /** 此次充值余额，余额 */
     private Integer balance;
@@ -152,19 +152,19 @@ public class MemberCharge extends BaseEntity {
         this.discount = discount;
     }
 
-    public Integer getChargeMoney() {
+    public Float getChargeMoney() {
         return chargeMoney;
     }
 
-    public void setChargeMoney(Integer chargeMoney) {
+    public void setChargeMoney(Float chargeMoney) {
         this.chargeMoney = chargeMoney;
     }
 
-    public Integer getGiveMoney() {
+    public Float getGiveMoney() {
         return giveMoney;
     }
 
-    public void setGiveMoney(Integer giveMoney) {
+    public void setGiveMoney(Float giveMoney) {
         this.giveMoney = giveMoney;
     }
 

@@ -1,31 +1,27 @@
-package com.zslin.wx.tools;
+package com.zslin.web.model;
 
-import com.zslin.web.model.WeixinConfig;
-import com.zslin.web.service.IWeixinConfigService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import javax.persistence.*;
 
 /**
- * Created by 钟述林 393156105@qq.com on 2017/1/24 10:36.
+ * Created by 钟述林 393156105@qq.com on 2017/3/18 16:53.
+ * 微信配置
  */
-@Component
-//@ConfigurationProperties(locations = "classpath:wx.properties")
-public class WxConfig {
-    /*private String url;
+@Entity
+@Table(name = "t_weixin_config")
+public class WeixinConfig {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+    //链接地址，即主域名，如：http://zsl8.5166.info
+    private String url;
     private String appid;
     private String secret;
     private String token;
     private String aeskey;
-    private String eventTemp;*/
+    private String eventTemp;
 
-    @Autowired
-    private IWeixinConfigService weixinConfigService;
-
-    public WeixinConfig getConfig() {
-        return weixinConfigService.loadOne();
-    }
-
-    /*public String getUrl() {
+    public String getUrl() {
         return url;
     }
 
@@ -71,5 +67,13 @@ public class WxConfig {
 
     public void setToken(String token) {
         this.token = token;
-    }*/
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

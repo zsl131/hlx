@@ -1,5 +1,6 @@
 package com.zslin.wx.tools;
 
+import com.zslin.web.model.WeixinConfig;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,8 +28,8 @@ public class ExchangeTools {
     @Autowired
     private WxConfig wxConfig;
 
-    public WxConfig getWxConfig() {
-        return wxConfig;
+    public WeixinConfig getWxConfig() {
+        return wxConfig.getConfig();
     }
 
     public JSONObject getUserInfo(String openid) {
@@ -53,9 +54,10 @@ public class ExchangeTools {
         try {
             String openid = null;
             if(code!=null && !"".equals(code.trim())) {
+                WeixinConfig config = wxConfig.getConfig();
                 Map<String, Object> params = new HashMap<String, Object>();
-                params.put("appid", wxConfig.getAppid());
-                params.put("secret", wxConfig.getSecret());
+                params.put("appid", config.getAppid());
+                params.put("secret", config.getSecret());
                 params.put("code", code);
                 params.put("grant_type", "authorization_code");
                 String result = InternetTools.doGet("https://api.weixin.qq.com/sns/oauth2/access_token", params);

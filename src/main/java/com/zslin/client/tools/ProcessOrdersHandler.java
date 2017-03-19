@@ -5,6 +5,7 @@ import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.client.model.Orders;
 import com.zslin.client.service.IOrdersService;
+import com.zslin.web.model.Account;
 import com.zslin.web.service.IAccountService;
 import com.zslin.wx.dto.EventRemarkDto;
 import com.zslin.wx.tools.EventTools;
@@ -33,12 +34,26 @@ public class ProcessOrdersHandler {
         String no = orders.getNo();
         Orders o = ordersService.findByNo(no);
         if(o==null){
+            setOrderAccount(orders);
             ordersService.save(orders);
         } else {
             MyBeanUtils.copyProperties(orders, o);
+            setOrderAccount(o);
             ordersService.save(o);
         }
         noticeAdmin(orders);
+    }
+
+    //当订单中存在手机号码，则需要与Account进行匹配
+    private void setOrderAccount(Orders order) {
+        String phone = order.getPhone();
+        if(phone!=null && !"".equalsIgnoreCase(phone)) {
+            Account a = accountService.findByPhone(phone);
+            if(a!=null) {
+                order.setAccountId(a.getId());
+                order.setOpenid(a.getOpenid());
+            }
+        }
     }
 
     private void noticeAdmin(Orders o) {

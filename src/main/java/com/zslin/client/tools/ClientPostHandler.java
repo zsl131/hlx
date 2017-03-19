@@ -19,6 +19,9 @@ public class ClientPostHandler {
     @Autowired
     private ProcessOrdersHandler processOrdersHandler;
 
+    @Autowired
+    private ClientSimpleProcessHandler clientSimpleProcessHandler;
+
     public void handler(String json) {
         Integer status = Integer.parseInt(JsonTools.getJsonParam(json, "status"));
         if(status!=null && status==1) { //表示获取成功
@@ -44,6 +47,10 @@ public class ClientPostHandler {
             updateWorkerPwd(dataId, dataObj);
         } else if("orders".equalsIgnoreCase(type)) { //订单
             processOrdersHandler.updateOrders(dataObj);
+        } else if("memberCharge".equalsIgnoreCase(type)) { //充值记录
+            clientSimpleProcessHandler.handlerMemberCharge(dataObj);
+        } else if("member".equalsIgnoreCase(type)) { //店内办理会员（非微信会员）
+            clientSimpleProcessHandler.handlerMember(dataObj, action);
         }
     }
 

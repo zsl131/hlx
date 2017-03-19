@@ -33,7 +33,7 @@ public class WeixinGlobalConfigController {
             url = url.substring(0, url.indexOf("#"));
         }
         Map<String, String> config = WxjsSign.sign(accessTokenTools.getJsTicket(), url);
-        WxjsConfigDto dto = new WxjsConfigDto(wxConfig.getAppid(), config);
+        WxjsConfigDto dto = new WxjsConfigDto(wxConfig.getConfig().getAppid(), config);
         return dto;
     }
 }

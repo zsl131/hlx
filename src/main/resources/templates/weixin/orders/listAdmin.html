@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-member-level.css"/>
+    <title>昭通汉丽轩</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div>
+        <div class="head-part">
+            <div class="img"><img src="/logo-500.png"/></div>
+            <div class="info">
+                <p class="title">我给出的折扣订单</p>
+            </div>
+        </div>
+
+        <div class="line-div"></div>
+
+        <div class="level-div">
+            <ul class="level-ul">
+                <li th:each="obj : ${datas}">
+                    <p class="name" th:text="${obj.no}+'('+${obj.level eq '1'?'晚餐':'午餐'}+')'" style="color:#777; font-size:13px;">
+                    </p>
+                    <p class="con">
+                        <span><b th:text="${obj.peopleCount}"></b>(全票)&nbsp;&nbsp;<b th:text="${obj.halfCount}"></b>(半票)&nbsp;&nbsp;<b th:text="${obj.childCount}"></b>(名票)</span>
+                        <span>应付金额：<b th:text="${#numbers.formatDecimal(obj.totalMoney, 0, 'COMMA', 1, 'POINT')}+' 元'"></b></span>
+                        <span>折扣金额：<b th:text="${#numbers.formatDecimal(obj.discountMoney, 0, 'COMMA', 1, 'POINT')}+' 元'"></b></span>
+                        <span>订单时间：<b th:text="${obj.createTime}"></b></span>
+                    </p>
+                    <p class="opt-btn">
+                        <button type="button" class="btn">状态：
+                            <span th:remove="tag" th:switch="${obj.status}">
+                                <span th:remove="tag" th:case="0">待确认</span>
+                                <span th:remove="tag" th:case="2">就餐中</span>
+                                <span th:remove="tag" th:case="4">压金全退</span>
+                                <span th:remove="tag" th:case="5">扣压金<b th:text="${obj.surplusBond}"></b></span>
+                                <span th:remove="tag" th:case="6">已确认</span>
+                                <span th:remove="tag" th:case="-1">已退票</span>
+                                <span th:remove="tag" th:case="-2">已取消</span>
+                                <span th:remove="tag" th:case="-3">已驳回</span>
+                            </span>
+                        </button>
+                        <a th:href="@{/wx/orders/confirmFriend(no=${obj.no})}" class="btn btn-info"><i class="fa fa-eye"></i> 查看详情</a>
+                    </p>
+                </li>
+            </ul>
+        </div>
+
+        <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
+    </div>
+</div>
+</body>
+</html>

@@ -23,6 +23,16 @@ public class AccountTools {
     public static final String PARTNER = "5"; //股东
     public static final String ADMIN = "10"; //超级管理员
 
+    /**
+     * 判断type是否为股东或超级管理员
+     * @param type 用户类型
+     * @return
+     */
+    public static boolean isPartner(String type) {
+        if(PARTNER.equalsIgnoreCase(type) || ADMIN.equalsIgnoreCase(type)) {return true;}
+        return false;
+    }
+
     public List<String> getOpenid(String... types) {
         List<String> result = new ArrayList<>();
         for(String type : types) {

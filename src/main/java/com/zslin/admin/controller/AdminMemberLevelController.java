@@ -7,6 +7,8 @@ import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
 import com.zslin.web.model.MemberLevel;
 import com.zslin.web.service.IMemberLevelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class AdminMemberLevelController {
     @Autowired
     private IMemberLevelService memberLevelService;
 
+    @Autowired
+    private ClientFileTools clientFileTools;
+
     @GetMapping(value = "list")
     @AdminAuth(name = "会员等级管理", type = "1", orderNum = 1, icon = "fa fa-level-up")
     public String list(Model model, Integer page, HttpServletRequest request) {
@@ -53,6 +58,7 @@ public class AdminMemberLevelController {
     public String add(Model model, MemberLevel memberLevel, HttpServletRequest request) {
         if(TokenTools.isNoRepeat(request)) { //不是重复提交
             memberLevelService.save(memberLevel);
+            send2Client(memberLevel, "update");
         }
         return "redirect:/admin/memberLevel/list";
     }
@@ -73,7 +79,14 @@ public class AdminMemberLevelController {
             MemberLevel ml = memberLevelService.findOne(id);
             MyBeanUtils.copyProperties(memberLevel, ml, new String[]{"id"});
             memberLevelService.save(ml);
+
+            send2Client(ml, "update");
         }
         return "redirect:/admin/memberLevel/list";
+    }
+
+    public void send2Client(MemberLevel level, String action) {
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildMemberLevel(level, action));
+        clientFileTools.setChangeContext(content, true);
     }
 }
