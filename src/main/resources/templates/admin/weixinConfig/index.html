@@ -57,6 +57,24 @@
 						<input name="eventTemp" type="text" class="form-control" th:value="${weixinConfig.eventTemp}" placeholder="请输入事件模板ID，在公众号中查看" />
 					</div>
 				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">商户ID（支付）：</div>
+						<input name="mchid" type="text" class="form-control" th:value="${weixinConfig.mchid}" placeholder="请输入商户ID，申请微信支付得到的" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">支付通知地址：</div>
+						<input name="notifyUrl" type="text" class="form-control" th:value="${weixinConfig.notifyUrl}" placeholder="支付结果通知地址，以http://开头" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">APIKEY（支付）：</div>
+						<input name="apiKey" type="text" class="form-control" th:value="${weixinConfig.apiKey}" placeholder="APIKEY，申请微信支付得到的" />
+					</div>
+				</div>
 				<button type="submit" class="btn btn-primary submit-update-btn">保存设置</button>
 			</form>
 		</div>

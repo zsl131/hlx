@@ -68,6 +68,8 @@ public class ProcessOrdersHandler {
                         new EventRemarkDto("全票人数", o.getPeopleCount()+" 人"),
                         new EventRemarkDto("半票人数", o.getHalfCount()+ " 人"),
                         new EventRemarkDto("免票人数", o.getChildCount()+ " 人"),
+                        new EventRemarkDto("订单金额", o.getTotalMoney()+ " 元"),
+                        new EventRemarkDto("优惠金额", o.getDiscountMoney()+ " 元"),
                         new EventRemarkDto("", "点击查看可确认！"));
             }
         }

@@ -5,6 +5,8 @@ import com.zslin.client.model.Orders;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/13 17:26.
  */

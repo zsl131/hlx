@@ -80,7 +80,7 @@ public class Orders {
     @Column(name = "surplus_bond")
     private Float surplusBond;
 
-    /** 类型，1-收银员下单；2-微信下单；3-美团下单；4-友情价下单 */
+    /** 类型，1-收银员下单；2-微信下单；3-美团下单；4-友情价下单；5-会员订单；6-卡券订单 */
     private String type;
 
     /** 只针对微信下单订单 */

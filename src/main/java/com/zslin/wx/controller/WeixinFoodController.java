@@ -35,7 +35,7 @@ import java.util.List;
  * Created by 钟述林 393156105@qq.com on 2017/2/28 16:45.
  */
 @Controller
-@RequestMapping(value = "weixin/food")
+@RequestMapping(value = "wx/food")
 public class WeixinFoodController {
 
     @Autowired
@@ -69,24 +69,6 @@ public class WeixinFoodController {
         return "weixin/food/index";
     }
 
-    //点赞
-    @PostMapping(value = "goodFood")
-    public @ResponseBody String goodFood(Integer id, HttpServletRequest request) {
-        try {
-            foodService.plusGoodCount(id);
-
-            String openid = SessionTools.getOpenid(request);
-            Food f = foodService.findOne(id);
-//            processScore(a, f.getName()); //处理积分和通知用户
-            scoreTools.processScore(openid, ScoreRule.GOOD_FOOD, new ScoreAdditionalDto("点赞食品", f.getName()));
-            System.out.println("==="+openid);
-            return "1";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "0";
-    }
-
     @GetMapping(value = "detail")
     public String detail(Integer id, Integer page, Model model, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request); //当前用户的Openid
@@ -99,6 +81,24 @@ public class WeixinFoodController {
         model.addAttribute("datas", datas);
         model.addAttribute("goodCount", commentService.queryGoodCount(id)); //好评数量
         return "weixin/food/detail";
+    }
+
+    //点赞
+    @PostMapping(value = "goodFood")
+    public @ResponseBody String goodFood(Integer id, HttpServletRequest request) {
+        try {
+            String openid = SessionTools.getOpenid(request);
+            foodService.plusGoodCount(id);
+
+            Food f = foodService.findOne(id);
+//            processScore(a, f.getName()); //处理积分和通知用户
+            scoreTools.processScore(openid, ScoreRule.GOOD_FOOD, new ScoreAdditionalDto("点赞食品", f.getName()));
+            System.out.println("==="+openid);
+            return "1";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "0";
     }
 
     @PostMapping(value = "add")

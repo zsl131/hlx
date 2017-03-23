@@ -23,14 +23,27 @@
 			<form method="POST" th:object="${price}" id="dataForm">
 				<div class="form-group form-group-lg">
 					<div class="input-group">
-					  <div class="input-group-addon">早餐单价：</div>
+					  <div class="input-group-addon">早餐单价（正价）：</div>
 					  <input name="breakfastPrice" id="breakfastPrice" type="text" class="form-control" th:value="${price.breakfastPrice}" placeholder="请输入早餐单价，单位：元" />
 					</div>
 				</div>
 				<div class="form-group form-group-lg">
 					<div class="input-group">
-						<div class="input-group-addon">晚餐单价：</div>
+						<div class="input-group-addon">晚餐单价（正价）：</div>
 						<input name="dinnerPrice" id="dinnerPrice" type="text" class="form-control" th:value="${price.dinnerPrice}" placeholder="请输入晚餐单价，单位：元" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">早餐单价（亲情）：</div>
+						<input name="friendBreakfastPrice" id="friendBreakfastPrice" type="text" class="form-control" th:value="${price.friendBreakfastPrice}" placeholder="请输入亲情早餐单价，单位：元" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">晚餐单价（亲情）：</div>
+						<input name="friendDinnerPrice" id="friendDinnerPrice" type="text" class="form-control" th:value="${price.friendDinnerPrice}" placeholder="请输入亲情晚餐单价，单位：元" />
 					</div>
 				</div>
 				<div class="form-group form-group-lg">
@@ -68,6 +81,28 @@
 								validators: {
 									notEmpty: {
 										message: '请输入晚餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							},
+							friendDinnerPrice: {
+								validators: {
+									notEmpty: {
+										message: '请输入亲情晚餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							},
+							friendBreakfastPrice: {
+								validators: {
+									notEmpty: {
+										message: '请输入亲情早餐单位，单位：元'
 									},
 									regexp: {
 										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",

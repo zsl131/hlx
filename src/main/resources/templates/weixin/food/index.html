@@ -14,12 +14,12 @@
 <div th:fragment="content" th:remove="tag">
     <div class="left-div">
         <ul class="cate-ul">
-            <li th:class="${args[filter_cateId] eq NULL?'curClass':''}"><a href="/weixin/food/index">
+            <li th:class="${args[filter_cateId] eq NULL?'curClass':''}"><a href="/wx/food/index">
                 <img src="/weixin/images/all.jpg"/>
                 <span>全部</span></a>
             </li>
             <li th:each="cate : ${cateList}" th:class="${cate.id+'' eq args[filter_cateId]?'curClass':''}">
-                <a th:href="'/weixin/food/index?filter_cateId=eq-'+${cate.id}">
+                <a th:href="'/wx/food/index?filter_cateId=eq-'+${cate.id}">
                     <img th:src="${cate.picPath}"/>
                     <span th:text="${cate.name}"></span>
                 </a>
@@ -31,10 +31,10 @@
         <ul class="food-list">
             <li th:each="food : ${datas}">
                 <div class="pic-div">
-                    <a th:href="@{/weixin/food/detail(id=${food.id})}"><img th:src="${food.picPath}"/></a>
+                    <a th:href="@{/wx/food/detail(id=${food.id})}"><img th:src="${food.picPath}"/></a>
                 </div>
                 <div class="name-div">
-                    <a th:href="@{/weixin/food/detail(id=${food.id})}" th:text="${food.name}"></a>
+                    <a th:href="@{/wx/food/detail(id=${food.id})}" th:text="${food.name}"></a>
                     <p class="remark">
                         评论<b th:text="${food.commentCount}" th:class="'comment ' + ${food.commentCount gt 0?'count-b':'normal-b'}"></b>，
                         赞<b th:text="${food.goodCount}"  th:class="'good ' + ${food.goodCount gt 0?'count-b':'normal-b'}"></b>

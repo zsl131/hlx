@@ -52,12 +52,14 @@
     </style>
 </head>
 <body>
+
 <div class="container-fluid" style="padding:0px;">
-        <div th:include="this :: content"></div>
+    <div th:include="this :: content"></div>
 </div>
 
 <div th:each="arg : ${args}" class="search-filter-div">
     <input th:value="${arg.value}" type="hidden" th:attr="targetId=${arg.key}"/>
 </div>
+
 </body>
 </html>

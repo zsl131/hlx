@@ -18,7 +18,7 @@ $(function() {
                 return false;
             } else {
                 var toastId = showLoadToast();
-                $.post("/weixin/food/add", {foodId:foodId, content:content, isGood:isGood}, function(res) {
+                $.post("/wx/food/add", {foodId:foodId, content:content, isGood:isGood}, function(res) {
                     if(res=='1') {
                         showToast("点评成功!");
                     }

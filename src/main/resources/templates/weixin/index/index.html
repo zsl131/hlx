@@ -19,9 +19,11 @@
 
     <div th:replace="weixin/index/index-gallery :: content" th:remove="tag"></div>
     <div th:replace="weixin/index/index-flex :: content" th:remove="tag"></div>
-    <div class="single-line"></div>
+    <!--<div class="single-line"></div>-->
 
-    <div th:replace="weixin/wx-tabbar :: content" th:remove="tag"></div>
+    <div th:replace="weixin/index/index-orders :: content" th:remove="tag"></div>
+    <div th:replace="weixin/index/index-comment :: content" th:remove="tag"></div>
+    <!--<div th:replace="weixin/wx-tabbar :: content" th:remove="tag"></div>-->
 </div>
 </body>
 </html>

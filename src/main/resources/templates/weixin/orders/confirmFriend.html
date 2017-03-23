@@ -64,12 +64,12 @@
                     <span class="weui-form-preview__value">
                         <span th:remove="tag" th:switch="${orders.status}">
                             <span th:remove="tag" th:case="0">待确认</span>
-                            <span th:remove="tag" th:case="2">就餐中</span>
+                            <span th:remove="tag" th:case="2">就餐中…</span>
                             <span th:remove="tag" th:case="4">压金全退</span>
                             <span th:remove="tag" th:case="5">扣压金<b th:text="${orders.surplusBond}"></b></span>
                             <span th:remove="tag" th:case="6">已确认</span>
-                            <span th:remove="tag" th:case="-1">已退票（<b th:remove="tag" th:text="${orders.retreatReason}"></b>）</span>
-                            <span th:remove="tag" th:case="-2">已取消（<b th:remove="tag" th:text="${orders.retreatReason}"></b>）</span>
+                            <span th:remove="tag" th:case="-1" style="color:#F00">已退票（<b th:remove="tag" th:text="${orders.retreatReason}"></b>）</span>
+                            <span th:remove="tag" th:case="-2" style="color:#F00">已取消（<b th:remove="tag" th:text="${orders.retreatReason}"></b>）</span>
                             <span th:remove="tag" th:case="-3">已驳回</span>
                         </span>
                     </span>

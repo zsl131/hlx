@@ -11,6 +11,7 @@ import com.zslin.web.service.IWxMenuService;
 import com.zslin.wx.tools.AccessTokenTools;
 import com.zslin.wx.tools.JsonTools;
 import com.zslin.wx.tools.WeixinUtil;
+import com.zslin.wx.tools.WxConfig;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,9 @@ public class AdminWxMenuController {
 
     @Autowired
     private AccessTokenTools accessTokenTools;
+
+    @Autowired
+    private WxConfig wxConfig;
 
     @GetMapping(value = "list")
     @AdminAuth(name = "微信菜单管理", type = "1", orderNum = 1, icon = "fa fa-list")
@@ -169,9 +173,14 @@ public class AdminWxMenuController {
     }
 
     private String createMenu(WxMenu menu) {
+        String url = menu.getUrl();
+        if(!url.toLowerCase().startsWith("http://") && !url.toLowerCase().startsWith("https://")) { //如果不是http链接
+            if(!url.startsWith("/")) {url = "/"+url;}
+            url = wxConfig.getConfig().getUrl()+url;
+        }
         StringBuffer sb = new StringBuffer();
         sb.append(",\"type\":\"view\"");
-        sb.append(",\"url\":\"").append(menu.getUrl()).append("\"");
+        sb.append(",\"url\":\"").append(url).append("\"");
         return sb.toString();
     }
 }

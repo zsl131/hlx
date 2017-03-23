@@ -1,4 +1,5 @@
 $(function() {
+
     wxConfig(["menuItem:share:timeline", "chooseImage", "getLocation", "openLocation", "scanQRCode"]);
 
     $("#abc").click(function() {

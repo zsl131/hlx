@@ -6,7 +6,10 @@ import com.zslin.kaoqin.tools.PicTools;
 import com.zslin.sms.tools.RandomTools;
 import com.zslin.web.model.WeixinConfig;
 import com.zslin.web.tools.CommonTools;
+import com.zslin.wx.tools.JsonTools;
 import com.zslin.wx.tools.WxConfig;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,5 +95,49 @@ public class NormalTest {
     public void test09() {
         System.out.println(CommonTools.keep2Point(33d/10));
         System.out.println(CommonTools.daysOfTwo("2017-03-09", "2017-03-18"));
+    }
+
+    @Test
+    public void test10() {
+        String str = "{\n" +
+                "  \"errcode\": 0,\n" +
+                "  \"data\": {\n" +
+                "    \"totalcount\": 16,\n" +
+                "    \"pageindex\": 1,\n" +
+                "    \"pagecount\": 8,\n" +
+                "    \"records\": [\n" +
+                "      {\n" +
+                "        \"shop_id\": 429620,\n" +
+                "        \"shop_name\": \"南山店\",\n" +
+                "        \"ssid\": \"WX123\",\n" +
+                "        \"ssid_list\": [\n" +
+                "          \"WX123\",\n" +
+                "          \"WX456\"\n" +
+                "        ],\n" +
+                "        \"protocol_type\": 4,\n" +
+                "        \"sid\": \"\",\n" +
+                "        \"poi_id\":\"285633617\"\n" +
+                "      },\n" +
+                "      {\n" +
+                "        \"shop_id\": 7921527,\n" +
+                "        \"shop_name\": \"宝安店\",\n" +
+                "        \"ssid\": \"\",\n" +
+                "        \"ssid_list\": [],\n" +
+                "        \"protocol_type\": 0,\n" +
+                "        \"sid\": \"\",\n" +
+                "        \"poi_id\":\"285623614\"\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "}";
+
+        JSONObject jsonObj = new JSONObject(str);
+        JSONObject data = jsonObj.getJSONObject("data");
+        System.out.println(data.getInt("totalcount"));
+        JSONArray array = data.getJSONArray("records");
+        for(int i=0;i<array.length();i++) {
+            JSONObject single = array.getJSONObject(i);
+            System.out.println("single===="+single.getString("shop_name")+"===="+single.getInt("shop_id"));
+        }
     }
 }

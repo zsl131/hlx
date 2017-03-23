@@ -110,6 +110,9 @@ public class WeixinController {
                     if("subscribe".equalsIgnoreCase(eventStr)) { //关注
                         datasTools.onSubscribe(fromOpenid);
                         docSend = datasTools.buildSubscribeStr(fromOpenid, builderName);
+                    } else if("WifiConnected".equalsIgnoreCase(eventStr)) { //Wifi连接成功
+                        datasTools.onSubscribe(fromOpenid);
+                        docSend = datasTools.buildSubscribeStr(fromOpenid, builderName);
                     } else if("unsubscribe".equalsIgnoreCase(eventStr)) { //取消关注
                         datasTools.onUnsubscribe(fromOpenid);
                     } else if("LOCATION".equalsIgnoreCase(eventStr)) { //定位

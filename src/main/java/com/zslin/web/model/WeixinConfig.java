@@ -20,6 +20,40 @@ public class WeixinConfig {
     private String token;
     private String aeskey;
     private String eventTemp;
+    /** 商户ID，微信支付时申请的 */
+    private String mchid;
+
+    /** 微信支付结果通知地址 */
+    @Column(name = "notify_url")
+    private String notifyUrl;
+
+    /** APIKEY，微信支付时所需要的APIKEY */
+    @Column(name = "api_key")
+    private String apiKey;
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl;
+    }
+
+    public String getMchid() {
+        return mchid;
+    }
+
+    public void setMchid(String mchid) {
+        this.mchid = mchid;
+    }
 
     public String getUrl() {
         return url;

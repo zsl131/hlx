@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+		<title>微信门店详情</title>
+	</head>
+	<body>
+		<div th:fragment="content" th:remove="tag">
+			<div class="header lighter smaller blue">
+				<h3><i class="fa fa-plus"></i>&nbsp;微信门店详情</h3>
+				<div th:replace="admin/shop/nav :: content" th:remove="tag"></div>
+			</div>
+			<div class="form-group form-group-lg">
+				<div class="input-group">
+					<div class="input-group-addon">门店名称：</div>
+					<div th:text="${shop.shop_name}" class="form-control"></div>
+				</div>
+			</div>
+
+			<div class="form-group form-group-lg">
+				<div class="input-group">
+					<div class="input-group-addon">门店设备数量：</div>
+					<div th:text="${shop.ap_count}" class="form-control"></div>
+				</div>
+			</div>
+			<div class="form-group form-group-lg">
+				<div class="input-group">
+					<div class="input-group-addon">门店设备类型：</div>
+					<div th:switch="${shop.protocol_type}" class="form-control">
+						<span th:case="0">无设备</span>
+						<span th:case="4">密码型设备</span>
+						<span th:case="31">portal型设备</span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group form-group-lg">
+				<div class="input-group">
+					<div class="input-group-addon">连接后提示：</div>
+					<div th:switch="${shop.bar_type}" class="form-control">
+						<span th:case="0">欢迎光临+公众号名称</span>
+						<span th:case="1">欢迎光临+门店名称</span>
+						<span th:case="2">已连接+公众号名称+WiFi</span>
+						<span th:case="3">已连接+门店名称+Wi-Fi</span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group form-group-lg">
+				<div class="input-group">
+					<div class="input-group-addon">模板类型：</div>
+					<div th:text="${shop.template_id eq 1?'自定义URL':'系统模板'}" class="form-control"></div>
+				</div>
+			</div>
+			<div class="form-group form-group-lg">
+				<div class="input-group">
+					<div class="input-group-addon">商家首页：</div>
+					<div th:text="${shop.homepage_url}" class="form-control"></div>
+				</div>
+			</div>
+			<div class="form-group form-group-lg">
+				<div class="input-group">
+					<div class="input-group-addon">连接后首页：</div>
+					<div th:text="${shop.finishpage_url}" class="form-control"></div>
+				</div>
+			</div>
+			<div class="form-group form-group-lg">
+				<div class="input-group">
+					<div class="input-group-addon">门店ID：</div>
+					<div th:text="${shop.poi_id}+'（适用于微信卡券、微信门店业务）'" class="form-control"></div>
+				</div>
+			</div>
+
+		</div>
+	</body>
+</html>

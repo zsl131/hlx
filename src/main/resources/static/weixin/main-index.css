@@ -1,6 +1,58 @@
-* {
-    color:#F00;
-}
+
 .single-line {
     width:100%; background:#f2f2f2; height:8px; border-top:1px #ddd solid;
 }
+
+.area-title {
+    width:100%; background:#fafafa; height:40px; line-height:40px; border:1px #e7e7e7 solid; border-width:1px 0px 1px 0px; color:#777; padding-left:8px;
+}
+
+/*** 订单 **/
+.orders-area {
+    width:100%; padding:0px 5%;
+}
+
+.single-order {
+    width:100%; border-bottom:#e7e7e7 1px solid; height:40px; line-height:40px; margin:8px 0px;
+}
+.order-time {
+    float:right; color:#999;
+}
+/*** 订单 **/
+
+/*** 点评 **/
+
+.single-comment {
+    width:100%; border-bottom:#e7e7e7 1px solid; margin:8px 0px; float:left; line-height:20px; padding-bottom:7px;
+}
+.food-info-img {
+    width:56%; padding:8px; float:left; position:relative;border-right:1px #ddd dotted;
+}
+.food-info-img img.food-img {
+    width:40%; border-radius:6px; float:left;
+}
+.food-info-img .info {
+    width:60%;
+    float:left; padding:7px;
+}
+.food-info-img .info a {
+    color:#333; text-decoration:None; line-height:24px; padding-bottom:4px; float:left;
+}
+
+.comment {
+    float:right; width:42%; padding-right:7px; color:#444; line-height:24px;
+}
+.food-info-img .food-name {
+
+}
+.food-info-img .info .author-info {
+    float:left; width:100%; position:absolute; bottom:0px;
+}
+.food-info-img .info .author-info img {
+    width:25px; border-radius:25px;
+}
+.food-info-img .info .author-info span {
+    font-size:12px; color:#888; padding-left:4px;
+}
+
+/*** 点评 **/

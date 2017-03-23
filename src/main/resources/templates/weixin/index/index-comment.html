@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content">
+            <div class="area-title"><i class="fa fa-commenting"></i> 最新点评</div>
+            <div class="single-comment" th:each="comment : ${commentList}">
+                <div class="food-info-img">
+                    <a th:href="@{/wx/food/detail(id=${comment.foodId})}"><img th:src="${comment.foodPic}" class="food-img"/></a>
+                    <div class="info">
+                        <a th:href="@{/wx/food/detail(id=${comment.foodId})}" class="food-name" th:text="${comment.foodName}"></a>
+                        <p class="author-info">
+                            <img th:src="${comment.headimgurl}" class="author-img"/><span th:text="${comment.createDay}"></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="comment" th:text="${comment.content}"></div>
+            </div>
+        </div>
+    </body>
+</html>
