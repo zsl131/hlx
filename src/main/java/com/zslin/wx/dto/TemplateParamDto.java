@@ -29,7 +29,6 @@ public class TemplateParamDto {
     }
 
     public TemplateParamDto(EventRemarkDto... dtos) {
-        this.paramName = paramName;
         StringBuffer sb = new StringBuffer();
         for(EventRemarkDto dto : dtos) {
             sb.append(dto.getName()).append((dto.getName()==null || "".equals(dto.getName()))?"":"：").append(dto.getValue()).append("\\n");

@@ -71,7 +71,7 @@ public class PaySignTools {
 	
 	public String createResultSign(PayResultDto dto, String timestamp) {
 		try {
-			SortedMap<String, Object> params = new TreeMap<String, Object>();
+			SortedMap<String, Object> params = new TreeMap<>();
 //			params.put("appid", dto.getAppid());
 			params.put("appId", dto.getAppid()); 
 			params.put("timeStamp", timestamp);

@@ -39,6 +39,18 @@ public class Rules {
     @Column(name = "refund_min")
     private Integer refundMin;
 
+    /** 几个积分兑换一元 */
+    @Column(name = "score_money")
+    private Integer scoreMoney;
+
+    public Integer getScoreMoney() {
+        return scoreMoney;
+    }
+
+    public void setScoreMoney(Integer scoreMoney) {
+        this.scoreMoney = scoreMoney;
+    }
+
     public Integer getRefundMin() {
         return refundMin;
     }

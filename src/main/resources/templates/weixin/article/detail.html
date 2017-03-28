@@ -6,14 +6,14 @@
       layout:decorator="fragments/weixinModel">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>昭通汉丽轩</title>
+    <title th:text="${article.title}">昭通汉丽轩</title>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
     <div class="page">
         <div class="page__hd" style="padding-left:10px;padding-right:10px;">
             <h1 class="page__title" th:text="${article.title}">Article</h1>
-            <p class="page__desc">昭通汉丽轩</p>
+            <p class="page__desc"  th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</p>
         </div>
         <div class="page__bd">
             <article class="weui-article" th:utext="${article.content}">

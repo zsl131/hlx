@@ -7,7 +7,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-feedback-list.css"/>
-    <title>昭通汉丽轩</title>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}"></title>
 </head>
 <body style="background:#eff4f7;">
 <div th:fragment="content" th:remove="tag">

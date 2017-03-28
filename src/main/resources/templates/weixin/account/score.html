@@ -6,7 +6,7 @@
       layout:decorator="fragments/weixinModel">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>昭通汉丽轩</title>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
@@ -14,7 +14,9 @@
         <div class="page__hd" style="padding-left:10px;padding-right:10px; background:#fafafa; border-bottom:1px #ececec solid;">
             <div class="weui-flex">
                 <div class="weui-flex__item">
-                    <h1 class="page__title" style="color:#F60;"><i class="fa fa-rmb"></i><b th:text="${wallet.score}"></b></h1>
+                    <h1 class="page__title" style="color:#F60;"><b th:text="${wallet.score}"></b>
+                        <span style="font-size:14px;">可抵：<b th:text="${canMoney}"></b>元</span>
+                    </h1>
                     <p class="page__desc">积分余额</p>
                 </div>
                 <div class="weui-flex__item" style="position:relative;">

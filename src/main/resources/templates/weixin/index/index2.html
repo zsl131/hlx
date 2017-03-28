@@ -6,7 +6,7 @@
       layout:decorator="fragments/weixinModel">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>微信首页</title>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">微信首页</title>
     <script src="/weixin/weixin-index.js"></script>
 </head>
 <body>

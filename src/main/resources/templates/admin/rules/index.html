@@ -28,27 +28,21 @@
 						<span class="input-group-addon">&nbsp;天&nbsp;</span>
 					</div>
 				</div>
-				<!--<div class="form-group form-group-lg">
-					<div class="input-group">
-						<div class="input-group-addon">优秀评论加分：</div>
-						<input name="goodCommentScores" id="goodCommentScores" type="text" class="form-control" th:value="${rules.goodCommentScores}" placeholder="请输入优秀评论加分，单位：分" />
-						<span class="input-group-addon">&nbsp;分&nbsp;</span>
-					</div>
-				</div>-->
 				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">积分兑换：</div>
+						<input name="scoreMoney" id="scoreMoney" type="text" class="form-control" th:value="${rules.scoreMoney}" placeholder="多少积分可换一元" />
+						<span class="input-group-addon">分抵一元</span>
+					</div>
+				</div>
+
+				<!--<div class="form-group form-group-lg">
 					<div class="input-group">
 						<div class="input-group-addon">充值赠送比例：</div>
 						<input name="chargePercent" id="chargePercent" type="text" class="form-control" th:value="${rules.chargePercent}" placeholder="请输入充值赠送积分比例，未除100的整数" />
 						<span class="input-group-addon">&nbsp;%&nbsp;</span>
 					</div>
-				</div>
-				<div class="form-group form-group-lg">
-					<div class="input-group">
-						<div class="input-group-addon">亲情折扣比例：</div>
-						<input name="friendPercent" id="friendPercent" type="text" class="form-control" th:value="${rules.friendPercent}" placeholder="请输入比例值，未除100的整数" />
-						<span class="input-group-addon">&nbsp;%&nbsp;</span>
-					</div>
-				</div>
+				</div>-->
 				<div class="form-group form-group-lg">
 					<div class="input-group">
 						<div class="input-group-addon">早晚餐时间间隔：</div>

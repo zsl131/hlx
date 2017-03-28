@@ -9,7 +9,7 @@
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-account-me.css"/>
     <script type="text/javascript" src="/weixin/weixin-bind-phone.js"></script>
     <script src="/weixin/weixin-account-me.js"></script>
-    <title>昭通汉丽轩</title>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
 
 </head>
 <body>
@@ -49,7 +49,7 @@
                         </div>
                     </a>
                     <a class="weui-cell weui-cell_access" href="/wx/account/score" >
-                        <div class="weui-cell__hd"><i class="list-icon fa fa-cube"></i></div>
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-opera"></i></div>
                         <div class="weui-cell__bd">
                             <span>我的积分</span>
                         </div>

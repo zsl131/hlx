@@ -19,6 +19,8 @@ public class ScoreRule {
     public static final String SEND_MESSAGE = "SEND-MESSAGE";
     //分享平台
     public static final String SHARE = "SHARE";
+    //分享给朋友
+    public static final String SHARE_FRIEND = "SHARE-FRIEND";
     //拉取用户
     public static final String PULL_USER = "PULL-USER";
     //绑定手机号码

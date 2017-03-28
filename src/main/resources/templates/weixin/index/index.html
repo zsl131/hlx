@@ -6,7 +6,7 @@
       layout:decorator="fragments/weixinModel">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>昭通汉丽轩</title>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
     <script src="/weixin/weixin-index.js"></script>
     <script src="/weixin/gallery/jssor.slider-22.2.10.mini.js"></script>
     <script src="/weixin/gallery/main.js"></script>
@@ -21,8 +21,13 @@
     <div th:replace="weixin/index/index-flex :: content" th:remove="tag"></div>
     <!--<div class="single-line"></div>-->
 
+    <div th:replace="weixin/index/index-buy :: content" th:remove="tag"></div>
+    <div th:replace="weixin/index/index-address :: content" th:remove="tag"></div>
+
     <div th:replace="weixin/index/index-orders :: content" th:remove="tag"></div>
     <div th:replace="weixin/index/index-comment :: content" th:remove="tag"></div>
+
+    <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
     <!--<div th:replace="weixin/wx-tabbar :: content" th:remove="tag"></div>-->
 </div>
 </body>

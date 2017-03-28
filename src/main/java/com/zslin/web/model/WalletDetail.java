@@ -36,9 +36,33 @@ public class WalletDetail extends BaseEntity {
     /** 数量，如果是现金，单位为分 */
     private Integer amount;
 
+    /** 剩余，当是积分时，有可能积分只使用一部份 */
+    private Integer surplus;
+
     /** 交易类型 */
     @Column(name = "tran_type")
     private String tranType;
+
+    /** 状态，0-正常；1-部份使用；2-全部使用；-1-过期 */
+    private String status="0";
+
+    public Integer getSurplus() {
+        return surplus;
+    }
+
+    public void setSurplus(Integer surplus) {
+        this.surplus = surplus;
+    }
+
+    /** 状态，0-正常；1-部份使用；2-全部使用；-1-过期 */
+    public String getStatus() {
+        return status;
+    }
+
+    /** 状态，0-正常；1-部份使用；2-全部使用；-1-过期 */
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getTranType() {
         return tranType;

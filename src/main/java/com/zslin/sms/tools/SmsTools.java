@@ -117,8 +117,8 @@ public class SmsTools {
             throw new SystemException("要替换的参数不匹配");
         }
         String par = buildMsgParmas(params);
-//        String res = InternetTools.doGet(buildUrl(smsConfig.getSendMsgCode(), "mid", iid, "phone", phone, "con", par), null);
-        String res = "{'err':'0', 'res':'1', 'msg':'测试发送，未真正发送'}";
+        String res = InternetTools.doGet(buildUrl(smsConfig.getSendMsgCode(), "mid", iid, "phone", phone, "con", par), null);
+//        String res = "{'err':'0', 'res':'1', 'msg':'测试发送，未真正发送'}";
         String err = JsonTools.getJsonParam(res, "err");
         if("0".equals(err)) {
             String resCode = JsonTools.getJsonParam(res, "res");

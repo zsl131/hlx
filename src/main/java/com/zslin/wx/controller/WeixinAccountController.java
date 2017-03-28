@@ -78,6 +78,9 @@ public class WeixinAccountController {
     @Autowired
     private IOrdersService ordersService;
 
+    @Autowired
+    private IRulesService rulesService;
+
     //微信用户个人中心
     @GetMapping(value = "me")
     public String me(Model model, HttpServletRequest request) {
@@ -102,7 +105,10 @@ public class WeixinAccountController {
         String openid = SessionTools.getOpenid(request);
         SimpleSpecificationBuilder builder = new SimpleSpecificationBuilder("openid", "eq", openid);
         builder.add("type", "eq", "2");
-        model.addAttribute("wallet", walletService.findByOpenid(openid));
+        Rules rules = rulesService.loadOne();
+        Wallet w = walletService.findByOpenid(openid);
+        model.addAttribute("wallet", w);
+        model.addAttribute("canMoney", rules.getScoreMoney()==null|| rules.getScoreMoney()<=0?0:NormalTools.buildPoint(w.getScore()*1.0/rules.getScoreMoney()));
         Page<WalletDetail> datas = walletDetailService.findAll(builder.generate(),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
         model.addAttribute("datas", datas);
@@ -238,5 +244,14 @@ public class WeixinAccountController {
         } else {
             accountService.modifyPhone(phone, openid);
         }
+    }
+
+    @PostMapping(value = "sharePage")
+    public @ResponseBody String sharePage(String type, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        if(openid==null || "".equals(openid)) {return "未检测到用户信息";}
+        //type可以为SHARE和SHARE-FRIEND
+        scoreTools.processScore(openid, type); //通知积分
+        return "1";
     }
 }

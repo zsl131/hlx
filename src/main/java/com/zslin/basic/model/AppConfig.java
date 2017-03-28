@@ -42,6 +42,62 @@ public class AppConfig {
 	@Column(name = "admin_email")
 	private String adminEmail;
 
+	/** 微信支付，1-开启；0-未开启 */
+	@Column(name = "wx_pay")
+	private String wxPay;
+
+	/** 联系地址 */
+	private String address;
+
+	/** 联系电话 */
+	private String phone;
+
+	/** 纬度 */
+	private String latitude;
+
+	/** 经度 */
+	private String longitude;
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getWxPay() {
+		return wxPay;
+	}
+
+	public void setWxPay(String wxPay) {
+		this.wxPay = wxPay;
+	}
+
 	public String getAdminEmail() {
 		return adminEmail;
 	}

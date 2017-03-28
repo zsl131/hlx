@@ -7,7 +7,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-member-level.css"/>
-    <title>昭通汉丽轩</title>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
@@ -15,7 +15,7 @@
         <div class="head-part">
             <div class="img"><img src="/logo-500.png"/></div>
             <div class="info">
-                <p class="title">昭通汉丽轩会员</p>
+                <p class="title" th:text="${session.appConfig ne null?session.appConfig.appName+'会员':'汉丽轩会员'}">昭通汉丽轩会员</p>
             </div>
         </div>
 

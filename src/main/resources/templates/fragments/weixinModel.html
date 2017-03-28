@@ -5,7 +5,7 @@
       th:fragment="mymodel" >
 
 <head th:fragment="head">
-    <title>昭通汉丽轩</title>
+    <title  th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">汉丽轩</title>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <link rel="icon" type="image/x-icon" href="/favicon.png"/>
@@ -23,15 +23,15 @@
     <!-- Font Awesome-->
     <link rel="stylesheet" href="/basic/font-awesome-4.7.0/css/font-awesome.min.css" />
 
-    <script type="text/javascript" src="/basic/admin/myself/delete.js"></script>
+    <!--<script type="text/javascript" src="/basic/admin/myself/delete.js"></script>
     <script type="text/javascript" src="/basic/admin/myself/auth.js"></script>
     <script type="text/javascript" src="/basic/admin/myself/cms.admin.js"></script>
-    <script type="text/javascript" src="/basic/admin/myself/my_filter.js"></script>
+    <script type="text/javascript" src="/basic/admin/myself/my_filter.js"></script>-->
 
-    <link type="text/css" rel="stylesheet" href="/basic/admin/main.css"/>
+    <!--<link type="text/css" rel="stylesheet" href="/basic/admin/main.css"/>
     <link type="text/css" rel="stylesheet" href="/basic/admin/form-page.css"/>
     <link type="text/css" rel="stylesheet" href="/basic/admin/list-page.css"/>
-    <link type="text/css" rel="stylesheet" href="/basic/admin/nav.css"/>
+    <link type="text/css" rel="stylesheet" href="/basic/admin/nav.css"/>-->
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script type="text/javascript" src="/weixin/wxjs-config.js"></script>
     <script type="text/javascript" src="/weixin/wxjs-fun.js"></script>
@@ -40,11 +40,11 @@
 
     <script type="text/javascript" src="/weixin/util/weixin-util.js"></script>
 
-    <script type="text/javascript">
+    <!--<script type="text/javascript">
         $(function() {
             $(".logout-href").deleteFun({title:'退出提示',msg:'确定退出系统吗？'});
         });
-    </script>
+    </script>-->
     <style>
         html, body {
             background:#FFF;

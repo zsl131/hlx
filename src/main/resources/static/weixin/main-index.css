@@ -56,3 +56,78 @@
 }
 
 /*** 点评 **/
+
+
+/** 买票 **/
+.buy-ticket {
+    width:100%; margin-top:10px; border-top:1px #E7E7E7 solid;
+}
+
+.single-buy-ticket {
+    width:100%; text-align:center; margin:8px 0px; border-right:1px #ddd dotted;
+}
+.single-buy-ticket a {
+    text-decoration:none;
+}
+.single-buy-ticket h4 {
+    color:#999; font-size:12px; height:24px; line-height:24px;
+}
+.single-buy-ticket h4 b {
+    color:#F60; font-size:24px;
+}
+.single-buy-ticket h4 b.fa {
+    font-size:18px;
+}
+.single-buy-ticket p {
+    color:#999;
+}
+.single-buy-ticket p span {
+    color:#F60;
+}
+.charge-member {
+    border:none;
+}
+.charge-member h4 b {
+    color:#039BB6; font-size:18px;
+}
+/** 买票 **/
+
+/** 联系地址 **/
+.show-company-address {
+    border-top:1px #E7E7E7 solid; width:100%; padding:8px 10px;
+}
+.address-map {
+    color:#039BB6; padding:10px; width:80px; height:80px; text-align:center;
+}
+
+.address-map b {
+    font-size:30px; text-align:center; width:100%;
+}
+
+.share-btn {
+    color:#039BB6; padding:10px; width:80px; height:80px; text-align:center; border-right:1px #ddd dotted;
+}
+
+.share-btn b {
+    font-size:30px; text-align:center; width:100%;
+}
+.address-part {
+    border-left:1px #ddd dotted; padding-left:8px; margin-left:8px;
+}
+.address-part h4 {
+    color:#F60; font-weight:bold;
+}
+.address-part p {
+    color:#888;
+}
+/** 联系地址 **/
+
+
+/** 页底 **/
+.main-bottom {
+    line-height:22px; text-align:center; width:100%; color:#999;  padding-bottom:10px; float:left;margin-top:12px;
+}
+.main-bottom p {
+
+}
+/** 页底 **/

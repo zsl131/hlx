@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content">
+            <div class="main-bottom">
+                <p><b th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}"></b>全体员工欢迎您的到来！</p>
+                <p th:text="${session.appConfig ne null?session.appConfig.adminEmail:'技术支持:393156105（QQ）'}"></p>
+            </div>
+        </div>
+    </body>
+</html>

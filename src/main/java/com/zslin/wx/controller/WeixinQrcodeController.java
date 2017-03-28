@@ -24,7 +24,12 @@ public class WeixinQrcodeController {
     @GetMapping(value = "qr")
     public String qr(Model model, Integer id, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
-        Qrcode qr = qrcodeService.findByAccountId(id);
+        Qrcode qr = null;
+        if(id!=null && id>0) {
+            qr = qrcodeService.findByAccountId(id);
+        } else {
+            qr = qrcodeService.findByOpenid(openid);
+        }
         if(qr!=null && openid!=null && qr.getOpenid().equals(openid)) {
             model.addAttribute("canModify", true);
         } else {

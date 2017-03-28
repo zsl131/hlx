@@ -13,7 +13,7 @@ import java.util.Date;
 public class CommonTools {
 
     /**
-     * 比较两个日期相关的天数
+     * 比较两个日期相差的天数
      * @param fDate 开始
      * @param oDate 结束
      * @return

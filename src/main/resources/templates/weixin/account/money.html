@@ -17,6 +17,9 @@
                     <h1 class="page__title" style="color:#F60;"><i class="fa fa-rmb"></i><b th:text="${#numbers.formatDecimal(wallet.money*1.0/100, 0, 'COMMA', 2, 'POINT')}"></b></h1>
                     <p class="page__desc">账户余额</p>
                 </div>
+                <div class="weui-flex__item" style="position:relative;">
+                    <a href="/wx/member/level" style="position:absolute; bottom:10px;"><i class="fa fa-info"></i> 办理会员卡！</a>
+                </div>
             </div>
 
         </div>

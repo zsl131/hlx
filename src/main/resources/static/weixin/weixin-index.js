@@ -1,41 +1,15 @@
 $(function() {
 
-    wxConfig(["menuItem:share:timeline", "chooseImage", "getLocation", "openLocation", "scanQRCode"]);
+    wxConfig(["menuItem:share:timeline", "chooseImage", "getLocation", "openLocation", "scanQRCode", "onMenuShareTimeline","onMenuShareAppMessage"]);
 
-    $("#abc").click(function() {
-share2Cirlce("测试分享标题", "http://www.zslin.com", "https://www.baidu.com/s?wd=%E5%BE%AE%E7%9B%9F&rsv_idx=2&tn=baiduhome_pg&usm=1&ie=utf-8&rsv_cq=wx+jsapi+invalid+signature&rsv_dl=0_right_recommends_merge_28335&euri=10960559", function() {
-            alert("====success");
-        }, function() {
-            alert("cancel");
-        });
-    });
+    setShares();
 
-    $("#getPic").click(function() {
-        chooseImages(6, function(res) {
-            alert(res.localIds);
-        });
-    });
-
-    $("#getLocation").click(function() {
-        getLocation(true, function(res) {
-            var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-            var speed = res.speed; // 速度，以米/每秒计
-            var accuracy = res.accuracy; // 位置精度
-
-            alert(JSON.stringify(res));
-        });
-    });
-
-    $("#openLocation").click(function() {
-        getLocation(false, function(res) {
-            var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-            var speed = res.speed; // 速度，以米/每秒计
-            var accuracy = res.accuracy; // 位置精度
-alert(latitude+"=="+longitude);
-            openLocation(latitude, longitude, "这里是我家", "云南省昭通市昭阳区二环西路荷花蒂斯", "http://www.zslin.com");
-        });
+    $(".address-map").click(function() {
+        var latitude = $(this).attr("latitude");
+        var longitude = $(this).attr("longitude");
+        var address = $(this).attr("address");
+        var title = $(this).attr("appName");
+        openLocation(latitude, longitude, title, address);
     });
 
     $("#qrCode").click(function() {
@@ -44,4 +18,36 @@ alert(latitude+"=="+longitude);
         });
     });
 });
+
+function setShares() {
+    var appName = $(".address-map").attr("appName");
+    var shareDesc = "在"+appName+"自助餐厅用餐真“"+buildShareTitle()+"”";
+
+    share2Cirlce(shareDesc, "http://zthlx.zslin.com/weixin/index", "http://zthlx.zslin.com/logo-200.png", function() {
+        postScore("SHARE");
+    }, function() {
+        alert("取消分享不会加分哦");
+    });
+
+    share2Friend(appName, shareDesc, "http://zthlx.zslin.com/weixin/index", "http://zthlx.zslin.com/logo-200.png", function() {
+        postScore("SHARE-FRIEND");
+    }, function() {
+        alert("取消分享不会加分哦");
+    })
+}
+
+function postScore(type) {
+    $.post("/wx/account/sharePage", {type:type}, function(res) {
+        if(res!='1') {
+            alert(res);
+        }
+    }, "json");
+}
+
+function buildShareTitle() {
+    var array = ["超值", "值", "爽", "划算", "赞", "便宜"];
+    var random = parseInt(Math.random()*array.length);
+
+    return array[random];
+}
 

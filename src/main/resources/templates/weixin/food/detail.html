@@ -6,7 +6,7 @@
       layout:decorator="fragments/weixinModel">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>昭通汉丽轩</title>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-food-detail.css"/>
     <script type="text/javascript" src="/weixin/weixin-food-detail.js"></script>
 </head>

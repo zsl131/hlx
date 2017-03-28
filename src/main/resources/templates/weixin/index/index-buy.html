@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content" th:if="${session.appConfig.wxPay eq '1'}">
+            <div class="page__bd page__bd_spacing">
+                <div class="weui-flex buy-ticket">
+                    <div class="weui-flex__item single-buy-ticket">
+                        <a href="#">
+                        <h4><b class="fa fa-rmb"></b> <b th:text="${price.breakfastPrice}"></b> 元/位</h4>
+                        <p>购买<span>早餐券</span></p>
+                        </a>
+                    </div>
+                    <div class="weui-flex__item single-buy-ticket">
+                        <a href="#">
+                        <h4><b class="fa fa-rmb"></b> <b th:text="${price.dinnerPrice}"></b> 元/位</h4>
+                        <p>购买<span>晚餐券</span></p>
+                        </a>
+                    </div>
+                    <div class="weui-flex__item single-buy-ticket charge-member">
+                        <a href="/wx/member/level">
+                        <h4><b class="fa fa-vcard-o"></b><b>办理会员</b> </h4>
+                        <p>充值就送<span>现金</span></p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

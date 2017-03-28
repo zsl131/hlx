@@ -1,5 +1,6 @@
 package com.zslin.wx.paytools;
 
+import com.zslin.web.model.WeixinConfig;
 import com.zslin.wx.tools.WxConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,10 @@ public class PayXmlTools {
 	 * @return
 	 */
 	public String buildParamXml(PayPostDto dto) {
-		dto.setNotify_url(wxConfig.getConfig().getNotifyUrl()); //设置回调地址
+		WeixinConfig config = wxConfig.getConfig();
+		dto.setAppid(config.getAppid()); //APPID
+		dto.setMch_id(config.getMchid()); //商户ID
+		dto.setNotify_url(config.getNotifyUrl()); //设置回调地址
 		dto.setSign(paySignTools.createMD5Sign(dto)); //赋值签名
 		SortedMap<String, Object> params = new TreeMap<>();
 		
