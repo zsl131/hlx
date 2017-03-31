@@ -101,7 +101,7 @@ public class DatasTools {
             return "";
         } else if(isPrizeCode(content.trim())) { //如果是中奖代码
             gamePrizeTools.processMessage(openid, content.trim());
-            return WeixinXmlTools.createTextXml(openid, builderName, "已成效提交兑奖码，请注意查收对奖信息！\n感谢您的参与！");
+            return WeixinXmlTools.createTextXml(openid, builderName, "已成功提交兑奖码，请注意查收对奖信息！\n感谢您的参与！");
         } else {
             Feedback f = new Feedback();
             f.setCreateDate(new Date());
@@ -197,7 +197,7 @@ public class DatasTools {
                 String nickname = "";
                 try {
                     nickname = jsonObj.getString("nickname");
-//						nickname = nickname.replaceAll("[^\\u0000-\\uFFFF]", "");
+                    nickname = nickname.replaceAll("[^\\u0000-\\uFFFF]", ""); //替换utf8mb4字条
                 } catch (Exception e) {
                 }
                 a.setHeadimgurl(jsonObj.getString("headimgurl"));
@@ -240,7 +240,7 @@ public class DatasTools {
                 String nickname = "";
                 try {
                     nickname = jsonObj.getString("nickname");
-//						nickname = nickname.replaceAll("[^\\u0000-\\uFFFF]", "");
+                    nickname = nickname.replaceAll("[^\\u0000-\\uFFFF]", ""); //替换utf8mb4字符
                 } catch (Exception e) {
                 }
                 a.setHeadimgurl(jsonObj.getString("headimgurl"));

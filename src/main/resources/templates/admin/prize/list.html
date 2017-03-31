@@ -45,8 +45,9 @@
 					<td>
 						<div th:remove="tag" th:switch="${obj.type}">
 							<span th:case="'1'">现金券</span>
-							<span th:case="'2'">就餐券</span>
-							<span th:case="'3'">礼物</span>
+							<span th:case="'2'">抵价券</span>
+							<span th:case="'3'">早餐券</span>
+							<span th:case="'4'">晚餐券</span>
 						</div>
 					</td>
 					<td th:text="${obj.name}"></td>

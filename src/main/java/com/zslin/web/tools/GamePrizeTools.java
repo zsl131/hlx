@@ -62,7 +62,7 @@ public class GamePrizeTools {
                 gp.setOpenid(openid);
                 gamePrizeService.save(gp);
             }
-            if("0".equals(gp.getStatus())) { //如果未兑奖
+            if("0".equals(gp.getStatus()) && gp.getPrizeId()!=null && gp.getPrizeId()>0) { //如果未兑奖
                 Prize prizeObj = prizeService.findOne(gp.getPrizeId());
                 if(prizeObj!=null) {
                     if("1".equals(prizeObj.getType())) { //如果是积分
@@ -75,6 +75,7 @@ public class GamePrizeTools {
                                 new ScoreAdditionalDto("游戏批次", gp.getBatchNo()));
                     }
                     gp.setStatus("1");
+                    gamePrizeService.save(gp);
                 }
             }
         }
@@ -84,7 +85,6 @@ public class GamePrizeTools {
         try {
             HSSFWorkbook book = new HSSFWorkbook(is);
             HSSFSheet sheet = book.getSheetAt(0);
-            System.out.println(title+"++++"+batchNo+"====="+sheet.getLastRowNum());
             for(int i=0; i<sheet.getLastRowNum()+1; i++) {
                 HSSFRow row = sheet.getRow(i);
                 String code = row.getCell(0).getStringCellValue(); //第一个单元格，中奖码
