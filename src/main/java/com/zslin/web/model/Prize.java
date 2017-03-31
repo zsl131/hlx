@@ -28,9 +28,10 @@ public class Prize extends BaseEntity {
 
     /**
      * 类型
-     * 1-现金券
-     * 2-就餐券
-     * 3-礼品
+     * 1-积分
+     * 2-抵价券
+     * 3-早餐券
+     * 4-晚餐券
      */
     private String type;
 
@@ -41,6 +42,17 @@ public class Prize extends BaseEntity {
 
     /** 数量 */
     private Integer amount = 0;
+
+    /** 价值，如果是积分则是可抵积分数量；如果是抵价券，则是可抵现金金额，单位：分 */
+    private Integer worth = 0;
+
+    public Integer getWorth() {
+        return worth;
+    }
+
+    public void setWorth(Integer worth) {
+        this.worth = worth;
+    }
 
     public Integer getAmount() {
         return amount;

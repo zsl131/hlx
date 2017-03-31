@@ -70,4 +70,28 @@ public class ScoreTools {
             }
         }).start();
     }
+
+    public void processScoreByAmount(String openid, Integer amount, String reason, ScoreAdditionalDto... dtoList) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(openid==null || "".equals(openid)) {return;}
+                Account a = accountService.findByOpenid(openid);
+                walletDetailTools.addWalletDetailScore(amount, a.getOpenid(), a.getId(), a.getNickname(), reason, reason);
+                walletService.plusScore(amount, a.getOpenid());
+
+                StringBuffer sb = new StringBuffer();
+                sb.append("积分增加：").append(amount).append(" 分\\n")
+                        .append("当前剩余：").append(walletService.queryScore(a.getOpenid())).append(" 分\\n")
+                        .append("变化原因：").append(reason);
+
+                for(ScoreAdditionalDto dto : dtoList) {
+//                            sb.append("\\n").append(dto.getName()).append("：").append(dto.getValue());
+                    sb.append("\\n").append(dto.getName()).append((dto.getName()==null || "".equals(dto.getName()))?"":"：").append(dto.getValue());
+                }
+//                        .append("点赞食品：").append(foodName);
+                eventTools.eventRemind(a.getOpenid(), "积分变化提醒", "积分发生变化啦~~", NormalTools.curDate("yyyy-MM-dd HH:mm"), sb.toString(), "/wx/account/score");
+            }
+        }).start();
+    }
 }

@@ -29,7 +29,7 @@ import java.util.UUID;
  */
 @Controller
 @RequestMapping(value = "admin/gallery")
-@AdminAuth(name = "微信画廊管理", psn = "应用管理", orderNum = 6, porderNum = 1, pentity = 0, icon = "fa fa-image")
+@AdminAuth(name = "微信画廊管理", psn = "微信管理", orderNum = 6, porderNum = 1, pentity = 0, icon = "fa fa-image")
 public class AdminGalleryController {
 
     @Autowired

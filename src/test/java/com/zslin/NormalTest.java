@@ -140,4 +140,11 @@ public class NormalTest {
             System.out.println("single===="+single.getString("shop_name")+"===="+single.getInt("shop_id"));
         }
     }
+
+    @Test
+    public void test11() {
+        String str = "91658502";
+        Integer i = Integer.parseInt(str);
+        System.out.println(str+"========"+i);
+    }
 }

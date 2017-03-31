@@ -6,7 +6,7 @@
             <div id="sys_filter" class="form-inline" style="padding-bottom:10px;">
                 <div class="input-group">
                     <span class="input-group-addon">类型</span>
-                    <select class='filter_element form-control' opt="eq" name='filter_type'>
+                    <select class='filter_element form-control' opt="eq" name='filter_prizeType'>
                         <option value="">=全部=</option>
                         <option value="1">积分</option>
                         <option value="2">抵价券</option>
@@ -17,7 +17,16 @@
 
                 <div class="input-group">
                     <span class="input-group-addon">名称</span>
-                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_name'/>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_prizeName'/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">状态</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_status'>
+                        <option value="">=全部=</option>
+                        <option value="1">已使用</option>
+                        <option value="2">已过期</option>
+                        <option value="0">未使用</option>
+                    </select>
                 </div>
 
                 <span><button type="button" class="btn btn-primary btn-sm" id="beginFilter">查询</button></span>

@@ -1,5 +1,6 @@
 package com.zslin.wx.controller;
 
+import com.zslin.basic.exception.SystemException;
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.repository.SimpleSpecificationBuilder;
@@ -9,6 +10,9 @@ import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.ClientJsonTools;
 import com.zslin.web.model.Account;
 import com.zslin.web.service.IAccountService;
+import com.zslin.web.service.IPriceService;
+import com.zslin.web.service.IRulesService;
+import com.zslin.web.service.IWalletService;
 import com.zslin.wx.tools.SessionTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,6 +40,32 @@ public class WeixinOrdersController {
 
     @Autowired
     private ClientFileTools clientFileTools;
+
+    @Autowired
+    private IPriceService priceService;
+
+    @Autowired
+    private IRulesService rulesService;
+
+    @Autowired
+    private IWalletService walletService;
+
+    /** 买票 */
+    @GetMapping(value = "buy")
+    public String buy(Model model, String type, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        boolean isDinner = "2".equals(type)?false:true; //type为2时表示买早餐票，否则是晚餐票
+        Account a = accountService.findByOpenid(openid);
+        if(a==null) {
+            throw new SystemException("用户不存在不可买票！");
+        }
+        model.addAttribute("account", a);
+        model.addAttribute("isDinner", isDinner);
+        model.addAttribute("rules", rulesService.loadOne());
+        model.addAttribute("price", priceService.loadOne());
+        model.addAttribute("wallet", walletService.findByOpenid(openid));
+        return "weixin/orders/buy";
+    }
 
     /** 管理员的列表，用于有友情价权限的用户列表（股东） */
     @GetMapping(value = "listAdmin")

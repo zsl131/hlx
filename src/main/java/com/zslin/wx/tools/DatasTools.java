@@ -5,6 +5,7 @@ import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.web.model.*;
 import com.zslin.web.service.*;
+import com.zslin.web.tools.GamePrizeTools;
 import com.zslin.wx.dbtools.ScoreTools;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,12 @@ public class DatasTools {
     @Autowired
     private EventTools eventTools;
 
+    @Autowired
+    private IOwnService ownService;
+
+    @Autowired
+    private GamePrizeTools gamePrizeTools;
+
     /** 当用户取消关注时 */
     public void onUnsubscribe(String openid) {
         accountService.updateStatus(openid, "0");
@@ -92,6 +99,9 @@ public class DatasTools {
         } else if("hlx".equals(content.toLowerCase())) { //关注情况
             eventTools.eventRemind(openid, "查询提醒", "关注情况如下", DateTools.date2Str(new Date(), "yyyy-MM-dd"), accountTools.buildAccountStr(), "");
             return "";
+        } else if(isPrizeCode(content.trim())) { //如果是中奖代码
+            gamePrizeTools.processMessage(openid, content.trim());
+            return WeixinXmlTools.createTextXml(openid, builderName, "已成效提交兑奖码，请注意查收对奖信息！\n感谢您的参与！");
         } else {
             Feedback f = new Feedback();
             f.setCreateDate(new Date());
@@ -113,6 +123,19 @@ public class DatasTools {
             scoreTools.processScore(openid, ScoreRule.SEND_MESSAGE); //关注时送积分
             return "";
         }
+    }
+
+    //判断用户发送的消息是否为中奖码
+    private boolean isPrizeCode(String content) {
+        try {
+            if(content!=null && content.length()>=8) {
+                Integer code = Integer.parseInt(content);
+                if(code>0) {return true;}
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
     }
 
     private String buildHelpStr() {

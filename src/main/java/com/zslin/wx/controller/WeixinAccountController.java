@@ -100,6 +100,17 @@ public class WeixinAccountController {
         return "weixin/account/me";
     }
 
+    //礼品列表
+    @GetMapping(value = "own")
+    public String own(Model model, Integer page, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        SimpleSpecificationBuilder builder = new SimpleSpecificationBuilder("openid", "eq", openid);
+        Page<Own> datas = ownService.findAll(builder.generate(), SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
+        model.addAttribute("datas", datas);
+        model.addAttribute("ownCount", ownService.findCount(openid)); //礼物数量
+        return "weixin/account/own";
+    }
+
     @GetMapping(value = "score")
     public String score(Model model, Integer page, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);

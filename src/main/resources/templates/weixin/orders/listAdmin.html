@@ -21,7 +21,7 @@
 
         <div class="line-div"></div>
 
-        <div class="level-div">
+        <div class="level-div" th:if="${datas ne null}">
             <ul class="level-ul">
                 <li th:each="obj : ${datas}">
                     <p class="name" th:text="${obj.no}+'('+${obj.level eq '1'?'晚餐':'午餐'}+')'" style="color:#777; font-size:13px;">
@@ -49,9 +49,12 @@
                     </p>
                 </li>
             </ul>
+            <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
         </div>
 
-        <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
+        <div th:if="${datas eq null}">
+            <p style="text-align:center; width:100%; line-height:140px; float:left; color:#eee;"><i class="fa fa-info-circle"></i> 暂无任何折扣订单</p>
+        </div>
     </div>
 </div>
 </body>

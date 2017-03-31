@@ -97,7 +97,7 @@
                         </div>
                     </a>
 
-                    <a class="weui-cell weui-cell_access" href="/wx/account/own" >
+                    <!--<a class="weui-cell weui-cell_access" href="/wx/account/own" >
                         <div class="weui-cell__hd"><i class="list-icon fa fa-cart-arrow-down"></i></div>
                         <div class="weui-cell__bd">
                             <span>消费记录</span>
@@ -105,9 +105,9 @@
                         <div class="weui-cell__ft">
                             <span th:text="${ownCount}"></span>
                         </div>
-                    </a>
+                    </a>-->
 
-                    <a class="weui-cell weui-cell_access" href="/wx/orders/listAdmin" >
+                    <a class="weui-cell weui-cell_access" href="/wx/orders/listAdmin" th:if="${friendOrdersCount ne null}">
                         <div class="weui-cell__hd"><i class="list-icon fa fa-bar-chart"></i></div>
                         <div class="weui-cell__bd">
                             <span>折扣订单</span>
@@ -117,7 +117,7 @@
                         </div>
                     </a>
 
-                    <!--<a class="weui-cell weui-cell_access" href="/wx/account/own" >
+                    <a class="weui-cell weui-cell_access" href="/wx/account/own" >
                         <div class="weui-cell__hd"><i class="list-icon fa fa-gift"></i></div>
                         <div class="weui-cell__bd">
                             <span>我的物品</span>
@@ -125,7 +125,7 @@
                         <div class="weui-cell__ft">
                             <span th:text="${ownCount}"></span>
                         </div>
-                    </a>-->
+                    </a>
                 </div>
 
             </div>

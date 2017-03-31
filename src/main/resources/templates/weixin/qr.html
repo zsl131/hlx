@@ -37,7 +37,7 @@
 
         <div class="show-info">
             <p class="text">在<i style="color:#ee0;" th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}"></i>全自助餐厅用餐我觉得：<b>值</b>。</p>
-            <p class="address">用餐地址：昭通金融中心·金池购物广场三楼F3-15~16</p>
+            <p class="address" th:attr="appName=${session.appConfig.appName},latitude=${session.appConfig.latitude},longitude=${session.appConfig.longitude},address=${session.appConfig.address}">用餐地址：昭通金融中心·金池购物广场三楼F3-15~16</p>
         </div>
 
         <div class="line-div"></div>

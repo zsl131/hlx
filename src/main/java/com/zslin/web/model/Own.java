@@ -33,6 +33,10 @@ public class Own extends BaseEntity {
     @Column(name = "prize_name")
     private String prizeName;
 
+    /** 礼品类型，与Prize中的type一致 */
+    @Column(name = "prize_type")
+    private String prizeType;
+
     /** 状态 0-未使用，1-使用，2-过期 */
     private String status = "0";
 
@@ -53,6 +57,35 @@ public class Own extends BaseEntity {
     /** 来源说明，如参加抽奖活动等 */
     @Column(name = "source_info")
     private String sourceInfo;
+
+    /** 价值，如果是积分则是可抵积分数量；如果是抵价券，则是可抵现金金额，单位：分 */
+    private Integer worth = 0;
+
+    private String headimg;
+
+    public String getPrizeType() {
+        return prizeType;
+    }
+
+    public void setPrizeType(String prizeType) {
+        this.prizeType = prizeType;
+    }
+
+    public String getHeadimg() {
+        return headimg;
+    }
+
+    public void setHeadimg(String headimg) {
+        this.headimg = headimg;
+    }
+
+    public Integer getWorth() {
+        return worth;
+    }
+
+    public void setWorth(Integer worth) {
+        this.worth = worth;
+    }
 
     public String getOpenid() {
         return openid;

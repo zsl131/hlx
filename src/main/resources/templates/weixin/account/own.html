@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>昭通汉丽轩</title>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-own.css"/>
+    <script>
+        $(function() {
+            $(".money-show").each(function() {
+                var val = parseInt($(this).html());
+                $(this).html((val/100)+" 元");
+            });
+        });
+    </script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="page">
+        <div class="page__hd" style="padding-left:10px;padding-right:10px; background:#fafafa; border-bottom:1px #ececec solid;">
+            <div class="weui-flex">
+                <div class="weui-flex__item">
+                    <h1 class="page__title" style="color:#F60;"><i class="fa fa-gift"></i><b th:text="${ownCount}"></b></h1>
+                    <p class="page__desc">物品数量</p>
+                </div>
+                <div class="weui-flex__item" style="position:relative;">
+                    <a href="javascript:;" style="position:absolute; bottom:10px;"><i class="fa fa-info"></i> 参与活动可获得物品哦！</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="weui-cells" style="text-align:center;">
+        <div th:each="obj : ${datas}" th:remove="tag">
+            <div class="single-ticket-div">
+                <span class="dot-span"></span>
+                <div class="ticket-left">
+                    <span class="flag-span" th:switch="${obj.prizeType}">
+                        <span th:case="1" th:remove="tag">积</span>
+                        <span th:case="2" th:remove="tag">抵</span>
+                        <span th:case="3" th:remove="tag">早</span>
+                        <span th:case="4" th:remove="tag">晚</span>
+                    </span>
+                    <h4 th:if="${obj.prizeType eq '3' or obj.prizeType eq '4'}">一张 </h4>
+                    <h4 class="money-show" th:if="${obj.prizeType eq '2'}" th:text="${obj.worth}"></h4>
+                    <p class="remark" th:text="${obj.prizeName}"></p>
+                </div>
+                <div class="ticket-right" th:switch="${obj.prizeType}">
+                    <span th:case="1" th:remove="tag">积分券</span>
+                    <span th:case="2" th:remove="tag">抵价券</span>
+                    <span th:case="3" th:remove="tag">早餐券</span>
+                    <span th:case="4" th:remove="tag">晚餐券</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
+</div>
+</body>
+</html>

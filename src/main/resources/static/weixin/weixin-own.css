@@ -1,0 +1,24 @@
+.single-ticket-div {
+    width:260px; height:100px; position:relative; background:#e86245; margin:10px; padding:5px; color:#FFF;
+}
+.single-ticket-div .dot-span {
+    width:26px; height:26px; border-radius:26px; background:#FFF; position:absolute; top:37px; right:-13px;
+}
+.single-ticket-div .ticket-left {
+    width:180px; float:left; border-right:1px #fff dotted; height:100%;
+}
+.single-ticket-div .ticket-right {
+    width:58px; font-size:24px; float:right; word-wrap: break-word; padding-left:5px; writing-mode:tb-rl; margin-right:10px; line-height:30px; padding-top:8px; padding-right:12px;
+}
+
+
+.single-ticket-div h4 {
+    float:left; width:100%; text-align:center; font-size:36px; color:#fcec34;
+}
+.single-ticket-div p.remark {
+    float:left; width:90%; margin-left:5%; background:#a34531; line-height:28px; text-align:center; border-radius:2px; color:#f9f2f0;
+}
+
+.single-ticket-div .flag-span {
+    position:absolute; left:5px; top:5px; font-size:12px;
+}
