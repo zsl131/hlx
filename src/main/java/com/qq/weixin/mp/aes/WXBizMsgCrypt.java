@@ -21,11 +21,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.zslin.wx.tools.AccessTokenTools;
-import com.zslin.wx.tools.SignTools;
-import com.zslin.wx.tools.WxConfig;
 import org.apache.commons.codec.binary.Base64;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 提供接收和推送给公众平台消息的加解密接口(UTF8编码的字符串).
@@ -43,16 +39,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  * </ol>
  */
 public class WXBizMsgCrypt {
-
-	@Autowired
-	private WxConfig wxConfig;
-
-	@Autowired
-	private SignTools signTools;
-
-	@Autowired
-	private AccessTokenTools accessTokenTools;
-
 	static Charset CHARSET = Charset.forName("utf-8");
 	Base64 base64 = new Base64();
 	byte[] aesKey;
@@ -75,16 +61,6 @@ public class WXBizMsgCrypt {
 		this.token = token;
 		this.appId = appId;
 		aesKey = Base64.decodeBase64(encodingAesKey + "=");
-	}
-	
-	public WXBizMsgCrypt() throws AesException {
-		if (wxConfig.getAeskey().length() != 43) {
-			throw new AesException(AesException.IllegalAesKey);
-		}
-
-		this.token = accessTokenTools.getAccessToken();
-		this.appId = wxConfig.getAppid();
-		aesKey = Base64.decodeBase64(wxConfig.getAeskey() + "=");
 	}
 
 	// 生成4个字节的网络字节序
@@ -173,7 +149,7 @@ public class WXBizMsgCrypt {
 	 * @return 解密得到的明文
 	 * @throws AesException aes解密失败
 	 */
-	public String decrypt(String text) throws AesException {
+	String decrypt(String text) throws AesException {
 		byte[] original;
 		try {
 			// 设置解密模式为AES的CBC模式
@@ -274,7 +250,7 @@ public class WXBizMsgCrypt {
 		Object[] encrypt = XMLParse.extract(postData);
 
 		// 验证安全签名
-		//String signature = SHA1.getSHA1(token, timeStamp, nonce, encrypt[1].toString());
+		String signature = SHA1.getSHA1(token, timeStamp, nonce, encrypt[1].toString());
 
 		// 和URL中的签名比较是否相等
 		// System.out.println("第三方收到URL中的签名：" + msg_sign);
@@ -282,9 +258,6 @@ public class WXBizMsgCrypt {
 		/*if (!signature.equals(msgSignature)) {
 			throw new AesException(AesException.ValidateSignatureError);
 		}*/
-		if(!signTools.checkSignature(msgSignature, timeStamp, nonce)) {
-			throw new AesException(AesException.ValidateSignatureError);
-		}
 
 		// 解密
 		String result = decrypt(encrypt[1].toString());

@@ -4,6 +4,8 @@ import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
 import com.zslin.web.model.Account;
 import com.zslin.web.service.IAccountService;
 import com.zslin.wx.tools.DatasTools;
@@ -29,6 +31,9 @@ public class AdminAccountController {
     @Autowired
     private DatasTools datasTools;
 
+    @Autowired
+    private ClientFileTools clientFileTools;
+
     @GetMapping(value = "list")
     @AdminAuth(name = "微信用户", orderNum = 1, type = "1", icon = "fa fa-user-circle")
     public String list(Model model, Integer page, HttpServletRequest request) {
@@ -47,6 +52,29 @@ public class AdminAccountController {
             return "1";
         } catch (Exception e) {
             return "0";
+        }
+    }
+
+    @PostMapping(value = "updateType")
+    public @ResponseBody String updateType(Integer id, String type) {
+        try {
+            accountService.updateType(id, type);
+            Account a = accountService.findOne(id);
+            if("5".equals(type) || "10".equals(type)) {
+                send2Client("update", a);
+            } else {
+                send2Client("delete", a);
+            }
+        } catch (Exception e) {
+            return "0";
+        }
+        return "1";
+    }
+
+    private void send2Client(String action, Account a) {
+        if(a!=null && !"".equals(a.getPhone())) { //如果绑定手机号码才可以
+            String json = ClientJsonTools.buildDataJson(ClientJsonTools.buildAdminPhone(action, a));
+            clientFileTools.setChangeContext(json, true);
         }
     }
 }

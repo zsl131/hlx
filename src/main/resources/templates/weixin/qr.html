@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-qr.css"/>
+    <script src="/weixin/weixin-qr.js"></script>
+    <title th:text="'我为'+${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}+'代言'"></title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div th:if="${qrcode eq null}" style="width:100%; text-align:center; padding:30px;">
+        <span class="fa fa-info-circle" style="font-size:140px; color:#cfcfcf;"></span>
+        <p style="color:#FF0; margin-top:10px;">您还没有申请您的专属二维码！</p>
+        <p><a href="/wx/account/getQr" class="btn btn-info btn-lg"><i class="fa fa-hand-pointer-o"></i> 申请我的专属二维码</a></p>
+        <p style="color:#aaa;">申请后将您的专属二维码分享到朋友圈，当您的朋友通过此二维码关注本微信平台后，您的积分就“蹭蹭”往上涨~~ 积分可以抵现金使用哦！！！</p>
+    </div>
+    <div th:if="${qrcode ne null}">
+        <div class="head-part">
+            <div class="img"><img src="/logo-500.png"/></div>
+            <div class="info">
+                <p class="title" th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</p>
+                <p class="name">我是<b th:text="${qrcode.name eq null?qrcode.nickname:qrcode.name}"></b><a th:if="${canModify}" href="javascript:;" class="update-name-href"><i class="fa fa-pencil"></i></a></p>
+                <p class="text">我为<b th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}"></b>代言！</p>
+            </div>
+        </div>
+
+        <div class="line-div"></div>
+
+        <div th:if="${canModify}" class="show-info">
+            <p style="color:#eee;">将此页面分享给朋友或分享到朋友圈，邀请他人关注可获得更多积分哦~~~</p>
+            <div class="line-div"></div>
+        </div>
+
+        <div class="show-info">
+            <p class="text">在<i style="color:#ee0;" th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}"></i>全自助餐厅用餐我觉得：<b>值</b>。</p>
+            <p class="address" th:attr="appName=${session.appConfig.appName},latitude=${session.appConfig.latitude},longitude=${session.appConfig.longitude},address=${session.appConfig.address}">用餐地址：昭通金融中心·金池购物广场三楼F3-15~16</p>
+        </div>
+
+        <div class="line-div"></div>
+        <div class="qr-div">
+            <div class="img"><img th:src="${qrcode.qrPath}"/></div>
+            <div class="info">
+                <p><i class="fa fa-hand-pointer-o"></i> 长按二维码->“识别图中二维码”->“关注”</p>
+                <p><i class="fa fa-cubes"></i> 关注“<b th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}" th:remove="tag"></b>”微信平台可以获取积分！</p>
+                <p><i class="fa fa-cube"></i> 积分可以用作现金抵价！</p>
+                <p><a href="/weixin/article/detail?id=2"><i class="fa fa-eye"></i> 查看积分说明</a></p>
+            </div>
+        </div>
+        <div class="line-div"></div>
+
+        <div class="bottom">
+            <p><b th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}"></b>全体员工欢迎您的到来！</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

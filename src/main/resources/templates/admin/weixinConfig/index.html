@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+	<title>微信配置管理</title>
+	<script type="text/javascript">
+		$(function() {
+			//$("#addForm").platformvalidate();
+		});
+	</script>
+	</head>
+	<body>
+		<div th:fragment="content" th:remove="tag">
+			<div class="header lighter smaller blue">
+				<h3><span class="glyphicon glyphicon-th-list"></span><i class="icon-setting"></i>&nbsp;微信配置管理<small>&nbsp;</small></h3>
+			</div>
+
+			<form method="POST" th:object="${weixinConfig}" id="dataForm">
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+					  <div class="input-group-addon">链接地址：</div>
+					  <input name="url" type="text" class="form-control" th:value="${weixinConfig.url}" placeholder="请输入链接地址，主域名" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">APPID：</div>
+						<input name="appid" type="text" class="form-control" th:value="${weixinConfig.appid}" placeholder="请输入appid，在公众号中查看" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">secret：</div>
+						<input name="secret" type="text" class="form-control" th:value="${weixinConfig.secret}" placeholder="请输入secret，在公众号中查看" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">token：</div>
+						<input name="token" type="text" class="form-control" th:value="${weixinConfig.token}" placeholder="请输入token，在公众号中查看" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">aeskey：</div>
+						<input name="aeskey" type="text" class="form-control" th:value="${weixinConfig.aeskey}" placeholder="请输入aeskey，在公众号中查看" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">事件模板ID：</div>
+						<input name="eventTemp" type="text" class="form-control" th:value="${weixinConfig.eventTemp}" placeholder="请输入事件模板ID，在公众号中查看" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">商户ID（支付）：</div>
+						<input name="mchid" type="text" class="form-control" th:value="${weixinConfig.mchid}" placeholder="请输入商户ID，申请微信支付得到的" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">支付通知地址：</div>
+						<input name="notifyUrl" type="text" class="form-control" th:value="${weixinConfig.notifyUrl}" placeholder="支付结果通知地址，以http://开头" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">APIKEY（支付）：</div>
+						<input name="apiKey" type="text" class="form-control" th:value="${weixinConfig.apiKey}" placeholder="APIKEY，申请微信支付得到的" />
+					</div>
+				</div>
+				<button type="submit" class="btn btn-primary submit-update-btn">保存设置</button>
+			</form>
+		</div>
+	</body>
+</html>

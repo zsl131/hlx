@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>客户端授权</title>
+		<script type="text/javascript">
+			$(function() {
+				$(".delete-obj-href").deleteFun();
+			});
+		</script>
+		<script type="text/javascript" src="/admin/bussiness/url-auth.js"></script>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="fa fa-key"></span>&nbsp;客户端授权（<span th:remove="tag" th:text="${clientConfig.name}"></span>）</h3>
+			<div th:replace="admin/clientConfig/nav :: content" th:remove="tag"></div>
+		</div>
+		<input th:value="${clientConfig.id}" id="uid" type="hidden"/>
+		<div th:remove="tag" th:each="obj : ${datas}">
+			<input th:value="'c-'+${obj.cid}" type="hidden" class="my-code"/>
+		</div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>代码</th>
+						<th>ServiceName</th>
+						<th>MethodName</th>
+						<th>描述</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:each="obj : ${codeList}">
+						<td th:text="${obj.c}">代码</td>
+						<td th:text="${obj.serviceName}">ServiceName</td>
+						<td th:text="${obj.methodName}">MethodName</td>
+						<td th:text="${obj.remark}">描述</td>
+						<td>
+							<div class="action-buttons">
+								<input type="checkbox" class="form-control single-code" th:id="'c-'+${obj.id}" th:attr="cid=${obj.id}" style="width:20px; height:20px;"/>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

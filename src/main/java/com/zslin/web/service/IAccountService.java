@@ -19,10 +19,25 @@ public interface IAccountService extends BaseRepository<Account, Integer>, JpaSp
     @Transactional
     void updateStatus(Integer id, String status);
 
+    @Query("UPDATE Account a SET a.type=?2 WHERE a.id=?1")
+    @Modifying
+    @Transactional
+    void updateType(Integer id, String type);
+
+    @Query("UPDATE Account a SET a.phone=?1, a.bindPhone='1' WHERE a.openid=?2")
+    @Modifying
+    @Transactional
+    void modifyPhone(String phone, String openid);
+
     @Query("UPDATE Account a SET a.status=?2 WHERE a.openid=?1")
     @Modifying
     @Transactional
     void updateStatus(String openid, String status);
+
+    @Query("UPDATE Account a SET a.hasCard=?2 WHERE a.openid=?1")
+    @Modifying
+    @Transactional
+    void updateCard(String openid, String hasCard);
 
     Account findByOpenid(String openid);
 
@@ -35,4 +50,23 @@ public interface IAccountService extends BaseRepository<Account, Integer>, JpaSp
 
     @Query("SELECT a.openid FROM Account a WHERE a.type=?1")
     List<String> findOpenid(String type);
+
+    //获取用户所拉进来的用户数量
+    @Query("SELECT COUNT(id) FROM Account a WHERE a.followUserId=?1")
+    Integer findPullCount(Integer id);
+
+    @Query("SELECT COUNT(id) FROM Account ")
+    Integer findAllCount();
+
+    @Query("SELECT COUNT(id) FROM Account a WHERE a.status='1'")
+    Integer findFollowCount();
+
+    @Query("SELECT COUNT(id) FROM Account a WHERE a.createDay=?1 AND a.status='1'")
+    Integer findFollowCountByDay(String day);
+
+    @Query("SELECT a.openid FROM Account a WHERE a.phone=?1")
+    String findOpenidByPhone(String phone);
+
+    @Query("SELECT a.phone FROM Account a WHERE a.openid=?1")
+    String findPhoneByOpenid(String openid);
 }

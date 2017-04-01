@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-member-charge.css"/>
+    <script type="text/javascript" src="/weixin/weixin-bind-phone.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-member-charge.js"></script>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="page">
+        <!--<div class="page__hd" style="padding:15px;">
+            <h1 class="page__title">会员充值确认</h1>
+            <p class="page__desc">会员充值预览</p>
+        </div>-->
+        <div class="head-part">
+            <div class="head-img"><img th:src="${account.headimgurl}"/></div>
+            <div class="nickname"><b th:text="${account.nickname}"></b> <span style="color:#aaa;">- 办理会员中…</span></div>
+        </div>
+        <div class="weui-form-preview">
+            <div class="weui-form-preview__hd">
+                <label class="weui-form-preview__label">支付金额</label>
+                <em class="weui-form-preview__value">¥<span th:remove="tag" th:text="${level.chargeMoney}"></span></em>
+            </div>
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">会员名称</label>
+                    <span class="weui-form-preview__value" th:text="${level.name}"></span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">充值金额</label>
+                    <span class="weui-form-preview__value" th:text="${level.chargeMoney} + ' 元'">名字名字名字</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">赠送金额</label>
+                    <span class="weui-form-preview__value" th:text="${level.giveMoney} + ' 元'">名字名字名字</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">说明</label>
+                    <span class="weui-form-preview__value">您的账户将增加 <b th:text="${level.chargeMoney + level.giveMoney}" style="color:#F60"></b> 元，并且成为<span th:text="${level.name}" th:remove="tag"></span></span>
+                </div>
+            </div>
+            <div class="weui-form-preview__ft">
+                <span th:text="${account.phone}" id="phone" style="display:none;"></span>
+                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:history.back(-1)">返回重选</a>
+                <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" th:attr="levelId=${level.id}" href="javascript:;" onclick="submitCharge(this)">确定操作</button>
+            </div>
+        </div>
+        <div class="" style="text-align:center; color:#aaa; font-size:12px; padding:15px 10px;">
+            建议到店完成会员办理业务，目前只支持<b style="color:#F60">到店支付</b>！
+        </div>
+    </div>
+</div>
+</body>
+</html>

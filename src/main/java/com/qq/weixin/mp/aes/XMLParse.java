@@ -9,11 +9,13 @@
 package com.qq.weixin.mp.aes;
 
 import java.io.StringReader;
-import java.util.List;
 
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 /**
@@ -29,37 +31,21 @@ class XMLParse {
 	 * @return 提取出的加密消息字符串
 	 * @throws AesException 
 	 */
-	@SuppressWarnings("unchecked")
 	public static Object[] extract(String xmltext) throws AesException     {
 		Object[] result = new Object[3];
 		try {
-//			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-//			DocumentBuilder db = dbf.newDocumentBuilder();
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
 			StringReader sr = new StringReader(xmltext);
 			InputSource is = new InputSource(sr);
-			SAXReader reader = new SAXReader();
-			Document doc = reader.read(is);
-			Element root = doc.getRootElement();
-			List<Element> list = root.elements();
-			result[0] = 0;
-			for(Element ele : list) {
-				if(ele.getName().indexOf("Encrypt")>=0) {
-					result[1] = ele.getText();
-				} else {
-					result[2] = ele.getText();
-				}
-			}
-			/*Document document = db.parse(is);
+			Document document = db.parse(is);
 
 			Element root = document.getDocumentElement();
 			NodeList nodelist1 = root.getElementsByTagName("Encrypt");
 			NodeList nodelist2 = root.getElementsByTagName("ToUserName");
 			result[0] = 0;
-//			result[1] = nodelist1.item(0).getTextContent();
-//			result[2] = nodelist2.item(0).getTextContent();
-			
-			result[1] = nodelist1.item(0).getNodeValue();
-			result[2] = nodelist2.item(0).getNodeValue();*/
+			result[1] = nodelist1.item(0).getTextContent();
+			result[2] = nodelist2.item(0).getTextContent();
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();

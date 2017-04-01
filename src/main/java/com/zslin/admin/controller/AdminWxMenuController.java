@@ -11,6 +11,7 @@ import com.zslin.web.service.IWxMenuService;
 import com.zslin.wx.tools.AccessTokenTools;
 import com.zslin.wx.tools.JsonTools;
 import com.zslin.wx.tools.WeixinUtil;
+import com.zslin.wx.tools.WxConfig;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,9 @@ public class AdminWxMenuController {
 
     @Autowired
     private AccessTokenTools accessTokenTools;
+
+    @Autowired
+    private WxConfig wxConfig;
 
     @GetMapping(value = "list")
     @AdminAuth(name = "微信菜单管理", type = "1", orderNum = 1, icon = "fa fa-list")
@@ -118,9 +122,7 @@ public class AdminWxMenuController {
     String gen() {
         try {
             String json = createMenuJson();
-            System.out.println(json);
             String url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token="+accessTokenTools.getAccessToken();
-            System.out.println(url);
             JSONObject jsonObj = WeixinUtil.httpRequest(url, "POST", json);
             String code = JsonTools.getJsonParam(jsonObj.toString(), "errcode");
             if("0".equals(code)) {
@@ -171,9 +173,14 @@ public class AdminWxMenuController {
     }
 
     private String createMenu(WxMenu menu) {
+        String url = menu.getUrl();
+        if(!url.toLowerCase().startsWith("http://") && !url.toLowerCase().startsWith("https://")) { //如果不是http链接
+            if(!url.startsWith("/")) {url = "/"+url;}
+            url = wxConfig.getConfig().getUrl()+url;
+        }
         StringBuffer sb = new StringBuffer();
         sb.append(",\"type\":\"view\"");
-        sb.append(",\"url\":\"").append(menu.getUrl()).append("\"");
+        sb.append(",\"url\":\"").append(url).append("\"");
         return sb.toString();
     }
 }

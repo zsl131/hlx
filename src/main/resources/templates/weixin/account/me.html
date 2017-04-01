@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-account-me.css"/>
+    <script type="text/javascript" src="/weixin/weixin-bind-phone.js"></script>
+    <script src="/weixin/weixin-account-me.js"></script>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="page__bd page__bd_spacing">
+        <div class="weui-flex">
+            <div class="weui-flex__item">
+                <div class="center-head" >
+                    <span class="head-img"><img th:src="${account.headimgurl}"/></span>
+                    <span class="head-info">
+                        <span th:text="${account.nickname}" class="nickname"></span>
+                        <span th:switch="${account.type}">
+                            用户类型：
+                            <span th:case="0" th:remove="tag"><i th:if="${account.hasCard eq null or account.hasCard eq '0'}" style="color:#F60">（非会员）</i></span>
+                            <span th:case="1" th:remove="tag">员工</span>
+                            <span th:case="2" th:remove="tag">经理</span>
+                            <span th:case="5" th:remove="tag">股东</span>
+                            <span th:case="10" th:remove="tag">管理员</span>
+                            <b th:if="${account.hasCard eq '1'}" style="color:#FF0">（会员）</b>
+                            <i th:if="${account.hasCard eq '2'}" style="color:#F60; text-decoration:line-through;">（会员过期）</i>
+                        </span>
+                        <span>邀请人：<b th:remove="tag" th:text="${(account.followUserName ne null and account.followUserName ne '')?account.followUserName:'无'}"></b>
+                        <a th:href="@{/weixin/qr(id=${account.id})}"><i class="fa fa-info"></i> 邀请人赚积分！</a>
+                        </span>
+                    </span>
+                </div>
+                <div class="line-div"></div>
+
+                <div class="weui-cells">
+                    <a class="weui-cell weui-cell_access" href="/wx/account/money" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-rmb"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>账户余额</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${wallet.money*1.0/100} + ' 元'"></span>
+                        </div>
+                    </a>
+                    <a class="weui-cell weui-cell_access" href="/wx/account/score" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-opera"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>我的积分</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${wallet.score}"></span>
+                        </div>
+                    </a>
+                    <a class="weui-cell weui-cell_access" href="/wx/member/chargeList" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-plug"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>充值明细</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${chargeCount}"></span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" th:href="${(account.phone eq null || account.phone eq '')?'javascript:bindPhone()':'javascript:showPhone()'}" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-phone"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>手机号码</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span id="phone" th:text="${(account.phone eq null || account.phone eq '')?'未绑定':account.phone}"></span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" href="/wx/account/commentList" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-comments-o"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>我的评论</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${commentCount}"></span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" href="/wx/account/feedbackList" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-commenting"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>我的消息</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${feedbackCount}"></span>
+                        </div>
+                    </a>
+
+                    <!--<a class="weui-cell weui-cell_access" href="/wx/account/own" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-cart-arrow-down"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>消费记录</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${ownCount}"></span>
+                        </div>
+                    </a>-->
+
+                    <a class="weui-cell weui-cell_access" href="/wx/orders/listAdmin" th:if="${friendOrdersCount ne null}">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-bar-chart"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>折扣订单</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${friendOrdersCount}"></span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" href="/wx/account/own" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-gift"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>我的物品</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${ownCount}"></span>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

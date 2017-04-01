@@ -62,6 +62,18 @@ public class Feedback extends BaseEntity {
     @Column(name = "media_id")
     private String mediaId;
 
+    /** 本地图片路径 */
+    @Column(name = "file_path")
+    private String filePath;
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
     public String getPicUrl() {
         return picUrl;
     }

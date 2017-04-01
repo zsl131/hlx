@@ -29,10 +29,18 @@
 				</div>
 			</div>
 		</div>
-		<div class="form-group form-group-lg">
+		<div class="form-group form-group-lg" th:if="${feedback.type eq 'text'}">
 			<div class="input-group">
 				<div class="input-group-addon">反馈内容：</div>
 				<div class="form-control" th:utext="${feedback.content}"></div>
+			</div>
+		</div>
+		<div class="form-group form-group-lg" th:if="${feedback.type eq 'image'}">
+			<div class="input-group">
+				<div class="input-group-addon">反馈图片：</div>
+				<div class="form-control1" style="border:1px #ccc solid; border-radius:0px 5px 5px 0px; padding:8px;">
+					<a th:href="${feedback.filePath}" target="_blank"><img th:src="${feedback.filePath}" class="head-img" style="width:100px;"/></a>
+				</div>
 			</div>
 		</div>
 		<div class="form-group form-group-lg">

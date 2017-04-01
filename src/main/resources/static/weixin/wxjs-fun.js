@@ -11,6 +11,20 @@ function share2Cirlce(title, link, imgUrl, sucFun, cancelFun) {
     });
 }
 
+//分享到朋友圈
+function share2Friend(title, desc, link, imgUrl, sucFun, cancelFun) {
+    wx.ready(function() {
+        wx.onMenuShareAppMessage({
+            title: title,
+            desc:desc,
+            link: link,
+            imgUrl: imgUrl,
+            success: sucFun,
+            cancel: cancelFun
+        });
+    });
+}
+
 //选择图片
 function chooseImages(count, sucFun) {
     wx.ready(function() {

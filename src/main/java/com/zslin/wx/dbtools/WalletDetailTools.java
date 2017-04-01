@@ -27,6 +27,7 @@ public class WalletDetailTools {
         wd.setAccountId(accountId);
         wd.setOpenid(openid);
         wd.setAmount(amount);
+        wd.setSurplus(amount); //添加时剩余与原始一样
         wd.setFlag(amount>0?"1":"-1");
         wd.setReason(reason);
         wd.setTranType(tranType);

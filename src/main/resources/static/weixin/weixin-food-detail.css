@@ -1,0 +1,98 @@
+.top-div {
+    float:left; width:100%; padding-top:15px; padding-bottom:15px;
+}
+.top-div div.img {
+    width:40%; float:left; border-right:1px #e8e8e8 solid;
+}
+
+.top-div div.img img {
+    width:80%; border-radius:5px; margin:10px 0px 10px 10%; float:left;
+    box-shadow: 5px 3px 5px #ddd; border:1px #ddd solid; padding:2px;
+}
+
+.top-div div.remark {
+    width:57%; float:right;
+}
+
+.top-div div.remark p.title {
+    width:100%; font-size:18px; color:#373838; font-family: "Microsoft YaHei" !important;font-family: '微软雅黑';
+}
+
+.top-div div.remark div.percent {
+    width:55%; float:left; position:relative; padding:0px; padding-top:30px;
+}
+.top-div div.remark p.percent {
+    float:left; font-size:22px; font-family: "Microsoft YaHei" !important;font-family: '微软雅黑'; font-weight:bold;
+    color:#FF425D; line-height:100%; margin:0px; padding-right:3px;
+}
+
+.top-div div.remark div.percent span.word {
+    position:absolute; bottom:0px; color:#FF425D;
+}
+
+.top-div div.remark div.amount-detail {
+    width:42%; float:right; padding-top:15px;
+}
+.top-div div.remark div.amount-detail p {
+    float:right; width:100%; line-height:10px; margin-top:10px; color:#999; text-align:center;
+}
+
+.line-div {
+    float:left; width:100%; height:15px; background:#eee;
+}
+
+div.add-comment-div {
+    width:100%; float:left; padding:10px;
+}
+
+div.add-comment-div .title {
+    float:left; line-height:35px; color:#888;
+}
+div.add-comment-div button {
+    float:right;
+}
+
+
+div.comment-list-div {
+    width:100%; float:left;
+}
+
+div.comment-list-div ul {
+    float:left; width:100%; margin-top:8px;
+}
+div.comment-list-div ul li {
+    float:left; width:100%; border-bottom:1px #eee solid; padding:12px 8px;
+}
+
+div.comment-list-div .headimg {
+    width:15%; float:left;
+}
+
+div.comment-list-div .headimg img {
+    width:80%; border-radius:20px; margin-left:10%; border-right:1px #e8e8e8 solid; box-shadow: 3px 3px 5px #ddd;
+}
+div.comment-list-div .content {
+    width:82%; float:right;
+}
+div.comment-list-div .content .head {
+    color:#777; float:left; width:100%;
+}
+div.comment-list-div .content .head .nickname {
+    float:left;
+}
+div.comment-list-div .content .head .date {
+    float:right;
+}
+
+div.comment-list-div .content .isGood {
+ float:left; width:100%; line-height:30px; color:#ff4f0c;
+}
+
+div.comment-list-div .content .con {
+ float:left; width:100%; color:#555; padding-top:7px; line-height:22px;
+}
+
+div.comment-list-div .content .reply {
+    width:90%; float:right; border-top:1px #b0d3b6 solid; margin-top:10px; padding-top:10px;
+    color:#08bc27;
+}

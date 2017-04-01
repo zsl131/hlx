@@ -1,11 +1,12 @@
 package com.zslin.wx.tools;
 
 import com.zslin.cache.CacheTools;
+import com.zslin.web.model.WeixinConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/1/24 11:05.
@@ -34,10 +35,11 @@ public class AccessTokenTools {
     }
 
     private String getNewAccessToken() {
+        WeixinConfig config = wxConfig.getConfig();
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("grant_type", "client_credential");
-        params.put("appid", wxConfig.getAppid());
-        params.put("secret", wxConfig.getSecret());
+        params.put("appid", config.getAppid());
+        params.put("secret", config.getSecret());
         String result = InternetTools.doGet(TOKEN_URL, params);
         return JsonTools.getJsonParam(result, "access_token");
     }

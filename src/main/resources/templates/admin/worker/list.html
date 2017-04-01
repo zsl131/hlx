@@ -40,7 +40,7 @@
 						<a th:if="${obj.headimgurl ne NULL and obj.headimgurl ne ''}" th:href="${obj.headimgurl}" target="_blank"><img th:src="${obj.headimgurl}" style="width:120px"/></a>
 						<span th:if="${obj.openid eq NULL or obj.openid eq ''}" style="color:#F00;">未绑定微信</span>
 					</td>
-					<td th:text="${obj.name}"></td>
+					<td><span th:text="${obj.name}" th:remove="tag"></span><span th:if="${obj.isCashier eq '1'}">（收银员）</span></td>
 					<td th:text="${obj.depId eq 1 ? '前厅':'后厨'}"></td>
 					<td th:text="${obj.phone}"></td>
 					<td th:text="${obj.identity}"></td>
@@ -48,6 +48,10 @@
 						<div class="action-buttons">
 							<a class="green auth" sn="AdminWorkerController.update" title="修改" th:href="'/admin/worker/update/'+${obj.id}">
 								<i class="fa fa-pencil"></i>
+							</a>
+
+							<a class="delete-obj-href red auth" sn="AdminWorkerController.initPwd" th:title="'此操作不可逆，确定初始化【'+${obj.name}+'】的密码为【123456789】吗？'" th:href="'/admin/worker/initPwd/'+${obj.id}">
+								<i class="fa fa-key"></i>
 							</a>
 
 							<a class="delete-obj-href red auth" sn="AdminWorkerController.delete" th:title="'此操作不可逆，确定删除【'+${obj.name}+'】吗？'" th:href="'/admin/worker/delete/'+${obj.id}">

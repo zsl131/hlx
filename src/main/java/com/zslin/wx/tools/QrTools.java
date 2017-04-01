@@ -29,9 +29,11 @@ public class QrTools {
     @Autowired
     private ConfigTools configTools;
 
-    public void genUserQr(String value) {
+    public String genUserQr(String value, String headimg) {
         value = USER_TYPE+value;
-        genQr(value, "user");
+        String picPath = genQr(value, "user");
+        PictureTools.markImageByUrl(headimg, configTools.getUploadPath()+picPath, configTools.getUploadPath()+picPath);
+        return picPath;
     }
 
     public String getQrTicket(String value) {
@@ -46,7 +48,8 @@ public class QrTools {
         return ticket;
     }
 
-    private void genQr(String value, String path) {
+    private String genQr(String value, String path) {
+        String res = "/wxqr/"+path+"/"+value+".jpg";
         try {
             String ticket = getQrTicket(value);
             String urlString = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket="+ticket;
@@ -75,6 +78,7 @@ public class QrTools {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return res;
     }
 
     private String buildForOverParam(String value) {

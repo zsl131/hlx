@@ -1,0 +1,22 @@
+html, body {
+    background:#eff4f7;
+}
+
+ul.data-list-ul {
+    width:100%;background:#eff4f7; margin-top:0px;
+}
+
+ul.data-list-ul li {
+    list-style:none; border:1px #ddd solid; width:90%; margin-left:5%; margin-top:12px; background:#FFF; padding:10px;
+    border-radius: 12px 0px 12px 0px; float:left;
+}
+p.date {
+    color:#888; width:100%;
+}
+
+.reply {
+    width:90%; float:right; border-top:1px #eee solid; margin-top:5px; padding-top:10px;
+}
+.reply p {
+    text-align:right;
+}

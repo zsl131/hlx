@@ -1,6 +1,133 @@
-* {
-    color:#F00;
-}
+
 .single-line {
     width:100%; background:#f2f2f2; height:8px; border-top:1px #ddd solid;
 }
+
+.area-title {
+    width:100%; background:#fafafa; height:40px; line-height:40px; border:1px #e7e7e7 solid; border-width:1px 0px 1px 0px; color:#777; padding-left:8px;
+}
+
+/*** 订单 **/
+.orders-area {
+    width:100%; padding:0px 5%;
+}
+
+.single-order {
+    width:100%; border-bottom:#e7e7e7 1px solid; height:40px; line-height:40px; margin:8px 0px;
+}
+.order-time {
+    float:right; color:#999;
+}
+/*** 订单 **/
+
+/*** 点评 **/
+
+.single-comment {
+    width:100%; border-bottom:#e7e7e7 1px solid; margin:8px 0px; float:left; line-height:20px; padding-bottom:7px;
+}
+.food-info-img {
+    width:56%; padding:8px; float:left; position:relative;border-right:1px #ddd dotted;
+}
+.food-info-img img.food-img {
+    width:40%; border-radius:6px; float:left;
+}
+.food-info-img .info {
+    width:60%;
+    float:left; padding:7px;
+}
+.food-info-img .info a {
+    color:#333; text-decoration:None; line-height:24px; padding-bottom:4px; float:left;
+}
+
+.comment {
+    float:right; width:42%; padding-right:7px; color:#444; line-height:24px;
+}
+.food-info-img .food-name {
+
+}
+.food-info-img .info .author-info {
+    float:left; width:100%; position:absolute; bottom:0px;
+}
+.food-info-img .info .author-info img {
+    width:25px; border-radius:25px;
+}
+.food-info-img .info .author-info span {
+    font-size:12px; color:#888; padding-left:4px;
+}
+
+/*** 点评 **/
+
+
+/** 买票 **/
+.buy-ticket {
+    width:100%; margin-top:10px; border-top:1px #E7E7E7 solid;
+}
+
+.single-buy-ticket {
+    width:100%; text-align:center; margin:8px 0px; border-right:1px #ddd dotted;
+}
+.single-buy-ticket a {
+    text-decoration:none;
+}
+.single-buy-ticket h4 {
+    color:#999; font-size:12px; height:24px; line-height:24px;
+}
+.single-buy-ticket h4 b {
+    color:#F60; font-size:24px;
+}
+.single-buy-ticket h4 b.fa {
+    font-size:18px;
+}
+.single-buy-ticket p {
+    color:#999;
+}
+.single-buy-ticket p span {
+    color:#F60;
+}
+.charge-member {
+    border:none;
+}
+.charge-member h4 b {
+    color:#039BB6; font-size:18px;
+}
+/** 买票 **/
+
+/** 联系地址 **/
+.show-company-address {
+    border-top:1px #E7E7E7 solid; width:100%; padding:8px 10px;
+}
+.address-map {
+    color:#039BB6; padding:10px; width:80px; height:80px; text-align:center;
+}
+
+.address-map b {
+    font-size:30px; text-align:center; width:100%;
+}
+
+.share-btn {
+    color:#039BB6; padding:10px; width:80px; height:80px; text-align:center; border-right:1px #ddd dotted;
+}
+
+.share-btn b {
+    font-size:30px; text-align:center; width:100%;
+}
+.address-part {
+    border-left:1px #ddd dotted; padding-left:8px; margin-left:8px;
+}
+.address-part h4 {
+    color:#F60; font-weight:bold;
+}
+.address-part p {
+    color:#888;
+}
+/** 联系地址 **/
+
+
+/** 页底 **/
+.main-bottom {
+    line-height:22px; text-align:center; width:100%; color:#999;  padding-bottom:10px; float:left;margin-top:12px;
+}
+.main-bottom p {
+
+}
+/** 页底 **/

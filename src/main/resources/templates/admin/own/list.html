@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>已派发的礼品</title>
+		<script type="text/javascript">
+			$(function() {
+				$(".delete-obj-href").deleteFun();
+				$(".moneyValue").each(function() {
+					var val = parseInt($(this).html());
+					$(this).html((val/100)+" 元");
+				});
+			});
+		</script>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;已派发的礼品（<span th:text="${datas.getTotalElements()}"></span>）</h3>
+			<div th:replace="admin/own/nav :: content" th:remove="tag"></div>
+		</div>
+
+		<div th:replace="admin/own/filter :: content" th:remove="tag"></div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>用户头像</th>
+						<th>用户昵称</th>
+						<th>礼品名称</th>
+						<th>礼品来源</th>
+						<th>礼品价值</th>
+						<th>获得日期</th>
+						<th>状态</th>
+					</tr>
+				</thead>
+
+				<tr th:each="obj : ${datas}">
+					<td>
+						<a th:href="${obj.headimg}" target="_blank"><img th:src="${obj.headimg}" style="width:120px"/></a>
+					</td>
+					<td th:text="${obj.accountName}"></td>
+					<td th:text="${obj.prizeName}"></td>
+					<td><span th:text="${obj.source eq '1'?'购买':'活动'}"></span>[<span th:text="${obj.sourceInfo}"></span>]</td>
+					<td><b th:text="${obj.worth}+' 分'" th:class="${obj.prizeType ne '1'?'moneyValue':''}"></b></td>
+					<td th:text="${obj.createTime}"></td>
+					<td>
+						<div th:remove="tag" th:switch="${obj.status}">
+							<span th:case="'0'">未使用</span>
+							<span th:case="'1'" style="color:#00F">已使用</span>
+							<span th:case="'2'" style="color:#F00">已过期</span>
+						</div>
+					</td>
+				</tr>
+			</table>
+
+			<div th:include="fragments/page :: pager" th:remove="tag"></div>
+		</div>
+	</div>
+</body>
+</html>

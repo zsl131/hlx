@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>短信模板列表</title>
+		<script type="text/javascript">
+			$(function() {
+				$(".delete-obj-href").deleteFun();
+			});
+		</script>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;短信模板列表<small>（<span th:text="${datas.getTotalElements()}"></span>）</small></h3>
+			<div th:replace="admin/module/nav :: content" th:remove="tag"></div>
+		</div>
+
+        <div th:replace="admin/module/filter :: content" th:remove="tag"></div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>接口ID</th>
+						<th>状态</th>
+						<th>签名</th>
+						<th>内容</th>
+						<th>原因</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:each="obj : ${datas}">
+						<td th:text="${obj.iid}">名称</td>
+						<td>
+							<div th:switch="${obj.status}" th:remove="tag">
+								<span style="color:blue" th:case="'1'">正常</span>
+								<span style="color:red" th:case="*">停用</span>
+							</div>
+						</td>
+						<td th:text="${obj.sign}">amount</td>
+						<td th:text="${obj.content}"></td>
+						<td th:text="${obj.reason}"></td>
+						<td>
+							<div class="action-buttons">
+								<!--<a th:if="${obj.status ne '1'}" class="green auth" sn="AdminModuleController.update" title="修改" th:href="'/admin/module/update/'+${obj.id}">
+									<i class="fa fa-pencil"></i>
+								</a>-->
+
+								<a th:if="${obj.status ne '1'}" class="delete-obj-href red auth" sn="AdminModuleController.send" th:title="'确定提交短信模板【'+${obj.content}+'】到接口中心吗'" th:href="'/admin/module/send/'+${obj.id}">
+									<i class="fa fa-share"></i>
+								</a>
+
+								<a class="delete-obj-href red auth" sn="AdminModuleController.delete" th:title="'此操作不可逆，确定删除【'+${obj.content}+'】吗？'" th:href="'/admin/module/delete/'+${obj.id}">
+									<i class="fa fa-remove"></i>
+								</a>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div th:include="fragments/page :: pager" th:remove="tag"></div>
+		</div>
+	</div>
+</body>
+</html>

@@ -2,7 +2,10 @@ package com.zslin.wx.tools;
 
 import com.zslin.basic.tools.DateTools;
 import com.zslin.web.model.Account;
+import com.zslin.web.model.ScoreRule;
 import com.zslin.web.service.IAccountService;
+import com.zslin.wx.dbtools.ScoreAdditionalDto;
+import com.zslin.wx.dbtools.ScoreTools;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,6 +30,9 @@ public class QrsceneTools {
 
     @Autowired
     private EventTools eventTools;
+
+    @Autowired
+    private ScoreTools scoreTools;
 
     /**
      * 处理二维码
@@ -62,6 +68,7 @@ public class QrsceneTools {
             if(oldAcc!=null) {
                 eventTools.eventRemind(oldAcc.getOpenid(), "关注提醒", "邀请用户关注提醒",
                         DateTools.date2Str(new Date(), "yyyy-MM-dd"), "您已成功邀请["+account.getNickname()+"]关注，感谢您的参与！", "");
+                scoreTools.processScore(oldAcc.getOpenid(), ScoreRule.PULL_USER, new ScoreAdditionalDto("好友昵称", account.getNickname()));
             }
         } else {
             //TODO

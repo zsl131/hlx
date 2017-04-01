@@ -3,6 +3,7 @@ package com.zslin.admin.controller;
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.annotations.Token;
 import com.zslin.basic.repository.SimplePageBuilder;
+import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
@@ -39,7 +40,7 @@ public class AdminFeedbackController {
     @AdminAuth(name = "反馈管理", type = "1", orderNum = 1, icon = "fa fa-commenting")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<Feedback> datas = feedbackService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
-                SimplePageBuilder.generate(page));
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
         model.addAttribute("datas", datas);
         return "admin/feedback/list";
     }
@@ -67,10 +68,10 @@ public class AdminFeedbackController {
 
             if("text".equals(f.getType())) {
                 eventTools.eventRemind(f.getOpenid(), "反馈得到回复了",
-                        "反馈回复", f.getReplyTime(), "你的反馈：" + f.getContent() + "\\n回复内容：" + f.getReply(), "");
+                        "反馈回复", f.getReplyTime(), "你的反馈：" + f.getContent() + "\\n回复内容：" + f.getReply(), "/wx/account/feedbackList");
             } else if("image".equals(f.getType())) {
                 eventTools.eventRemind(f.getOpenid(), "反馈得到回复了",
-                        "反馈回复", f.getReplyTime(), "你反馈的图片信息得到回复：\\n" + f.getReply(), "");
+                        "反馈回复", f.getReplyTime(), "你反馈的图片信息得到回复：\\n" + f.getReply(), "/wx/account/feedbackList");
             }
 
         }

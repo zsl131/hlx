@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="page">
+        <div class="weui-cells__title" th:text="${session.appConfig ne null?session.appConfig.appName+'资讯动态':'汉丽轩资讯动态'}">昭通汉丽轩资讯动态</div>
+        <div class="weui-cells">
+            <div th:each="obj : ${datas}" th:remove="tag">
+            <a class="weui-cell weui-cell_access" th:href="@{/weixin/article/detail(id=${obj.id})}" >
+                <div class="weui-cell__hd" th:if="${obj.picPath ne null and obj.picPath ne ''}"><img th:src="${obj.picPath}" alt="" style="width:20px;margin-right:5px;display:block"/></div>
+                <div class="weui-cell__bd">
+                    <span th:text="${obj.title}">cell standard</span>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+            </div>
+        </div>
+
+        <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
+    </div>
+</div>
+</body>
+</html>

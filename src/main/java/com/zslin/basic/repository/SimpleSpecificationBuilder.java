@@ -45,7 +45,7 @@ public class SimpleSpecificationBuilder<T> {
     }
 
     public Specification generate() {
-        Specification<T> specification = new SimpleSpecification<T>(opers);
+        Specification<T> specification = new SimpleSpecification<>(opers);
         return specification;
     }
 }

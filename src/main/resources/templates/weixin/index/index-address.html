@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content">
+            <div class="page__bd page__bd_spacing show-company-address">
+                <div class="weui-flex">
+                    <div>
+                        <div class="address-map" th:attr="appName=${session.appConfig.appName},latitude=${session.appConfig.latitude},longitude=${session.appConfig.longitude},address=${session.appConfig.address}">
+                            <b class="fa fa-map-marker"></b>
+                            <p class="word">开地图</p>
+                        </div>
+                    </div>
+                    <div class="weui-flex__item address-part">
+                        <h4><b class="fa fa-phone"></b> <span th:text="${session.appConfig.phone}"></span></h4>
+                        <p><b class="fa fa-home"></b> <span th:text="'地址：'+${session.appConfig.address}"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

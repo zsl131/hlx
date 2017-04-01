@@ -62,6 +62,16 @@
 			</div>
 		</div>
 
+		<div class="form-group form-group-lg">
+			<div class="input-group input-group-lg">
+				<div class="input-group-addon">优秀：</div>
+				<div class="form-control">
+					<input type="radio" name="isExcellet" value="1" id="isExcellet_1" th:checked="${comment.isExcellet == 1}?'checked'"/><label for="status_1">设为优秀</label>
+					<input type="radio" name="isExcellet" value="0" id="isExcellet_0" th:checked="${comment.isExcellet == 0}?'checked'"/><label for="status_0">普通评论</label>
+				</div>
+			</div>
+		</div>
+
 		<input type="hidden" name="token" value="${session.token}"/>
 		<button type="submit" class="btn btn-primary">确定提交</button>
 	</form>

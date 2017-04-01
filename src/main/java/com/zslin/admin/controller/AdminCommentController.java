@@ -7,8 +7,10 @@ import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.web.model.Comment;
-import com.zslin.web.model.Feedback;
+import com.zslin.web.model.ScoreRule;
 import com.zslin.web.service.ICommentService;
+import com.zslin.wx.dbtools.ScoreAdditionalDto;
+import com.zslin.wx.dbtools.ScoreTools;
 import com.zslin.wx.tools.EventTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,9 @@ public class AdminCommentController {
     @Autowired
     private EventTools eventTools;
 
+    @Autowired
+    private ScoreTools scoreTools;
+
     @GetMapping(value = "list")
     @AdminAuth(name = "点评管理", type = "1", orderNum = 1, icon = "fa fa-comment")
     public String list(Model model, Integer page, HttpServletRequest request) {
@@ -58,17 +63,26 @@ public class AdminCommentController {
     @RequestMapping(value="update/{id}", method=RequestMethod.POST)
     public String update(Model model, @PathVariable Integer id, Comment comment, HttpServletRequest request) {
         if(TokenTools.isNoRepeat(request)) {
+            int isExcellet = comment.getIsExcellet();
             Comment c = commentService.findOne(id);
+            Integer oldExxcellet = c.getIsExcellet();
             c.setReply(comment.getReply());
             c.setStatus(comment.getStatus());
             c.setReplyDate(new Date());
             c.setReplyLong(System.currentTimeMillis());
             c.setReplyTime(DateTools.formatDate(new Date()));
+            c.setIsExcellet(comment.getIsExcellet());
             commentService.save(c);
 
             eventTools.eventRemind(c.getOpenid(), "点评得到回复了",
-                    "反馈回复", c.getReplyTime(), "你的点评："+c.getContent()+"\\n回复内容："+c.getReply(), "");
+                    "点评回复", c.getReplyTime(), "菜品名称："+c.getFoodName()+"\\n你的点评："+c.getContent()+"\\n回复内容："+c.getReply()+((isExcellet==1)?"\\n您的评论被设定为优秀评论！":""), "/wx/food/detail?id="+c.getFoodId());
 
+            if((oldExxcellet==null || oldExxcellet<=0) && isExcellet==1) {
+                scoreTools.processScore(c.getOpenid(), ScoreRule.EXCELLET_COMMENT,
+                        new ScoreAdditionalDto("菜品名称", c.getFoodName()),
+                        new ScoreAdditionalDto("你的评论", c.getContent()),
+                        new ScoreAdditionalDto("加分原因", "被评为优秀评论"));
+            }
         }
         return "redirect:/admin/comment/list";
     }

@@ -10,6 +10,8 @@ import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.tools.SecurityUtil;
 import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
 import com.zslin.kaoqin.model.Worker;
 import com.zslin.kaoqin.service.IWorkerService;
 import com.zslin.kaoqin.tools.GetJsonTools;
@@ -46,6 +48,9 @@ public class AdminWorkerController {
     @Autowired
     private KaoqinFileTools kaoqinFileTools;
 
+    @Autowired
+    private ClientFileTools clientFileTools;
+
     @GetMapping(value = "list")
     @AdminAuth(name = "员工信息列表", type = "1", orderNum = 1, icon = "fa fa-users")
     public String list(Model model, Integer page, HttpServletRequest request) {
@@ -80,6 +85,9 @@ public class AdminWorkerController {
 
             workerService.save(worker);
             sendWorker2Device(worker);
+            if("1".equals(worker.getIsCashier())) {
+                sendWorker2Client("update", worker);
+            }
         }
         return "redirect:/admin/worker/list";
     }
@@ -104,12 +112,17 @@ public class AdminWorkerController {
                 throw new SystemException("手机号码【"+worker.getPhone()+"】已经存在");
             }
 
-            MyBeanUtils.copyProperties(worker, w);
+            MyBeanUtils.copyProperties(worker, w, new String[]{"id", "password"});
 
             bind(w);
 
             workerService.save(w);
             sendWorker2Device(w);
+            if("1".equals(w.getIsCashier())) {
+                sendWorker2Client("update", w);
+            } else {
+                sendWorker2Client("delete", w);
+            }
         }
         return "redirect:/admin/worker/list";
     }
@@ -121,6 +134,23 @@ public class AdminWorkerController {
         try {
             workerService.delete(id);
             sendDelWorker2Device(id); //从设备中删除员工数据
+            Worker w = workerService.findOne(id);
+            sendWorker2Client("delete", w); //从客户端删除
+            return "1";
+        } catch (Exception e) {
+            return "0";
+        }
+    }
+
+    @AdminAuth(name="初始员工密码", orderNum=4, icon = "fa fa-key")
+    @RequestMapping(value="initPwd/{id}", method=RequestMethod.POST)
+    public @ResponseBody
+    String initPwd(@PathVariable Integer id) {
+        try {
+            Worker w = workerService.findOne(id);
+            w.setPassword(SecurityUtil.md5("123456789"));
+            workerService.save(w);
+            sendWorker2Client("update", w);
             return "1";
         } catch (Exception e) {
             return "0";
@@ -130,7 +160,7 @@ public class AdminWorkerController {
     private void bind(Worker w) {
         try {
             Account a = accountService.findByPhone(w.getPhone());
-            if(a!=null) {
+            if(a!=null && (w.getOpenid()==null || "".equals(w.getOpenid()))) {
                 w.setAccountId(a.getId());
                 w.setOpenid(a.getOpenid());
                 w.setHeadimgurl(a.getHeadimgurl());
@@ -144,6 +174,11 @@ public class AdminWorkerController {
     private void sendWorker2Device(Worker w) {
         String content = GetJsonTools.buildDataJson(GetJsonTools.buildWorkerJson(w));
         kaoqinFileTools.setChangeContext(content, true);
+    }
+
+    private void sendWorker2Client(String action, Worker w) {
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildWorker(action, w));
+        clientFileTools.setChangeContext(content, true);
     }
 
     private void sendDelWorker2Device(Integer id) {

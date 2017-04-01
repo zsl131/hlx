@@ -8,7 +8,11 @@ $(function() {
             var n = $(this).attr("name");
             var opt = $(this).attr("opt");
             if(val!=""&&val!=-1) {
-                params+=n+"="+opt+"-"+val+"&";
+                if(opt) {
+                    params+=n+"="+opt+"-"+val+"&";
+                } else {
+                    params+=n+"="+val+"&";
+                }
             }
         });
         window.location.href=location+params;

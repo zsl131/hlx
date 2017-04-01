@@ -46,8 +46,38 @@
 				</div>
 				<div class="form-group form-group-lg">
 					<div class="input-group">
+						<div class="input-group-addon">联系电话：</div>
+						<input name="phone" type="text" class="form-control" th:value="${appConfig.phone}" placeholder="联系电话" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">联系地址：</div>
+						<input name="address" type="text" class="form-control" th:value="${appConfig.address}" placeholder="联系地址" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
 						<div class="input-group-addon">管理员邮箱：</div>
 						<input name="adminEmail" type="text" class="form-control" th:value="${appConfig.adminEmail}" placeholder="管理员邮箱地址，多个用英文逗号隔开" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">纬度：</div>
+						<input name="latitude" type="text" class="form-control" th:value="${appConfig.latitude}" placeholder="输入纬度" />
+						<div class="input-group-addon">经度：</div>
+						<input name="longitude" type="text" class="form-control" th:value="${appConfig.longitude}" placeholder="输入经度" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group input-group-lg">
+						<div class="input-group-addon">微信支付：</div>
+						<div class="form-control">
+							<input type="radio" name="wxPay" value="1" id="pay_1" th:checked="${appConfig.wxPay == '1'}?'checked'"/><label for="pay_1">开启</label>
+							<input type="radio" name="wxPay" value="0" id="pay_0" th:checked="${appConfig.wxPay == '0'}?'checked'"/><label for="pay_0">关闭</label>
+						</div>
 					</div>
 				</div>
 				<button type="submit" class="btn btn-primary submit-update-btn">保存设置</button>

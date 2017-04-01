@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+	<title>修改接口代码</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+	<div class="header lighter smaller blue">
+		<h3><i class="fa fa-plus"></i>&nbsp;修改接口代码 </h3>
+		<div th:replace="admin/code/nav :: content" th:remove="tag"></div>
+	</div>
+
+	<form method="POST" th:object="${code}" id="dataForm">
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">代码：</div>
+				<input name="c" type="text" class="form-control" th:value="${code.c}" placeholder="请输入代码，如A01" />
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">ServiceName：</div>
+				<input name="serviceName" type="text" class="form-control" th:value="${code.serviceName}" placeholder="请输入ServiceName，如：rootService" />
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">MethodName：</div>
+				<input name="methodName" type="text" class="form-control" th:value="${code.methodName}" placeholder="请输入MethodName，如：addModule" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">描述：</div>
+				<textarea class="form-control" name="remark" th:text="${code.remark}" placeholder="输入描述信息" style="height:80px; resize:none;"></textarea>
+			</div>
+		</div>
+
+		<input type="hidden" name="token" value="${session.token}"/>
+		<button type="submit" class="btn btn-primary">确定提交</button>
+	</form>
+</div>
+</body>
+</html>

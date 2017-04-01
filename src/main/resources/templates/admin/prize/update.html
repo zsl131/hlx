@@ -46,13 +46,20 @@
 		</div>
 		<div class="form-group form-group-lg">
 			<div class="input-group">
+				<div class="input-group-addon">价值：</div>
+				<input name="worth" id="worth" type="text" class="form-control" th:value="${prize.worth}" placeholder="请输入礼物价值，只能输入整数；积分表示几个积分；其他则表示几分钱" />
+				<span class="input-group-addon">&nbsp;分&nbsp;</span>
+			</div>
+		</div>
+		<!--<div class="form-group form-group-lg">
+			<div class="input-group">
 				<div class="input-group-addon">图片：</div>
 				<div class="" style="border:1px #ddd solid; padding:5px;">
 					<a  th:if="${prize.picPath ne NULL and prize.picPath ne ''}" th:href="${prize.picPath}" target="_blank"><img th:src="${prize.picPath}" style="width:100px;"/></a>
 					<input name="file" type="file"/>
 				</div>
 			</div>
-		</div>
+		</div>-->
 
 		<div class="form-group form-group-lg">
 			<div class="input-group">

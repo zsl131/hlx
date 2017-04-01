@@ -45,7 +45,7 @@
 						<p th:text="${obj.createTime}"></p>
 						<span th:if="${obj.type eq 'text'}" th:utext="${obj.content}"></span>
 						<span th:if="${obj.type eq 'image'}">
-							<a th:href="${obj.picUrl}" target="_blank"><img th:src="${obj.picUrl}" class="head-img" style="width:150px;"/></a>
+							<a th:href="${obj.filePath}" target="_blank"><img th:src="${obj.filePath}" class="head-img" style="width:100px;"/></a>
 						</span>
 					</td>
 					<td>

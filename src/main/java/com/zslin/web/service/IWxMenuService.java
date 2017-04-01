@@ -12,8 +12,9 @@ import java.util.List;
  */
 public interface IWxMenuService extends BaseRepository<WxMenu, Integer>, JpaSpecificationExecutor<WxMenu> {
 
-    @Query("FROM WxMenu m WHERE m.pid IS NULL OR m.pid<=0")
+    @Query("FROM WxMenu m WHERE m.pid IS NULL OR m.pid<=0 ORDER BY m.orderNo ASC")
     List<WxMenu> findParent();
 
+    @Query("FROM WxMenu m WHERE m.pid=?1 ORDER BY m.orderNo ASC")
     List<WxMenu> findByPid(Integer pid);
 }

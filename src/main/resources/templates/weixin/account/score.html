@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="page">
+        <div class="page__hd" style="padding-left:10px;padding-right:10px; background:#fafafa; border-bottom:1px #ececec solid;">
+            <div class="weui-flex">
+                <div class="weui-flex__item">
+                    <h1 class="page__title" style="color:#F60;"><b th:text="${wallet.score}"></b>
+                        <span style="font-size:14px;">可抵：<b th:text="${canMoney}"></b>元</span>
+                    </h1>
+                    <p class="page__desc">积分余额</p>
+                </div>
+                <div class="weui-flex__item" style="position:relative;">
+                    <a href="/weixin/article/detail?id=2" style="position:absolute; bottom:10px;"><i class="fa fa-info"></i> 如何获得积分？</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="weui-cells">
+        <div th:each="obj : ${datas}" th:remove="tag">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><span th:text="${obj.reason}" style="color:#888;"></span></div>
+                <div class="weui-cell__bd">&nbsp;
+                    <span th:text="${obj.flag eq '1'?'+':'-'}"></span><span th:text="${obj.amount}">cell standard</span>分
+                </div>
+                <div class="weui-cell__ft">
+                    <span th:text="${obj.createTime}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
+</div>
+</body>
+</html>

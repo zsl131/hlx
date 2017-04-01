@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-member-level.css"/>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div>
+        <div class="head-part">
+            <div class="img"><img src="/logo-500.png"/></div>
+            <div class="info">
+                <p class="title" th:text="${session.appConfig ne null?session.appConfig.appName+'会员':'汉丽轩会员'}">昭通汉丽轩会员</p>
+            </div>
+        </div>
+
+        <div class="line-div"></div>
+
+        <div class="level-div">
+            <ul class="level-ul">
+                <li th:each="level : ${datas}">
+                    <p class="show-info">
+                        <b class="name" th:text="${level.name}"></b>
+                        <span><i class="fa fa-plug"></i> 充值：<b th:text="${level.chargeMoney}"></b> 元</span>
+                        <span>赠送：<b th:text="${level.giveMoney}"></b> 元</span>
+                    </p>
+                    <p class="opt-btn">
+                        <a th:href="@{/wx/member/charge(id=${level.id})}" class="btn btn-info"><i class="fa fa-unlock"></i> 立即办理该会员</a>
+                    </p>
+                </li>
+                <!--<li th:each="level : ${datas}">
+                    <p class="name" th:text="${level.name}"></p>
+                    <p class="con">
+                        <span><i class="fa fa-plug"></i> 充值：<b th:text="${level.chargeMoney}"></b> 元</span>
+                        <span><i class="fa fa-coffee"></i> 赠送：<b th:text="${level.giveMoney}"></b> 元</span>
+                        &lt;!&ndash;<span><i class="fa fa-percent"></i> 享受：<b th:text="${level.discount*1.0/10}"></b> 折优惠</span>&ndash;&gt;
+                    </p>
+                    <p class="btn"><a th:href="@{/wx/member/charge(id=${level.id})}" class="btn btn-warning"><i class="fa fa-unlock"></i> 申请成为<span th:remove="tag" th:text="${level.name}"></span></a></p>
+                </li>-->
+            </ul>
+        </div>
+
+        <div class="line-div"></div>
+
+        <div class="bottom">
+            <p>昭通汉丽轩全体员工欢迎您的到来！</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

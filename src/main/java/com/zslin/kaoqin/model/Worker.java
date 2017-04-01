@@ -41,6 +41,20 @@ public class Worker {
 
     private String openid;
 
+    /**
+     * 是否为收银员
+     * 当有顾客办卡等业务时将通知收银员（只有无当前收银员时才通知）
+     */
+    private String isCashier="0";
+
+    public String getIsCashier() {
+        return isCashier;
+    }
+
+    public void setIsCashier(String isCashier) {
+        this.isCashier = isCashier;
+    }
+
     public String getIdentity() {
         return identity;
     }

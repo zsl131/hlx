@@ -72,6 +72,7 @@ public class WeixinController {
             Node event = root.getElementsByTagName("Event").item(0);
             Node eventKey = root.getElementsByTagName("EventKey").item(0);
             Node msgId = root.getElementsByTagName("MsgId").item(0);
+            String builderName = root.getElementsByTagName("ToUserName").item(0).getTextContent(); //开发者微信号
 
             String fromOpenid = fromUser.getTextContent(); //用户的openid
             String cTime = createTime.getTextContent(); //创建时间
@@ -84,15 +85,14 @@ public class WeixinController {
                 return;
             } else {
                 if("text".equalsIgnoreCase(msgTypeStr)) { //文本信息
-                    datasTools.onEventText(fromOpenid, content.getTextContent());
-
+                    docSend = datasTools.onEventText(fromOpenid, builderName, content.getTextContent());
                 } else if("image".equalsIgnoreCase(msgTypeStr)) { //图片信息
                     String picUrl = root.getElementsByTagName("PicUrl").item(0).getTextContent(); //图片地址
                     String mediaId = root.getElementsByTagName("MediaId").item(0).getTextContent(); //媒体ID
 
                     datasTools.onEventImage(fromOpenid, picUrl, mediaId); //添加图片信息
-//                    System.out.println(picUrl);
-//                    System.out.println(mediaId);
+                    System.out.println(picUrl);
+                    System.out.println(mediaId);
                 } else if("voice".equalsIgnoreCase(msgTypeStr)) { //语音信息
 
                 } else if("video".equalsIgnoreCase(msgTypeStr)) { //视频信息
@@ -109,6 +109,10 @@ public class WeixinController {
                     String eventStr = event.getTextContent(); //事件
                     if("subscribe".equalsIgnoreCase(eventStr)) { //关注
                         datasTools.onSubscribe(fromOpenid);
+                        docSend = datasTools.buildSubscribeStr(fromOpenid, builderName);
+                    } else if("WifiConnected".equalsIgnoreCase(eventStr)) { //Wifi连接成功
+                        datasTools.onSubscribe(fromOpenid);
+                        docSend = datasTools.buildSubscribeStr(fromOpenid, builderName);
                     } else if("unsubscribe".equalsIgnoreCase(eventStr)) { //取消关注
                         datasTools.onUnsubscribe(fromOpenid);
                     } else if("LOCATION".equalsIgnoreCase(eventStr)) { //定位

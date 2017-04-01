@@ -1,5 +1,6 @@
 package com.zslin.basic.tools;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -33,6 +34,17 @@ public class NormalTools {
     public static String curDate(String pattern) {
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         return sdf.format(new Date());
+    }
+
+    /**
+     * 生成两位小数的数字
+     * @param d double类型的数字
+     * @return
+     */
+    public static double buildPoint(double d) {
+        BigDecimal bg = new BigDecimal(d);
+        double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return f1;
     }
 
     public static String curDate() {
