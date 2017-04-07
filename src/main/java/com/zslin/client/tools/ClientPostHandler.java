@@ -51,6 +51,10 @@ public class ClientPostHandler {
             clientSimpleProcessHandler.handlerMemberCharge(dataObj);
         } else if("member".equalsIgnoreCase(type)) { //店内办理会员（非微信会员）
             clientSimpleProcessHandler.handlerMember(dataObj, action);
+        } else if("buffetOrder".equalsIgnoreCase(type)) { //订单
+            clientSimpleProcessHandler.handlerBuffetOrder(dataObj);
+        } else if("buffetOrderDetail".equalsIgnoreCase(type)) { //订单详情
+            clientSimpleProcessHandler.handlerBuffetOrderDetail(dataObj);
         }
     }
 

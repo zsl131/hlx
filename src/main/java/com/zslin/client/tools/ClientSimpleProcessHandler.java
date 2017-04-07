@@ -4,12 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.client.model.Member;
 import com.zslin.client.service.IMemberService;
-import com.zslin.web.model.Account;
-import com.zslin.web.model.MemberCharge;
-import com.zslin.web.model.Wallet;
-import com.zslin.web.service.IAccountService;
-import com.zslin.web.service.IMemberChargeService;
-import com.zslin.web.service.IWalletService;
+import com.zslin.web.model.*;
+import com.zslin.web.service.*;
 import com.zslin.wx.dbtools.MoneyTools;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +32,16 @@ public class ClientSimpleProcessHandler {
     private IAccountService accountService;
 
     @Autowired
+    private IBuffetOrderService buffetOrderService;
+
+    @Autowired
+    private IBuffetOrderDetailService buffetOrderDetailService;
+
+    @Autowired
     private MoneyTools moneyTools;
+
+    @Autowired
+    private ShopTools shopTools;
 
     /** 处理充值或消费记录，只有添加 */
     public void handlerMemberCharge(JSONObject jsonObj) {
@@ -63,6 +68,23 @@ public class ClientSimpleProcessHandler {
         }
     }
 
+    public void handlerBuffetOrder(JSONObject jsonObj) {
+        BuffetOrder bo = JSON.toJavaObject(JSON.parseObject(jsonObj.toString()), BuffetOrder.class);
+        String no = bo.getNo();
+        BuffetOrder order = buffetOrderService.findByNo(no);
+        if(order==null) {
+            order = new BuffetOrder();
+        }
+        MyBeanUtils.copyProperties(bo, order, true);
+        buffetOrderService.save(order);
+        shopTools.onShopping(order); //处理账户余额等信息
+    }
+
+    public void handlerBuffetOrderDetail(JSONObject jsonObj) {
+        BuffetOrderDetail bod = JSON.toJavaObject(JSON.parseObject(jsonObj.toString()), BuffetOrderDetail.class);
+        buffetOrderDetailService.save(bod);
+    }
+
     /** 处理会员信息，在店内办理非微信会员 */
     public void handlerMember(JSONObject jsonObj, String action) {
         Member m = JSON.toJavaObject(JSON.parseObject(jsonObj.toString()), Member.class);
@@ -71,14 +93,11 @@ public class ClientSimpleProcessHandler {
         } else if("update".equalsIgnoreCase(action)) {
             Member member = memberService.findByPhone(m.getPhone());
             if (member == null) {
-                m.setId(null);
-                memberService.save(m);
-                checkWallet(m); //添加会员信息时先检测有无钱包信息
-            } else {
-                MyBeanUtils.copyProperties(m, member);
-                memberService.save(member);
-                checkWallet(member); //添加会员信息时先检测有无钱包信息
+                member = new Member();
             }
+            MyBeanUtils.copyProperties(m, member, true);
+            memberService.save(member);
+            checkWallet(member); //添加会员信息时先检测有无钱包信息
         }
     }
 
@@ -93,6 +112,7 @@ public class ClientSimpleProcessHandler {
             w.setPhone(m.getPhone());
             w.setCreateDate(new Date());
             w.setCreateDay(m.getCreateDay());
+            w.setCreateTime(m.getCreateTime());
             if(a!=null) {
                 w.setAccountName(a.getNickname());
                 w.setAccountId(a.getId());

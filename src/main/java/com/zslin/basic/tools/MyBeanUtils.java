@@ -16,11 +16,24 @@ public class MyBeanUtils extends BeanUtils {
 	
 	public static void copyProperties(Object source, Object target, String [] ignoreFields)
 			throws BeansException {
-		BeanUtils.copyProperties(source, target, concat(concat(ignoreFields, new String[]{"id","createDate", "createTime", "createLong", "createDay"}), getNullPropertyNames(source)));
+//		BeanUtils.copyProperties(source, target, concat(concat(ignoreFields, new String[]{"id","createDate", "createTime", "createLong", "createDay"}), getNullPropertyNames(source)));
+        copyProperties(source, target, ignoreFields, false);
 	}
 
 	public static void copyProperties(Object source, Object target) {
         copyProperties(source, target, new String[]{});
+    }
+
+    public static void copyProperties(Object source, Object target, boolean noAuto) {
+        copyProperties(source, target, new String[]{}, noAuto);
+    }
+
+    public static void copyProperties(Object source, Object target, String [] ignoreFields, boolean noAuto) {
+        if(noAuto) {
+            BeanUtils.copyProperties(source, target, concat(concat(ignoreFields, new String[]{"id"}), getNullPropertyNames(source)));
+        } else {
+            BeanUtils.copyProperties(source, target, concat(concat(ignoreFields, new String[]{"id", "createDate", "createTime", "createLong", "createDay"}), getNullPropertyNames(source)));
+        }
     }
 
     private static String[] concat(String[] a, String[] b) {

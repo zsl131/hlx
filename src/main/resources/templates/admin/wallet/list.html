@@ -12,6 +12,7 @@
 				$(".delete-obj-href").deleteFun();
 			});
 		</script>
+		<script type="text/javascript" src="/admin/bus/money-show.js"></script>
 		<style>
 			.head-img {border-radius:5px; width:50px;}
 		</style>
@@ -37,7 +38,7 @@
 
 				<tr th:each="obj : ${datas}">
 					<td th:text="${obj.accountName}"></td>
-					<td th:text="${obj.money}+' 分'"></td>
+					<td th:text="${obj.money}" class="show-money"></td>
 					<td th:text="${obj.score}+' 分'"></td>
 				</tr>
 			</table>

@@ -6,10 +6,7 @@ import com.zslin.client.model.ClientConfig;
 import com.zslin.client.model.Orders;
 import com.zslin.kaoqin.model.Worker;
 import com.zslin.web.dto.AdminPhoneDto;
-import com.zslin.web.model.Account;
-import com.zslin.web.model.MemberLevel;
-import com.zslin.web.model.Price;
-import com.zslin.web.model.Rules;
+import com.zslin.web.model.*;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/10 11:29.
@@ -62,6 +59,11 @@ public class ClientJsonTools {
 
     public static String buildMemberLevel(MemberLevel level, String action){
         JsonDto jd = new JsonDto("memberLevel", action, level.getId(), level);
+        return JSON.toJSONString(jd);
+    }
+
+    public static String buildCommodity(Commodity commodity, String action) {
+        JsonDto jd = new JsonDto("commodity", action, commodity.getId(), commodity);
         return JSON.toJSONString(jd);
     }
 }

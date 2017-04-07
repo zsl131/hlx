@@ -42,23 +42,39 @@ public class MoneyTools {
      * @param type 操作原因
      */
     public void processScoreByPhone(String phone, Integer money, String type) {
+        processScoreByPhone(phone, money, type, type);
+    }
+
+    public void processScoreByPhone(String phone, Integer money, String typeCn, String type, ScoreAdditionalDto... dtoList) {
         if(phone==null || "".equals(phone)) {return;}
         Wallet wallet = walletService.findByPhone(phone);
+        if(wallet==null) {wallet = initWallet(phone);}
         String openid = wallet.getOpenid();
-        walletDetailTools.addWalletDetailMoney(money/100, openid==null?wallet.getPhone():openid, wallet.getAccountId(), wallet.getAccountName(), type, type);
+        walletDetailTools.addWalletDetailMoney(money/100, openid==null?wallet.getPhone():openid, wallet.getAccountId(), wallet.getAccountName(), type, typeCn);
         walletService.plusMoneyByPhone(money, phone);
         memberService.plusMoneyByPhone(money, phone);
 
         //如果openid不为空，则通知
         if(openid!=null && !"".equalsIgnoreCase(openid)) {
             StringBuffer sb = new StringBuffer();
-            sb.append("账户增加：").append(money * 1.0 / 100).append(" 元\\n")
+            sb.append(money>=0?"账户增加：":"账户减少：").append(money * 1.0 / 100).append(" 元\\n")
                     .append("账户剩余：").append(walletService.queryMoney(openid) * 1.0 / 100).append(" 元\\n")
-                    .append("变化原因：").append(type);
+                    .append("变化原因：").append(typeCn);
+
+            for(ScoreAdditionalDto dto : dtoList) {
+                sb.append("\\n").append(dto.getName()).append((dto.getName()==null || "".equals(dto.getName()))?"":"：").append(dto.getValue());
+            }
 
             eventTools.eventRemind(openid, "账户余额变化提醒", "账户余额发生变化啦~~", NormalTools.curDate("yyyy-MM-dd HH:mm"), sb.toString(), "/wx/account/money");
         }
     }
 
-
+    private Wallet initWallet(String phone) {
+        Wallet w = new Wallet();
+        w.setPhone(phone);
+        w.setScore(0);
+        w.setMoney(0);
+        walletService.save(w);
+        return w;
+    }
 }
