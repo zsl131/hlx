@@ -208,6 +208,7 @@ public class DatasTools {
         }
         accountService.save(a);
 
+        System.out.println("========关注============");
         addWallet(a); //添加钱包
 
         scoreTools.processScore(openid, ScoreRule.INIT); //关注时送积分

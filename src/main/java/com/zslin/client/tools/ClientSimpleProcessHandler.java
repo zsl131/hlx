@@ -2,11 +2,15 @@ package com.zslin.client.tools;
 
 import com.alibaba.fastjson.JSON;
 import com.zslin.basic.tools.MyBeanUtils;
+import com.zslin.basic.tools.NormalTools;
 import com.zslin.client.model.Member;
+import com.zslin.client.model.Orders;
 import com.zslin.client.service.IMemberService;
 import com.zslin.web.model.*;
 import com.zslin.web.service.*;
 import com.zslin.wx.dbtools.MoneyTools;
+import com.zslin.wx.dto.EventRemarkDto;
+import com.zslin.wx.tools.EventTools;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,6 +47,9 @@ public class ClientSimpleProcessHandler {
     @Autowired
     private ShopTools shopTools;
 
+    @Autowired
+    private EventTools eventTools;
+
     /** 处理充值或消费记录，只有添加 */
     public void handlerMemberCharge(JSONObject jsonObj) {
         MemberCharge mc = JSON.toJavaObject(JSON.parseObject(jsonObj.toString()), MemberCharge.class);
@@ -77,7 +84,27 @@ public class ClientSimpleProcessHandler {
         }
         MyBeanUtils.copyProperties(bo, order, true);
         buffetOrderService.save(order);
+        if("0".equalsIgnoreCase(order.getStatus()) && "4".equalsIgnoreCase(order.getType())) {
+            noticeAdmin(order); //需要通知管理人员
+        }
         shopTools.onShopping(order); //处理账户余额等信息
+    }
+
+    private void noticeAdmin(BuffetOrder o) {
+        //如果是友情价订单并且状态为刚下订单，则通过管理员
+        if("0".equalsIgnoreCase(o.getStatus()) && "4".equalsIgnoreCase(o.getType())) {
+            //当有友情价是discountReason必须存老板手机号码
+            String openid = accountService.findOpenidByPhone(o.getDiscountReason());
+            if(openid!=null) {
+                eventTools.eventRemind(openid,"亲情价折扣提醒", "有顾客需要亲情折扣价", NormalTools.curDate("yyyy-MM-dd HH:mm"),
+                        "/wx/buffetOrders/confirmFriend?no="+o.getNo(),
+                        new EventRemarkDto("订单编号", o.getNo()),
+                        new EventRemarkDto("商品总数", o.getCommodityCount()+""),
+                        new EventRemarkDto("订单金额", o.getTotalMoney()+ " 元"),
+                        new EventRemarkDto("优惠金额", o.getDiscountMoney()+ " 元"),
+                        new EventRemarkDto("", "点击查看可确认！"));
+            }
+        }
     }
 
     public void handlerBuffetOrderDetail(JSONObject jsonObj) {

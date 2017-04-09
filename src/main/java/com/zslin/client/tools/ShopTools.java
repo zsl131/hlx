@@ -22,21 +22,23 @@ public class ShopTools {
     private MoneyTools moneyTools;
 
     public void onShopping(BuffetOrder order) {
-        Integer orderType = Integer.parseInt(order.getType());
-        String orderNo = order.getNo();
-        if(orderType>=0) { //表示需要扣款
-            WalletDetail wd = walletDetailService.findByShop(orderNo, "-1");
-            if(wd==null) {
-                moneyTools.processScoreByPhone(order.getDiscountReason(), 0-(int)(order.getDiscountMoney()*100), "消费扣款", orderNo,
-                        new ScoreAdditionalDto("订单编号", orderNo),
-                        new ScoreAdditionalDto("订单时间", order.getCreateTime()));
-            }
-        } else { //需要退款
-            WalletDetail wd = walletDetailService.findByShop(order.getNo(), "1");
-            if(wd==null) {
-                moneyTools.processScoreByPhone(order.getDiscountReason(), 0-(int)(order.getDiscountMoney()*100), "订单退款", orderNo,
-                        new ScoreAdditionalDto("订单编号", orderNo),
-                        new ScoreAdditionalDto("订单时间", order.getCreateTime()));
+        if("5".equals(order.getType())) { //如果是会员订单则需要做相应处理
+            Integer orderType = Integer.parseInt(order.getType());
+            String orderNo = order.getNo();
+            if (orderType >= 0) { //表示需要扣款
+                WalletDetail wd = walletDetailService.findByShop(orderNo, "-1");
+                if (wd == null) {
+                    moneyTools.processScoreByPhone(order.getDiscountReason(), 0 - (int) (order.getDiscountMoney() * 100), "消费扣款", orderNo,
+                            new ScoreAdditionalDto("订单编号", orderNo),
+                            new ScoreAdditionalDto("订单时间", order.getCreateTime()));
+                }
+            } else { //需要退款
+                WalletDetail wd = walletDetailService.findByShop(order.getNo(), "1");
+                if (wd == null) {
+                    moneyTools.processScoreByPhone(order.getDiscountReason(), 0 - (int) (order.getDiscountMoney() * 100), "订单退款", orderNo,
+                            new ScoreAdditionalDto("订单编号", orderNo),
+                            new ScoreAdditionalDto("订单时间", order.getCreateTime()));
+                }
             }
         }
     }

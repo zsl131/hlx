@@ -57,6 +57,11 @@ public class ClientJsonTools {
         return JSON.toJSONString(jd);
     }
 
+    public static String buildBuffetOrders(BuffetOrder orders) {
+        JsonDto jd = new JsonDto("buffetOrder", "update", orders.getId(), orders);
+        return JSON.toJSONString(jd);
+    }
+
     public static String buildMemberLevel(MemberLevel level, String action){
         JsonDto jd = new JsonDto("memberLevel", action, level.getId(), level);
         return JSON.toJSONString(jd);
