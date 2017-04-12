@@ -30,7 +30,7 @@
 						<th>ID</th>
 						<th>类型</th>
 						<th>名称</th>
-						<th>数量</th>
+						<!--<th>数量</th>-->
 						<!--<th>状态</th>-->
 						<th>备注</th>
 						<th>操作</th>
@@ -44,14 +44,14 @@
 					<td th:text="${obj.id}"></td>
 					<td>
 						<div th:remove="tag" th:switch="${obj.type}">
-							<span th:case="'1'">现金券</span>
+							<span th:case="'1'">积分</span>
 							<span th:case="'2'">抵价券</span>
-							<span th:case="'3'">早餐券</span>
+							<span th:case="'3'">午餐券</span>
 							<span th:case="'4'">晚餐券</span>
 						</div>
 					</td>
 					<td th:text="${obj.name}"></td>
-					<td th:text="${obj.amount}">0</td>
+					<!--<td th:text="${obj.amount}">0</td>-->
 					<!--<td>
 						<div th:remove="tag" th:switch="${obj.status}">
 							<span th:case="'1'">停用</span>

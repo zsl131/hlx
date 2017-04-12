@@ -71,4 +71,9 @@ public class ClientJsonTools {
         JsonDto jd = new JsonDto("commodity", action, commodity.getId(), commodity);
         return JSON.toJSONString(jd);
     }
+
+    public static String buildPrize(Prize prize, String action) {
+        JsonDto jd = new JsonDto("prize", action, prize.getId(), prize);
+        return JSON.toJSONString(jd);
+    }
 }

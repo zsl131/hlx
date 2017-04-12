@@ -8,6 +8,8 @@ import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
 import com.zslin.web.model.Prize;
 import com.zslin.web.service.IPrizeService;
 import org.apache.commons.io.FileUtils;
@@ -37,6 +39,9 @@ public class AdminPrizeController {
 
     @Autowired
     private ConfigTools configTools;
+
+    @Autowired
+    private ClientFileTools clientFileTools;
 
     private static final String PATH_PRE = "prize/";
 
@@ -81,6 +86,7 @@ public class AdminPrizeController {
                 }
             }
             prizeService.save(prize);
+            send2Client(prize, "update");
         }
         return "redirect:/admin/prize/list";
     }
@@ -125,6 +131,7 @@ public class AdminPrizeController {
                 }
             }
             prizeService.save(p);
+            send2Client(p, "update");
         }
         return "redirect:/admin/prize/list";
     }
@@ -139,9 +146,18 @@ public class AdminPrizeController {
             if(oldFile.exists()) {oldFile.delete();}
 
             prizeService.delete(p);
+            send2Client(p, "delete");
             return "1";
         } catch (Exception e) {
             return "0";
+        }
+    }
+
+    private void send2Client(Prize p, String action) {
+        String type = p.getType();
+        if("2".equals(type) || "3".equals(type) || "4".equals(type)) { //只有是抵价券、就餐券才需要
+            String json = ClientJsonTools.buildDataJson(ClientJsonTools.buildPrize(p, action));
+            clientFileTools.setChangeContext(json, true);
         }
     }
 }

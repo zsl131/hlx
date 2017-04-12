@@ -12,6 +12,12 @@
 	<script src="/admin/bus/my-date.js"></script>
 	<script src="/admin/bus/admin-food.js"></script>
 	<title>修改礼物</title>
+	<script type="text/javascript">
+		$(function() {
+			var type = $("input[name='prizeType']").val();
+			$("select[name='type']").find("option[value='"+type+"']").attr("selected","selected");
+		});
+	</script>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
@@ -21,14 +27,14 @@
 	</div>
 
 	<form method="POST" th:object="${prize}" id="dataForm" enctype="multipart/form-data">
-		<input name="cateName" type="hidden"/>
 		<div class="form-group form-group-lg">
 			<div class="input-group">
 				<div class="input-group-addon">类型：</div>
 				<select name="type" class="form-control">
-					<option value="1">现金券</option>
-					<option value="2">就餐券</option>
-					<option value="3">礼物</option>
+					<option value="1" >积分</option>
+					<option value="2">抵价券</option>
+					<option value="3">午餐券</option>
+					<option value="4">晚餐券</option>
 				</select>
 			</div>
 		</div>
@@ -38,12 +44,12 @@
 				<input name="name" type="text" class="form-control" id="name" th:value="${prize.name}" placeholder="请输入礼物名称" />
 			</div>
 		</div>
-		<div class="form-group form-group-lg">
+		<!--<div class="form-group form-group-lg">
 			<div class="input-group">
 				<div class="input-group-addon">数量：</div>
 				<input name="amount" id="amount" type="text" class="form-control" th:value="${prize.amount}" placeholder="请输入礼物数量，只能输入整数" />
 			</div>
-		</div>
+		</div>-->
 		<div class="form-group form-group-lg">
 			<div class="input-group">
 				<div class="input-group-addon">价值：</div>
@@ -69,6 +75,7 @@
 		</div>
 
 		<input type="hidden" name="token" value="${session.token}"/>
+		<input type="hidden" name="prizeType" th:value="${prize.type}"/>
 		<button type="submit" class="btn btn-primary">确定提交</button>
 	</form>
 

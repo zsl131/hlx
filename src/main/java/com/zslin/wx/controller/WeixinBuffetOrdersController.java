@@ -4,6 +4,7 @@ import com.zslin.basic.exception.SystemException;
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.repository.SimpleSpecificationBuilder;
+import com.zslin.basic.tools.NormalTools;
 import com.zslin.client.model.Orders;
 import com.zslin.client.service.IOrdersService;
 import com.zslin.client.tools.ClientFileTools;
@@ -105,6 +106,8 @@ public class WeixinBuffetOrdersController {
                 orders.setDiscountType("2");
             } else {
                 orders.setStatus("-3"); //被老板驳回
+                orders.setEndLong(System.currentTimeMillis());
+                orders.setEndTime(NormalTools.curDate());
             }
             buffetOrderService.save(orders);
 

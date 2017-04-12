@@ -21,6 +21,10 @@ public class BuffetOrder {
     @Column(name = "cashier_name")
     private String cashierName;
 
+    /** 是否为自助餐订单1-是；0-否 */
+    @Column(name = "is_self")
+    private String isSelf;
+
     /** 收银员电话 */
     @Column(name = "cashier_phone")
     private String cashierPhone;
@@ -121,6 +125,14 @@ public class BuffetOrder {
     /** 退票原因 */
     @Column(name = "retreatReason")
     private String retreatReason;
+
+    public String getIsSelf() {
+        return isSelf;
+    }
+
+    public void setIsSelf(String isSelf) {
+        this.isSelf = isSelf;
+    }
 
     public Integer getId() {
         return id;
