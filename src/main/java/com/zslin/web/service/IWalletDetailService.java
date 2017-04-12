@@ -28,4 +28,7 @@ public interface IWalletDetailService extends BaseRepository<WalletDetail, Integ
     /** 获取过期的积分 */
     @Query("FROM WalletDetail w WHERE w.type='2' AND w.flag='1' AND (w.status='0' OR w.status='1') AND w.surplus>0 AND w.createLong<=?1 ORDER BY w.accountId ASC")
     List<WalletDetail> findOverdue(Long createLong);
+
+    @Query("FROM WalletDetail w WHERE w.type='1' AND w.reason=?1 AND w.flag=?2 ")
+    WalletDetail findByShop(String orderNo, String flag);
 }

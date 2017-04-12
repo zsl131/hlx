@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>添加商品</title>
+	</head>
+	<body>
+		<div th:fragment="content" th:remove="tag">
+			<div class="header lighter smaller blue">
+				<h3><i class="fa fa-plus"></i>&nbsp;添加商品（只能添加外卖单品）</h3>
+				<div th:replace="admin/commodity/nav :: content" th:remove="tag"></div>
+			</div>
+
+			<form method="POST" th:object="${commodity}" id="dataForm" enctype="multipart/form-data">
+				<input name="cateName" type="hidden"/>
+				<!--<div class="form-group form-group-lg">
+					<div class="input-group input-group-lg">
+						<div class="input-group-addon">商品类型：</div>
+						<div class="form-control">
+							<input type="radio" name="type" value="1" id="type_1" th:checked="${commodity.type == '1'}?'checked'"/><label for="type_1">自餐券入场券</label>
+							<input type="radio" name="type" value="2" id="type_2" th:checked="${commodity.type == '2'}?'checked'"/><label for="type_2">外卖单品</label>
+						</div>
+					</div>
+				</div>-->
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">商品编号：</div>
+						<input name="no" type="text" class="form-control" id="no" th:value="${commodity.no}" placeholder="请输入商品编号" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">商品名称：</div>
+						<input name="name" type="text" class="form-control" id="name" th:value="${commodity.name}" placeholder="请输入商品名称" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">商品单价：</div>
+						<input name="price" id="price" type="text" class="form-control" th:value="${commodity.price}" placeholder="请输商品单价，单位元" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">商品描述</div>
+						<textarea name="remark" th:text="${commodity.remark}" style="width:100%; height:100px;"></textarea>
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">商品图片：</div>
+						<input name="file" type="file" class="form-control" />
+					</div>
+				</div>
+
+				<input type="hidden" name="token" value="${session.token}"/>
+				<button type="submit" class="btn btn-primary">确定提交</button>
+			</form>
+		</div>
+	</body>
+</html>

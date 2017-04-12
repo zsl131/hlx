@@ -4,7 +4,6 @@ import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.repository.SimpleSpecificationBuilder;
 import com.zslin.basic.tools.NormalTools;
-import com.zslin.client.service.IOrdersService;
 import com.zslin.kaoqin.model.Worker;
 import com.zslin.kaoqin.service.IWorkerService;
 import com.zslin.sms.tools.RandomTools;
@@ -75,11 +74,17 @@ public class WeixinAccountController {
     @Autowired
     private IMemberChargeService memberChargeService;
 
-    @Autowired
-    private IOrdersService ordersService;
+//    @Autowired
+//    private IOrdersService ordersService;
 
     @Autowired
     private IRulesService rulesService;
+
+    @Autowired
+    private IBuffetOrderService buffetOrderService;
+
+    @Autowired
+    private IWalletRemovedService walletRemovedService;
 
     //微信用户个人中心
     @GetMapping(value = "me")
@@ -95,7 +100,7 @@ public class WeixinAccountController {
         model.addAttribute("chargeCount", memberChargeService.findCount(openid)); //充值次数
 
         if(AccountTools.isPartner(account.getType())) {
-            model.addAttribute("friendOrdersCount", ordersService.findFriendCount(account.getPhone())); //友情折扣的次数
+            model.addAttribute("friendOrdersCount", buffetOrderService.findFriendCount(account.getPhone())); //友情折扣的次数
         }
         return "weixin/account/me";
     }
@@ -224,8 +229,9 @@ public class WeixinAccountController {
         String openid = SessionTools.getOpenid(request);
         String sessionCode = (String) request.getSession().getAttribute("sms_code");
         if(code.equals(sessionCode)) {
-            walletService.modifyPhone(phone, openid);
+            //walletService.modifyPhone(phone, openid); //不能先修改数据
             updateData(phone, openid);
+            updateWallet(phone, openid);
             //处理积分
             scoreTools.processScore(openid, ScoreRule.BIND_PHONE, new ScoreAdditionalDto("手机号码", phone));
             return "1";
@@ -254,6 +260,42 @@ public class WeixinAccountController {
             accountService.save(a);
         } else {
             accountService.modifyPhone(phone, openid);
+        }
+    }
+
+    private void updateWallet(String phone, String openid) {
+        Wallet w = walletService.findByPhone(phone);
+        Wallet wxWallet = walletService.findByOpenid(openid);
+        if(w!=null && wxWallet!=null && !w.getId().equals(wxWallet.getId())) { //两个钱包都不为空，且不是同一个
+            Account a = accountService.findByOpenid(openid);
+            w.setMoney(w.getMoney()+wxWallet.getMoney());
+            w.setOpenid(openid);
+            w.setAccountId(a.getId());
+            w.setScore(w.getScore()+wxWallet.getScore());
+            w.setAccountName(wxWallet.getAccountName());
+            walletService.save(w);
+
+            a.setHasCard(w.getMoney()>0?"1":"2");
+            accountService.save(a);
+
+            WalletRemoved wr = new WalletRemoved();
+            wr.setAccountName(wxWallet.getAccountName());
+            wr.setScore(wxWallet.getScore());
+            wr.setAccountId(wxWallet.getAccountId());
+            wr.setOpenid(wxWallet.getOpenid());
+            wr.setMoney(wxWallet.getMoney());
+            wr.setPassword(wxWallet.getPassword());
+            wr.setPhone(wxWallet.getPhone());
+            wr.setRemoveTime(NormalTools.curDate());
+            wr.setCreateDate(wxWallet.getCreateDate());
+            wr.setCreateDay(wxWallet.getCreateDay());
+            wr.setCreateLong(wxWallet.getCreateLong());
+            wr.setCreateTime(wxWallet.getCreateTime());
+            walletRemovedService.save(wr);
+
+            walletService.delete(wxWallet);
+        } else {
+            walletService.modifyPhone(phone, openid);
         }
     }
 

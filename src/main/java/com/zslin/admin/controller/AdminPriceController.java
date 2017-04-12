@@ -2,9 +2,12 @@ package com.zslin.admin.controller;
 
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.tools.MyBeanUtils;
+import com.zslin.basic.tools.NormalTools;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.ClientJsonTools;
+import com.zslin.web.model.Commodity;
 import com.zslin.web.model.Price;
+import com.zslin.web.service.ICommodityService;
 import com.zslin.web.service.IPriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +30,9 @@ public class AdminPriceController {
 
     @Autowired
     private ClientFileTools clientFileTools;
+
+    @Autowired
+    private ICommodityService commodityService;
 
     @AdminAuth(name="价格配置管理", orderNum=1, icon="fa fa-rmb", type="1")
     @RequestMapping(value="index", method= RequestMethod.GET)
@@ -56,6 +62,70 @@ public class AdminPriceController {
 
     private void send2Client(Price p) {
         String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildPrice(p));
+        clientFileTools.setChangeContext(content, true);
+        buildCommodity(p);
+    }
+
+    //添加商品，在配置价格时修改
+    private void buildCommodity(Price p) {
+        Commodity breakfastCommodity = commodityService.findByNo(Commodity.BREAKFAST_NO); //早餐券
+        if(breakfastCommodity==null) {
+            breakfastCommodity = new Commodity();
+            breakfastCommodity.setType("1");
+            breakfastCommodity.setNo(Commodity.BREAKFAST_NO);
+            breakfastCommodity.setName("午餐券");
+        }
+        breakfastCommodity.setPrice(p.getBreakfastPrice());
+        commodityService.save(breakfastCommodity);
+        send2Client(breakfastCommodity, "update");
+
+        Commodity dinnerCommodity = commodityService.findByNo(Commodity.DINNER_NO); //晚餐券
+        if(dinnerCommodity==null) {
+            dinnerCommodity = new Commodity();
+            dinnerCommodity.setType("2");
+            dinnerCommodity.setNo(Commodity.DINNER_NO);
+            dinnerCommodity.setName("晚餐券");
+        }
+        dinnerCommodity.setPrice(p.getDinnerPrice());
+        commodityService.save(dinnerCommodity);
+        send2Client(dinnerCommodity, "update");
+
+        Commodity halfBreakfast = commodityService.findByNo(Commodity.HALF_BREADFAST_NO); //早餐券（半票）
+        if(halfBreakfast==null) {
+            halfBreakfast = new Commodity();
+            halfBreakfast.setType("1");
+            halfBreakfast.setNo(Commodity.HALF_BREADFAST_NO);
+            halfBreakfast.setName("午餐券（儿童票）");
+        }
+        halfBreakfast.setPrice((float)NormalTools.buildPoint(p.getBreakfastPrice()/2f));
+        commodityService.save(halfBreakfast);
+        send2Client(halfBreakfast, "update");
+
+        Commodity halfDinner = commodityService.findByNo(Commodity.HALF_DINNER_NO); //晚餐券（半票）
+        if(halfDinner==null) {
+            halfDinner = new Commodity();
+            halfDinner.setType("2");
+            halfDinner.setNo(Commodity.HALF_DINNER_NO);
+            halfDinner.setName("晚餐券（儿童票）");
+        }
+        halfDinner.setPrice((float)NormalTools.buildPoint(p.getDinnerPrice()/2f));
+        commodityService.save(halfDinner);
+        send2Client(halfDinner, "update");
+
+        Commodity freeCom = commodityService.findByNo(Commodity.FREE_NO); //免票券
+        if(freeCom==null) {
+            freeCom = new Commodity();
+            freeCom.setType("2");
+            freeCom.setNo(Commodity.FREE_NO);
+            freeCom.setName("免票券");
+        }
+        freeCom.setPrice(0f);
+        commodityService.save(freeCom);
+        send2Client(freeCom, "update");
+    }
+
+    public void send2Client(Commodity commodity, String action) {
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildCommodity(commodity, action));
         clientFileTools.setChangeContext(content, true);
     }
 }

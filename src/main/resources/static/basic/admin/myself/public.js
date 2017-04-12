@@ -30,7 +30,7 @@ function showDialog(msg, title) {
 		  	'</div>' +
 		  	'<div class="modal-body">'+msg+'</div>' +
 		  	'<div class="modal-footer">' +
-		  	'<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>' +
+		  	'<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> 关闭</button>' +
 		  	'</div></div></div></div>';
 	
 	$(html).appendTo("body");
@@ -55,8 +55,8 @@ function confirmDialog(msg, title, okfn) {
 		  	'</div>' +
 		  	'<div class="modal-body">'+msg+'</div>' +
 		  	'<div class="modal-footer">' +
-		  	'<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>' +
-		  	'<button type="button" class="btn btn-primary dialog-ok-btn">确定</button>' +
+		  	'<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> 关闭</button>' +
+		  	'<button type="button" class="btn btn-primary dialog-ok-btn"><i class="fa fa-check"></i> 确定</button>' +
 		  	'</div></div></div></div>';
 	
 	$(html).appendTo("body");

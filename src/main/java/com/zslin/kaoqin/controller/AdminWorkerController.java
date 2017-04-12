@@ -85,9 +85,7 @@ public class AdminWorkerController {
 
             workerService.save(worker);
             sendWorker2Device(worker);
-            if("1".equals(worker.getIsCashier())) {
-                sendWorker2Client("update", worker);
-            }
+            sendWorker2Client("update", worker);
         }
         return "redirect:/admin/worker/list";
     }
@@ -118,11 +116,7 @@ public class AdminWorkerController {
 
             workerService.save(w);
             sendWorker2Device(w);
-            if("1".equals(w.getIsCashier())) {
-                sendWorker2Client("update", w);
-            } else {
-                sendWorker2Client("delete", w);
-            }
+            sendWorker2Client("update", w);
         }
         return "redirect:/admin/worker/list";
     }
