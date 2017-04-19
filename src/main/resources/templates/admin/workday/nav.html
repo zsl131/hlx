@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content">
+            <div class="ace-settings-container" id="ace-settings-container">
+                <ul class="pagination">
+                    <li><a class="auth" sn="AdminWorkdayController.list" href="/admin/workday/list"><span class="glyphicon glyphicon-th-list"></span> 员工作息时间列表</a></li>
+                    <li><a class="delete-obj-href auth" title="确定初始化员工作息时间吗？" sn="AdminWorkdayController.init" href="/admin/workday/init"><span class="fa fa-plus"></span> 初始化员工作息时间</a></li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>

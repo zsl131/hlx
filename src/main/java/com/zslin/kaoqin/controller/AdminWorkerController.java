@@ -12,7 +12,9 @@ import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.ClientJsonTools;
+import com.zslin.kaoqin.model.Workday;
 import com.zslin.kaoqin.model.Worker;
+import com.zslin.kaoqin.service.IWorkdayService;
 import com.zslin.kaoqin.service.IWorkerService;
 import com.zslin.kaoqin.tools.GetJsonTools;
 import com.zslin.kaoqin.tools.KaoqinFileTools;
@@ -51,6 +53,9 @@ public class AdminWorkerController {
     @Autowired
     private ClientFileTools clientFileTools;
 
+    @Autowired
+    private IWorkdayService workdayService;
+
     @GetMapping(value = "list")
     @AdminAuth(name = "员工信息列表", type = "1", orderNum = 1, icon = "fa fa-users")
     public String list(Model model, Integer page, HttpServletRequest request) {
@@ -83,11 +88,23 @@ public class AdminWorkerController {
 
             bind(worker);
 
+            buildWorkday(worker);
             workerService.save(worker);
             sendWorker2Device(worker);
             sendWorker2Client("update", worker);
         }
         return "redirect:/admin/worker/list";
+    }
+
+    private void buildWorkday(Worker worker) {
+        Workday w = workdayService.findByWorkerId(worker.getId());
+        if(w==null) {
+            w = new Workday();
+        }
+        w.setWorkerName(worker.getName());
+        w.setWorkerId(w.getId());
+        w.setWorkerIdentity(worker.getIdentity());
+        workdayService.save(w);
     }
 
     @Token(flag= Token.READY)
@@ -117,6 +134,7 @@ public class AdminWorkerController {
             workerService.save(w);
             sendWorker2Device(w);
             sendWorker2Client("update", w);
+            buildWorkday(w);
         }
         return "redirect:/admin/worker/list";
     }
@@ -130,6 +148,8 @@ public class AdminWorkerController {
             sendDelWorker2Device(id); //从设备中删除员工数据
             Worker w = workerService.findOne(id);
             sendWorker2Client("delete", w); //从客户端删除
+
+            workdayService.deleteByWorkerId(id); //删除员工作息时间
             return "1";
         } catch (Exception e) {
             return "0";

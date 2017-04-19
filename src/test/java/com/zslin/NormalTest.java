@@ -1,5 +1,7 @@
 package com.zslin;
 
+import com.zslin.basic.tools.NormalTools;
+import com.zslin.kaoqin.tools.ClockinTools;
 import com.zslin.kaoqin.tools.GetJsonTools;
 import com.zslin.kaoqin.tools.KaoqinFileTools;
 import com.zslin.kaoqin.tools.PicTools;
@@ -17,6 +19,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.ClassUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/1/24 10:35.
@@ -146,5 +153,28 @@ public class NormalTest {
         String str = "91658502";
         Integer i = Integer.parseInt(str);
         System.out.println(str+"========"+i);
+    }
+
+    @Test
+    public void test12() throws Exception {
+        String day = NormalTools.curDate("yyyy-MM-dd");
+        String str = "8:30";
+        String s = day + " " + str;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date d = sdf.parse(s);
+        System.out.println(s);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        System.out.println(cal.get(Calendar.YEAR)+"=="+cal.get(Calendar.MONTH)+"=="+cal.get(Calendar.DAY_OF_MONTH)+"=="+cal.get(Calendar.HOUR)+"=="+cal.get(Calendar.MINUTE)+"=="+cal.get(Calendar.SECOND));
+//        System.out.println(d.getYear()+"=="+d.getMonth()+"=="+d.getDay()+"=="+d.getHours()+"=="+d.getMinutes()+"=="+d.getSeconds());
+    }
+
+    @Autowired
+    private ClockinTools clockinTools;
+
+    @Test
+    public void test13() {
+        String clockTime = "2017-04-16 11:59:59";
+        clockinTools.clockin(1, clockTime, 1);
     }
 }

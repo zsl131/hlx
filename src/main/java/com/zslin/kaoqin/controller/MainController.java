@@ -39,11 +39,6 @@ public class MainController {
     //设备从服务端下载数据
     @GetMapping(value = "get")
     public String get(String sn, String requesttime, HttpServletRequest request) {
-
-//        String configJson = GetJsonTools.buildDataJson(GetJsonTools.buildConfigJson(companyService.loadOne()));
-
-//        System.out.println(System.currentTimeMillis()/1000);
-
         String json = kaoqinFileTools.getChangeContext();
         if(json==null || "".equals(json.trim())) {
 //            json = configJson;
@@ -58,6 +53,7 @@ public class MainController {
     @GetMapping(value = "unixtime")
     public String unixtime(String sn, HttpServletRequest request) {
         String json = GetJsonTools.buildUnixTimeJson();
+        System.out.println("========time======="+json);
         return json;
     }
 
