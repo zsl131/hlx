@@ -2,6 +2,7 @@ package com.zslin.kaoqin.tools;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class PostJsonTools {
+
+    @Autowired
+    private ClockinTools clockinTools;
 
     public String handlerPost(String json) {
         StringBuffer sb = new StringBuffer();
@@ -26,11 +30,14 @@ public class PostJsonTools {
 
     private Integer handlerJsonObj(JSONObject jsonObj) {
         Integer id = jsonObj.getInt("id");
-
+        System.out.println("========"+jsonObj.toString());
         String data = jsonObj.getString("data");
-        if("clockin".equals(data)) { //打卡记录
+        if("clockin".equalsIgnoreCase(data)) { //打卡记录
+            System.out.println("======开始打卡=========");
             Integer ccid = jsonObj.getInt("ccid"); //员工id
             String time = jsonObj.getString("time"); //打卡时间
+            Integer verify = jsonObj.getInt("verify"); //打卡验证方式
+            clockinTools.clockin(ccid, time, verify); //员工打卡
         }
 
         return id;

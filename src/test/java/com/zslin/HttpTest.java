@@ -49,7 +49,7 @@ public class HttpTest {
 
     @Test
     public void testPost() {
-        String url = "http://192.168.1.110:81/api/data/post?sn=123456";
+        String url = "http://192.168.1.117:81/api/data/post?sn=123456";
 
         HttpClient client = HttpClients.createDefault();
         HttpPost post = new HttpPost(url);
@@ -74,6 +74,15 @@ public class HttpTest {
         json2.put("fingerprint", "[\"base64\",\"base64\"]");
 
         array.put(json2);
+
+        JSONObject json3 = new JSONObject();
+        json3.put("id", 5);
+        json3.put("ccid", 1);
+        json3.put("data", "clockin");
+        json3.put("time", "2017-04-18 11:55:46");
+        json3.put("verify", 0);
+        array.put(json3);
+
         try {
             post.addHeader("Content-type", "application/json; charset=utf-8");
             post.setHeader("Accept", "application/json");

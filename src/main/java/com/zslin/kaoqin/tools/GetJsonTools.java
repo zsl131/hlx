@@ -24,7 +24,9 @@ public class GetJsonTools {
         sb.append("{id:\"0\",do:\"update\",data:\"config\",name:\"").append(company.getName()).
                 append("\",company:\"").append(company.getLongName()).append("\",companyid:").
                 append(company.getId()).append(",max:3000,function:65535,delay:").append(company.getDelay()).
-                append(",errdelay:").append(company.getErrdelay()).append(",timezone:+8,encrypt:0,expired:\"2055-12-10 12:10:10\"}");
+                append(",errdelay:").append(company.getErrdelay()).
+                append(",timezone:\"GMT+08:00\",encrypt:0,expired:\"2055-12-10 12:10:10\"}");
+                //append(",timezone:+8,encrypt:0,expired:\"2055-12-10 12:10:10\"}");
         return sb.toString();
     }
 
