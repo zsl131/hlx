@@ -1,0 +1,39 @@
+.month-ul {
+    width:100%; border:1px #ddd solid; padding:0px; float:left; background:#eee; margin:0px;
+}
+.month-ul li {
+    display:inline; list-style:none; width:14.285%; text-align:center; float:left; padding:8px 0px;
+}
+
+.data-ul {
+    float:left; width:100%; border:1px #ddd solid; border-top:none; margin:0px; padding:0px;
+}
+.data-ul li {
+    list-style:none; width:14.285%; float:left; height:35px; text-align:center; border:1px #ddd solid; border-width:0px 0px 1px 1px; line-height:30px; color:#777; position:relative;
+}
+.data-ul li.hover {
+    background:#dff5f9;
+}
+.data-ul li p {
+    position:absolute; bottom:-10px; width:100%; float:left; line-height:18px;
+}
+.data-ul li p .fa-check-circle {
+    color:#019f13;
+}
+.data-ul li p .fa-info-circle {
+    color:#F60;
+}
+.data-ul li p .fa-question-circle {
+    color:#a20;
+}
+.day-span {
+    position:absolute; left:1px; top:1px; font-size:8px; line-height:12px; text-align:center; width:12px; height:12px; float:left; background:#ddd; border-radius:30px; color:#444;
+}
+
+
+.exception-count {
+    color:#888; float:left; width:100%; line-height:40px;
+}
+.exception-count b {
+    color:#F60;
+}

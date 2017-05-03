@@ -57,6 +57,12 @@ public class AdminWorkdayController {
     @RequestMapping(value="update/{id}", method=RequestMethod.POST)
     public String update(Model model, @PathVariable Integer id, Workday workday, HttpServletRequest request) {
         if(TokenTools.isNoRepeat(request)) {
+            if(workday.getSbsj1()!=null) {workday.setSbsj1(workday.getSbsj1().replace("：", ":"));}
+            if(workday.getXbsj1()!=null) {workday.setXbsj1(workday.getXbsj1().replace("：", ":"));}
+            if(workday.getSbsj2()!=null) {workday.setSbsj2(workday.getSbsj2().replace("：", ":"));}
+            if(workday.getXbsj2()!=null) {workday.setXbsj2(workday.getXbsj2().replace("：", ":"));}
+            if(workday.getSbsj3()!=null) {workday.setSbsj3(workday.getSbsj3().replace("：", ":"));}
+            if(workday.getXbsj3()!=null) {workday.setXbsj3(workday.getXbsj3().replace("：", ":"));}
             Workday w = workdayService.findOne(id);
 
             MyBeanUtils.copyProperties(workday, w, new String[]{"id", "workerId", "workerName", "workerIdentity"});

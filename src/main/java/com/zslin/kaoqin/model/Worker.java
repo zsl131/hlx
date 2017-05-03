@@ -47,6 +47,24 @@ public class Worker {
      */
     private String isCashier="0";
 
+    /** 自己上传的头像 */
+    @Column(name = "head_pic")
+    private String headPic;
+
+    @Column(name = "account_id")
+    private Integer accountId;
+
+    /** 微信端头像 */
+    private String headimgurl;
+
+    public String getHeadPic() {
+        return headPic;
+    }
+
+    public void setHeadPic(String headPic) {
+        this.headPic = headPic;
+    }
+
     public String getIsCashier() {
         return isCashier;
     }
@@ -70,12 +88,6 @@ public class Worker {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    @Column(name = "account_id")
-    private Integer accountId;
-
-    /** 微信端头像 */
-    private String headimgurl;
 
     public String getOpenid() {
         return openid;

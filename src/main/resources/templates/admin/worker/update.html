@@ -39,6 +39,16 @@
 		</div>
 
 		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">图片：</div>
+				<div class="" style="border:1px #ddd solid; padding:5px;">
+					<a  th:if="${worker.headPic ne NULL and worker.headPic ne ''}" th:href="${worker.headPic}" target="_blank"><img th:src="${worker.headPic}" style="width:100px;"/></a>
+					<input name="file" type="file"/>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
 			<div class="input-group input-group-lg">
 				<div class="input-group-addon">部门：</div>
 				<div class="form-control">
