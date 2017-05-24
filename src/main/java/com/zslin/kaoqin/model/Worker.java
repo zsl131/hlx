@@ -57,6 +57,17 @@ public class Worker {
     /** 微信端头像 */
     private String headimgurl;
 
+    /** 状态，1-在职；2-离职 */
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getHeadPic() {
         return headPic;
     }

@@ -31,6 +31,7 @@
 						<th>部门</th>
 						<th>电话</th>
 						<th>身份证号</th>
+						<th>状态</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -47,6 +48,10 @@
 					<td th:text="${obj.depId eq 1 ? '前厅':'后厨'}"></td>
 					<td th:text="${obj.phone}"></td>
 					<td th:text="${obj.identity}"></td>
+					<td th:switch="${obj.status}">
+						<span th:case="1" style="color:#00F">在职</span>
+						<span th:case="2" style="color:#F00">离职</span>
+					</td>
 					<td>
 						<div class="action-buttons">
 							<a class="green auth" sn="AdminWorkerController.update" title="修改" th:href="'/admin/worker/update/'+${obj.id}">

@@ -86,6 +86,7 @@ public class AdminWorkerController {
     public String add(Model model, Worker worker, HttpServletRequest request, @RequestParam("file")MultipartFile[] files) {
         if(TokenTools.isNoRepeat(request)) { //不是重复提交
             Worker w = workerService.findByPhone(worker.getPhone());
+            worker.setStatus("1"); //添加时表示都为在职
             if(w!=null) {
                 throw new SystemException("手机号码【"+worker.getPhone()+"】已经存在");
             }
@@ -100,6 +101,7 @@ public class AdminWorkerController {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
                         File outFile = new File(configTools.getUploadPath(PATH_PRE) + "/" + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+
                         worker.setHeadPic(outFile.getAbsolutePath().replace(configTools.getUploadPath(), "\\"));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
@@ -167,6 +169,7 @@ public class AdminWorkerController {
                         if(oldFile.exists()) {oldFile.delete();}
 
                         File outFile = new File(configTools.getUploadPath(PATH_PRE) + "/" + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+
                         w.setHeadPic(outFile.getAbsolutePath().replace(configTools.getUploadPath(), "\\"));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
