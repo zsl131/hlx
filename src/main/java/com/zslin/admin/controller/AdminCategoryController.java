@@ -39,7 +39,7 @@ public class AdminCategoryController {
     @Autowired
     private ConfigTools configTools;
 
-    private static final String PATH_PRE = "category/";
+    private static final String PATH_PRE = "category";
 
     @GetMapping(value = "list")
     @AdminAuth(name = "分类管理", orderNum = 1, type = "1", icon = "fa fa-tasks")
@@ -67,8 +67,8 @@ public class AdminCategoryController {
                 try {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + "/" + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        category.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), "\\"));
+                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        category.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -111,8 +111,8 @@ public class AdminCategoryController {
                         File oldFile = new File(configTools.getUploadPath()+c.getPicPath());
                         if(oldFile.exists()) {oldFile.delete();}
 
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + "/" + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        c.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), "\\"));
+                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        c.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {

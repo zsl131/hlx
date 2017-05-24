@@ -38,7 +38,7 @@ public class AdminGalleryController {
     @Autowired
     private ConfigTools configTools;
 
-    private static final String PATH_PRE = "gallery/";
+    private static final String PATH_PRE = "gallery";
 
     @GetMapping(value = "list")
     @AdminAuth(name = "微信画廊管理", orderNum = 1, type = "1", icon = "fa fa-image")
@@ -66,8 +66,8 @@ public class AdminGalleryController {
                 try {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + "/" + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        gallery.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), "\\"));
+                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        gallery.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -110,8 +110,8 @@ public class AdminGalleryController {
                         File oldFile = new File(configTools.getUploadPath()+g.getPicPath());
                         if(oldFile.exists()) {oldFile.delete();}
 
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + "/" + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        g.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), "\\"));
+                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        g.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {

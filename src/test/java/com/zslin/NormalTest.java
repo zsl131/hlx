@@ -20,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.ClassUtils;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,6 +39,12 @@ public class NormalTest {
 
     @Autowired
     private KaoqinFileTools kaoqinFileTools;
+
+    @Test
+    public void test16() {
+        System.out.println(File.pathSeparator);
+        System.out.println(File.separator);
+    }
 
     @Test
     public void test() {
