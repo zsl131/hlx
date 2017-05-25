@@ -121,6 +121,13 @@ public class DatasTools {
             feedbackService.save(f);
 
             scoreTools.processScore(openid, ScoreRule.SEND_MESSAGE); //关注时送积分
+
+//            List<String> adminOpenids = accountService.findOpenid(AccountTools.ADMIN);
+            List<String> adminOpenids = accountTools.getOpenid(AccountTools.ADMIN);
+            StringBuffer sb = new StringBuffer();
+            sb.append("反馈用户：").append(f.getNickname()).append(" \\n")
+                    .append("反馈内容：").append(content);
+            eventTools.eventRemind(adminOpenids, "在线反馈", "收到在线反馈信息", NormalTools.curDate("yyyy-MM-dd HH:mm"), sb.toString(), "/wx/feedback/list");
             return "";
         }
     }
@@ -208,7 +215,6 @@ public class DatasTools {
         }
         accountService.save(a);
 
-        System.out.println("========关注============");
         addWallet(a); //添加钱包
 
         scoreTools.processScore(openid, ScoreRule.INIT); //关注时送积分
