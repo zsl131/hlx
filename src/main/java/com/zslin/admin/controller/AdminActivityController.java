@@ -25,14 +25,14 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping(value = "admin/activity")
-@AdminAuth(name = "活动管理", psn = "应用管理", orderNum = 4, porderNum = 1, pentity = 0, icon = "fa fa-gamepad")
+//@AdminAuth(name = "活动管理", psn = "应用管理", orderNum = 4, porderNum = 1, pentity = 0, icon = "fa fa-gamepad")
 public class AdminActivityController {
 
     @Autowired
     private IActivityService activityService;
 
     @GetMapping(value = "list")
-    @AdminAuth(name = "活动管理", type = "1", orderNum = 1, icon = "fa fa-gamepad")
+//    @AdminAuth(name = "活动管理", type = "1", orderNum = 1, icon = "fa fa-gamepad")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<Activity> datas = activityService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
@@ -41,7 +41,7 @@ public class AdminActivityController {
     }
 
     @Token(flag= Token.READY)
-    @AdminAuth(name = "添加活动", orderNum = 2, icon="fa fa-plus")
+//    @AdminAuth(name = "添加活动", orderNum = 2, icon="fa fa-plus")
     @RequestMapping(value="add", method= RequestMethod.GET)
     public String add(Model model, HttpServletRequest request) {
         model.addAttribute("activity", new Activity());
@@ -58,7 +58,7 @@ public class AdminActivityController {
     }
 
     @Token(flag= Token.READY)
-    @AdminAuth(name="修改活动", orderNum=3, icon = "fa fa-pencil")
+//    @AdminAuth(name="修改活动", orderNum=3, icon = "fa fa-pencil")
     @RequestMapping(value="update/{id}", method=RequestMethod.GET)
     public String update(Model model, @PathVariable Integer id, HttpServletRequest request) {
         Activity a = activityService.findOne(id);

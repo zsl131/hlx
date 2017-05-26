@@ -39,7 +39,7 @@ public class AdminCommodityController {
     @Autowired
     private ICommodityService commodityService;
 
-    private static final String PATH_PRE = "commodity/";
+    private static final String PATH_PRE = "commodity";
 
     @Autowired
     private ConfigTools configTools;
@@ -82,8 +82,8 @@ public class AdminCommodityController {
                 try {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + "/" + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        commodity.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), "\\"));
+                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        commodity.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -131,8 +131,8 @@ public class AdminCommodityController {
                                 oldFile.delete();
                             }
 
-                            File outFile = new File(configTools.getUploadPath(PATH_PRE) + "/" + UUID.randomUUID().toString() + NormalTools.getFileType(fileName));
-                            c.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), "\\"));
+                            File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString() + NormalTools.getFileType(fileName));
+                            c.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
                             FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                         }
                     } catch (IOException e) {

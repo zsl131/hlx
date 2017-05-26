@@ -5,10 +5,7 @@ import com.zslin.basic.annotations.Token;
 import com.zslin.basic.exception.SystemException;
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
-import com.zslin.basic.tools.MyBeanUtils;
-import com.zslin.basic.tools.NormalTools;
-import com.zslin.basic.tools.SecurityUtil;
-import com.zslin.basic.tools.TokenTools;
+import com.zslin.basic.tools.*;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.ClientJsonTools;
@@ -21,14 +18,20 @@ import com.zslin.kaoqin.tools.KaoqinFileTools;
 import com.zslin.web.model.Account;
 import com.zslin.web.service.IAccountService;
 import com.zslin.wx.tools.EventTools;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/2/27 16:47.
@@ -56,6 +59,11 @@ public class AdminWorkerController {
     @Autowired
     private IWorkdayService workdayService;
 
+    private static final String PATH_PRE = "worker/";
+
+    @Autowired
+    private ConfigTools configTools;
+
     @GetMapping(value = "list")
     @AdminAuth(name = "员工信息列表", type = "1", orderNum = 1, icon = "fa fa-users")
     public String list(Model model, Integer page, HttpServletRequest request) {
@@ -75,15 +83,37 @@ public class AdminWorkerController {
 
     @Token(flag= Token.CHECK)
     @RequestMapping(value="add", method=RequestMethod.POST)
-    public String add(Model model, Worker worker, HttpServletRequest request) {
+    public String add(Model model, Worker worker, HttpServletRequest request, @RequestParam("file")MultipartFile[] files) {
         if(TokenTools.isNoRepeat(request)) { //不是重复提交
             Worker w = workerService.findByPhone(worker.getPhone());
+            worker.setStatus("1"); //添加时表示都为在职
             if(w!=null) {
                 throw new SystemException("手机号码【"+worker.getPhone()+"】已经存在");
             }
             try {
                 worker.setPassword(SecurityUtil.md5("123456789")); //所有员工默认密码为123456789
             } catch (NoSuchAlgorithmException e) {
+            }
+
+            if(files!=null && files.length>=1) {
+                BufferedOutputStream bw = null;
+                try {
+                    String fileName = files[0].getOriginalFilename();
+                    if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
+                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + "/" + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+
+                        worker.setHeadPic(outFile.getAbsolutePath().replace(configTools.getUploadPath(), "\\"));
+                        FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if(bw!=null) {bw.close();}
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             bind(worker);
@@ -118,7 +148,7 @@ public class AdminWorkerController {
 
     @Token(flag= Token.CHECK)
     @RequestMapping(value="update/{id}", method=RequestMethod.POST)
-    public String update(Model model, @PathVariable Integer id, Worker worker, HttpServletRequest request) {
+    public String update(Model model, @PathVariable Integer id, Worker worker, HttpServletRequest request, @RequestParam("file")MultipartFile[] files) {
         if(TokenTools.isNoRepeat(request)) {
             Worker w = workerService.findOne(id);
 
@@ -128,6 +158,31 @@ public class AdminWorkerController {
             }
 
             MyBeanUtils.copyProperties(worker, w, new String[]{"id", "password"});
+
+            if(files!=null && files.length>=1) {
+                BufferedOutputStream bw = null;
+                try {
+                    String fileName = files[0].getOriginalFilename();
+                    if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
+
+                        File oldFile = new File(configTools.getUploadPath()+w.getHeadPic());
+                        if(oldFile.exists()) {oldFile.delete();}
+
+                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + "/" + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+
+                        w.setHeadPic(outFile.getAbsolutePath().replace(configTools.getUploadPath(), "\\"));
+                        FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if(bw!=null) {bw.close();}
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
 
             bind(w);
 

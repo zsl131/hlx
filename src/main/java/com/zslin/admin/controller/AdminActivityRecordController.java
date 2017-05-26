@@ -19,14 +19,14 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping(value = "admin/activityRecord")
-@AdminAuth(name = "活动记录", porderNum = 1, orderNum = 5, pentity = 0, psn = "应用管理", icon = "fa fa-file-text-o")
+//@AdminAuth(name = "活动记录", porderNum = 1, orderNum = 5, pentity = 0, psn = "应用管理", icon = "fa fa-file-text-o")
 public class AdminActivityRecordController {
 
     @Autowired
     private IActivityRecordService activityRecordService;
 
     @GetMapping(value = "list")
-    @AdminAuth(name = "活动记录", orderNum = 1, type = "1", icon = "fa fa-file-text-o")
+//    @AdminAuth(name = "活动记录", orderNum = 1, type = "1", icon = "fa fa-file-text-o")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<ActivityRecord> datas = activityRecordService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
                 SimplePageBuilder.generate(page));

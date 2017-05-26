@@ -1,14 +1,16 @@
 package com.zslin;
 
 import com.zslin.basic.tools.NormalTools;
-import com.zslin.kaoqin.tools.ClockinTools;
-import com.zslin.kaoqin.tools.GetJsonTools;
-import com.zslin.kaoqin.tools.KaoqinFileTools;
-import com.zslin.kaoqin.tools.PicTools;
+import com.zslin.kaoqin.dto.DayDto;
+import com.zslin.kaoqin.dto.MonthDto;
+import com.zslin.kaoqin.model.Clockin;
+import com.zslin.kaoqin.service.IClockinService;
+import com.zslin.kaoqin.tools.*;
 import com.zslin.sms.tools.RandomTools;
+import com.zslin.sms.tools.SmsConfig;
+import com.zslin.sms.tools.SmsTools;
 import com.zslin.web.model.WeixinConfig;
 import com.zslin.web.tools.CommonTools;
-import com.zslin.wx.tools.JsonTools;
 import com.zslin.wx.tools.WxConfig;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,6 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.ClassUtils;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,6 +41,23 @@ public class NormalTest {
 
     @Autowired
     private KaoqinFileTools kaoqinFileTools;
+
+    @Autowired
+    private SmsTools smsTools;
+
+    @Autowired
+    private SmsConfig smsConfig;
+
+    @Test
+    public void test19() {
+        smsTools.sendMsg(Integer.parseInt(smsConfig.getSendCodeIid()), "15925061256", "code", "123456");
+    }
+
+    @Test
+    public void test16() {
+        System.out.println(File.pathSeparator);
+        System.out.println(File.separator);
+    }
 
     @Test
     public void test() {
@@ -174,7 +194,91 @@ public class NormalTest {
 
     @Test
     public void test13() {
-        String clockTime = "2017-04-16 11:59:59";
+        String clockTime = "2017-04-20 08:22:59";
         clockinTools.clockin(1, clockTime, 1);
+    }
+
+    @Autowired
+    private IClockinService clockinService;
+
+    @Test
+    public void test14() throws Exception {
+        String month = "2017-03-";
+        for(int i=12; i<=31;i++) {
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            for(int j=1;j<=4;j++) {
+                cal.setTime(sdf.parse(month + i));
+                Clockin c = new Clockin();
+                c.setDepId(1);
+                c.setWorkerId(2);
+                c.setWorkerName("张三");
+                c.setVerify(1);
+                c.setCurDay(sdf.format(cal.getTime()));
+                c.setWeekday(getWeekday(cal));
+                c.setDay(cal.get(Calendar.DAY_OF_MONTH));
+                c.setMonth(cal.get(Calendar.MONTH)+1);
+                c.setYear(cal.get(Calendar.YEAR));
+                c.setTime("2017-04-20 08:22:59");
+                c.setStep(j+"");
+                c.setFlag(Math.random() < 0.4 ? 0 : 1);
+                clockinService.save(c);
+            }
+        }
+//        System.out.println(getWeekday("2017-03-15"));
+    }
+
+    private String getWeekday(Calendar cal) {
+        try {
+            String[] weekDays = {"日", "一", "二", "三", "四", "五", "六"};
+
+            int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
+            if (w < 0)
+                w = 0;
+            return weekDays[w];
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Test
+    public void test15() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String str = "2017-3-5";
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(sdf.parse(str));
+        System.out.println(sdf.format(cal.getTime()));
+        System.out.println(cal.get(Calendar.DAY_OF_WEEK));
+    }
+
+    /*@Test
+    public void test16() {
+        List<MonthDto> list = ClockinShowTools.initBefore(2017, 3, 1);
+        System.out.println("3====="+list.size());
+        list = ClockinShowTools.initBefore(2017, 3, 15);
+        System.out.println("17====="+list.size());
+        list = ClockinShowTools.initBefore(2017, 3, 18);
+        System.out.println("20====="+list.size());
+    }*/
+
+    @Autowired
+    private ClockinShowTools clockinShowTools;
+
+    @Test
+    public void test17() {
+        MonthDto dto = clockinShowTools.buildWorkerClockin(2017, 3, 2);
+        System.out.println(dto);
+        for(DayDto d : dto.getList()) {
+            System.out.println(d==null?"-":d);
+        }
+    }
+
+    @Test
+    public void test18() {
+        String str = NormalTools.curDate("yyyy-MM");
+        String [] array = str.split("-");
+        System.out.println(array[0]+"======"+array[1]);
+        System.out.println(Integer.parseInt(array[0])+"===="+Integer.parseInt(array[1]));
     }
 }

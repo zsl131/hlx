@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel" style="background:#eff4f7;">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-feedback-list.css"/>
+    <script type="text/javascript" src="/weixin/weixin-feedback-list.js"></script>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+</head>
+<body style="background:#eff4f7;">
+<div th:fragment="content" th:remove="tag">
+    <div class="page">
+        <div class="page__hd" style="padding-left:10px;padding-right:10px; background:#fafafa; border-bottom:1px #ececec solid;">
+            <div class="weui-flex">
+                <div class="weui-flex__item">
+                    <h1 class="page__title" style="color:#F60;"><i class="fa fa-quote-left" style="color:#ddd"></i> <b th:text="${datas.getTotalElements()}"></b> <i style="color:#ddd" class="fa fa-quote-right"></i></h1>
+                    <p class="page__desc">消息数量</p>
+                </div>
+                <div class="weui-flex__item" style="position:relative;">
+                    <a href="/weixin/article/detail?id=2" style="position:absolute; bottom:10px;"><i class="fa fa-info"></i> 发消息可赚积分！</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="page" >
+        <input name="isAdmin" th:value="${isAdmin}" type="hidden"/>
+        <ul class="data-list-ul">
+            <li th:each="obj : ${datas}" class="single-feedback" th:attr="objId=${obj.id}">
+                <p class="date">
+                    <img th:src="${obj.headimgurl}" style="width:28px;"/>
+                    <span th:text="${obj.nickname}"></span>
+                    <span th:text="${obj.createTime}"></span>
+                </p>
+                <p class="con" th:text="${obj.content}" th:if="${obj.type eq 'text'}"></p>
+                <p class="con" th:if="${obj.type eq 'image'}">
+                    <img th:src="${obj.filePath}" style="width:30%;"/>
+                </p>
+
+                <div class="reply" th:if="${obj.reply ne null}">
+                    <p class="date" th:text="${obj.replyTime}"></p>
+                    <p class="rep-con" th:text="${obj.reply}"></p>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
+</div>
+</body>
+</html>

@@ -31,7 +31,9 @@ public class AdminCompanyController {
     @AdminAuth(name="公司信息维护", orderNum=1, icon="fa fa-cog", type="1")
     @RequestMapping(value="index", method= RequestMethod.GET)
     public String index(Model model, HttpServletRequest request) {
-        model.addAttribute("company", companyService.loadOne());
+        Company company = companyService.loadOne();
+        if(company==null) {company = new Company();}
+        model.addAttribute("company", company);
         return "admin/company/index";
     }
 

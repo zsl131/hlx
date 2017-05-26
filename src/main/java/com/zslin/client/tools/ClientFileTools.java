@@ -52,7 +52,7 @@ public class ClientFileTools {
     }
 
     private File getFile(String fileName) {
-        File file = new File(configTools.getUploadPath("/client/")+fileName);
+        File file = new File(configTools.getUploadPath("client")+fileName);
         if(!file.exists()) {createFile(fileName);}
         return file;
     }

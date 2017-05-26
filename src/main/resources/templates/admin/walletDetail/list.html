@@ -34,6 +34,7 @@
 						<th>方式</th>
 						<th>原因</th>
 						<th>量</th>
+						<th>日期</th>
 					</tr>
 				</thead>
 
@@ -46,6 +47,7 @@
 					</td>
 					<td th:text="${obj.reason}"></td>
 					<td><b th:text="${obj.flag eq '1'?'+':''}"></b><span th:text="${obj.amount}"></span> <span th:text="${obj.type eq '1'?'元':'分'}"></span></td>
+					<td th:text="${obj.createTime}"></td>
 				</tr>
 			</table>
 

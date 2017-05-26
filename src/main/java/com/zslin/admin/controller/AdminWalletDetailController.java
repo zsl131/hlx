@@ -2,6 +2,7 @@ package com.zslin.admin.controller;
 
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.repository.SimplePageBuilder;
+import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.web.model.WalletDetail;
 import com.zslin.web.service.IWalletDetailService;
@@ -29,7 +30,7 @@ public class AdminWalletDetailController {
     @AdminAuth(name = "钱包明细", type = "1", orderNum = 1, icon = "fa fa-sliders")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<WalletDetail> datas = walletDetailService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
-                SimplePageBuilder.generate(page));
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
         model.addAttribute("datas", datas);
         return "admin/walletDetail/list";
     }

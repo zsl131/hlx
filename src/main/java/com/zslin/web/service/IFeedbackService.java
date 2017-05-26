@@ -2,6 +2,8 @@ package com.zslin.web.service;
 
 import com.zslin.basic.repository.BaseRepository;
 import com.zslin.web.model.Feedback;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +23,7 @@ public interface IFeedbackService extends BaseRepository<Feedback, Integer>, Jpa
 
     @Query("SELECT COUNT(id) FROM Feedback f WHERE f.openid=?1")
     Integer findCount(String opeind);
+
+    @Query("FROM Feedback f WHERE (f.status='1' OR f.openid=?1)")
+    Page<Feedback> findAll(String openid, Pageable pageable);
 }

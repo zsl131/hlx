@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="/echart/echarts.min.js"></script>
+    <script src="/echart/dark.js"></script>
+    <script src="/echart/myself/my-echarts.js"></script>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}"></title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <input id="amount" th:value="${amount}" type="hidden"/>
+    <nav class="navbar navbar-default navbar-fixed-top" style="height:35px; min-height:0px;">
+        <div class="btn-group btn-group-justified" role="group" style="margin-top:1px;">
+            <a href="/wx/cal/index?amount=1" th:class="'btn '+${amount eq '1'?'btn-info':'btn-default'}">今天</a>
+            <a href="/wx/cal/index?amount=2" th:class="'btn '+${amount eq '2'?'btn-info':'btn-default'}">今天</a>
+            <a href="/wx/cal/index?amount=3" th:class="'btn '+${amount eq '3'?'btn-info':'btn-default'}">前7天</a>
+            <a href="/wx/cal/index?amount=4" th:class="'btn '+${amount eq '4'?'btn-info':'btn-default'}">本月</a>
+            <a href="/wx/cal/index?amount=5" th:class="'btn '+${amount eq '5'?'btn-info':'btn-default'}">上月</a>
+        </div>
+    </nav>
+    <p style="height:30px; width:100%;float:left;"></p>
+    <div class="alert alert-default" ><div class="show-pie" id="buildCountData" href="/wx/datas/buildCountData" style="width: 94%;height:200px; margin:0px 3%;"></div></div>
+    <div class="alert alert-default" ><div class="show-bar" id="buildCountData2" href="/wx/datas/buildMoneyData" style="width: 94%;height:200px; margin:0px 3%;"></div></div>
+</div>
+</body>
+</html>

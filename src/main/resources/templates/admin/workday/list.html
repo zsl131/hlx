@@ -16,7 +16,7 @@
 <body>
 	<div th:fragment="content" th:remove="tag">
 		<div class="header lighter smaller blue">
-			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;员工列表（<span th:text="${datas.getTotalElements()}"></span>）</h3>
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;员工作息时间列表（<span th:text="${datas.getTotalElements()}"></span>）</h3>
 			<div th:replace="admin/workday/nav :: content" th:remove="tag"></div>
 		</div>
 

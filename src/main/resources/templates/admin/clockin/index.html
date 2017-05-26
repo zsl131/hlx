@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>员工考勤统计</title>
+		<script src="/js/jedate/jquery.jedate.min.js"></script>
+		<link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
+		<script src="/admin/bus/my-date.js"></script>
+		<script type="text/javascript" src="/admin/bus/admin-clockin.js"></script>
+		<link type="text/css" rel="stylesheet" href="/admin/bus/admin-clockin.css"/>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;员工考勤统计（<span th:text="${#lists.size(datas)}"></span>）</h3>
+			<div th:replace="admin/clockin/nav :: content" th:remove="tag"></div>
+		</div>
+
+		<div class="form-inline" style="padding-bottom:10px;">
+			<div class="input-group">
+				<span class="input-group-addon">年月</span>
+				<input type='text' style="width:140px;" class='form-control' id="month" th:value="${month}" placeholder="yyyy-MM" readonly="readonly"/>
+			</div>
+
+			<span><button type="button" class="btn btn-primary btn-sm" id="submitClockinBtn">查询</button></span>
+		</div>
+
+		<div class="table-responsive">
+			<div class="col-md-6 col-sm-6 col-xs-6"  th:each="dto : ${datas}">
+				<div class="panel panel-info">
+					<div class="panel-heading"><span th:text="${dto.year}"></span>年<span th:text="${dto.month}"></span>月份【<b th:text="${dto.workerName}"></b>】的考勤情况</div>
+					<div class="panel-body">
+						<ul class="month-ul">
+							<li>周日</li>
+							<li>周一</li>
+							<li>周二</li>
+							<li>周三</li>
+							<li>周四</li>
+							<li>周五</li>
+							<li>周六</li>
+						</ul>
+						<ul class="data-ul">
+							<li th:each="day : ${dto.list}">
+								<span th:if="${day eq null}">-</span>
+								<div th:if="${day ne null}" th:remove="tag">
+									<span class="day-span" th:if="${day ne null}" th:text="${day.day}"></span>
+									<p>
+										<b th:each="flag : ${day.res}" th:class="'fa '+${flag.value eq '1'?'fa-check-circle':(flag.value eq '-1'?'fa-question-circle':'fa-info-circle')}" th:title="${flag.value eq '1'?'正常':(flag.value eq '-1'?'未打卡':'迟到或早退')}"></b>
+									</p>
+								</div>
+							</li>
+						</ul>
+						<div class="exception-count">迟到或早退次数：<b th:text="${dto.lateCount}"></b>，未打卡次数：<b th:text="${dto.unmarkCount}"></b>，异常合计：<b th:text="${dto.lateCount + dto.unmarkCount}"></b></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

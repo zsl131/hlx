@@ -49,6 +49,17 @@ public class ClockinTools {
             c.setCurDay(clockTime.split(" ")[0]);
             c.setWeekday(getWeekday(clockTime));
 
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(sdf.parse(clockTime));
+                c.setYear(cal.get(Calendar.YEAR));
+                c.setMonth(cal.get(Calendar.MONTH)+1);
+                c.setDay(cal.get(Calendar.DAY_OF_MONTH));
+            } catch (ParseException e) {
+//                e.printStackTrace();
+            }
+
             clockinService.save(c);
         }
     }
