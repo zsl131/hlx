@@ -9,6 +9,21 @@
                     <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_nickname'/>
                 </div>
                 <div class="input-group">
+                    <span class="input-group-addon">邀请人</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_followUserName'/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">类型</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_type'>
+                        <option value="">=全部=</option>
+                        <option value="0">顾客</option>
+                        <option value="1">员工</option>
+                        <option value="2">经理</option>
+                        <option value="5">股东</option>
+                        <option value="10">管理员</option>
+                    </select>
+                </div>
+                <div class="input-group">
                     <span class="input-group-addon">绑定</span>
                     <select class='filter_element form-control' opt="eq" name='filter_bindPhone'>
                         <option value="">=全部=</option>

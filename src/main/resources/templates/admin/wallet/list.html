@@ -13,6 +13,7 @@
 			});
 		</script>
 		<script type="text/javascript" src="/admin/bus/money-show.js"></script>
+		<script type="text/javascript" src="/admin/bus/admin-wallet.js"></script>
 		<style>
 			.head-img {border-radius:5px; width:50px;}
 		</style>
@@ -33,6 +34,7 @@
 						<th>昵称</th>
 						<th>现金余额</th>
 						<th>积分余额</th>
+						<th>操作</th>
 					</tr>
 				</thead>
 
@@ -40,6 +42,9 @@
 					<td th:text="${obj.accountName}"></td>
 					<td th:text="${obj.money}" class="show-money"></td>
 					<td th:text="${obj.score}+' 分'"></td>
+					<td>
+						<a href="javascript:void(0)" class="auth single-wallet" th:attr="phone=${obj.phone}, openid=${obj.openid}" sn="AdminWalletController.plus">充值</a>
+					</td>
 				</tr>
 			</table>
 

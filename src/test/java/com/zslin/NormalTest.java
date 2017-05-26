@@ -7,6 +7,8 @@ import com.zslin.kaoqin.model.Clockin;
 import com.zslin.kaoqin.service.IClockinService;
 import com.zslin.kaoqin.tools.*;
 import com.zslin.sms.tools.RandomTools;
+import com.zslin.sms.tools.SmsConfig;
+import com.zslin.sms.tools.SmsTools;
 import com.zslin.web.model.WeixinConfig;
 import com.zslin.web.tools.CommonTools;
 import com.zslin.wx.tools.WxConfig;
@@ -39,6 +41,17 @@ public class NormalTest {
 
     @Autowired
     private KaoqinFileTools kaoqinFileTools;
+
+    @Autowired
+    private SmsTools smsTools;
+
+    @Autowired
+    private SmsConfig smsConfig;
+
+    @Test
+    public void test19() {
+        smsTools.sendMsg(Integer.parseInt(smsConfig.getSendCodeIid()), "15925061256", "code", "123456");
+    }
 
     @Test
     public void test16() {
