@@ -17,7 +17,7 @@ public class WalletDetailTools {
     @Autowired
     private IWalletDetailService walletDetailService;
 
-    public void addWalletDetail(Integer amount, String openid, Integer accountId, String accountName, String tranType, String reason, String type) {
+    public void addWalletDetail(Integer amount, String phone, String openid, Integer accountId, String accountName, String tranType, String reason, String type) {
         WalletDetail wd = new WalletDetail();
         wd.setCreateDate(new Date());
         wd.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
@@ -32,14 +32,15 @@ public class WalletDetailTools {
         wd.setReason(reason);
         wd.setTranType(tranType);
         wd.setType(type);
+        wd.setPhone(phone);
         walletDetailService.save(wd);
     }
 
-    public void addWalletDetailScore(Integer amount, String openid, Integer accountId, String accountName, String tranType, String reason) {
-        addWalletDetail(amount, openid, accountId, accountName, tranType, reason, "2");
+    public void addWalletDetailScore(Integer amount, String phone, String openid, Integer accountId, String accountName, String tranType, String reason) {
+        addWalletDetail(amount, phone, openid, accountId, accountName, tranType, reason, "2");
     }
 
-    public void addWalletDetailMoney(Integer amount, String openid, Integer accountId, String accountName, String tranType, String reason) {
-        addWalletDetail(amount, openid, accountId, accountName, tranType, reason, "1");
+    public void addWalletDetailMoney(Integer amount, String phone, String openid, Integer accountId, String accountName, String tranType, String reason) {
+        addWalletDetail(amount, phone, openid, accountId, accountName, tranType, reason, "1");
     }
 }

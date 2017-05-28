@@ -3,8 +3,12 @@ package com.zslin.admin.controller;
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
+import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
 import com.zslin.web.model.Wallet;
+import com.zslin.web.model.WalletDetail;
 import com.zslin.web.service.IWalletService;
 import com.zslin.wx.dbtools.MoneyTools;
 import com.zslin.wx.dbtools.ScoreTools;
@@ -36,6 +40,9 @@ public class AdminWalletController {
     @Autowired
     private ScoreTools scoreTools;
 
+    @Autowired
+    private ClientFileTools clientFileTools;
+
     @GetMapping(value = "list")
     @AdminAuth(name = "钱包管理", type = "1", orderNum = 1, icon = "fa fa-shopping-bag")
     public String list(Model model, Integer page, HttpServletRequest request) {
@@ -46,12 +53,13 @@ public class AdminWalletController {
     }
 
     @RequestMapping(value = "plus", method = RequestMethod.POST)
-    @AdminAuth(name = "钱包充值", type = "1", orderNum = 1, icon = "fa fa-plus")
+    @AdminAuth(name = "钱包充值", orderNum = 1, icon = "fa fa-plus")
     public @ResponseBody String plus(String phone, String type, Float amount, String reason) {
         try {
             //type-1-积分；type-2-现金
             if("2".equals(type)) {
                 moneyTools.processScoreByPhone(phone, (int) (amount * 100), reason);
+                sendWalletDetail2Client(phone, (int) (amount * 100));
             } else if("1".equals(type)) { //如果是对积分的操作，页面传过来的phone应该为openid
                 scoreTools.processScoreByAmount(phone, (int) (amount*1), reason);
             }
@@ -60,5 +68,23 @@ public class AdminWalletController {
             return "0";
         }
         return "1";
+    }
+
+    private void sendWalletDetail2Client(String phone, Integer amount) {
+        Wallet w = walletService.findByPhone(phone);
+        WalletDetail wd = new WalletDetail();
+        wd.setPhone(phone);
+        wd.setType("1");
+        wd.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
+        wd.setCreateLong(System.currentTimeMillis());
+        wd.setCreateTime(NormalTools.curDate("yyyy-MM-dd HH:mm:ss"));
+        wd.setAmount(amount);
+        wd.setOpenid(w.getOpenid());
+        wd.setAccountId(w.getAccountId());
+        wd.setAccountName(w.getAccountName());
+        wd.setId(1);
+
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildWalletDetail(wd));
+        clientFileTools.setChangeContext(content, true);
     }
 }

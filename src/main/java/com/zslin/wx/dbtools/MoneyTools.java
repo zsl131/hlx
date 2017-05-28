@@ -50,7 +50,7 @@ public class MoneyTools {
         Wallet wallet = walletService.findByPhone(phone);
         if(wallet==null) {wallet = initWallet(phone);}
         String openid = wallet.getOpenid();
-        walletDetailTools.addWalletDetailMoney(money/100, openid==null?wallet.getPhone():openid, wallet.getAccountId(), wallet.getAccountName(), type, typeCn);
+        walletDetailTools.addWalletDetailMoney(money/100, phone, openid==null?wallet.getPhone():openid, wallet.getAccountId(), wallet.getAccountName(), type, typeCn);
         walletService.plusMoneyByPhone(money, phone);
         memberService.plusMoneyByPhone(money, phone);
 

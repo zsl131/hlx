@@ -46,6 +46,16 @@ public class WalletDetail extends BaseEntity {
     /** 状态，0-正常；1-部份使用；2-全部使用；-1-过期 */
     private String status="0";
 
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public Integer getSurplus() {
         return surplus;
     }

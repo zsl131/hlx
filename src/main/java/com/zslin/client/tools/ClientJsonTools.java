@@ -76,4 +76,10 @@ public class ClientJsonTools {
         JsonDto jd = new JsonDto("prize", action, prize.getId(), prize);
         return JSON.toJSONString(jd);
     }
+
+    public static String buildWalletDetail(WalletDetail wd) {
+        wd.setCreateDate(null); //先移除日期
+        JsonDto jd = new JsonDto("walletDetail", "add", wd.getId(), wd);
+        return JSON.toJSONString(jd);
+    }
 }

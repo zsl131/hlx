@@ -51,7 +51,7 @@ public class ScoreTools {
                     }
                     if(count<sr.getAmount()) {
                         Integer score = sr.getScore();
-                        walletDetailTools.addWalletDetailScore(score, a.getOpenid(), a.getId(), a.getNickname(), scoreRuleType, sr.getName());
+                        walletDetailTools.addWalletDetailScore(score, a.getPhone(), a.getOpenid(), a.getId(), a.getNickname(), scoreRuleType, sr.getName());
                         walletService.plusScore(score, a.getOpenid());
 
                         StringBuffer sb = new StringBuffer();
@@ -77,7 +77,7 @@ public class ScoreTools {
             public void run() {
                 if(openid==null || "".equals(openid)) {return;}
                 Account a = accountService.findByOpenid(openid);
-                walletDetailTools.addWalletDetailScore(amount, a.getOpenid(), a.getId(), a.getNickname(), reason, reason);
+                walletDetailTools.addWalletDetailScore(amount, a.getPhone(), a.getOpenid(), a.getId(), a.getNickname(), reason, reason);
                 walletService.plusScore(amount, a.getOpenid());
 
                 StringBuffer sb = new StringBuffer();
