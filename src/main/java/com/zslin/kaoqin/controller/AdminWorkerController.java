@@ -118,8 +118,8 @@ public class AdminWorkerController {
 
             bind(worker);
 
-            buildWorkday(worker);
             workerService.save(worker);
+            buildWorkday(worker);
             sendWorker2Device(worker);
             sendWorker2Client("update", worker);
         }
@@ -132,7 +132,7 @@ public class AdminWorkerController {
             w = new Workday();
         }
         w.setWorkerName(worker.getName());
-        w.setWorkerId(w.getId());
+        w.setWorkerId(worker.getId());
         w.setWorkerIdentity(worker.getIdentity());
         workdayService.save(w);
     }

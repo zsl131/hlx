@@ -3,6 +3,7 @@ package com.zslin.admin.controller;
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.annotations.Token;
 import com.zslin.basic.repository.SimplePageBuilder;
+import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
@@ -45,7 +46,7 @@ public class AdminCommentController {
     @AdminAuth(name = "点评管理", type = "1", orderNum = 1, icon = "fa fa-comment")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<Comment> datas = commentService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
-                SimplePageBuilder.generate(page));
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
         model.addAttribute("datas", datas);
         return "admin/comment/list";
     }

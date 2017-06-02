@@ -25,6 +25,7 @@ $(function() {
                     hideLoadToast(toastId);
                     $(myDialog).remove();
                 }, "json");
+                $(myDialog).remove(); //提交后就移除
             }
         });
     });

@@ -28,6 +28,7 @@
 					<tr>
 						<th>头像</th>
 						<th>姓名</th>
+						<th>微信</th>
 						<th>部门</th>
 						<th>电话</th>
 						<th>身份证号</th>
@@ -45,6 +46,12 @@
 						<a th:if="${obj.headPic ne NULL and obj.headPic ne ''}" th:href="${obj.headPic}" target="_blank"><img th:src="${obj.headPic}" style="width:120px"/></a>
 					</td>
 					<td><span th:text="${obj.name}" th:remove="tag"></span><span th:if="${obj.isCashier eq '1'}">（收银员）</span></td>
+					<td>
+						<span th:if="${obj.openid eq NULL or obj.openid eq ''}" style="color:#F00;">未绑定</span>
+						<span th:if="${obj.openid ne NULL and obj.openid ne ''}">
+							<a th:if="${obj.headimgurl ne NULL and obj.headimgurl ne ''}" th:href="${obj.headimgurl}" target="_blank"><img th:src="${obj.headimgurl}" style="width:120px"/></a>
+						</span>
+					</td>
 					<td th:text="${obj.depId eq 1 ? '前厅':'后厨'}"></td>
 					<td th:text="${obj.phone}"></td>
 					<td th:text="${obj.identity}"></td>

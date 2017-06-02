@@ -45,8 +45,8 @@ public class ClientController {
 
     @PostMapping(value = "upload")
     public void upload(String token, @RequestBody String json) {
-        System.out.println("========"+token);
-        System.out.println("========json:"+json);
+//        System.out.println("========"+token);
+//        System.out.println("========json:"+json);
 
         clientPostHandler.handler(json);
     }
