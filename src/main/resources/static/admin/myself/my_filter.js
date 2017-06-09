@@ -7,7 +7,7 @@ $(function() {
             var val = $(this).val();
             var n = $(this).attr("name");
             var opt = $(this).attr("opt");
-            if(val!=""&&val!=-1) {
+            if(val!="") {
                 if(opt) {
                     params+=n+"="+opt+"-"+val+"&";
                 } else {

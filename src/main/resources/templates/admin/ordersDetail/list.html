@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/adminModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title th:text="${session.company ne null?session.company.name:'收银台'}">收银台</title>
+    <script src="/js/jedate/jquery.jedate.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
+    <script src="/admin/bus/my-date.js"></script>
+    <script src="/admin/bus/order-day.js"></script>
+</head>
+<body>
+    <div th:fragment="content" th:remove="tag">
+        <div class="container" style="background:#FFF; min-height:400px; height:100%; padding:15px;">
+            <div class="header lighter smaller blue" style="color:#555; padding-bottom:10px;">
+                <h4><span class="fa fa-list"></span>&nbsp;订单详情列表（<span th:text="${datas.getTotalElements()}"></span>）</h4>
+            </div>
+            <div th:replace="admin/ordersDetail/filter :: content" th:remove="tag"></div>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>订单编号</th>
+                        <th>类型</th>
+                        <th>名称</th>
+                        <th>日期</th>
+                        <th>价格</th>
+                    </tr>
+                    </thead>
+
+                    <tr th:each="obj : ${datas}">
+                        <td th:text="${obj.orderNo}"></td>
+                        <td>
+                            <span  th:switch="${obj.commodityType}" >
+                                <span th:case="1">午餐券</span>
+                                <span th:case="2">晚餐券</span>
+                                <span th:case="3">外卖单品</span>
+                            </span>
+                        </td>
+                        <td th:text="${obj.commodityName}">
+                        </td>
+                        <td th:text="${obj.createTime}"></td>
+                        <td th:text="${obj.price}"></td>
+                    </tr>
+                </table>
+
+                <div th:include="fragments/page :: pager" th:remove="tag"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -30,10 +30,8 @@ public class PostJsonTools {
 
     private Integer handlerJsonObj(JSONObject jsonObj) {
         Integer id = jsonObj.getInt("id");
-        System.out.println("========"+jsonObj.toString());
         String data = jsonObj.getString("data");
         if("clockin".equalsIgnoreCase(data)) { //打卡记录
-            System.out.println("======开始打卡=========");
             Integer ccid = jsonObj.getInt("ccid"); //员工id
             String time = jsonObj.getString("time"); //打卡时间
             Integer verify = jsonObj.getInt("verify"); //打卡验证方式

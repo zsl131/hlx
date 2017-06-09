@@ -10,6 +10,7 @@ import com.zslin.sms.tools.RandomTools;
 import com.zslin.sms.tools.SmsConfig;
 import com.zslin.sms.tools.SmsTools;
 import com.zslin.web.model.WeixinConfig;
+import com.zslin.web.service.IBuffetOrderDetailService;
 import com.zslin.web.tools.CommonTools;
 import com.zslin.wx.tools.WxConfig;
 import org.json.JSONArray;
@@ -47,6 +48,16 @@ public class NormalTest {
 
     @Autowired
     private SmsConfig smsConfig;
+
+    @Autowired
+    private IBuffetOrderDetailService buffetOrderDetailService;
+
+    @Test
+    public void test20() {
+        Integer n1 = buffetOrderDetailService.queryCount("2017-06-08", "66666");
+        Integer n2 = buffetOrderDetailService.queryCount("2017-06-08", "88888");
+        System.out.println(n1+"============"+n2);
+    }
 
     @Test
     public void test19() {

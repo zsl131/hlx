@@ -27,4 +27,7 @@ public interface ICommodityService extends BaseRepository<Commodity, Integer>, J
 
     @Query("FROM Commodity c WHERE c.type=?1")
     List<Commodity> listByType(String type);
+
+    @Query("SELECT c.price FROM Commodity c WHERE c.no=?1")
+    Float queryPrice(String no);
 }

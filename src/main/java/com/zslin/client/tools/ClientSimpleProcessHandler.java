@@ -10,12 +10,14 @@ import com.zslin.web.model.*;
 import com.zslin.web.service.*;
 import com.zslin.wx.dbtools.MoneyTools;
 import com.zslin.wx.dto.EventRemarkDto;
+import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.EventTools;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/17 22:50.
@@ -49,6 +51,9 @@ public class ClientSimpleProcessHandler {
 
     @Autowired
     private EventTools eventTools;
+
+    @Autowired
+    private AccountTools accountTools;
 
     /** 处理充值或消费记录，只有添加 */
     public void handlerMemberCharge(JSONObject jsonObj) {
@@ -87,7 +92,24 @@ public class ClientSimpleProcessHandler {
         if("0".equalsIgnoreCase(order.getStatus()) && "4".equalsIgnoreCase(order.getType())) {
             noticeAdmin(order); //需要通知管理人员
         }
+        if("2".equals(order.getStatus()) && "3".equalsIgnoreCase(order.getType())) { //如果是美团
+            noticeAdminMeituan(order);
+        }
         shopTools.onShopping(order); //处理账户余额等信息
+    }
+
+    private void noticeAdminMeituan(BuffetOrder o) {
+        //如果是美团
+        if("2".equals(o.getStatus()) && "3".equalsIgnoreCase(o.getType())) {
+            List<String> openids = accountTools.getOpenid(AccountTools.ADMIN);
+            //当有友情价是discountReason必须存老板手机号码
+            eventTools.eventRemind(openids,"美团抵价通知", "有顾客使用美团购票", NormalTools.curDate("yyyy-MM-dd HH:mm"),
+                    "/wx/buffetOrders/show?no="+o.getNo(),
+                    new EventRemarkDto("订单编号", o.getNo()),
+                    new EventRemarkDto("商品总数", o.getCommodityCount()+""),
+                    new EventRemarkDto("美团编号", o.getDiscountReason()),
+                    new EventRemarkDto("", "点击查看可确认！"));
+        }
     }
 
     private void noticeAdmin(BuffetOrder o) {

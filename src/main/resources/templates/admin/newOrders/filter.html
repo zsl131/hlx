@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content" th:remove="tag">
+            <div id="sys_filter" class="form-inline" style="padding-bottom:10px;">
+                <div class="input-group">
+                    <span class="input-group-addon">订单号</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_no'/>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">种类</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_isSelf'>
+                        <option value="">=全部=</option>
+                        <option value="1">自助餐</option>
+                        <option value="0">外卖单品</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">类型</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_type'>
+                        <option value="">=全部=</option>
+                        <option value="1">普通订单</option>
+                        <option value="2">微信订单</option>
+                        <option value="3">美团订单</option>
+                        <option value="4">折扣订单</option>
+                        <option value="5">会员订单</option>
+                        <option value="6">卡券订单</option>
+                        <option value="7">货到付款</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">收银员</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_cashierName'/>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">状态</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_status'>
+                        <option value="">=全部=</option>
+                        <option value="0">提交订单</option>
+                        <option value="1">已付款</option>
+                        <option value="2">就餐中</option>
+                        <option value="3">美団确认</option>
+                        <option value="4">压金全退</option>
+                        <option value="5">退部份压金</option>
+                        <option value="6">折扣确认-可付款</option>
+                        <option value="-1">已退票</option>
+                        <option value="-2">已取消</option>
+                        <option value="-3">被驳回-不打折</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">优惠类型</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_discountType'>
+                        <option value="">=全部=</option>
+                        <option value="0">无优惠</option>
+                        <option value="1">积分抵价</option>
+                        <option value="2">亲情折扣</option>
+                        <option value="3">卡券抵价</option>
+                        <option value="4">微信扣款</option>
+                        <option value="5">会员扣款</option>
+                        <option value="6">美团扣款</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">支付方式</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_payType'>
+                        <option value="">=全部=</option>
+                        <option value="1">现金支付</option>
+                        <option value="2">刷卡支付</option>
+                        <option value="3">微信支付</option>
+                        <option value="4">支付宝支付</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">日期</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control order-day' opt="eq" name='filter_createDay'/>
+                </div>
+
+                <span><button type="button" class="btn btn-primary btn-sm" id="beginFilter">查询</button></span>
+            </div>
+        </div>
+    </body>
+</html>

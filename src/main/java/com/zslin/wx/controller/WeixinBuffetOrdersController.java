@@ -12,6 +12,7 @@ import com.zslin.client.tools.ClientJsonTools;
 import com.zslin.web.model.Account;
 import com.zslin.web.model.BuffetOrder;
 import com.zslin.web.service.*;
+import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.SessionTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -79,6 +80,36 @@ public class WeixinBuffetOrdersController {
             model.addAttribute("datas", datas);
         }
         return "weixin/buffetOrders/listAdmin";
+    }
+
+    /** 显示订单，用于处理美团 */
+    @GetMapping(value = "show")
+    public String show(Model model, String no, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        BuffetOrder orders = buffetOrderService.findByNo(no);
+        Account a = accountService.findByOpenid(openid);
+        model.addAttribute("orders", orders);
+        model.addAttribute("account", a);
+        return "weixin/buffetOrders/show";
+    }
+
+    /** 显示订单，用于处理美团 */
+    @PostMapping(value = "checkMeituan")
+    public @ResponseBody String checkMeituan(String no, String res, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        BuffetOrder orders = buffetOrderService.findByNo(no);
+        Account a = accountService.findByOpenid(openid);
+        if(a.getType().equals(AccountTools.ADMIN)) {
+            //只有在就餐状态才需要修改
+            if(orders.getStatus().equals("2")) {
+                orders.setStatus("3");
+                buffetOrderService.save(orders);
+
+                //TODO 通知客户端
+                sendOrders2Client(orders);
+            }
+        }
+        return "1";
     }
 
     /** 用于管理员确认有友情价订单 */

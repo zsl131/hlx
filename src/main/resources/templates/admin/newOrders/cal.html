@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/adminModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title th:text="${session.company ne null?session.company.name:'收银台'}">收银对账</title>
+    <script src="/js/jedate/jquery.jedate.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
+    <script src="/admin/web-show-time.js"></script>
+    <script src="/admin/bus/my-date.js"></script>
+    <script>
+        $(function() {
+            $(".order-day").jeDate({
+                isinitVal:true, //初始化日期
+                festival: true, //显示农历
+                isClear:false,
+                maxDate: curDate(),
+        //        skinCell:'jedatered',
+                format: 'YYYY-MM-DD'
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <div th:fragment="content" th:remove="tag">
+        <div class="container" style="background:#FFF; min-height:400px; height:100%; padding:15px;">
+            <div class="header lighter smaller blue" style="color:#555; padding-bottom:10px;">
+                <h4><span class="fa fa-list"></span>&nbsp;收银对账</h4>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-addon">日期</span>
+                <input type='text' style="width:140px;" class='filter_element form-control order-day' opt="eq" name='day'/>
+                <span><button type="button" class="btn btn-primary btn-sm" id="beginFilter">查询</button></span>
+            </div>
+
+            <div class="row" style="padding-top:10px;">
+                <div class="col-md-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">人数统计：</div>
+                        <div class="panel-body">
+                            <p>上午半票人数：<b th:text="${halfAm}"></b> 人</p>
+                            <p>上午全票人数：<b th:text="${fullAm}"></b> 人</p>
+                            <p>下午半票人数：<b th:text="${halfPm}"></b> 人</p>
+                            <p>下午全票人数：<b th:text="${fullPm}"></b> 人</p>
+                            <p>合计：<b th:text="${halfAm+fullAm+halfPm+fullPm}"></b> 人</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
