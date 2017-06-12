@@ -1,5 +1,6 @@
 package com.zslin;
 
+import com.zslin.admin.dto.MyTicketDto;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.kaoqin.dto.DayDto;
 import com.zslin.kaoqin.dto.MonthDto;
@@ -11,6 +12,7 @@ import com.zslin.sms.tools.SmsConfig;
 import com.zslin.sms.tools.SmsTools;
 import com.zslin.web.model.WeixinConfig;
 import com.zslin.web.service.IBuffetOrderDetailService;
+import com.zslin.web.service.IBuffetOrderService;
 import com.zslin.web.tools.CommonTools;
 import com.zslin.wx.tools.WxConfig;
 import org.json.JSONArray;
@@ -25,9 +27,7 @@ import org.springframework.util.ClassUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/1/24 10:35.
@@ -51,6 +51,26 @@ public class NormalTest {
 
     @Autowired
     private IBuffetOrderDetailService buffetOrderDetailService;
+
+    @Autowired
+    private IBuffetOrderService buffetOrderService;
+
+    @Test
+    public void test22() {
+        MyTicketDto mtd = new MyTicketDto(1, "d");
+        Map<MyTicketDto, Integer> map = new HashMap<>();
+        map.put(mtd, 3);
+        System.out.println(map.containsKey(new MyTicketDto(1, "23")));
+    }
+
+    @Test
+    public void test21() {
+        Float f = buffetOrderService.queryMoneyByTicket("2017-06-11 09:00", "2017-06-11 15:30");
+        System.out.println("==============="+f);
+
+        Float f2 = buffetOrderService.queryMoneyByMeiTuan("2017-06-11 09:00", "2017-06-11 15:30");
+        System.out.println("==============="+f2);
+    }
 
     @Test
     public void test20() {

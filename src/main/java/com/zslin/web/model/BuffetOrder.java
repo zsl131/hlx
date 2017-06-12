@@ -105,7 +105,7 @@ public class BuffetOrder {
     @Column(name = "discount_type")
     private String discountType;
 
-    /** 付款方式，只有到店下单才会有此值；1-现金；2-刷卡；3-微信支付；4-支付宝支付 */
+    /** 付款方式，只有到店下单才会有此值；1-现金；2-刷卡；3-微信支付；4-支付宝支付；5-商场支付 */
     @Column(name = "pay_type")
     private String payType;
 

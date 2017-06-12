@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-member-charge.css"/>
+    <script src="/weixin/newOrders/weixin-newOrders-confirm.js"></script>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="page">
+        <!--<div class="page__hd" style="padding:15px;">
+            <h1 class="page__title">会员充值确认</h1>
+            <p class="page__desc">会员充值预览</p>
+        </div>-->
+        <div class="head-part">
+            <!--<div class="head-img"><img th:src="${account.headimgurl}"/></div>-->
+            <div class="nickname"><b th:text="${orders.no}"></b> <span style="color:#aaa;">- 消费折扣</span></div>
+        </div>
+        <div class="weui-form-preview">
+            <div class="weui-form-preview__hd">
+                <label class="weui-form-preview__label"><i class="fa fa-cny"></i> 应付金额</label>
+                <em class="weui-form-preview__value" th:text="${#numbers.formatDecimal(orders.totalMoney, 0, 'COMMA', 1, 'POINT')}+' 元'"></em>
+            </div>
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">商品数量</label>
+                    <span class="weui-form-preview__value" th:text="${orders.commodityCount}"></span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">订单总额</label>
+                    <span class="weui-form-preview__value" th:text="${#numbers.formatDecimal(orders.totalMoney+orders.discountMoney, 0, 'COMMA', 1, 'POINT')}+' 元'"></span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">折扣金额</label>
+                    <span class="weui-form-preview__value" th:text="${#numbers.formatDecimal(orders.discountMoney, 0, 'COMMA', 1, 'POINT')}+' 元'"></span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">下单日期</label>
+                    <span class="weui-form-preview__value" th:text="${orders.createTime}">名字名字名字</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">订单状态</label>
+                    <span class="weui-form-preview__value">
+                        <span th:remove="tag" th:switch="${orders.status}">
+                            <span th:remove="tag" th:case="0">待确认</span>
+                            <span th:remove="tag" th:case="2">就餐中…</span>
+                            <span th:remove="tag" th:case="4">压金全退</span>
+                            <span th:remove="tag" th:case="5">扣压金<b th:text="${orders.surplusBond}"></b></span>
+                            <span th:remove="tag" th:case="6">已确认</span>
+                            <span th:remove="tag" th:case="-1" style="color:#F00">已退票（<b th:remove="tag" th:text="${orders.retreatReason}"></b>）</span>
+                            <span th:remove="tag" th:case="-2" style="color:#F00">已取消（<b th:remove="tag" th:text="${orders.retreatReason}"></b>）</span>
+                            <span th:remove="tag" th:case="-3">已驳回</span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <input id="ordersNo" th:value="${orders.no}" type="hidden"/>
+            <div class="weui-form-preview__ft opt-btns-div" th:if="${orders.status eq '0' and account.phone eq orders.discountReason}">
+                <p th:text="${orders.discountReason}"></p>
+            </div>
+
+            <div class="weui-form-preview__ft" th:unless="${orders.status eq '0' and account.phone eq orders.discountReason}">
+                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:history.back(-1)">返回</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -6,7 +6,7 @@
       layout:decorator="fragments/adminModel">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title th:text="${session.company ne null?session.company.name:'收银台'}">收银对账</title>
+    <title>收银对账</title>
     <script src="/js/jedate/jquery.jedate.min.js"></script>
     <link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
     <script src="/admin/web-show-time.js"></script>
@@ -34,7 +34,7 @@
 
             <div class="input-group">
                 <span class="input-group-addon">日期</span>
-                <input type='text' style="width:140px;" class='filter_element form-control order-day' opt="eq" name='day'/>
+                <input type='text' style="width:140px;" th:value="${day}" class='filter_element form-control order-day' opt="eq" name='day'/>
                 <span><button type="button" class="btn btn-primary btn-sm" id="beginFilter">查询</button></span>
             </div>
 
@@ -48,6 +48,56 @@
                             <p>下午半票人数：<b th:text="${halfPm}"></b> 人</p>
                             <p>下午全票人数：<b th:text="${fullPm}"></b> 人</p>
                             <p>合计：<b th:text="${halfAm+fullAm+halfPm+fullPm}"></b> 人</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">收入总计：</div>
+                        <div class="panel-body">
+                            <p>此为按人数统计的总额，未扣除优惠的金额</p>
+                            <p>上午：<b th:text="${totalAM}"></b> 元</p>
+                            <p>下午：<b th:text="${totalPM}"></b> 元</p>
+                            <p>合计：<b th:text="${totalAM+totalPM}"></b> 元</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading"><span th:text="${day}"></span> 上午（应有现金：<b th:text="${cashMoneyAM+bondMoneyAM}"></b>）：</div>
+                        <div class="panel-body">
+                            <p>美团抵价：<b th:text="${meituanMoneyAM}"></b> 元，<b th:text="${meituanAmountAM}"></b> 人</p>
+                            <p>微信支付：<b th:text="${weixinMoneyAM}"></b> 元</p>
+                            <p>支付宝支付：<b th:text="${alipayMoneyAM}"></b> 元</p>
+                            <p>商场签单：<b th:text="${marketMoneyAM}"></b> 元</p>
+                            <p>现金金额：<b th:text="${cashMoneyAM}"></b> 元</p>
+                            <p>剩余押金：<b th:text="${bondMoneyAM}"></b> 元</p>
+                            <p>抵价券：<b th:text="${ticketMoneyAM}"></b> 元</p>
+                            <div class="alert alert-danger">
+                                <p th:each="obj : ${ticketAmountAM}" th:text="${obj.key.prizeName}+'：'+${obj.value}+'张'"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading"><span th:text="${day}"></span> 下午（应有现金：<b th:text="${cashMoneyPM+bondMoneyPM}"></b>）：</div>
+                        <div class="panel-body">
+                            <p>美团抵价：<b th:text="${meituanMoneyPM}"></b> 元，<b th:text="${meituanAmountPM}"></b> 人</p>
+                            <p>微信支付：<b th:text="${weixinMoneyPM}"></b> 元</p>
+                            <p>支付宝支付：<b th:text="${alipayMoneyPM}"></b> 元</p>
+                            <p>商场签单：<b th:text="${marketMoneyPM}"></b> 元</p>
+                            <p>现金金额：<b th:text="${cashMoneyPM}"></b> 元</p>
+                            <p>剩余押金：<b th:text="${bondMoneyPM}"></b> 元</p>
+                            <p>抵价券：<b th:text="${ticketMoneyPM}"></b> 元</p>
+                            <div class="alert alert-danger">
+                                <p th:each="obj : ${ticketAmountPM}" th:text="${obj.key.prizeName}+'：'+${obj.value}+'张'"></p>
+                            </div>
                         </div>
                     </div>
                 </div>
