@@ -54,4 +54,20 @@ public interface IBuffetOrderService extends BaseRepository<BuffetOrder, Integer
 
     @Query("FROM BuffetOrder WHERE type='3' AND STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
     List<BuffetOrder> findByMeiTuan(String startTime, String endTime);
+
+    //获取从会员账户扣款的金额
+    @Query("SELECT SUM(discountMoney) FROM BuffetOrder WHERE type='5' AND STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
+    Float queryMemberDiscount(String startTime, String endTime);
+
+    //获取会员订单中所补金额
+    @Query("SELECT SUM(totalMoney) FROM BuffetOrder WHERE type='5' AND payType=?3 AND STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
+    Float queryMemberRepair(String startTime, String endTime, String payType);
+
+    //获取不同支付方式的押金金额
+    @Query("SELECT SUM(surplusBond+backBond) FROM BuffetOrder WHERE bondPayType=?3 AND STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
+    Float queryBondByType(String startTime, String endTime, String bondPayType);
+
+    //获取已退还的押金，都用现金退
+    @Query("SELECT SUM(backBond) FROM BuffetOrder WHERE STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
+    Float queryReturnedBond(String startTime, String endTime);
 }

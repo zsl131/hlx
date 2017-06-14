@@ -111,6 +111,8 @@ public class AdminNewOrdersController {
 
         calTicket(mtd, model);
         calMeituan(mtd, model);
+        buildMemberMoney(mtd, model);
+        buildBond(mtd, model);
         return "admin/newOrders/cal";
     }
 
@@ -159,6 +161,37 @@ public class AdminNewOrdersController {
             }
         }
         return mtt.getDatas();
+    }
+
+    private void buildMemberMoney(MyTimeDto mtd, Model model) {
+        Float memberMoneyAM = buffetOrderService.queryMemberDiscount(mtd.getStartTimeAM(), mtd.getEndTimeAM()); //会员抵价金额
+        Float memberMoneyPM = buffetOrderService.queryMemberDiscount(mtd.getStartTimePM(), mtd.getEndTimePM()); //会员抵价金额
+
+        model.addAttribute("memberMoneyAM", memberMoneyAM==null?0:memberMoneyAM);
+        model.addAttribute("memberMoneyPM", memberMoneyPM==null?0:memberMoneyPM);
+    }
+
+    private void buildBond(MyTimeDto mtd, Model model) {
+        Float weixinBondAM = buffetOrderService.queryBondByType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "3"); //微信押金
+        Float weixinBondPM = buffetOrderService.queryBondByType(mtd.getStartTimePM(), mtd.getEndTimePM(), "3"); //微信押金
+
+        Float alipayBondAM = buffetOrderService.queryBondByType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "4"); //支付宝押金
+        Float alipayBondPM = buffetOrderService.queryBondByType(mtd.getStartTimePM(), mtd.getEndTimePM(), "4"); //支付宝押金
+
+        Float cashBondAM = buffetOrderService.queryBondByType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "1"); //现金押金
+        Float cashBondPM = buffetOrderService.queryBondByType(mtd.getStartTimePM(), mtd.getEndTimePM(), "1"); //现金押金
+
+        Float returnedBondAM = buffetOrderService.queryReturnedBond(mtd.getStartTimeAM(), mtd.getEndTimeAM()); //已退押金
+        Float returnedBondPM = buffetOrderService.queryReturnedBond(mtd.getStartTimePM(), mtd.getEndTimePM()); //已退押金
+
+        model.addAttribute("weixinBondAM", weixinBondAM==null?0:weixinBondAM);
+        model.addAttribute("weixinBondPM", weixinBondPM==null?0:weixinBondPM);
+        model.addAttribute("alipayBondAM", alipayBondAM==null?0:alipayBondAM);
+        model.addAttribute("alipayBondPM", alipayBondPM==null?0:alipayBondPM);
+        model.addAttribute("cashBondAM", cashBondAM==null?0:cashBondAM);
+        model.addAttribute("cashBondPM", cashBondPM==null?0:cashBondPM);
+        model.addAttribute("returnedBondAM", returnedBondAM==null?0:returnedBondAM);
+        model.addAttribute("returnedBondPM", returnedBondPM==null?0:returnedBondPM);
     }
 
     private void queryTotalMoney(MyTimeDto mtd, Model model) {

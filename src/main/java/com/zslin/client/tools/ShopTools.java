@@ -22,7 +22,7 @@ public class ShopTools {
     private MoneyTools moneyTools;
 
     public void onShopping(BuffetOrder order) {
-        if("5".equals(order.getType())) { //如果是会员订单则需要做相应处理
+        if("5".equals(order.getType()) && "2".equals(order.getStatus())) { //如果是会员订单则需要做相应处理
             Integer orderType = Integer.parseInt(order.getType());
             String orderNo = order.getNo();
             if (orderType >= 0) { //表示需要扣款

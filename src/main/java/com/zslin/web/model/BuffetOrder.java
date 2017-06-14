@@ -79,6 +79,10 @@ public class BuffetOrder {
     @Column(name = "surplus_bond")
     private Float surplusBond;
 
+    /** 已退押金 */
+    @Column(name = "back_bond")
+    private Float backBond = 0f;
+
     /** 类型，1-收银员下单；2-微信下单；3-美团下单；4-友情价下单；5-会员订单；6-卡券订单 */
     private String type;
 
@@ -109,6 +113,10 @@ public class BuffetOrder {
     @Column(name = "pay_type")
     private String payType;
 
+    /** 押金付款方式，只有到店下单才会有此值；1-现金；2-刷卡；3-微信支付；4-支付宝支付； */
+    @Column(name = "bond_pay_type")
+    private String bondPayType;
+
     /** 收银金额，只是餐费，不包含压金 */
     @Column(name = "total_money")
     private Float totalMoney;
@@ -132,6 +140,22 @@ public class BuffetOrder {
     /** 退票原因 */
     @Column(name = "retreatReason")
     private String retreatReason;
+
+    public Float getBackBond() {
+        return backBond;
+    }
+
+    public void setBackBond(Float backBond) {
+        this.backBond = backBond;
+    }
+
+    public String getBondPayType() {
+        return bondPayType;
+    }
+
+    public void setBondPayType(String bondPayType) {
+        this.bondPayType = bondPayType;
+    }
 
     public String getIsSelf() {
         return isSelf;

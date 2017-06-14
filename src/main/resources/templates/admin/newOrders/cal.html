@@ -23,6 +23,10 @@
             });
         });
 
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+
     </script>
 </head>
 <body>
@@ -68,17 +72,18 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="panel panel-info">
-                        <div class="panel-heading"><span th:text="${day}"></span> 上午（应有现金：<b th:text="${cashMoneyAM+bondMoneyAM}"></b>）：</div>
+                        <div class="panel-heading"><span th:text="${day}"></span> 上午：</div>
                         <div class="panel-body">
+                            <p>会员扣款：<b th:text="${memberMoneyAM}"></b> 元</p>
                             <p>美团抵价：<b th:text="${meituanMoneyAM}"></b> 元，<b th:text="${meituanAmountAM}"></b> 人</p>
-                            <p>微信支付：<b th:text="${weixinMoneyAM}"></b> 元</p>
-                            <p>支付宝支付：<b th:text="${alipayMoneyAM}"></b> 元</p>
+                            <p>微信支付：<b th:text="${weixinMoneyAM}" data-toggle="tooltip" data-placement="bottom" title="微信餐费"></b> + <b title="微信押金" data-toggle="tooltip" data-placement="bottom" th:text="${weixinBondAM}"></b> = <b title="合计微信收款" data-toggle="tooltip" data-placement="bottom" th:text="${weixinBondAM+weixinMoneyAM}" style="color:#F60"></b> 元</p>
+                            <p>支付宝支付：<b data-toggle="tooltip" data-placement="bottom" th:text="${alipayMoneyAM}" title="支付宝餐费"></b> + <b title="支付宝押金" data-toggle="tooltip" data-placement="bottom" th:text="${alipayBondAM}"></b> = <b title="合计支付宝收款" data-toggle="tooltip" data-placement="bottom" th:text="${alipayBondAM+alipayMoneyAM}" style="color:#F60"></b> 元</p>
                             <p>商场签单：<b th:text="${marketMoneyAM}"></b> 元</p>
-                            <p>现金金额：<b th:text="${cashMoneyAM}"></b> 元</p>
+                            <p>现金金额：<b data-toggle="tooltip" data-placement="bottom" th:text="${cashMoneyAM}" title="现金餐费"></b> + <b data-toggle="tooltip" data-placement="bottom" title="现金押金" th:text="${cashBondAM}"></b> - <b data-toggle="tooltip" data-placement="bottom" title="已退押金" th:text="${returnedBondAM}"></b> = <b data-toggle="tooltip" data-placement="bottom" title="应有现金金额" style="color:#F00" th:text="${cashMoneyAM+cashBondAM-returnedBondAM}"></b> 元</p>
                             <p>剩余押金：<b th:text="${bondMoneyAM}"></b> 元</p>
                             <p>抵价券：<b th:text="${ticketMoneyAM}"></b> 元</p>
                             <div class="alert alert-danger">
-                                <p th:each="obj : ${ticketAmountAM}" th:text="${obj.key.prizeName}+'：'+${obj.value}+'张'"></p>
+                                <p th:each="obj : ${ticketAmountAM}" th:text="${obj.key.prizeName}+'：'+${obj.value}+' 张'"></p>
                             </div>
                         </div>
                     </div>
@@ -86,13 +91,14 @@
 
                 <div class="col-md-4">
                     <div class="panel panel-info">
-                        <div class="panel-heading"><span th:text="${day}"></span> 下午（应有现金：<b th:text="${cashMoneyPM+bondMoneyPM}"></b>）：</div>
+                        <div class="panel-heading"><span th:text="${day}"></span> 下午：</div>
                         <div class="panel-body">
+                            <p>会员扣款：<b th:text="${memberMoneyPM}"></b> 元</p>
                             <p>美团抵价：<b th:text="${meituanMoneyPM}"></b> 元，<b th:text="${meituanAmountPM}"></b> 人</p>
-                            <p>微信支付：<b th:text="${weixinMoneyPM}"></b> 元</p>
-                            <p>支付宝支付：<b th:text="${alipayMoneyPM}"></b> 元</p>
+                            <p>微信支付：<b th:text="${weixinMoneyPM}" data-toggle="tooltip" data-placement="bottom" title="微信餐费"></b> + <b title="微信押金" data-toggle="tooltip" data-placement="bottom" th:text="${weixinBondPM}"></b> = <b title="合计微信收款" data-toggle="tooltip" data-placement="bottom" th:text="${weixinBondPM+weixinMoneyPM}" style="color:#F60"></b> 元</p>
+                            <p>支付宝支付：<b data-toggle="tooltip" data-placement="bottom" th:text="${alipayMoneyPM}" title="支付宝餐费"></b> + <b title="支付宝押金" data-toggle="tooltip" data-placement="bottom" th:text="${alipayBondPM}"></b> = <b title="合计支付宝收款" data-toggle="tooltip" data-placement="bottom" th:text="${alipayBondPM+alipayMoneyPM}" style="color:#F60"></b> 元</p>
                             <p>商场签单：<b th:text="${marketMoneyPM}"></b> 元</p>
-                            <p>现金金额：<b th:text="${cashMoneyPM}"></b> 元</p>
+                            <p>现金金额：<b data-toggle="tooltip" data-placement="bottom" th:text="${cashMoneyPM}" title="现金餐费"></b> + <b data-toggle="tooltip" data-placement="bottom" title="现金押金" th:text="${cashBondPM}"></b> - <b data-toggle="tooltip" data-placement="bottom" title="已退押金" th:text="${returnedBondPM}"></b> = <b data-toggle="tooltip" data-placement="bottom" title="应有现金金额" style="color:#F00" th:text="${cashMoneyPM+cashBondPM-returnedBondPM}"></b> 元</p>
                             <p>剩余押金：<b th:text="${bondMoneyPM}"></b> 元</p>
                             <p>抵价券：<b th:text="${ticketMoneyPM}"></b> 元</p>
                             <div class="alert alert-danger">

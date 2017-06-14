@@ -60,7 +60,7 @@
                 </div>
             </div>
             <input id="ordersNo" th:value="${orders.no}" type="hidden"/>
-            <div class="weui-form-preview__ft opt-btns-div" th:if="${orders.status eq '0' and account.phone eq orders.discountReason}">
+            <div class="weui-form-preview__ft opt-btns-div" >
                 <p th:text="${orders.discountReason}"></p>
             </div>
 
