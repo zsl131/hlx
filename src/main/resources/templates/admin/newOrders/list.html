@@ -27,7 +27,7 @@
                     <tr>
                         <th>订单编号</th>
                         <th>类型</th>
-                        <th>订单金额/压金</th>
+                        <th>订单金额/押金</th>
                         <th>日期</th>
                         <th>商品数</th>
                         <th>优惠类型</th>
@@ -41,28 +41,36 @@
                         <td>
                             <span th:text="${obj.isSelf eq '1'?'自助':'外卖'}"></span> /
                             <span  th:switch="${obj.type}" th:if="${obj.isSelf eq '1'}">
-                                <span th:case="1">普通订单</span>
-                                <span th:case="2">微信订单</span>
-                                <span th:case="3">美团订单</span>
-                                <span th:case="4">折扣订单</span>
-                                <span th:case="5">会员订单</span>
-                                <span th:case="6">卡券订单</span>
+                                <span th:case="1">普通</span>
+                                <span th:case="2">微信</span>
+                                <span th:case="3">美团</span>
+                                <span th:case="4">亲情</span>
+                                <span th:case="5">会员</span>
+                                <span th:case="6">卡券</span>
                             </span>
 
                             <span  th:switch="${obj.type}" th:if="${obj.isSelf eq '0'}">
                                 <span th:case="1">店内下单</span>
                                 <span th:case="7">货到付款</span>
                             </span>
-
-                            <p th:switch="${obj.payType}">
+                        </td>
+                        <td>
+                            <p title="订单金额"><span th:text="${obj.totalMoney}"></span>
+                            <span th:if="${obj.totalMoney>0}" th:switch="${obj.payType}">
                                 <span th:case="1">现金</span>
                                 <span th:case="2">刷卡</span>
                                 <span th:case="3">微信</span>
                                 <span th:case="4">支付宝</span>
+                            </span>
                             </p>
-                        </td>
-                        <td>
-                            <span th:text="${obj.totalMoney}"></span> <span th:if="${obj.isSelf eq '1'}">/ <span th:text="${obj.surplusBond eq null?0:obj.surplusBond}"></span></span>
+                            <span title="押金" th:if="${obj.isSelf eq '1'}"><span th:text="${obj.surplusBond eq null?0:obj.surplusBond}"></span>
+                                <span th:if="${obj.surplusBond>0}" th:switch="${obj.bondPayType}">
+                                    <span th:case="1">现金</span>
+                                    <span th:case="2">刷卡</span>
+                                    <span th:case="3">微信</span>
+                                    <span th:case="4">支付宝</span>
+                                </span>
+                            </span>
                         </td>
                         <td th:if="${obj.isSelf eq '1'}">
                             <p th:title="${obj.createTime}"><span th:text="${obj.createDay}"></span>（<span th:style="'color:'+${obj.endTime ne null?'#555':'#F00'}" th:text="${obj.endTime ne null?'已结束':'未结束'}"></span>）</p>

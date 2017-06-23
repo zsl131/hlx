@@ -1,6 +1,7 @@
 package com.zslin.client.tools;
 
 import com.alibaba.fastjson.JSON;
+import com.zslin.admin.dto.MyTimeDto;
 import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.client.model.Member;
@@ -102,11 +103,21 @@ public class ClientSimpleProcessHandler {
         //如果是美团
         if("2".equals(o.getStatus()) && "3".equalsIgnoreCase(o.getType())) {
             List<String> openids = accountTools.getOpenid(AccountTools.ADMIN);
+
+            String day = NormalTools.curDate("yyyy-MM-dd");
+
+            Integer halfAm = buffetOrderDetailService.queryCount(day, "66666"); //午餐半票人数
+            Integer fullAm = buffetOrderDetailService.queryCount(day, "88888"); //午餐全票人数
+            Integer halfPm = buffetOrderDetailService.queryCount(day, "77777"); //晚餐半票人数
+            Integer fullPm = buffetOrderDetailService.queryCount(day, "99999"); //晚餐全票人数
+
             //当有友情价是discountReason必须存老板手机号码
             eventTools.eventRemind(openids,"美团抵价通知", "有顾客使用美团购票", NormalTools.curDate("yyyy-MM-dd HH:mm"),
                     "/wx/buffetOrders/show?no="+o.getNo(),
                     new EventRemarkDto("订单编号", o.getNo()),
                     new EventRemarkDto("商品总数", o.getCommodityCount()+""),
+                    new EventRemarkDto("午餐人数", halfAm+"+"+fullAm+"="+(halfAm+fullAm)),
+                    new EventRemarkDto("晚餐人数", halfPm+"+"+fullPm+"="+(halfPm+fullPm)),
                     new EventRemarkDto("美团编号", o.getDiscountReason()),
                     new EventRemarkDto("", "点击查看可确认！"));
         }

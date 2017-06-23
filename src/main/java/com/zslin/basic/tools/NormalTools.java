@@ -42,9 +42,11 @@ public class NormalTools {
      * @return
      */
     public static double buildPoint(double d) {
-        BigDecimal bg = new BigDecimal(d);
+        /*BigDecimal bg = new BigDecimal(d);
         double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-        return f1;
+        f1 = Math.rint(f1);
+        return f1;*/
+        return Math.ceil(d);
     }
 
     public static String curDate() {

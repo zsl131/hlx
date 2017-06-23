@@ -70,4 +70,7 @@ public interface IBuffetOrderService extends BaseRepository<BuffetOrder, Integer
     //获取已退还的押金，都用现金退
     @Query("SELECT SUM(backBond) FROM BuffetOrder WHERE STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
     Float queryReturnedBond(String startTime, String endTime);
+
+    @Query("SELECT SUM(surplusBond) FROM BuffetOrder WHERE status=?3 AND createTime BETWEEN ?1 AND ?2")
+    Float queryBondByStatus(String startTime, String endTime, String status);
 }

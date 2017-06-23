@@ -69,10 +69,6 @@ public class AdminNewOrdersController {
         queryCount(day, model);
         queryTotalMoney(mtd, model);
         model.addAttribute("day", day);
-        Float bondMoneyAM = buffetOrderService.queryBondMoney(mtd.getStartTimeAM(), mtd.getEndTimeAM());
-        model.addAttribute("bondMoneyAM", bondMoneyAM==null?0:bondMoneyAM); //押金
-        Float bondMoneyPM = buffetOrderService.queryBondMoney(mtd.getStartTimePM(), mtd.getEndTimePM());
-        model.addAttribute("bondMoneyPM", bondMoneyPM==null?0:bondMoneyPM); //押金
 
         Float marketMoneyAM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "5");
         model.addAttribute("marketMoneyAM", marketMoneyAM==null?0:marketMoneyAM); //商场签单
@@ -113,7 +109,25 @@ public class AdminNewOrdersController {
         calMeituan(mtd, model);
         buildMemberMoney(mtd, model);
         buildBond(mtd, model);
+        buildBondMoney(mtd, model);
         return "admin/newOrders/cal";
+    }
+
+    private void buildBondMoney(MyTimeDto mtd, Model model) {
+        Float bondMoneyAM = buffetOrderService.queryBondMoney(mtd.getStartTimeAM(), mtd.getEndTimeAM());
+        model.addAttribute("bondMoneyAM", bondMoneyAM==null?0:bondMoneyAM); //押金
+        Float bondMoneyPM = buffetOrderService.queryBondMoney(mtd.getStartTimePM(), mtd.getEndTimePM());
+        model.addAttribute("bondMoneyPM", bondMoneyPM==null?0:bondMoneyPM); //押金
+
+        Float unBackBondAM = buffetOrderService.queryBondByStatus(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "2"); //未退押金
+        Float surplusBondAM = buffetOrderService.queryBondByStatus(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "5"); //已扣押金
+        model.addAttribute("unBackBondAM", unBackBondAM==null?0:unBackBondAM);
+        model.addAttribute("surplusBondAM", surplusBondAM==null?0:surplusBondAM);
+
+        Float unBackBondPM = buffetOrderService.queryBondByStatus(mtd.getStartTimePM(), mtd.getEndTimePM(), "2"); //未退押金
+        Float surplusBondPM = buffetOrderService.queryBondByStatus(mtd.getStartTimePM(), mtd.getEndTimePM(), "5"); //已扣押金
+        model.addAttribute("unBackBondPM", unBackBondPM==null?0:unBackBondPM);
+        model.addAttribute("surplusBondPM", surplusBondPM==null?0:surplusBondPM);
     }
 
     private void calMeituan(MyTimeDto mtd, Model model) {

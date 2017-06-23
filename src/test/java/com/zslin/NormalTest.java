@@ -56,6 +56,26 @@ public class NormalTest {
     private IBuffetOrderService buffetOrderService;
 
     @Test
+    public void test24() {
+        Float f = buffetOrderService.queryBondByStatus("2017-06-20 16:00", "2017-06-20 23:30", "2"); //未退
+        System.out.println("未退==============="+f);
+
+        Float f2 = buffetOrderService.queryBondByStatus("2017-06-20 16:00", "2017-06-20 23:30", "5"); //有扣
+        System.out.println("有扣==============="+f2);
+
+        Float f3 = buffetOrderService.queryBondMoney("2017-06-20 16:00", "2017-06-20 23:30"); //所有
+        System.out.println("==============="+f3);
+    }
+
+    @Test
+    public void test23() {
+        float f1 = (float)NormalTools.buildPoint(45/2f);
+        System.out.println(f1);
+        float f2 = (float)NormalTools.buildPoint(55/2f);
+        System.out.println(f2);
+    }
+
+    @Test
     public void test22() {
         MyTicketDto mtd = new MyTicketDto(1, "d");
         Map<MyTicketDto, Integer> map = new HashMap<>();

@@ -8,6 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-member-charge.css"/>
     <script src="/weixin/newOrders/weixin-newOrders-confirm.js"></script>
+    <script src="/weixin/newOrders/weixin-orders-show.js"></script>
     <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
 </head>
 <body>
@@ -60,8 +61,8 @@
                 </div>
             </div>
             <input id="ordersNo" th:value="${orders.no}" type="hidden"/>
-            <div class="weui-form-preview__ft opt-btns-div" >
-                <p th:text="${orders.discountReason}"></p>
+            <div class="weui-form-preview__ft opt-btns-div" style="padding:10px 15px;">
+                <p th:text="${orders.discountReason}" class="orderDiscountReason"></p>
             </div>
 
             <div class="weui-form-preview__ft" th:unless="${orders.status eq '0' and account.phone eq orders.discountReason}">
