@@ -1,18 +1,20 @@
-package com.zslin.admin.controller;
+package com.zslin.wx.controller;
 
 import com.zslin.admin.dto.MyTicketDto;
 import com.zslin.admin.dto.MyTimeDto;
 import com.zslin.admin.tools.MyTicketTools;
 import com.zslin.basic.annotations.AdminAuth;
-import com.zslin.basic.repository.SimplePageBuilder;
-import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.tools.NormalTools;
-import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.web.model.Account;
 import com.zslin.web.model.BuffetOrder;
 import com.zslin.web.model.Prize;
-import com.zslin.web.service.*;
+import com.zslin.web.service.IAccountService;
+import com.zslin.web.service.IBuffetOrderDetailService;
+import com.zslin.web.service.IBuffetOrderService;
+import com.zslin.web.service.IPrizeService;
+import com.zslin.wx.tools.AccountTools;
+import com.zslin.wx.tools.SessionTools;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,123 +25,86 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by 钟述林 393156105@qq.com on 2017/6/7 0:48.
+ * Created by 钟述林 393156105@qq.com on 2017/6/24 14:16.
  */
 @Controller
-@RequestMapping(value = "admin/newOrders")
-@AdminAuth(name = "订单管理", psn = "订单管理", orderNum = 10, porderNum = 1, pentity = 0, icon = "fa fa-list")
-public class AdminNewOrdersController {
+@RequestMapping(value = "wx/cashCal")
+public class WeixinCashCalController {
 
     @Autowired
     private IBuffetOrderService buffetOrderService;
 
     @Autowired
+    private IPrizeService prizeService;
+
+    @Autowired
     private IBuffetOrderDetailService buffetOrderDetailService;
 
     @Autowired
-    private ICommodityService commodityService;
+    private IAccountService accountService;
 
-    @Autowired
-    private IRulesService rulesService;
+    @GetMapping(value = "index")
+    public String index(Model model, String day, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        Account a = accountService.findByOpenid(openid);
 
-    @Autowired
-    private IPrizeService prizeService;
-
-    /** 订单列表 */
-    @GetMapping(value = "list")
-    @AdminAuth(name = "订单管理", orderNum = 1, type = "1", icon = "fa fa-list")
-    public String list(Model model, Integer page, HttpServletRequest request) {
-        Page<BuffetOrder> datas = buffetOrderService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
-                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createLong_d")));
-        model.addAttribute("datas", datas);
-        return "admin/newOrders/list";
-    }
-
-    /** 订单列表 */
-    @GetMapping(value = "nos")
-    @AdminAuth(name = "美团编码管理", orderNum = 1, type = "1", icon = "fa fa-tumblr")
-    public String nos(Model model, String day, HttpServletRequest request) {
-        if(day==null) {
-            day = NormalTools.curDate("yyyy-MM-dd"); //默认为当天
-        } else {
-            day = day.replace("eq-", "");
-        }
-        List<BuffetOrder> list = buffetOrderService.listByHql("FROM BuffetOrder WHERE discountType='6' AND createDay=?", new String[]{day});
-        StringBuffer sb = new StringBuffer();
-        for(BuffetOrder b : list) {
-            sb.append(buildNo(b.getDiscountReason()));
-        }
-        model.addAttribute("nos", sb.toString());
-        return "admin/newOrders/nos";
-    }
-
-    private String buildNo(String no) {
-        StringBuffer sb = new StringBuffer();
-        String [] array = no.split(",");
-        for(String n : array) {
-            if(n!=null && !"".equals(n) && !n.startsWith("999999")) {
-                sb.append(n).append("\n");
+        if(a!=null && (AccountTools.ADMIN.equals(a.getType()) || AccountTools.PARTNER.equals(a.getType()))) {
+            if(day==null) {
+                day = NormalTools.curDate("yyyy-MM-dd"); //默认为当天
+            } else {
+                day = day.replace("eq-", "");
             }
-        }
-        return sb.toString();
-    }
 
-    @GetMapping(value = "cal")
-    @AdminAuth(name = "收银对账", orderNum = 2, type = "1", icon = "fa fa-cny")
-    public String cal(Model model, String day, HttpServletRequest request) {
-        if(day==null) {
-            day = NormalTools.curDate("yyyy-MM-dd"); //默认为当天
+            MyTimeDto mtd = new MyTimeDto(day);
+
+            queryCount(day, model);
+            queryTotalMoney(mtd, model);
+            model.addAttribute("day", day);
+
+            Float marketMoneyAM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "5");
+            model.addAttribute("marketMoneyAM", marketMoneyAM==null?0:marketMoneyAM); //商场签单
+            Float marketMoneyPM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimePM(), mtd.getEndTimePM(), "5");
+            model.addAttribute("marketMoneyPM", marketMoneyPM==null?0:marketMoneyPM); //商场签单
+
+            Float meituanMoneyAM = buffetOrderService.queryMoneyByMeiTuan(mtd.getStartTimeAM(), mtd.getEndTimeAM());
+            model.addAttribute("meituanMoneyAM", meituanMoneyAM==null?0:meituanMoneyAM); //美团
+            Float meituanMoneyPM = buffetOrderService.queryMoneyByMeiTuan(mtd.getStartTimePM(), mtd.getEndTimePM());
+            model.addAttribute("meituanMoneyPM", meituanMoneyPM==null?0:meituanMoneyPM); //美团
+
+            Float ticketMoneyAM = buffetOrderService.queryMoneyByTicket(mtd.getStartTimeAM(), mtd.getEndTimeAM());
+            model.addAttribute("ticketMoneyAM", ticketMoneyAM==null?0:ticketMoneyAM); //卡券
+            Float ticketMoneyPM = buffetOrderService.queryMoneyByTicket(mtd.getStartTimePM(), mtd.getEndTimePM());
+            model.addAttribute("ticketMoneyPM", ticketMoneyPM==null?0:ticketMoneyPM); //卡券
+
+            Float weixinMoneyAM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "3");
+            model.addAttribute("weixinMoneyAM", weixinMoneyAM==null?0:weixinMoneyAM); //微信支付
+            Float weixinMoneyPM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimePM(), mtd.getEndTimePM(), "3");
+            model.addAttribute("weixinMoneyPM", weixinMoneyPM==null?0:weixinMoneyPM); //微信支付
+
+            Float alipayMoneyAM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "4");
+            model.addAttribute("alipayMoneyAM", alipayMoneyAM==null?0:alipayMoneyAM); //支付宝
+            Float alipayMoneyPM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimePM(), mtd.getEndTimePM(), "4");
+            model.addAttribute("alipayMoneyPM", alipayMoneyPM==null?0:alipayMoneyPM); //支付宝
+
+            Float cashMoneyAM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "1");
+            model.addAttribute("cashMoneyAM", cashMoneyAM==null?0:cashMoneyAM); //现金
+            Float cashMoneyPM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimePM(), mtd.getEndTimePM(), "1");
+            model.addAttribute("cashMoneyPM", cashMoneyPM==null?0:cashMoneyPM); //现金
+
+            Float cardMoneyAM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "2");
+            model.addAttribute("cardMoneyAM", cardMoneyAM==null?0:cardMoneyAM); //刷卡
+            Float cardMoneyPM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimePM(), mtd.getEndTimePM(), "2");
+            model.addAttribute("cardMoneyPM", cardMoneyPM==null?0:cardMoneyPM); //刷卡
+
+            calTicket(mtd, model);
+            calMeituan(mtd, model);
+            buildMemberMoney(mtd, model);
+            buildBond(mtd, model);
+            buildBondMoney(mtd, model);
+            return "weixin/cashCal/index";
         } else {
-            day = day.replace("eq-", "");
+            return "redirect:/weixin/index";
         }
-
-        MyTimeDto mtd = new MyTimeDto(day);
-
-        queryCount(day, model);
-        queryTotalMoney(mtd, model);
-        model.addAttribute("day", day);
-
-        Float marketMoneyAM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "5");
-        model.addAttribute("marketMoneyAM", marketMoneyAM==null?0:marketMoneyAM); //商场签单
-        Float marketMoneyPM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimePM(), mtd.getEndTimePM(), "5");
-        model.addAttribute("marketMoneyPM", marketMoneyPM==null?0:marketMoneyPM); //商场签单
-
-        Float meituanMoneyAM = buffetOrderService.queryMoneyByMeiTuan(mtd.getStartTimeAM(), mtd.getEndTimeAM());
-        model.addAttribute("meituanMoneyAM", meituanMoneyAM==null?0:meituanMoneyAM); //美团
-        Float meituanMoneyPM = buffetOrderService.queryMoneyByMeiTuan(mtd.getStartTimePM(), mtd.getEndTimePM());
-        model.addAttribute("meituanMoneyPM", meituanMoneyPM==null?0:meituanMoneyPM); //美团
-
-        Float ticketMoneyAM = buffetOrderService.queryMoneyByTicket(mtd.getStartTimeAM(), mtd.getEndTimeAM());
-        model.addAttribute("ticketMoneyAM", ticketMoneyAM==null?0:ticketMoneyAM); //卡券
-        Float ticketMoneyPM = buffetOrderService.queryMoneyByTicket(mtd.getStartTimePM(), mtd.getEndTimePM());
-        model.addAttribute("ticketMoneyPM", ticketMoneyPM==null?0:ticketMoneyPM); //卡券
-
-        Float weixinMoneyAM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "3");
-        model.addAttribute("weixinMoneyAM", weixinMoneyAM==null?0:weixinMoneyAM); //微信支付
-        Float weixinMoneyPM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimePM(), mtd.getEndTimePM(), "3");
-        model.addAttribute("weixinMoneyPM", weixinMoneyPM==null?0:weixinMoneyPM); //微信支付
-
-        Float alipayMoneyAM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "4");
-        model.addAttribute("alipayMoneyAM", alipayMoneyAM==null?0:alipayMoneyAM); //支付宝
-        Float alipayMoneyPM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimePM(), mtd.getEndTimePM(), "4");
-        model.addAttribute("alipayMoneyPM", alipayMoneyPM==null?0:alipayMoneyPM); //支付宝
-
-        Float cashMoneyAM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "1");
-        model.addAttribute("cashMoneyAM", cashMoneyAM==null?0:cashMoneyAM); //现金
-        Float cashMoneyPM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimePM(), mtd.getEndTimePM(), "1");
-        model.addAttribute("cashMoneyPM", cashMoneyPM==null?0:cashMoneyPM); //现金
-
-        Float cardMoneyAM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "2");
-        model.addAttribute("cardMoneyAM", cardMoneyAM==null?0:cardMoneyAM); //刷卡
-        Float cardMoneyPM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimePM(), mtd.getEndTimePM(), "2");
-        model.addAttribute("cardMoneyPM", cardMoneyPM==null?0:cardMoneyPM); //刷卡
-
-        calTicket(mtd, model);
-        calMeituan(mtd, model);
-        buildMemberMoney(mtd, model);
-        buildBond(mtd, model);
-        buildBondMoney(mtd, model);
-        return "admin/newOrders/cal";
     }
 
     private void buildBondMoney(MyTimeDto mtd, Model model) {

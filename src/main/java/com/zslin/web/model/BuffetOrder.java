@@ -141,6 +141,18 @@ public class BuffetOrder {
     @Column(name = "retreatReason")
     private String retreatReason;
 
+    /** 美团状态，只有是美团订单时才有用,0-未验证；1-已验证 */
+    @Column(name = "mt_status")
+    private String mtStatus;
+
+    public String getMtStatus() {
+        return mtStatus;
+    }
+
+    public void setMtStatus(String mtStatus) {
+        this.mtStatus = mtStatus;
+    }
+
     public Float getBackBond() {
         return backBond;
     }

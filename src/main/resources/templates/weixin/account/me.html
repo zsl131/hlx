@@ -17,7 +17,7 @@
     <div class="page__bd page__bd_spacing">
         <div class="weui-flex">
             <div class="weui-flex__item">
-                <div class="center-head" >
+                <div class="center-head"  style="width:100%;">
                     <span class="head-img"><img th:src="${account.headimgurl}"/></span>
                     <span class="head-info">
                         <span th:text="${account.nickname}" class="nickname"></span>
@@ -38,7 +38,7 @@
                 </div>
                 <div class="line-div"></div>
 
-                <div class="weui-cells">
+                <div class="weui-cells" style="width:100%;">
                     <a class="weui-cell weui-cell_access" href="/wx/account/money" >
                         <div class="weui-cell__hd"><i class="list-icon fa fa-rmb"></i></div>
                         <div class="weui-cell__bd">
@@ -124,6 +124,15 @@
                         </div>
                         <div class="weui-cell__ft">
                             <span th:text="${ownCount}"></span>
+                        </div>
+                    </a>
+                    <a class="weui-cell weui-cell_access" href="/wx/cashCal/index" th:if="${account.type eq '5' || account.type eq '10'}">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-calculator"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>收银对账</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span>点击前往</span>
                         </div>
                     </a>
                 </div>

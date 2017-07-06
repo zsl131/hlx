@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<title>美团配置管理</title>
+	<script type="text/javascript">
+		$(function() {
+			//$("#addForm").platformvalidate();
+		});
+	</script>
+	</head>
+	<body>
+		<div th:fragment="content" th:remove="tag">
+			<div class="header lighter smaller blue">
+				<h3><span class="glyphicon glyphicon-th-list"></span><i class="icon-setting"></i>&nbsp;美团配置管理<small>&nbsp;</small></h3>
+			</div>
+
+			<form method="POST" th:object="${meituanConfig}">
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+					  <div class="input-group-addon">developerId：</div>
+					  <input name="depId" type="text" class="form-control" th:value="${meituanConfig.depId}" placeholder="请输入developerId" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">SignKey：</div>
+						<input name="signKey" type="text" class="form-control" th:value="${meituanConfig.signKey}" placeholder="SignKey" />
+					</div>
+				</div>
+				<button type="submit" class="btn btn-primary submit-update-btn">保存设置</button>
+			</form>
+		</div>
+	</body>
+</html>

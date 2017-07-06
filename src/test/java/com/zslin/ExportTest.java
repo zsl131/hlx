@@ -28,7 +28,7 @@ public class ExportTest {
 
     @Test
     public void test() {
-        String [] days = new String[]{"2017-06-20"};
+        String [] days = new String[]{"2017-06-26"};
         for(String day : days) {
             buildSingleDay(day);
         }
@@ -48,7 +48,7 @@ public class ExportTest {
         StringBuffer sb = new StringBuffer();
         String [] array = no.split(",");
         for(String n : array) {
-            if(n!=null && !"".equals(n)) {
+            if(n!=null && !"".equals(n) && !n.startsWith("999999")) {
                 sb.append(n).append("\n");
             }
         }

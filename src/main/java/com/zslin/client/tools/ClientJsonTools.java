@@ -5,6 +5,8 @@ import com.zslin.client.dto.JsonDto;
 import com.zslin.client.model.ClientConfig;
 import com.zslin.client.model.Orders;
 import com.zslin.kaoqin.model.Worker;
+import com.zslin.meituan.model.MeituanConfig;
+import com.zslin.meituan.model.MeituanShop;
 import com.zslin.web.dto.AdminPhoneDto;
 import com.zslin.web.model.*;
 
@@ -80,6 +82,16 @@ public class ClientJsonTools {
     public static String buildWalletDetail(WalletDetail wd) {
         wd.setCreateDate(null); //先移除日期
         JsonDto jd = new JsonDto("walletDetail", "add", wd.getId(), wd);
+        return JSON.toJSONString(jd);
+    }
+
+    public static String buildMeituanConfig(String action, MeituanConfig config) {
+        JsonDto jd = new JsonDto("meituanConfig", action, config.getId(), config);
+        return JSON.toJSONString(jd);
+    }
+
+    public static String buildMeituanShop(String action, MeituanShop shop) {
+        JsonDto jd = new JsonDto("meituanShop", action, shop.getId(), shop);
         return JSON.toJSONString(jd);
     }
 }
