@@ -26,6 +26,11 @@ public interface IWalletService extends BaseRepository<Wallet, Integer>, JpaSpec
     @Transactional
     void plusMoney(Integer money, String openid);
 
+    @Query("UPDATE Wallet w SET w.isVip='1' WHERE w.phone=?1")
+    @Modifying
+    @Transactional
+    void updateVip(String phone);
+
     @Query("UPDATE Wallet w SET w.money=w.money+?1 WHERE w.phone=?2")
     @Modifying
     @Transactional

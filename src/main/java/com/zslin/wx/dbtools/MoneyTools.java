@@ -49,6 +49,9 @@ public class MoneyTools {
         if(phone==null || "".equals(phone)) {return;}
         Wallet wallet = walletService.findByPhone(phone);
         if(wallet==null) {wallet = initWallet(phone);}
+        else {
+            walletService.updateVip(phone); //将其设置为VIP会员
+        }
         String openid = wallet.getOpenid();
         walletDetailTools.addWalletDetailMoney(money/100, phone, openid==null?wallet.getPhone():openid, wallet.getAccountId(), wallet.getAccountName(), type, typeCn);
         walletService.plusMoneyByPhone(money, phone);
@@ -73,6 +76,7 @@ public class MoneyTools {
         Wallet w = new Wallet();
         w.setPhone(phone);
         w.setScore(0);
+        w.setIsVip("1"); //初始化时表示是店内会员
         w.setMoney(0);
         walletService.save(w);
         return w;

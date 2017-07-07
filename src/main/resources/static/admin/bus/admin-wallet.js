@@ -33,7 +33,7 @@ $(function() {
 
                 if(!type) {
                     showDialog("请选择充值类型", '<i class="fa fa-info-circle"></i> 系统提示');
-                } else if(isNaN(amount) || amount<=0) {
+                } else if(isNaN(amount) || amount==0) {
                     showDialog("请输入充值数量", '<i class="fa fa-info-circle"></i> 系统提示');
                 } else if($.trim(reason)=='') {
                     showDialog("请输入充值原因", '<i class="fa fa-info-circle"></i> 系统提示');

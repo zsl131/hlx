@@ -35,6 +35,10 @@ public class MemberCharge extends BaseEntity {
     /** 此次充值余额，余额 */
     private Integer balance;
 
+    /** 支付方式，1-现金；2-支付宝；3-微信；4-刷卡 */
+    @Column(name = "pay_type")
+    private String payType;
+
     @Column(name = "account_id")
     private Integer accountId;
 
@@ -71,6 +75,14 @@ public class MemberCharge extends BaseEntity {
 
     @Column(name = "verify_date")
     private Date verifyDate;
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
 
     public Integer getVerifyAccountId() {
         return verifyAccountId;

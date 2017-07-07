@@ -47,7 +47,21 @@
                             <p>此为按人数统计的总额，未扣除优惠的金额</p>
                             <p>上午：<b th:text="${totalAM}"></b> 元</p>
                             <p>下午：<b th:text="${totalPM}"></b> 元</p>
-                            <p>合计：<b th:text="${totalAM+totalPM}"></b> 元</p>
+                            <!--<p>合计：<b th:text="${totalAM+totalPM}"></b> 元</p>-->
+                            <p>会员充值：<b th:text="${mCash+mWeixin+mAlipay}"></b> 元</p>
+                            <p>合计：<b th:text="${totalAM+totalPM+mCash+mWeixin+mAlipay}"></b> 元</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">会员充值：</div>
+                        <div class="panel-body">
+                            <p>现金：<b th:text="${mCash}"></b> 元</p>
+                            <p>微信：<b th:text="${mWeixin}"></b> 元</p>
+                            <p>支付宝：<b th:text="${mAlipay}"></b> 元</p>
+                            <p>合计：<b th:text="${mCash+mWeixin+mAlipay}"></b> 元</p>
                         </div>
                     </div>
                 </div>

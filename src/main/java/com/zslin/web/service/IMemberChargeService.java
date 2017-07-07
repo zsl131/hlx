@@ -40,4 +40,7 @@ public interface IMemberChargeService extends BaseRepository<MemberCharge, Integ
 
     @Query("SELECT COUNT(id) FROM MemberCharge mc WHERE mc.openid=?1")
     Integer findCount(String openid);
+
+    @Query("SELECT SUM(chargeMoney) FROM MemberCharge WHERE createDay=?1 AND payType=?2")
+    Float queryMoneyByPayType(String day, String payType);
 }

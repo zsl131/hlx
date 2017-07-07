@@ -36,6 +36,18 @@ public class Wallet extends BaseEntity {
     /** 手机号码 */
     private String phone;
 
+    /** 是否为会员，1-是；0-否 */
+    @Column(name = "is_vip")
+    private String isVip;
+
+    public String getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(String isVip) {
+        this.isVip = isVip;
+    }
+
     public String getPassword() {
         return password;
     }
