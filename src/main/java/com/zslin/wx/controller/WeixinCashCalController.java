@@ -8,10 +8,7 @@ import com.zslin.basic.tools.NormalTools;
 import com.zslin.web.model.Account;
 import com.zslin.web.model.BuffetOrder;
 import com.zslin.web.model.Prize;
-import com.zslin.web.service.IAccountService;
-import com.zslin.web.service.IBuffetOrderDetailService;
-import com.zslin.web.service.IBuffetOrderService;
-import com.zslin.web.service.IPrizeService;
+import com.zslin.web.service.*;
 import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.SessionTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +39,9 @@ public class WeixinCashCalController {
 
     @Autowired
     private IAccountService accountService;
+
+    @Autowired
+    private IMemberChargeService memberChargeService;
 
     @GetMapping(value = "index")
     public String index(Model model, String day, HttpServletRequest request) {
@@ -101,10 +101,21 @@ public class WeixinCashCalController {
             buildMemberMoney(mtd, model);
             buildBond(mtd, model);
             buildBondMoney(mtd, model);
+            calMemberCharge(model, day);
             return "weixin/cashCal/index";
         } else {
             return "redirect:/weixin/index";
         }
+    }
+
+    //会员充值统计
+    private void calMemberCharge(Model model, String day) {
+        Float mCash = memberChargeService.queryMoneyByPayType(day, "1"); //会员现金
+        Float mWeixin = memberChargeService.queryMoneyByPayType(day, "3"); //会员微信
+        Float mAlipay = memberChargeService.queryMoneyByPayType(day, "2"); //会员支付宝
+        model.addAttribute("mCash", mCash==null?0:mCash);
+        model.addAttribute("mWeixin", mWeixin==null?0:mWeixin);
+        model.addAttribute("mAlipay", mAlipay==null?0:mAlipay);
     }
 
     private void buildBondMoney(MyTimeDto mtd, Model model) {
