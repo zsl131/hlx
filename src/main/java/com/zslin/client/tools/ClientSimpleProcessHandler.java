@@ -7,6 +7,7 @@ import com.zslin.basic.tools.NormalTools;
 import com.zslin.client.model.Member;
 import com.zslin.client.model.Orders;
 import com.zslin.client.service.IMemberService;
+import com.zslin.meituan.tools.MeituanHandlerTools;
 import com.zslin.web.model.*;
 import com.zslin.web.service.*;
 import com.zslin.wx.dbtools.MoneyTools;
@@ -93,11 +94,18 @@ public class ClientSimpleProcessHandler {
         if("0".equalsIgnoreCase(order.getStatus()) && "4".equalsIgnoreCase(order.getType())) {
             noticeAdmin(order); //需要通知管理人员
         }
-        if("2".equals(order.getStatus()) && "3".equalsIgnoreCase(order.getType())) { //如果是美团
+        /*if("2".equals(order.getStatus()) && "3".equalsIgnoreCase(order.getType())) { //如果是美团
             noticeAdminMeituan(order);
+        }*/
+        if("2".equals(order.getStatus()) && "9".equalsIgnoreCase(order.getType())) { //如果是飞凡
+            noticeAdminFfan(order);
         }
+
         shopTools.onShopping(order); //处理账户余额等信息
     }
+
+    @Autowired
+    private MeituanHandlerTools meituanHandlerTools;
 
     private void noticeAdminMeituan(BuffetOrder o) {
         //如果是美团
@@ -120,6 +128,40 @@ public class ClientSimpleProcessHandler {
                     new EventRemarkDto("晚餐人数", halfPm+"+"+fullPm+"="+(halfPm+fullPm)),
                     new EventRemarkDto("美团编号", o.getDiscountReason()),
                     new EventRemarkDto("", "点击查看可确认！"));
+
+            try { //TODO 应该判断当mtStatus不为1时才执行以下代码
+                String [] tmpArray = o.getDiscountReason().split(",");
+                for(String code : tmpArray) {
+                    meituanHandlerTools.handlerCheck(code, 1, o.getNo());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void noticeAdminFfan(BuffetOrder o) {
+        //如果是美团
+        if("2".equals(o.getStatus()) && "9".equalsIgnoreCase(o.getType())) {
+            List<String> openids = accountTools.getOpenid(AccountTools.ADMIN);
+
+            String day = NormalTools.curDate("yyyy-MM-dd");
+
+            Integer halfAm = buffetOrderDetailService.queryCount(day, "66666"); //午餐半票人数
+            Integer fullAm = buffetOrderDetailService.queryCount(day, "88888"); //午餐全票人数
+            Integer halfPm = buffetOrderDetailService.queryCount(day, "77777"); //晚餐半票人数
+            Integer fullPm = buffetOrderDetailService.queryCount(day, "99999"); //晚餐全票人数
+
+            //当有友情价是discountReason必须存老板手机号码
+            boolean res = eventTools.eventRemind(openids,"飞凡抵价通知", "有顾客使用飞凡购票", NormalTools.curDate("yyyy-MM-dd HH:mm"),
+                    "/wx/buffetOrders/show?no="+o.getNo(),
+                    new EventRemarkDto("订单编号", o.getNo()),
+                    new EventRemarkDto("商品总数", o.getCommodityCount()+""),
+                    new EventRemarkDto("午餐人数", halfAm+"+"+fullAm+"="+(halfAm+fullAm)),
+                    new EventRemarkDto("晚餐人数", halfPm+"+"+fullPm+"="+(halfPm+fullPm)),
+                    new EventRemarkDto("飞凡编号", o.getDiscountReason()),
+                    new EventRemarkDto("", "点击查看可确认！"));
+
         }
     }
 

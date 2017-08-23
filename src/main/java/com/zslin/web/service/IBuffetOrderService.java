@@ -14,6 +14,9 @@ public interface IBuffetOrderService extends BaseRepository<BuffetOrder, Integer
 
     BuffetOrder findByNo(String no);
 
+    @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE status in ('2', '4', '5')")
+    Integer queryCount();
+
     //查询折扣次数
     @Query("SELECT COUNT(id) FROM BuffetOrder b WHERE b.discountReason=?1 AND b.discountType='2' AND b.type='4'")
     Integer findFriendCount(String phone);
@@ -43,6 +46,9 @@ public interface IBuffetOrderService extends BaseRepository<BuffetOrder, Integer
     @Query("SELECT SUM(discountMoney) FROM BuffetOrder WHERE type='3' AND STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
     Float queryMoneyByMeiTuan(String startTime, String endTime);
 
+    @Query("SELECT SUM(discountMoney) FROM BuffetOrder WHERE type='9' AND STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
+    Float queryMoneyByFfan(String startTime, String endTime);
+
     @Query("SELECT SUM(totalMoney) FROM BuffetOrder WHERE payType=?3 AND STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
     Float queryTotalMoneyByPayType(String startTime, String endTime, String payType);
 
@@ -54,6 +60,9 @@ public interface IBuffetOrderService extends BaseRepository<BuffetOrder, Integer
 
     @Query("FROM BuffetOrder WHERE type='3' AND STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
     List<BuffetOrder> findByMeiTuan(String startTime, String endTime);
+
+    @Query("FROM BuffetOrder WHERE type='9' AND STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
+    List<BuffetOrder> findByFfan(String startTime, String endTime);
 
     //获取从会员账户扣款的金额
     @Query("SELECT SUM(discountMoney) FROM BuffetOrder WHERE type='5' AND STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")

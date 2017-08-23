@@ -112,6 +112,11 @@ public class AdminNewOrdersController {
         Float meituanMoneyPM = buffetOrderService.queryMoneyByMeiTuan(mtd.getStartTimePM(), mtd.getEndTimePM());
         model.addAttribute("meituanMoneyPM", meituanMoneyPM==null?0:meituanMoneyPM); //美团
 
+        Float ffanMoneyAM = buffetOrderService.queryMoneyByFfan(mtd.getStartTimeAM(), mtd.getEndTimeAM());
+        model.addAttribute("ffanMoneyAM", ffanMoneyAM==null?0:ffanMoneyAM); //飞凡
+        Float ffanMoneyPM = buffetOrderService.queryMoneyByFfan(mtd.getStartTimePM(), mtd.getEndTimePM());
+        model.addAttribute("ffanMoneyPM", ffanMoneyPM==null?0:ffanMoneyPM); //飞凡
+
         Float ticketMoneyAM = buffetOrderService.queryMoneyByTicket(mtd.getStartTimeAM(), mtd.getEndTimeAM());
         model.addAttribute("ticketMoneyAM", ticketMoneyAM==null?0:ticketMoneyAM); //卡券
         Float ticketMoneyPM = buffetOrderService.queryMoneyByTicket(mtd.getStartTimePM(), mtd.getEndTimePM());
@@ -139,6 +144,7 @@ public class AdminNewOrdersController {
 
         calTicket(mtd, model);
         calMeituan(mtd, model);
+        calFfan(mtd, model);
         buildMemberMoney(mtd, model);
         buildBond(mtd, model);
         buildBondMoney(mtd, model);
@@ -179,6 +185,28 @@ public class AdminNewOrdersController {
 
         List<BuffetOrder> listPM = buffetOrderService.findByMeiTuan(mtd.getStartTimePM(), mtd.getEndTimePM()); //下午
         model.addAttribute("meituanAmountPM", buildMeituanAmount(listPM));
+    }
+
+    private void calFfan(MyTimeDto mtd, Model model) {
+        List<BuffetOrder> list = buffetOrderService.findByFfan(mtd.getStartTimeAM(), mtd.getEndTimeAM()); //上午
+        model.addAttribute("ffanAmountAM", buildFfanAmount(list));
+
+        List<BuffetOrder> listPM = buffetOrderService.findByFfan(mtd.getStartTimePM(), mtd.getEndTimePM()); //下午
+        model.addAttribute("ffanAmountPM", buildFfanAmount(listPM));
+    }
+
+    private Integer buildFfanAmount(List<BuffetOrder> list) {
+        Integer res = 0;
+        for(BuffetOrder order : list) {
+            String datas = order.getDiscountReason();
+            String [] array = datas.split(",");
+            for(String d : array) {
+                if(d!=null) {
+                    res ++;
+                }
+            }
+        }
+        return res;
     }
 
     private Integer buildMeituanAmount(List<BuffetOrder> list) {

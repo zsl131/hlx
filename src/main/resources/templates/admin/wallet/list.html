@@ -35,6 +35,7 @@
 						<th>电话</th>
 						<th>现金余额</th>
 						<th>积分余额</th>
+						<th>创建日期</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -43,9 +44,10 @@
 					<td><span  th:text="${obj.accountName}"></span>
 					[<span th:if="${obj.isVip eq '1'}" style="color:#F00">会员</span><span th:if="${obj.isVip ne '1'}">非会员</span>]
 					</td>
-					<td th:text="${obj.phone}"></td>
+					<td><a th:href="'/admin/walletDetail/list?filter_phone=like-'+${obj.phone}" th:text="${obj.phone}"></a></td>
 					<td th:text="${obj.money}" class="show-money"></td>
 					<td th:text="${obj.score}+' 分'"></td>
+					<td th:text="${obj.createTime}"></td>
 					<td>
 						<a href="javascript:void(0)" class="auth single-wallet" th:attr="phone=${obj.phone}, openid=${obj.openid}" sn="AdminWalletController.plus">充值</a>
 					</td>

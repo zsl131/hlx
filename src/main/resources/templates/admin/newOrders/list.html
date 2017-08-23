@@ -47,6 +47,7 @@
                                 <span th:case="4">亲情</span>
                                 <span th:case="5">会员</span>
                                 <span th:case="6">卡券</span>
+                                <span th:case="9">飞凡</span>
                             </span>
 
                             <span  th:switch="${obj.type}" th:if="${obj.isSelf eq '0'}">
@@ -90,7 +91,8 @@
                             <span th:case="3">卡券抵价（<b th:text="${obj.discountMoney}"></b> 元）</span>
                             <span th:case="4">微信扣款（<b th:text="${obj.discountMoney}"></b> 元）</span>
                             <span th:case="5">会员扣款（<b th:text="${obj.discountMoney}"></b> 元）</span>
-                            <span th:case="6">美团扣款（<b th:text="${obj.discountMoney}"></b> 元）</span>
+                            <span th:case="6">美团抵价（<b th:text="${obj.discountMoney}"></b> 元）</span>
+                            <span th:case="9">飞凡抵价（<b th:text="${obj.discountMoney}"></b> 元）</span>
                             <span th:case="*">-</span>
                         </td>
                         <td th:switch="${obj.status}" th:if="${obj.isSelf eq '1'}">

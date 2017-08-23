@@ -47,7 +47,7 @@
 						<span th:case="1" style="color:#00F;">进账</span>
 						<span th:case="-1" style="color:#F00;">出账</span>
 					</td>
-					<td th:text="${obj.reason}"></td>
+					<td><span th:text="${obj.reason}"></span>(<span th:text="${obj.tranType}"></span>)</td>
 					<td><b th:text="${obj.flag eq '1'?'+':''}"></b><span th:text="${obj.amount}"></span> <span th:text="${obj.type eq '1'?'元':'分'}"></span></td>
 					<td th:text="${obj.createTime}"></td>
 				</tr>

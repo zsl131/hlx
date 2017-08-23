@@ -50,7 +50,7 @@ public class WeixinIndexController {
         model.addAttribute("categoryList", categoryService.findByOrder()); //分类
         model.addAttribute("galleryList", galleryService.findShow()); //微信画廊
         model.addAttribute("ordersList", buffetOrderService.findAll(SimplePageBuilder.generate(0, 6, SimpleSortBuilder.generateSort("id_d")))); //最新订单
-        model.addAttribute("ordersCount", buffetOrderDetailService.queryCount());
+        model.addAttribute("ordersCount", buffetOrderService.queryCount());
         model.addAttribute("ordersCountYestoday", buffetOrderDetailService.queryCount(DateTools.plusDay(-1, "yyyy-MM-dd")));
         model.addAttribute("ordersCountToday", buffetOrderDetailService.queryCount(DateTools.plusDay(0, "yyyy-MM-dd")));
         SimpleSpecificationBuilder builder = new SimpleSpecificationBuilder("status", "eq", "1");
