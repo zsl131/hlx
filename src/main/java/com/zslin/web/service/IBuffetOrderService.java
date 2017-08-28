@@ -55,6 +55,12 @@ public interface IBuffetOrderService extends BaseRepository<BuffetOrder, Integer
     @Query("SELECT SUM(surplusBond) FROM BuffetOrder WHERE STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
     Float queryBondMoney(String startTime, String endTime);
 
+    @Query("SELECT SUM(discountMoney) FROM BuffetOrder WHERE STATUS IN ('2', '3', '4', '5') AND discountType='10' AND createDay=?1")
+    Float queryDiscountMoneyByTime(String createDay);
+
+    @Query("SELECT SUM(discountMoney) FROM BuffetOrder WHERE STATUS IN ('2', '3', '4', '5') AND discountType='10' AND createTime BETWEEN ?1 AND ?2")
+    Float queryDiscountMoneyByTime(String startTime, String endTime);
+
     @Query("FROM BuffetOrder WHERE type='6' AND STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
     List<BuffetOrder> findByTicket(String startTime, String endTime);
 

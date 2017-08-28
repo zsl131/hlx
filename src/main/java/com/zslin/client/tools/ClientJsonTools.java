@@ -94,4 +94,9 @@ public class ClientJsonTools {
         JsonDto jd = new JsonDto("meituanShop", action, shop.getId(), shop);
         return JSON.toJSONString(jd);
     }
+
+    public static String buildDiscountTime(DiscountTime discountTime, String action) {
+        JsonDto jd = new JsonDto("discountTime", action, discountTime.getId(), discountTime);
+        return JSON.toJSONString(jd);
+    }
 }

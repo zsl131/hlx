@@ -105,7 +105,7 @@ public class BuffetOrder {
     @Column(name = "discount_reason")
     private String discountReason;
 
-    /** 优惠类型；0-无优惠；1-积分抵价；2-友情价；3-抵价券；4-微信扣款订单；5-会员扣款订单；6-美团扣款订单 */
+    /** 优惠类型；0-无优惠；1-积分抵价；2-友情价；3-抵价券；4-微信扣款订单；5-会员扣款订单；6-美团扣款订单；9-飞凡扣款订单；10-时段折扣 */
     @Column(name = "discount_type")
     private String discountType;
 

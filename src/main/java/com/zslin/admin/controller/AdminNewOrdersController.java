@@ -102,6 +102,14 @@ public class AdminNewOrdersController {
         queryTotalMoney(mtd, model);
         model.addAttribute("day", day);
 
+        Float discountMoneyAM = buffetOrderService.queryDiscountMoneyByTime(mtd.getStartTimeAM(), mtd.getEndTimeAM());
+        discountMoneyAM = discountMoneyAM==null?0:discountMoneyAM;
+        model.addAttribute("discountMoneyAM", discountMoneyAM); //时段折扣金额
+        Float discountMoneyPM = buffetOrderService.queryDiscountMoneyByTime(mtd.getStartTimePM(), mtd.getEndTimePM());
+        discountMoneyPM = discountMoneyPM==null?0:discountMoneyPM;
+        model.addAttribute("discountMoneyPM", discountMoneyPM); //时段折扣金额
+        model.addAttribute("discountMoney", discountMoneyAM+discountMoneyPM);
+
         Float marketMoneyAM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "5");
         model.addAttribute("marketMoneyAM", marketMoneyAM==null?0:marketMoneyAM); //商场签单
         Float marketMoneyPM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimePM(), mtd.getEndTimePM(), "5");

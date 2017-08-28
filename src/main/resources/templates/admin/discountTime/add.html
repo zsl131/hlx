@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>添加时段折扣规则</title>
+	</head>
+	<body>
+		<div th:fragment="content" th:remove="tag">
+			<div class="header lighter smaller blue">
+				<h3><i class="fa fa-plus"></i>&nbsp;添加时段折扣规则</h3>
+				<div th:replace="admin/discountTime/nav :: content" th:remove="tag"></div>
+			</div>
+
+			<form method="POST" th:object="${discountTime}" id="dataForm" enctype="multipart/form-data">
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">折扣时段：</div>
+						<input name="startClock" type="text" class="form-control" th:value="${discountTime.startClock}" placeholder="时间点，如：17:00" />
+						<span class="input-group-addon">&nbsp;-&nbsp;</span>
+						<input name="endClock" type="text" class="form-control" th:value="${discountTime.endClock}" placeholder="时间点，如：17:30" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">折扣金额：</div>
+						<input name="discountMoney" type="text" class="form-control" th:value="${discountTime.discountMoney}" placeholder="请输入折扣金额，单位元，如：10" />
+						<span class="input-group-addon">&nbsp;元&nbsp;</span>
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group input-group-lg">
+						<div class="input-group-addon">状态</div>
+						<div class="form-control">
+							<input type="radio" name="status" value="1" id="status_1" th:checked="${discountTime.status == '1'}?'checked'"/><label for="status_1">启用</label>
+							<input type="radio" name="status" value="0" id="status_0" th:checked="${discountTime.status == '0'}?'checked'"/><label for="status_0">停用</label>
+						</div>
+					</div>
+				</div>
+
+				<input type="hidden" name="token" value="${session.token}"/>
+				<button type="submit" class="btn btn-primary">确定提交</button>
+			</form>
+		</div>
+	</body>
+</html>
