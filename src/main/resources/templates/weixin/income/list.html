@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+    <script type="text/javascript" src="/basic/admin/myself/cms.admin.js"></script>
+    <script type="text/javascript" src="/basic/admin/myself/my_filter.js"></script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div  th:if="${datas ne null}">
+        <div class="page">
+            <div class="page__hd" style="padding-left:10px;padding-right:10px; background:#fafafa; border-bottom:1px #ececec solid;">
+                <div class="weui-flex">
+                    <div class="weui-flex__item">
+                        <h1 class="page__title" style="color:#F60;"><b class="fa fa-cny"></b><b th:text="|${#numbers.formatDecimal(totalMoney, 0, 2)} 元|"></b>
+                        </h1>
+                        <span class="page__desc">平均：<b th:text="|${#numbers.formatDecimal(avg, 0, 2)} 元/天|"></b>，超过2万：<b th:text="${moreThan}"></b>&nbsp;天</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row container align-center" style="padding-top:10px;margin-left:10px;">
+            <div class="input-group">
+                <span class="input-group-addon">日期</span>
+                <input type='text' style="width:140px;" th:value="${month}" class='filter_element form-control' placeholder="yyyyMM" opt="eq" maxlength="6" name='filter_comeMonth'/>
+                <span><button type="button" class="btn btn-primary btn-sm" id="beginFilter">查询</button></span>
+            </div>
+        </div>
+
+        <div class="weui-cells">
+            <div th:each="obj : ${datas}" th:remove="tag">
+                <a class="weui-cell weui-cell_access" th:href="'/wx/income/show?id='+${obj.id}" >
+                    <div class="weui-cell__hd"><span th:text="|${#strings.substring(obj.comeDay, 0, 4)}-${#strings.substring(obj.comeDay, 4, 6)}-${#strings.substring(obj.comeDay, 6, 8)}|" style="color:#888;"></span></div>
+                    <div class="weui-cell__bd">&nbsp;
+
+                    </div>
+                    <div class="weui-cell__ft">
+                        <span th:text="|${#numbers.formatDecimal(obj.totalMoney, 0, 2)} 元|"></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
+    </div>
+    <div th:if="${datas eq null}">
+        <h4 class="align-center">无权限访问！</h4>
+    </div>
+    <div th:each="arg : ${args}" class="search-filter-div">
+        <input th:value="${arg.value}" type="hidden" th:attr="targetId=${arg.key}"/>
+    </div>
+</div>
+</body>
+</html>

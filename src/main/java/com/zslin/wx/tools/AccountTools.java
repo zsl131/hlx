@@ -45,6 +45,15 @@ public class AccountTools {
     }
 
     /**
+     * 判断是否为管理员
+     * @param type
+     * @return
+     */
+    public static boolean isAdmin(String type) {
+        return ADMIN.equalsIgnoreCase(type);
+    }
+
+    /**
      * 生成用户人数相关的事件推送字符串
      * @return
      */

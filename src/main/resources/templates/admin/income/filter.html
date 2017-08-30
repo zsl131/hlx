@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content" th:remove="tag">
+            <div id="sys_filter" class="form-inline" style="padding-bottom:10px;">
+                <div class="input-group">
+                    <span class="input-group-addon">类别</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_type'>
+                        <option value="">=全部=</option>
+                        <option value="1">营业收入</option>
+                        <option value="2">其他收入</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">日期</span>
+                    <input type='text' style="width:95px;" class='filter_element form-control' opt="eq" name='filter_comeDay' placeholder="yyyyMMdd"/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">月份</span>
+                    <input type='text' style="width:78px;" class='filter_element form-control' opt="eq" name='filter_comeMonth' placeholder="yyyyMM"/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">年份</span>
+                    <input type='text' style="width:60px;" class='filter_element form-control' opt="eq" name='filter_comeYear' placeholder="yyyy"/>
+                </div>
+
+                <span><button type="button" class="btn btn-primary btn-sm" id="beginFilter">查询</button></span>
+            </div>
+        </div>
+    </body>
+</html>

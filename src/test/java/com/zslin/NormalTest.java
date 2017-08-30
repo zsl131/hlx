@@ -10,9 +10,11 @@ import com.zslin.kaoqin.tools.*;
 import com.zslin.sms.tools.RandomTools;
 import com.zslin.sms.tools.SmsConfig;
 import com.zslin.sms.tools.SmsTools;
+import com.zslin.web.model.Income;
 import com.zslin.web.model.WeixinConfig;
 import com.zslin.web.service.IBuffetOrderDetailService;
 import com.zslin.web.service.IBuffetOrderService;
+import com.zslin.web.service.IIncomeService;
 import com.zslin.web.tools.CommonTools;
 import com.zslin.wx.tools.WxConfig;
 import org.json.JSONArray;
@@ -26,6 +28,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.ClassUtils;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -54,6 +57,21 @@ public class NormalTest {
 
     @Autowired
     private IBuffetOrderService buffetOrderService;
+
+    @Autowired
+    private IIncomeService incomeService;
+
+    @Test
+    public void test25() {
+        Income income = incomeService.findOne(2);
+        Float totalMoney = income.getCash()+income.getAlipay()+income.getFfan()+income.getMarket()+income.getMeituan()+income.getMember()+income.getOther()+income.getWeixin();
+        BigDecimal bg = new BigDecimal(totalMoney);
+        totalMoney = bg.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+        System.out.println("============"+totalMoney);
+
+        Double avg = incomeService.average("201708");
+        System.out.println("===avg==="+avg);
+    }
 
     @Test
     public void test24() {

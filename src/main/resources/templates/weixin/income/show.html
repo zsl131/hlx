@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+    <script type="text/javascript" src="/basic/admin/myself/cms.admin.js"></script>
+    <script type="text/javascript" src="/basic/admin/myself/my_filter.js"></script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div  th:if="${income ne null}">
+        <div class="page">
+            <div class="page__hd" style="padding-left:10px;padding-right:10px; background:#fafafa; border-bottom:1px #ccc solid;">
+                <div class="weui-flex">
+                    <div class="weui-flex__item">
+                        <h1 class="page__title" style="color:#F60;"><b class="fa fa-cny"></b><b th:text="|${#numbers.formatDecimal(totalMoney, 0, 2)} 元|"></b>
+                        </h1>
+                        <span class="page__desc">平均：<b th:text="|${#numbers.formatDecimal(avg, 0, 2)} 元/天|"></b>，超过2万：<b th:text="${moreThan}"></b>&nbsp;天</span>
+                        <span class="page__desc" style="width:100%; float:left;" th:text="|${#strings.substring(income.comeDay, 0, 4)}年${#strings.substring(income.comeDay, 4, 6)}月${#strings.substring(income.comeDay, 6, 8)}日|"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-cells" style="margin-top:0px;">
+            <div class="weui-cell">
+                <div class="weui-cell__hd">合计</div>
+                <div class="weui-cell__bd">&nbsp;</div>
+                <div class="weui-cell__ft">
+                    <span th:text="|${#numbers.formatDecimal(income.totalMoney, 0, 2)} 元|" style="color:#00F;"></span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">现金</div>
+                <div class="weui-cell__bd">&nbsp;</div>
+                <div class="weui-cell__ft">
+                    <span th:text="|${income.cash} 元|"></span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">微信</div>
+                <div class="weui-cell__bd">&nbsp;</div>
+                <div class="weui-cell__ft">
+                    <span th:text="|${income.weixin} 元|"></span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">支付宝</div>
+                <div class="weui-cell__bd">&nbsp;</div>
+                <div class="weui-cell__ft">
+                    <span th:text="|${income.alipay} 元|"></span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">美团</div>
+                <div class="weui-cell__bd">&nbsp;</div>
+                <div class="weui-cell__ft">
+                    <span th:text="|${income.meituan} 元|"></span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">商场</div>
+                <div class="weui-cell__bd">&nbsp;</div>
+                <div class="weui-cell__ft">
+                    <span th:text="|${income.market} 元|"></span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">飞凡</div>
+                <div class="weui-cell__bd">&nbsp;</div>
+                <div class="weui-cell__ft">
+                    <span th:text="|${income.ffan} 元|"></span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">会员</div>
+                <div class="weui-cell__bd">&nbsp;</div>
+                <div class="weui-cell__ft">
+                    <span th:text="|${income.member} 元|"></span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">其他</div>
+                <div class="weui-cell__bd">&nbsp;</div>
+                <div class="weui-cell__ft">
+                    <span th:text="|${income.other} 元|"></span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">午餐券</div>
+                <div class="weui-cell__bd">&nbsp;</div>
+                <div class="weui-cell__ft">
+                    <span th:text="|${income.noonTicket} 张|"></span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">晚餐券</div>
+                <div class="weui-cell__bd">&nbsp;</div>
+                <div class="weui-cell__ft">
+                    <span th:text="|${income.nightTicket} 张|"></span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">10元券</div>
+                <div class="weui-cell__bd">&nbsp;</div>
+                <div class="weui-cell__ft">
+                    <span th:text="|${income.tenTicket} 张|"></span>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="padding-top:10px;padding-bottom:10px;">
+            <a href="javascript:void(0)" onclick="history.back(-1)" class="btn btn-default"><b class="fa fa-chevron-circle-left"></b> 点击返回</a>
+        </div>
+    </div>
+    <div th:if="${income eq null}">
+        <h4 class="align-center">无权限访问！</h4>
+    </div>
+</div>
+</body>
+</html>
