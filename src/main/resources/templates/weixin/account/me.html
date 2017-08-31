@@ -10,16 +10,15 @@
     <script type="text/javascript" src="/weixin/weixin-bind-phone.js"></script>
     <script src="/weixin/weixin-account-me.js"></script>
     <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
-
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
     <div class="page__bd page__bd_spacing">
         <div class="weui-flex">
             <div class="weui-flex__item">
-                <div class="center-head"  style="width:100%;">
-                    <span class="head-img"><img th:src="${account.headimgurl}"/></span>
-                    <span class="head-info">
+                <div class="center-head"  style="width:100%; float:left;">
+                    <span class="head-img" style="float:left;"><img th:src="${account.headimgurl}"/></span>
+                    <span class="head-info" style="float:left;">
                         <span th:text="${account.nickname}" class="nickname"></span>
                         <span th:switch="${account.type}">
                             用户类型：
@@ -31,8 +30,9 @@
                             <b th:if="${account.hasCard eq '1'}" style="color:#FF0">（会员）</b>
                             <i th:if="${account.hasCard eq '2'}" style="color:#F60; text-decoration:line-through;">（会员过期）</i>
                         </span>
-                        <span>邀请人：<b th:remove="tag" th:text="${(account.followUserName ne null and account.followUserName ne '')?account.followUserName:'无'}"></b>
-                        <a th:href="@{/weixin/qr(id=${account.id})}"><i class="fa fa-info"></i> 邀请人赚积分！</a>
+                        <span>
+                            <!--邀请人：<b th:remove="tag" th:text="${(account.followUserName ne null and account.followUserName ne '')?account.followUserName:'无'}"></b>-->
+                            <a th:href="@{/weixin/qr(id=${account.id})}"><i class="fa fa-info"></i> 邀请好友赚积分！</a>
                         </span>
                     </span>
                 </div>
@@ -126,6 +126,15 @@
                             <span th:text="${ownCount}"></span>
                         </div>
                     </a>
+                    <a class="weui-cell weui-cell_access" href="/wx/income/list" th:if="${account.type eq '5' || account.type eq '10'}">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-cny"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>收入管理</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="|${#numbers.formatDecimal(incomeMoney, 0, 2)} 元|">点击前往</span>
+                        </div>
+                    </a>
                     <a class="weui-cell weui-cell_access" href="/wx/cashCal/index" th:if="${account.type eq '5' || account.type eq '10'}">
                         <div class="weui-cell__hd"><i class="list-icon fa fa-calculator"></i></div>
                         <div class="weui-cell__bd">
@@ -136,6 +145,8 @@
                         </div>
                     </a>
                 </div>
+
+                <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
 
             </div>
         </div>

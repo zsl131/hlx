@@ -86,6 +86,9 @@ public class WeixinAccountController {
     @Autowired
     private IWalletRemovedService walletRemovedService;
 
+    @Autowired
+    private IIncomeService incomeService;
+
     //微信用户个人中心
     @GetMapping(value = "me")
     public String me(Model model, HttpServletRequest request) {
@@ -101,6 +104,7 @@ public class WeixinAccountController {
 
         if(AccountTools.isPartner(account.getType())) {
             model.addAttribute("friendOrdersCount", buffetOrderService.findFriendCount(account.getPhone())); //友情折扣的次数
+            model.addAttribute("incomeMoney", incomeService.totalMoney(NormalTools.curDate("yyyyMM")));
         }
         return "weixin/account/me";
     }
