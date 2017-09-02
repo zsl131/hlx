@@ -95,7 +95,7 @@ public class AdminIncomeController {
 //            in.setTotalMoney(income.getCash()+income.getAlipay()+income.getFfan()+income.getMarket()+income.getMeituan()+income.getMember()+income.getOther()+income.getWeixin());
             Float totalMoney = income.getCash()+income.getAlipay()+income.getFfan()+income.getMarket()+income.getMeituan()+income.getMember()+income.getOther()+income.getWeixin();
             BigDecimal bg = new BigDecimal(totalMoney);
-            income.setTotalMoney(bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            in.setTotalMoney(bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
             String comeDay = income.getComeDay();
             comeDay = comeDay==null||"".equalsIgnoreCase(comeDay)? NormalTools.curDate("yyyyMMdd"):comeDay;
             String comeYear = comeDay.substring(0, 4);

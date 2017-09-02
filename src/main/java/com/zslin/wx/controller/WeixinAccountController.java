@@ -104,7 +104,8 @@ public class WeixinAccountController {
 
         if(AccountTools.isPartner(account.getType())) {
             model.addAttribute("friendOrdersCount", buffetOrderService.findFriendCount(account.getPhone())); //友情折扣的次数
-            model.addAttribute("incomeMoney", incomeService.totalMoney(NormalTools.curDate("yyyyMM")));
+            Double incomeMoney = incomeService.totalMoney(NormalTools.curDate("yyyyMM"));
+            model.addAttribute("incomeMoney", incomeMoney==null?0:incomeMoney);
         }
         return "weixin/account/me";
     }

@@ -126,6 +126,15 @@
                             <span th:text="${ownCount}"></span>
                         </div>
                     </a>
+                    <a class="weui-cell weui-cell_access" href="/wx/income/add" th:if="${account.type eq '10'}">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-plus"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>添加收入</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span>点击前往</span>
+                        </div>
+                    </a>
                     <a class="weui-cell weui-cell_access" href="/wx/income/list" th:if="${account.type eq '5' || account.type eq '10'}">
                         <div class="weui-cell__hd"><i class="list-icon fa fa-cny"></i></div>
                         <div class="weui-cell__bd">
