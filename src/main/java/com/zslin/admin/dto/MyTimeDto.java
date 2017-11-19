@@ -2,6 +2,7 @@ package com.zslin.admin.dto;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/6/12 9:49.
+ * 时间间隔点
  */
 public class MyTimeDto {
 
