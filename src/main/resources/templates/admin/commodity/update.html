@@ -55,6 +55,15 @@
 				<input name="file" type="file" class="form-control" />
 			</div>
 		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group input-group-lg">
+				<div class="input-group-addon">状态：</div>
+				<div class="form-control">
+					<input type="radio" name="status" value="1" id="status_1" th:checked="${commodity.status == '1'}?'checked'"/><label for="status_1">启用</label>
+					<input type="radio" name="status" value="0" id="status_0" th:checked="${commodity.status == '0'}?'checked'"/><label for="status_0">停用</label>
+				</div>
+			</div>
+		</div>
 
 		<input type="hidden" name="token" value="${session.token}"/>
 		<button type="submit" class="btn btn-primary">确定提交</button>

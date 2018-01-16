@@ -3,14 +3,23 @@ package com.zslin.basic.controller;
 import com.zslin.basic.dto.AuthToken;
 import com.zslin.basic.model.User;
 import com.zslin.basic.service.IUserService;
-import com.zslin.basic.tools.SecurityUtil;
+import com.zslin.basic.tools.*;
+import com.zslin.web.model.Commodity;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Created by zsl-pc on 2016/9/7.
@@ -20,12 +29,49 @@ import javax.servlet.http.HttpServletRequest;
 public class AdminController {
 
     @Autowired
+    private ConfigTools configTools;
+
+    @Autowired
     private IUserService userService;
+
+
+    private static final String PATH_PRE = "clientProgram";
 
     /** 后台首页 */
     @RequestMapping(value={"", "/"}, method= RequestMethod.GET)
     public String index(Model model, HttpServletRequest request) {
         return "admin/basic/index";
+    }
+
+    @RequestMapping(value="uploadClient", method=RequestMethod.POST)
+    public String update(HttpServletRequest request, @RequestParam("file")MultipartFile[] files) {
+        if (files != null && files.length >= 1) {
+            BufferedOutputStream bw = null;
+            try {
+                String fileName = files[0].getOriginalFilename();
+                if (fileName != null) {
+
+                    File oldFile = new File(configTools.getUploadPath() + fileName);
+                    if (oldFile.exists()) {
+                        oldFile.delete();
+                    }
+
+                    File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + fileName);
+                    FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (bw != null) {
+                        bw.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return "redirect:/admin";
     }
 
     /** 修改密码 */

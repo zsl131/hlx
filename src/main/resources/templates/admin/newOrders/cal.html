@@ -31,11 +31,11 @@
                     <div class="panel panel-info">
                         <div class="panel-heading">人数统计：</div>
                         <div class="panel-body">
-                            <p>上午半票人数：<b th:text="${halfAm}"></b> 人</p>
+                            <p>上午半票人数：<b th:text="${halfAm}"></b> 人，简餐人数：<b th:text="${speCount}"></b> 人（半票：<b th:text="${speHalfCount}"></b>）</p>
                             <p>上午全票人数：<b th:text="${fullAm}"></b> 人</p>
                             <p>下午半票人数：<b th:text="${halfPm}"></b> 人</p>
                             <p>下午全票人数：<b th:text="${fullPm}"></b> 人</p>
-                            <p>合计：<b th:text="${halfAm+fullAm+halfPm+fullPm}"></b> 人</p>
+                            <p>合计：<b th:text="${halfAm+fullAm+halfPm+fullPm+speCount+speHalfCount}"></b> 人</p>
                         </div>
                     </div>
                 </div>

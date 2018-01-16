@@ -117,39 +117,39 @@ public class AdminCommodityController {
         if(TokenTools.isNoRepeat(request)) {
             Commodity c = commodityService.findOne(id);
             String type = c.getType();
-            if("3".equalsIgnoreCase(type)) { //只能修改外卖单品
-                MyBeanUtils.copyProperties(commodity, c, new String[]{"id", "no", "type"});
+//            if("3".equalsIgnoreCase(type)) { //只能修改外卖单品
+            MyBeanUtils.copyProperties(commodity, c, new String[]{"id", "no", "type"});
 
-                if (files != null && files.length >= 1) {
-                    BufferedOutputStream bw = null;
+            if (files != null && files.length >= 1) {
+                BufferedOutputStream bw = null;
+                try {
+                    String fileName = files[0].getOriginalFilename();
+                    if (fileName != null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
+
+                        File oldFile = new File(configTools.getUploadPath() + c.getPicPath());
+                        if (oldFile.exists()) {
+                            oldFile.delete();
+                        }
+
+                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString() + NormalTools.getFileType(fileName));
+                        c.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
                     try {
-                        String fileName = files[0].getOriginalFilename();
-                        if (fileName != null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
-
-                            File oldFile = new File(configTools.getUploadPath() + c.getPicPath());
-                            if (oldFile.exists()) {
-                                oldFile.delete();
-                            }
-
-                            File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString() + NormalTools.getFileType(fileName));
-                            c.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
-                            FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
+                        if (bw != null) {
+                            bw.close();
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
-                    } finally {
-                        try {
-                            if (bw != null) {
-                                bw.close();
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
                     }
                 }
-                commodityService.save(c);
-                send2Client(c, "update");
             }
+            commodityService.save(c);
+            send2Client(c, "update");
+//            }
         }
         return "redirect:/admin/commodity/list";
     }

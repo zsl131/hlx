@@ -68,6 +68,28 @@ public class AdminPriceController {
 
     //添加商品，在配置价格时修改
     private void buildCommodity(Price p) {
+        Commodity speCommodity = commodityService.findByNo(Commodity.SPE_NO); //不开火餐券(简餐券)
+        if(speCommodity==null) {
+            speCommodity = new Commodity();
+            speCommodity.setType("1");
+            speCommodity.setNo(Commodity.SPE_NO);
+            speCommodity.setName("牛排套餐");
+        }
+        speCommodity.setPrice(p.getSpeMoney());
+        commodityService.save(speCommodity);
+        send2Client(speCommodity, "update");
+
+        Commodity speHalfCommodity = commodityService.findByNo(Commodity.SPE_HALF_NO); //不开火餐券(简餐券 半票)
+        if(speHalfCommodity==null) {
+            speHalfCommodity = new Commodity();
+            speHalfCommodity.setType("1");
+            speHalfCommodity.setNo(Commodity.SPE_HALF_NO);
+            speHalfCommodity.setName("牛排套餐（儿童票）");
+        }
+        speHalfCommodity.setPrice(p.getSpeMoneyHalf());
+        commodityService.save(speHalfCommodity);
+        send2Client(speHalfCommodity, "update");
+
         Commodity breakfastCommodity = commodityService.findByNo(Commodity.BREAKFAST_NO); //早餐券
         if(breakfastCommodity==null) {
             breakfastCommodity = new Commodity();

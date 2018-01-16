@@ -261,10 +261,14 @@ public class WeixinCashCalController {
         Integer fullAm = buffetOrderDetailService.queryCount(day, "88888"); //午餐全票人数
         Integer halfPm = buffetOrderDetailService.queryCount(day, "77777"); //晚餐半票人数
         Integer fullPm = buffetOrderDetailService.queryCount(day, "99999"); //晚餐全票人数
+        Integer speCount = buffetOrderDetailService.queryCount(day, "33333"); //简餐人籹
+        Integer speHalfCount = buffetOrderDetailService.queryCount(day, "22222"); //简餐人籹,半票
+        model.addAttribute("speHalfCount", speHalfCount);
 
         model.addAttribute("halfAm", halfAm);
         model.addAttribute("fullAm", fullAm);
         model.addAttribute("halfPm", halfPm);
         model.addAttribute("fullPm", fullPm);
+        model.addAttribute("speCount", speCount);
     }
 }

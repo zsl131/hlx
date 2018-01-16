@@ -34,6 +34,30 @@ public class Price {
     @Column(name = "bond_money")
     private Float bondMoney;
 
+    /** 特殊商品价格，不开火 */
+    @Column(name = "spe_money")
+    private Float speMoney;
+
+    /** 简餐半票 */
+    @Column(name = "spe_money_half")
+    private Float speMoneyHalf;
+
+    public Float getSpeMoneyHalf() {
+        return speMoneyHalf;
+    }
+
+    public void setSpeMoneyHalf(Float speMoneyHalf) {
+        this.speMoneyHalf = speMoneyHalf;
+    }
+
+    public Float getSpeMoney() {
+        return speMoney;
+    }
+
+    public void setSpeMoney(Float speMoney) {
+        this.speMoney = speMoney;
+    }
+
     public Float getFriendBreakfastPrice() {
         return friendBreakfastPrice;
     }

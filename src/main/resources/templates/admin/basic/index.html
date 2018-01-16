@@ -28,7 +28,18 @@
                 <span th:text="${#dates.format(session.LOGIN_USER.login_time, 'yyyy-MM-dd HH:mm:ss')}"></span>
             </div>
 
-            <div class="col-md-12">
+            <div class="col-md-12" style="border:1px #ddd solid;">
+                <form method="POST" action="/admin/uploadClient" id="dataForm" enctype="multipart/form-data">
+                    <div class="form-group form-group-lg">
+                        <div class="input-group">
+                            <div class="input-group-addon">客户端程序：</div>
+                            <input name="file" type="file" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-lg">
+                        <button type="submit" class="btn btn-primary">确定提交</button>
+                    </div>
+                </form>
             </div>
 
         </div>

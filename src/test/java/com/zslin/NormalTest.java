@@ -2,6 +2,8 @@ package com.zslin;
 
 import com.zslin.admin.dto.MyTicketDto;
 import com.zslin.basic.tools.NormalTools;
+import com.zslin.basic.tools.SecurityUtil;
+import com.zslin.client.tools.RestdayTools;
 import com.zslin.kaoqin.dto.DayDto;
 import com.zslin.kaoqin.dto.MonthDto;
 import com.zslin.kaoqin.model.Clockin;
@@ -60,6 +62,50 @@ public class NormalTest {
 
     @Autowired
     private IIncomeService incomeService;
+
+    @Autowired
+    private RestdayTools restdayTools;
+
+    @Test
+    public void test28() throws Exception {
+        String pwd = "";
+        String p = SecurityUtil.md5("root", "111111");
+        System.out.println(p);
+    }
+
+    @Test
+    public void test27() {
+        restdayTools.setRestday("20180115", "1");
+        String res = restdayTools.setRestday("20180214_2");
+        System.out.println(res+"===="+("20180113_1".indexOf("_")));
+    }
+
+    @Test
+    public void test26() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MONTH, 1);
+        cal.set(Calendar.DAY_OF_MONTH, 14);
+        System.out.println(cal.get(Calendar.DAY_OF_MONTH)+"====="+cal.get(Calendar.DAY_OF_WEEK));
+        cal.set(Calendar.DAY_OF_MONTH, 13);
+        System.out.println(cal.get(Calendar.DAY_OF_MONTH)+"====="+cal.get(Calendar.DAY_OF_WEEK));
+        cal.set(Calendar.DAY_OF_MONTH, 12);
+        System.out.println(cal.get(Calendar.DAY_OF_MONTH)+"====="+cal.get(Calendar.DAY_OF_WEEK));
+        cal.set(Calendar.DAY_OF_MONTH, 11);
+        System.out.println(cal.get(Calendar.DAY_OF_MONTH)+"====="+cal.get(Calendar.DAY_OF_WEEK));
+        cal.set(Calendar.DAY_OF_MONTH, 10);
+        System.out.println(cal.get(Calendar.DAY_OF_MONTH)+"====="+cal.get(Calendar.DAY_OF_WEEK));
+        cal.set(Calendar.DAY_OF_MONTH, 9);
+        System.out.println(cal.get(Calendar.DAY_OF_MONTH)+"====="+cal.get(Calendar.DAY_OF_WEEK));
+        cal.set(Calendar.DAY_OF_MONTH, 8);
+        System.out.println(cal.get(Calendar.DAY_OF_MONTH)+"====="+cal.get(Calendar.DAY_OF_WEEK));
+        cal.set(Calendar.DAY_OF_MONTH, 7);
+        System.out.println(cal.get(Calendar.DAY_OF_MONTH)+"====="+cal.get(Calendar.DAY_OF_WEEK));
+        cal.set(Calendar.DAY_OF_MONTH, 6);
+        System.out.println(cal.get(Calendar.DAY_OF_MONTH)+"====="+cal.get(Calendar.DAY_OF_WEEK));
+        cal.set(Calendar.DAY_OF_MONTH, 5);
+        System.out.println(cal.get(Calendar.DAY_OF_MONTH)+"====="+cal.get(Calendar.DAY_OF_WEEK));
+        System.out.println(cal.get(Calendar.MONTH)+"====="+cal.getActualMaximum(Calendar.DATE));
+    }
 
     @Test
     public void test25() {

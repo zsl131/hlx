@@ -36,6 +36,20 @@
 
 				<div class="form-group form-group-lg">
 					<div class="input-group">
+						<div class="input-group-addon">简餐单价（无烤）：</div>
+						<input name="speMoney" id="speMoney" type="text" class="form-control" th:value="${price.speMoney}" placeholder="不开火用餐单价，单位：元" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">简餐单价（儿童）：</div>
+						<input name="speMoneyHalf" id="speMoneyHalf" type="text" class="form-control" th:value="${price.speMoneyHalf}" placeholder="不开火用餐单价，单位：元" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
 						<div class="input-group-addon">早餐单价（亲情）：</div>
 						<input name="friendBreakfastPrice" id="friendBreakfastPrice" type="text" class="form-control" th:value="${price.friendBreakfastPrice}" placeholder="请输入亲情早餐单价，单位：元" />
 					</div>

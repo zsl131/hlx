@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.zslin.client.dto.JsonDto;
 import com.zslin.client.model.ClientConfig;
 import com.zslin.client.model.Orders;
+import com.zslin.client.model.Restday;
 import com.zslin.kaoqin.model.Worker;
 import com.zslin.meituan.model.MeituanConfig;
 import com.zslin.meituan.model.MeituanShop;
@@ -97,6 +98,11 @@ public class ClientJsonTools {
 
     public static String buildDiscountTime(DiscountTime discountTime, String action) {
         JsonDto jd = new JsonDto("discountTime", action, discountTime.getId(), discountTime);
+        return JSON.toJSONString(jd);
+    }
+
+    public static String buildRestday(Restday restday) {
+        JsonDto jd = new JsonDto("restday", "save", restday.getId(), restday);
         return JSON.toJSONString(jd);
     }
 }

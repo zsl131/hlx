@@ -23,6 +23,12 @@ public class Commodity {
     //免票券
     public static final String FREE_NO = "55555";
 
+    //特殊的编号，不通电的消费
+    public static final String SPE_NO = "33333";
+
+    //简餐半票编号
+    public static final String SPE_HALF_NO = "22222";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -46,6 +52,16 @@ public class Commodity {
 
     /** 单价 */
     private Float price;
+
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Integer getId() {
         return id;

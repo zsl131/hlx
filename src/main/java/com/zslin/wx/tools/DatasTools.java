@@ -3,6 +3,7 @@ package com.zslin.wx.tools;
 import com.zslin.basic.tools.ConfigTools;
 import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
+import com.zslin.client.tools.RestdayTools;
 import com.zslin.web.model.*;
 import com.zslin.web.service.*;
 import com.zslin.web.tools.GamePrizeTools;
@@ -69,6 +70,9 @@ public class DatasTools {
     @Autowired
     private GamePrizeTools gamePrizeTools;
 
+    @Autowired
+    private RestdayTools restdayTools;
+
     /** 当用户取消关注时 */
     public void onUnsubscribe(String openid) {
         accountService.updateStatus(openid, "0");
@@ -102,6 +106,9 @@ public class DatasTools {
         } else if(isPrizeCode(content.trim())) { //如果是中奖代码
             gamePrizeTools.processMessage(openid, content.trim());
             return WeixinXmlTools.createTextXml(openid, builderName, "已成功提交兑奖码，请注意查收对奖信息！\n感谢您的参与！");
+        } else if(isSetRestday(content.trim(), openid)) {
+            String res = restdayTools.setRestday(content.trim());
+            return WeixinXmlTools.createTextXml(openid, builderName, res);
         } else {
             Feedback f = new Feedback();
             f.setCreateDate(new Date());
@@ -130,6 +137,16 @@ public class DatasTools {
             eventTools.eventRemind(adminOpenids, "在线反馈", "收到在线反馈信息", NormalTools.curDate("yyyy-MM-dd HH:mm"), sb.toString(), "/wx/feedback/list");
             return "";
         }
+    }
+
+    private boolean isSetRestday(String content, String openid) {
+        if(content!=null && content.length()==10 && content.indexOf("_")==8) {
+            List<String> openids = accountTools.getOpenid(AccountTools.ADMIN, AccountTools.PARTNER);
+            if(openids.contains(openid)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //判断用户发送的消息是否为中奖码
