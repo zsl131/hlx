@@ -55,6 +55,8 @@ public class ClientPostHandler {
             clientSimpleProcessHandler.handlerBuffetOrder(dataObj);
         } else if("buffetOrderDetail".equalsIgnoreCase(type)) { //订单详情
             clientSimpleProcessHandler.handlerBuffetOrderDetail(dataObj);
+        } else if("password".equalsIgnoreCase(type)) { //修改顾客支付密码
+            clientSimpleProcessHandler.handlerInitPassword(dataObj);
         }
     }
 

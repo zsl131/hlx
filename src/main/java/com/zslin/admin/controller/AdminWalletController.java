@@ -3,8 +3,10 @@ package com.zslin.admin.controller;
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
+import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.client.service.IMemberService;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.ClientJsonTools;
 import com.zslin.web.model.Wallet;
@@ -12,16 +14,16 @@ import com.zslin.web.model.WalletDetail;
 import com.zslin.web.service.IWalletService;
 import com.zslin.wx.dbtools.MoneyTools;
 import com.zslin.wx.dbtools.ScoreTools;
+import com.zslin.wx.tools.EventTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/1/25 23:46.
@@ -42,6 +44,60 @@ public class AdminWalletController {
 
     @Autowired
     private ClientFileTools clientFileTools;
+
+    @Autowired
+    private IMemberService memberService;
+
+    @Autowired
+    private EventTools eventTools;
+
+    /**
+     * 由于最开始没有设计支付密码，现在新增该功能后需要为每个用户初始化一个密码
+     * 此功能只能使用一次
+     * @return
+     */
+    @GetMapping(value = "initAllPasswordUseOnce")
+    public @ResponseBody String initAllPasswordUseOnce() {
+        List<Wallet> list = walletService.findAll();
+        for(Wallet w : list) {
+            initPwd(w.getId());
+        }
+        return "1";
+    }
+
+    @PostMapping(value = "initPassword")
+    public @ResponseBody String initPassword(Integer id) {
+        initPwd(id);
+        return "1";
+    }
+
+    private void initPwd(Integer id) {
+        try {
+            Wallet w = walletService.findOne(id);
+            if(w!=null && w.getPhone()!=null && !"".equalsIgnoreCase(w.getPhone())) {
+                String password = "0000";
+                walletService.updatePasswordByPhone(password, w.getPhone());
+
+                memberService.updatePassword(password, w.getPhone());
+                //TODO 此时应通知收银前端
+                send2Client(w.getPhone(), password);
+
+                if(w.getOpenid()!=null && !"".equalsIgnoreCase(w.getOpenid())) {
+                    StringBuffer sb = new StringBuffer();
+                    sb.append("新密码：").append(password).append("\\n")
+                            .append("请妥善保管好新密码，当使用账户余额（现金、积分）消费时需要向收银员提供此密码！");
+                    eventTools.eventRemind(w.getOpenid(), "密码初始化通知", "重要事件通知", DateTools.date2Str(new Date()), sb.toString(), "/wx/account/me");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void send2Client(String phone, String password) {
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildUpdatePassword(phone, password));
+        clientFileTools.setChangeContext(content, true);
+    }
 
     @GetMapping(value = "list")
     @AdminAuth(name = "钱包管理", type = "1", orderNum = 1, icon = "fa fa-shopping-bag")

@@ -88,4 +88,7 @@ public interface IBuffetOrderService extends BaseRepository<BuffetOrder, Integer
 
     @Query("SELECT SUM(surplusBond) FROM BuffetOrder WHERE status=?3 AND createTime BETWEEN ?1 AND ?2")
     Float queryBondByStatus(String startTime, String endTime, String status);
+
+    @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE createDay LIKE ?1 AND status NOT IN ('-1', '-2')")
+    Double sumByMonth(String month);
 }

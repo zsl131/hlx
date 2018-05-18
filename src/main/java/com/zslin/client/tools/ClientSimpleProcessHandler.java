@@ -228,4 +228,15 @@ public class ClientSimpleProcessHandler {
             walletService.save(w);
         }
     }
+
+    /**
+     * 修改顾客支付密码
+     * @param jsonObj
+     */
+    public void handlerInitPassword(JSONObject jsonObj) {
+        String phone = jsonObj.getString("key");
+        String password = jsonObj.getString("value");
+        memberService.updatePassword(password, phone);
+        walletService.updatePasswordByPhone(password, phone);
+    }
 }

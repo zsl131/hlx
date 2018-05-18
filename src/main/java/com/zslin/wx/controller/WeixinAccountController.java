@@ -3,7 +3,11 @@ package com.zslin.wx.controller;
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.repository.SimpleSpecificationBuilder;
+import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
+import com.zslin.client.service.IMemberService;
+import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
 import com.zslin.kaoqin.model.Worker;
 import com.zslin.kaoqin.service.IWorkerService;
 import com.zslin.sms.tools.RandomTools;
@@ -14,6 +18,7 @@ import com.zslin.web.service.*;
 import com.zslin.wx.dbtools.ScoreAdditionalDto;
 import com.zslin.wx.dbtools.ScoreTools;
 import com.zslin.wx.tools.AccountTools;
+import com.zslin.wx.tools.EventTools;
 import com.zslin.wx.tools.QrTools;
 import com.zslin.wx.tools.SessionTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +93,56 @@ public class WeixinAccountController {
 
     @Autowired
     private IIncomeService incomeService;
+
+    @Autowired
+    private EventTools eventTools;
+
+    @Autowired
+    private IMemberService memberService;
+
+    @Autowired
+    private ClientFileTools clientFileTools;
+
+    //修改密码
+    @PostMapping(value = "setPassword")
+    public @ResponseBody String setPassword(String password, HttpServletRequest request) {
+        try {
+            String openid = SessionTools.getOpenid(request);
+            walletService.updatePassword(password, openid);
+
+            Wallet w = walletService.findByOpenid(openid);
+            if(w.getPhone()!=null && !"".equals(w.getPhone())) {
+                memberService.updatePassword(password, w.getPhone());
+                //TODO 此时应通知收银前端
+                send2Client(w.getPhone(), password);
+            }
+
+            StringBuffer sb = new StringBuffer();
+            sb.append("新密码：").append(password).append("\\n")
+                    .append("请妥善保管好新密码，当使用账户余额（现金、积分）消费时需要向收银员提供此密码！\\n若非本人操作，请及时点击修改！");
+            eventTools.eventRemind(openid, "密码修改通知", "重要事件通知", DateTools.date2Str(new Date()), sb.toString(), "/wx/account/me");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "1";
+    }
+
+    private void send2Client(String phone, String password) {
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildUpdatePassword(phone, password));
+        clientFileTools.setChangeContext(content, true);
+    }
+
+    //获取用户支付密码
+    @PostMapping(value = "getPassword")
+    public @ResponseBody String getPassword(HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        Wallet w = walletService.findByOpenid(openid);
+        if(w==null) {
+            return "-2"; //未初始化钱包
+        } else {
+            return w.getPassword()==null?"-1":w.getPassword();
+        }
+    }
 
     //微信用户个人中心
     @GetMapping(value = "me")

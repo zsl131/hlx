@@ -73,6 +73,9 @@ public class DatasTools {
     @Autowired
     private RestdayTools restdayTools;
 
+    @Autowired
+    private HlxTools hlxTools;
+
     /** 当用户取消关注时 */
     public void onUnsubscribe(String openid) {
         accountService.updateStatus(openid, "0");
@@ -109,6 +112,9 @@ public class DatasTools {
         } else if(isSetRestday(content.trim(), openid)) {
             String res = restdayTools.setRestday(content.trim());
             return WeixinXmlTools.createTextXml(openid, builderName, res);
+        } else if(isFinance(content.trim(), openid)) {
+            String res = hlxTools.queryFinance(content.trim());
+            return WeixinXmlTools.createTextXml(openid, builderName, res);
         } else {
             Feedback f = new Feedback();
             f.setCreateDate(new Date());
@@ -139,6 +145,18 @@ public class DatasTools {
         }
     }
 
+    //是否为查询财务的指令
+    private boolean isFinance(String content, String openid) {
+        if(content!=null && content.length()==6) {
+            List<String> openids = accountTools.getOpenid(AccountTools.ADMIN, AccountTools.PARTNER);
+            if(openids.contains(openid)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //是否为设置工作日的指令
     private boolean isSetRestday(String content, String openid) {
         if(content!=null && content.length()==10 && content.indexOf("_")==8) {
             List<String> openids = accountTools.getOpenid(AccountTools.ADMIN, AccountTools.PARTNER);

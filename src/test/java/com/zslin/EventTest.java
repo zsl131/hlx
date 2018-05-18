@@ -1,8 +1,10 @@
 package com.zslin;
 
+import com.zslin.web.service.IBuffetOrderService;
 import com.zslin.wx.dto.EventRemarkDto;
 import com.zslin.wx.dto.TemplateParamDto;
 import com.zslin.wx.tools.EventTools;
+import com.zslin.wx.tools.HlxTools;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,15 @@ public class EventTest {
 
     @Autowired
     private EventTools eventTools;
+
+    @Autowired
+    private HlxTools hlxTools;
+
+    @Test
+    public void test02() {
+        String res = hlxTools.queryFinance("201806");
+        System.out.printf(res);
+    }
 
     @Test
     public void test01() {

@@ -19,6 +19,11 @@ public interface IMemberService extends BaseRepository<Member, Integer>, JpaSpec
     @Transactional
     void deleteByPhone(String phone);
 
+    @Query("UPDATE Member m SET m.password=?1 WHERE m.phone=?2")
+    @Modifying
+    @Transactional
+    void updatePassword(String password, String phone);
+
     @Query("UPDATE Member m SET m.surplus=m.surplus+?1 WHERE m.phone=?2")
     @Modifying
     @Transactional

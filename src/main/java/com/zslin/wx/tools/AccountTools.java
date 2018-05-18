@@ -33,6 +33,14 @@ public class AccountTools {
         return false;
     }
 
+    /**
+     * 获取所有用户的openid
+     * @return
+     */
+    public List<String> getAllOpenids() {
+        return getOpenid(CUSTOMER, WORKER, MANAGER, PARTNER, ADMIN);
+    }
+
     public List<String> getOpenid(String... types) {
         List<String> result = new ArrayList<>();
         for(String type : types) {

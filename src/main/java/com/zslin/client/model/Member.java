@@ -27,6 +27,8 @@ public class Member {
 
     private String phone;
 
+    private String password;
+
     /** 剩余金额，单位分 */
     private Integer surplus=0;
 
@@ -37,6 +39,14 @@ public class Member {
     /** 办理人员电话 */
     @Column(name = "cachier_phone")
     private String cachierPhone;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public Integer getId() {
         return id;

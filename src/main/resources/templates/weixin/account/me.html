@@ -8,6 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-account-me.css"/>
     <script type="text/javascript" src="/weixin/weixin-bind-phone.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-key-set.js"></script>
     <script src="/weixin/weixin-account-me.js"></script>
     <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
 </head>
@@ -46,6 +47,15 @@
                         </div>
                         <div class="weui-cell__ft">
                             <span th:text="${wallet.money*1.0/100} + ' 元'"></span>
+                        </div>
+                    </a>
+                    <a class="weui-cell weui-cell_access show-password-cls" href="javascript:void(0)" onclick="showPassword()">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-key"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>消费密码</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${wallet.password}">查看或修改</span>
                         </div>
                     </a>
                     <a class="weui-cell weui-cell_access" href="/wx/account/score" >

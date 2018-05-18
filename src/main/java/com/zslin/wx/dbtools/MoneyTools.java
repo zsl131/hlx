@@ -67,6 +67,7 @@ public class MoneyTools {
             for(ScoreAdditionalDto dto : dtoList) {
                 sb.append("\\n").append(dto.getName()).append((dto.getName()==null || "".equals(dto.getName()))?"":"：").append(dto.getValue());
             }
+            sb.append("\\n如有疑问及时联系我们：0870-2220360");
 
             eventTools.eventRemind(openid, "账户余额变化提醒", "账户余额发生变化啦~~", NormalTools.curDate("yyyy-MM-dd HH:mm"), sb.toString(), "/wx/account/money");
         }

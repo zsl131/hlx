@@ -4,13 +4,12 @@ import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.annotations.Token;
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
-import com.zslin.basic.tools.ConfigTools;
-import com.zslin.basic.tools.MyBeanUtils;
-import com.zslin.basic.tools.NormalTools;
-import com.zslin.basic.tools.TokenTools;
+import com.zslin.basic.tools.*;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.web.model.Article;
 import com.zslin.web.service.IArticleService;
+import com.zslin.wx.tools.AccountTools;
+import com.zslin.wx.tools.EventTools;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -39,7 +40,27 @@ public class AdminArticleController {
     @Autowired
     private ConfigTools configTools;
 
+    @Autowired
+    private AccountTools accountTools;
+
+    @Autowired
+    private EventTools eventTools;
+
     private static final String PATH_PRE = "article";
+
+    @PostMapping(value = "sendArticle")
+    public @ResponseBody String sendArticle(Integer id, String type) {
+        Article art = articleService.findOne(id);
+        List<String> openids ;
+        if("-1".equals(type)) {
+            openids = accountTools.getAllOpenids();
+        } else {
+            openids = accountTools.getOpenid(type);
+        }
+        //http://zthlx.zslin.com/weixin/article/detail?id=1
+        eventTools.eventRemind(openids, art.getTitle(), "新公告推送", DateTools.date2Str(new Date()), art.getGuide(), "/weixin/article/detail?id="+id);
+        return "1";
+    }
 
     @GetMapping(value = "list")
     @AdminAuth(name = "文章管理", orderNum = 1, type = "1", icon = "fa fa-file-word-o")

@@ -7,11 +7,13 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<title>文章列表</title>
+		<link type="text/css" rel="stylesheet" href="/admin/bus/admin-account.css"/>
 		<script type="text/javascript">
 			$(function() {
 				$(".delete-obj-href").deleteFun();
 			});
 		</script>
+		<script type="text/javascript" src="/admin/bus/admin-article-list.js"></script>
 	</head>
 <body>
 	<div th:fragment="content" th:remove="tag">
@@ -47,6 +49,16 @@
 					<td th:text="${obj.status eq '1' ? '显示':'隐藏'}"></td>
 					<td>
 						<div class="action-buttons">
+							<a class="sendHref set-type-div" href="javascript:void(0)" th:attr="objId=${obj.id}">推送给
+								<ul class="type-ul" th:attr="articleId=${obj.id}">
+									<li val="-1">推送给所有人</li>
+									<li val="0">推送给顾客</li>
+									<li val="1">推送给店员</li>
+									<li val="2">推送给经理</li>
+									<li val="5">推送给股东</li>
+									<li val="10">推送给管理员</li>
+								</ul>
+							</a>
 							<a class="green auth" sn="AdminArticleController.update" title="修改" th:href="'/admin/article/update/'+${obj.id}">
 								<i class="fa fa-pencil"></i>
 							</a>
