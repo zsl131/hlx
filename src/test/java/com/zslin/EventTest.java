@@ -28,8 +28,8 @@ public class EventTest {
 
     @Test
     public void test02() {
-        String res = hlxTools.queryFinance("201806");
-        System.out.printf(res);
+        String res = hlxTools.queryFinanceByTimer();
+        System.out.println(res);
     }
 
     @Test
