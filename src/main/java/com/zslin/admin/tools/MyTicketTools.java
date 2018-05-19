@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/6/12 10:32.
+ * --
  */
 public class MyTicketTools {
     private Map<MyTicketDto, Integer> map;
