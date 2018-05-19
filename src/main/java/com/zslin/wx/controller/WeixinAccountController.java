@@ -115,6 +115,7 @@ public class WeixinAccountController {
                 memberService.updatePassword(password, w.getPhone());
                 //TODO 此时应通知收银前端
                 send2Client(w.getPhone(), password);
+                send2Client(w);
             }
 
             StringBuffer sb = new StringBuffer();
@@ -129,6 +130,11 @@ public class WeixinAccountController {
 
     private void send2Client(String phone, String password) {
         String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildUpdatePassword(phone, password));
+        clientFileTools.setChangeContext(content, true);
+    }
+
+    private void send2Client(Wallet w) {
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildWallet(w));
         clientFileTools.setChangeContext(content, true);
     }
 

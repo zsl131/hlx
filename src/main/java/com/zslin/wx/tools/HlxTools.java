@@ -49,6 +49,34 @@ public class HlxTools {
         return sb.toString();
     }
 
+    public String calDay() {
+        String spe = "\\n";
+        String lastDay = getLastDay(0);
+        Integer sum = buffetOrderService.sumByDay(lastDay); //消费总数
+        sum = sum==null?0:sum;
+        Integer sumMt = buffetOrderService.sumByDay(lastDay, "3"); //美团人数
+        sumMt = sumMt==null?0:sumMt;
+
+        String lastDay2 = getLastDay(-1);
+        Integer sum2 = buffetOrderService.sumByDay(lastDay2);
+        sum2 = sum2==null?0:sum2;
+
+        Double ticketDiscountMoney = buffetOrderService.sumDiscountMoney("3", lastDay); //卡券抵扣
+        ticketDiscountMoney = ticketDiscountMoney==null?0:ticketDiscountMoney;
+        Double scoreDiscountMoney = buffetOrderService.sumDiscountMoney("1", lastDay); //积分抵扣
+        scoreDiscountMoney = scoreDiscountMoney==null?0:scoreDiscountMoney;
+
+        StringBuffer sb = new StringBuffer();
+        sb.append("查询日期：").append(lastDay).append(spe)
+                .append("消费人次：").append(sum).append(" 人次").append(spe)
+                .append("美团人数：").append(sumMt).append(" 人次").append(sum>0?("，占比："+formatValue(sumMt*1.0/sum*100, 2)+"%"):"").append(spe)
+                .append("卡券抵扣：").append(ticketDiscountMoney).append(" 元").append(spe)
+                .append("积分抵扣：").append(scoreDiscountMoney).append(" 元").append(spe)
+                .append("======与").append(lastDay2).append("相比======").append(spe)
+                .append("昨天消费：").append(sum2).append(" 人次，").append((sum>sum2)?"上升":"下降").append(cal(sum*1.0, sum2*1.0)).append(spe);
+        return sb.toString();
+    }
+
     /**
      * 计算变化比率
      * @param a 上一个月数据
@@ -57,6 +85,9 @@ public class HlxTools {
      */
     private String cal(Double a, Double b) {
         Double res = Math.abs(a - b);
+        if(b<=0) {
+            return "100%";
+        }
         return formatValue(res/b*100, 2)+"%";
     }
 
@@ -154,8 +185,16 @@ public class HlxTools {
 
     private String getLastMonth(int amount) {
         Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         cal.add(Calendar.MONTH, amount);
         return sdf.format(cal.getTime());
     }
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+
+    private String getLastDay(int amount) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        cal.add(Calendar.DAY_OF_MONTH, amount);
+        return sdf.format(cal.getTime());
+    }
+
 }

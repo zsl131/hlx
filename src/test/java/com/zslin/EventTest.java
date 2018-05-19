@@ -27,6 +27,12 @@ public class EventTest {
     private HlxTools hlxTools;
 
     @Test
+    public void test03() {
+        String res = hlxTools.calDay();
+        System.out.println(res);
+    }
+
+    @Test
     public void test02() {
         String res = hlxTools.queryFinanceByTimer();
         System.out.println(res);

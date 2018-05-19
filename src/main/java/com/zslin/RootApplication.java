@@ -9,6 +9,7 @@ import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/1/16 11:28.
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 @EnableJpaRepositories(basePackages = "com.zslin",
         repositoryFactoryBeanClass = BaseRepositoryFactoryBean.class)
 @SpringBootApplication
+@EnableScheduling
 public class RootApplication {
 
     public static void main(String [] args) {

@@ -43,6 +43,18 @@ public class Rules {
     @Column(name = "score_money")
     private Integer scoreMoney;
 
+    /** 积分抵扣比率，存整数，使用时除以100 */
+    @Column(name = "score_deductible")
+    private Integer scoreDeductible;
+
+    public Integer getScoreDeductible() {
+        return scoreDeductible;
+    }
+
+    public void setScoreDeductible(Integer scoreDeductible) {
+        this.scoreDeductible = scoreDeductible;
+    }
+
     public Integer getScoreMoney() {
         return scoreMoney;
     }

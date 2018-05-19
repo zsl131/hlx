@@ -154,6 +154,7 @@ public class AdminNewOrdersController {
         calMeituan(mtd, model);
         calFfan(mtd, model);
         buildMemberMoney(mtd, model);
+        calScoreMoney(mtd, model);
         buildBond(mtd, model);
         buildBondMoney(mtd, model);
         calMemberCharge(model, day);
@@ -254,6 +255,14 @@ public class AdminNewOrdersController {
             }
         }
         return mtt.getDatas();
+    }
+
+    private void calScoreMoney(MyTimeDto mtd, Model model) {
+        Float scoreMoneyAM = buffetOrderService.queryScoreDiscount(mtd.getStartTimeAM(), mtd.getEndTimeAM()); //会员抵价金额
+        Float scoreMoneyPM = buffetOrderService.queryScoreDiscount(mtd.getStartTimePM(), mtd.getEndTimePM()); //会员抵价金额
+
+        model.addAttribute("scoreMoneyAM", scoreMoneyAM==null?0:scoreMoneyAM);
+        model.addAttribute("scoreMoneyPM", scoreMoneyPM==null?0:scoreMoneyPM);
     }
 
     private void buildMemberMoney(MyTimeDto mtd, Model model) {

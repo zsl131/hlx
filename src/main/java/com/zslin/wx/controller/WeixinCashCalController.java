@@ -113,6 +113,7 @@ public class WeixinCashCalController {
             calMeituan(mtd, model);
             calFfan(mtd, model);
             buildMemberMoney(mtd, model);
+            calScoreMoney(mtd, model);
             buildBond(mtd, model);
             buildBondMoney(mtd, model);
             calMemberCharge(model, day);
@@ -199,6 +200,14 @@ public class WeixinCashCalController {
 
         List<BuffetOrder> listPM = buffetOrderService.findByTicket(mtd.getStartTimePM(), mtd.getEndTimePM()); //下午
         model.addAttribute("ticketAmountPM", buildTicketAmount(listPM));
+    }
+
+    private void calScoreMoney(MyTimeDto mtd, Model model) {
+        Float scoreMoneyAM = buffetOrderService.queryScoreDiscount(mtd.getStartTimeAM(), mtd.getEndTimeAM()); //会员抵价金额
+        Float scoreMoneyPM = buffetOrderService.queryScoreDiscount(mtd.getStartTimePM(), mtd.getEndTimePM()); //会员抵价金额
+
+        model.addAttribute("scoreMoneyAM", scoreMoneyAM==null?0:scoreMoneyAM);
+        model.addAttribute("scoreMoneyPM", scoreMoneyPM==null?0:scoreMoneyPM);
     }
 
     private Map<MyTicketDto, Integer> buildTicketAmount(List<BuffetOrder> list) {

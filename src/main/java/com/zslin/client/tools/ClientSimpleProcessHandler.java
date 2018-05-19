@@ -11,6 +11,7 @@ import com.zslin.meituan.tools.MeituanHandlerTools;
 import com.zslin.web.model.*;
 import com.zslin.web.service.*;
 import com.zslin.wx.dbtools.MoneyTools;
+import com.zslin.wx.dbtools.ScoreTools;
 import com.zslin.wx.dto.EventRemarkDto;
 import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.EventTools;
@@ -238,5 +239,19 @@ public class ClientSimpleProcessHandler {
         String password = jsonObj.getString("value");
         memberService.updatePassword(password, phone);
         walletService.updatePasswordByPhone(password, phone);
+    }
+
+    @Autowired
+    private ScoreTools scoreTools;
+
+    /**
+     * 积分消费处理
+     * @param jsonObj
+     */
+    public void handlerWallet(JSONObject jsonObj) {
+        System.out.println("========="+jsonObj.toString());
+        String openid = jsonObj.getString("key");
+        Integer score = Integer.parseInt(jsonObj.getString("value"));
+        scoreTools.processScoreByAmount(false, openid, score, "消费抵扣");
     }
 }

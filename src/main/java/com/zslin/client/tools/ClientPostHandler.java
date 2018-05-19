@@ -24,7 +24,7 @@ public class ClientPostHandler {
 
     public void handler(String json) {
         Integer status = Integer.parseInt(JsonTools.getJsonParam(json, "status"));
-        if(status!=null && status==1) { //表示获取成功
+        if (status != null && status == 1) { //表示获取成功
             String datas = JsonTools.getJsonParam(json, "data");
             processDatas(datas);
         }
@@ -32,7 +32,7 @@ public class ClientPostHandler {
 
     private void processDatas(String dataJson) {
         JSONArray array = new JSONArray(dataJson);
-        for(int i=0; i<array.length();i++) {
+        for (int i = 0; i < array.length(); i++) {
             JSONObject jsonObj = array.getJSONObject(i);
             processSingleData(jsonObj);
         }
@@ -43,20 +43,22 @@ public class ClientPostHandler {
         String type = jsonObj.getString("type"); //类型
         Integer dataId = jsonObj.getInt("dataId"); //对象Id
         JSONObject dataObj = jsonObj.getJSONObject("data"); //具体对象的Json数据
-        if("worker".equals(type)) { //修改员工密码
+        if ("worker".equals(type)) { //修改员工密码
             updateWorkerPwd(dataId, dataObj);
-        } else if("orders".equalsIgnoreCase(type)) { //订单
+        } else if ("orders".equalsIgnoreCase(type)) { //订单
             processOrdersHandler.updateOrders(dataObj);
-        } else if("memberCharge".equalsIgnoreCase(type)) { //充值记录
+        } else if ("memberCharge".equalsIgnoreCase(type)) { //充值记录
             clientSimpleProcessHandler.handlerMemberCharge(dataObj);
-        } else if("member".equalsIgnoreCase(type)) { //店内办理会员（非微信会员）
+        } else if ("member".equalsIgnoreCase(type)) { //店内办理会员（非微信会员）
             clientSimpleProcessHandler.handlerMember(dataObj, action);
-        } else if("buffetOrder".equalsIgnoreCase(type)) { //订单
+        } else if ("buffetOrder".equalsIgnoreCase(type)) { //订单
             clientSimpleProcessHandler.handlerBuffetOrder(dataObj);
-        } else if("buffetOrderDetail".equalsIgnoreCase(type)) { //订单详情
+        } else if ("buffetOrderDetail".equalsIgnoreCase(type)) { //订单详情
             clientSimpleProcessHandler.handlerBuffetOrderDetail(dataObj);
-        } else if("password".equalsIgnoreCase(type)) { //修改顾客支付密码
+        } else if ("password".equalsIgnoreCase(type)) { //修改顾客支付密码
             clientSimpleProcessHandler.handlerInitPassword(dataObj);
+        } else if ("wallet".equalsIgnoreCase(type)) { //积分钱包发生变化
+            clientSimpleProcessHandler.handlerWallet(dataObj);
         }
     }
 

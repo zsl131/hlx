@@ -111,4 +111,10 @@ public class ClientJsonTools {
         JsonDto jd = new JsonDto("password", "update",0, new NormalDto(phone, password));
         return JSON.toJSONString(jd);
     }
+
+    public static String buildWallet(Wallet w) {
+        w.setCreateDate(null); //不要传日期
+        JsonDto jd = new JsonDto("wallet", "update", w.getId(), w);
+        return JSON.toJSONString(jd);
+    }
 }

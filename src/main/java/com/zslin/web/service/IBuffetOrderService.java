@@ -74,6 +74,10 @@ public interface IBuffetOrderService extends BaseRepository<BuffetOrder, Integer
     @Query("SELECT SUM(discountMoney) FROM BuffetOrder WHERE type='5' AND STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
     Float queryMemberDiscount(String startTime, String endTime);
 
+    //获取使用积分抵扣的金额
+    @Query("SELECT SUM(discountMoney) FROM BuffetOrder WHERE type='11' AND STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
+    Float queryScoreDiscount(String startTime, String endTime);
+
     //获取会员订单中所补金额
     @Query("SELECT SUM(totalMoney) FROM BuffetOrder WHERE type='5' AND payType=?3 AND STATUS IN ('2', '3', '4', '5') AND createTime BETWEEN ?1 AND ?2")
     Float queryMemberRepair(String startTime, String endTime, String payType);
@@ -91,4 +95,13 @@ public interface IBuffetOrderService extends BaseRepository<BuffetOrder, Integer
 
     @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE createDay LIKE ?1 AND status NOT IN ('-1', '-2')")
     Double sumByMonth(String month);
+
+    @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE createDay = ?1 AND type=?2 AND status NOT IN ('-1', '-2')")
+    Integer sumByDay(String day, String type);
+
+    @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE createDay = ?1 AND status NOT IN ('-1', '-2')")
+    Integer sumByDay(String day);
+
+    @Query("SELECT SUM(discountMoney) FROM BuffetOrder WHERE discountType=?1 AND createDay LIKE ?2 AND status NOT IN ('-1', '-2')")
+    Double sumDiscountMoney(String discountType, String month);
 }

@@ -1,8 +1,12 @@
 package com.zslin.wx.dbtools;
 
 import com.zslin.basic.tools.NormalTools;
+import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
 import com.zslin.web.model.Account;
+import com.zslin.web.model.Rules;
 import com.zslin.web.model.ScoreRule;
+import com.zslin.web.model.Wallet;
 import com.zslin.web.service.IAccountService;
 import com.zslin.web.service.IScoreRuleService;
 import com.zslin.web.service.IWalletDetailService;
@@ -36,6 +40,10 @@ public class ScoreTools {
     private EventTools eventTools;
 
     public void processScore(String openid, String scoreRuleType, ScoreAdditionalDto... dtoList) {
+        processScore(true, openid, scoreRuleType, dtoList);
+    }
+
+    public void processScore(boolean needNoticeClient, String openid, String scoreRuleType, ScoreAdditionalDto... dtoList) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -54,6 +62,13 @@ public class ScoreTools {
                         walletDetailTools.addWalletDetailScore(score, a.getPhone(), a.getOpenid(), a.getId(), a.getNickname(), scoreRuleType, sr.getName());
                         walletService.plusScore(score, a.getOpenid());
 
+                        if(needNoticeClient) { //是否需要通知客户端修改积分
+                            Wallet w = walletService.findByOpenid(openid);
+                            if (w != null && w.getPhone() != null && !"".equalsIgnoreCase(w.getPhone())) {
+                                send2Client(w);
+                            }
+                        }
+
                         StringBuffer sb = new StringBuffer();
                         sb.append("积分增加：").append(score).append(" 分\\n")
                                 .append("当前剩余：").append(walletService.queryScore(a.getOpenid())).append(" 分\\n")
@@ -71,7 +86,15 @@ public class ScoreTools {
         }).start();
     }
 
-    public void processScoreByAmount(String openid, Integer amount, String reason, ScoreAdditionalDto... dtoList) {
+    @Autowired
+    private ClientFileTools clientFileTools;
+
+    private void send2Client(Wallet w) {
+        String json = ClientJsonTools.buildDataJson(ClientJsonTools.buildWallet(w));
+        clientFileTools.setChangeContext(json, true);
+    }
+
+    public void processScoreByAmount(boolean needNoticeClient, String openid, Integer amount, String reason, ScoreAdditionalDto... dtoList) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -79,6 +102,13 @@ public class ScoreTools {
                 Account a = accountService.findByOpenid(openid);
                 walletDetailTools.addWalletDetailScore(amount, a.getPhone(), a.getOpenid(), a.getId(), a.getNickname(), reason, reason);
                 walletService.plusScore(amount, a.getOpenid());
+
+                if(needNoticeClient) { //是否需要通知客户端修改积分
+                    Wallet w = walletService.findByOpenid(openid);
+                    if (w != null && w.getPhone() != null && !"".equalsIgnoreCase(w.getPhone())) {
+                        send2Client(w);
+                    }
+                }
 
                 StringBuffer sb = new StringBuffer();
                 sb.append("积分增加：").append(amount).append(" 分\\n")
@@ -93,5 +123,9 @@ public class ScoreTools {
                 eventTools.eventRemind(a.getOpenid(), "积分变化提醒", "积分发生变化啦~~", NormalTools.curDate("yyyy-MM-dd HH:mm"), sb.toString(), "/wx/account/score");
             }
         }).start();
+    }
+
+    public void processScoreByAmount(String openid, Integer amount, String reason, ScoreAdditionalDto... dtoList) {
+        processScoreByAmount(true, openid, amount, reason, dtoList);
     }
 }
