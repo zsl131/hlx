@@ -99,6 +99,20 @@
 				</div>
 
 				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">客户端版本：</div>
+						<input name="clientVersion" type="text" class="form-control" th:value="${clientConfig.clientVersion}" placeholder="输入版本号，用于升级" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">新版本下载地址：</div>
+						<input name="versionUrl" type="text" class="form-control" th:value="${clientConfig.versionUrl}" placeholder="输入新版本下载地址，用于客户端自动下载" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
 					<div class="input-group input-group-lg">
 						<div class="input-group-addon">状态：</div>
 						<div class="form-control">

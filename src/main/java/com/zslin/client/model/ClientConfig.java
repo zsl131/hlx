@@ -35,6 +35,9 @@ public class ClientConfig {
     /** 状态 */
     private String status="";
 
+    @Column(name = "client_version")
+    private String clientVersion;
+
     /** 用餐时长，单位分钟 */
     @Column(name = "have_time")
     private Integer haveTime;
@@ -56,6 +59,26 @@ public class ClientConfig {
     /** 坐位数量 */
     @Column(name = "site_count")
     private Integer siteCount;
+
+    /** 新版本下载地址 */
+    @Column(name = "version_url")
+    private String versionUrl;
+
+    public String getVersionUrl() {
+        return versionUrl;
+    }
+
+    public void setVersionUrl(String versionUrl) {
+        this.versionUrl = versionUrl;
+    }
+
+    public String getClientVersion() {
+        return clientVersion;
+    }
+
+    public void setClientVersion(String clientVersion) {
+        this.clientVersion = clientVersion;
+    }
 
     public Integer getDeskCount() {
         return deskCount;

@@ -99,6 +99,9 @@ public interface IBuffetOrderService extends BaseRepository<BuffetOrder, Integer
     @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE createDay = ?1 AND type=?2 AND status NOT IN ('-1', '-2')")
     Integer sumByDay(String day, String type);
 
+    @Query("FROM BuffetOrder WHERE type='3' AND STATUS IN ('2', '3', '4', '5') AND createDay=?1")
+    List<BuffetOrder> findMeiTuanByDay(String day);
+
     @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE createDay = ?1 AND status NOT IN ('-1', '-2')")
     Integer sumByDay(String day);
 

@@ -1,6 +1,7 @@
 package com.zslin.wx.tools;
 
 import com.zslin.basic.tools.DateTools;
+import com.zslin.web.model.BuffetOrder;
 import com.zslin.web.service.IBuffetOrderService;
 import com.zslin.web.service.IIncomeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by zsl on 2018/5/14.
@@ -50,14 +52,25 @@ public class HlxTools {
     }
 
     public String calDay() {
+        return calDay(0);
+    }
+
+    /**
+     * 修改成这个方法主要为了方便测试
+     * @param days days天前的数据
+     * @return
+     */
+    public String calDay(int days) {
         String spe = "\\n";
-        String lastDay = getLastDay(0);
+        String lastDay = getLastDay(0-days);
         Integer sum = buffetOrderService.sumByDay(lastDay); //消费总数
         sum = sum==null?0:sum;
-        Integer sumMt = buffetOrderService.sumByDay(lastDay, "3"); //美团人数
+        List<BuffetOrder> list = buffetOrderService.findMeiTuanByDay(lastDay);
+//        Integer sumMt = buffetOrderService.sumByDay(lastDay, "3"); //美团人数
+        Integer sumMt = buildMeituanAmount(list); //美团人数
         sumMt = sumMt==null?0:sumMt;
 
-        String lastDay2 = getLastDay(-1);
+        String lastDay2 = getLastDay(0-days-1);
         Integer sum2 = buffetOrderService.sumByDay(lastDay2);
         sum2 = sum2==null?0:sum2;
 
@@ -75,6 +88,21 @@ public class HlxTools {
                 .append("======与").append(lastDay2).append("相比======").append(spe)
                 .append("昨天消费：").append(sum2).append(" 人次，").append((sum>sum2)?"上升":"下降").append(cal(sum*1.0, sum2*1.0)).append(spe);
         return sb.toString();
+    }
+
+    private Integer buildMeituanAmount(List<BuffetOrder> list) {
+        Integer res = 0;
+        if(list==null) {return res;}
+        for(BuffetOrder order : list) {
+            String datas = order.getDiscountReason();
+            String [] array = datas.split(",");
+            for(String d : array) {
+                if(d!=null && d.length()==12) {
+                    res ++;
+                }
+            }
+        }
+        return res;
     }
 
     /**

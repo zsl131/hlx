@@ -28,7 +28,7 @@ public class EventTest {
 
     @Test
     public void test03() {
-        String res = hlxTools.calDay();
+        String res = hlxTools.calDay(1);
         System.out.println(res);
     }
 
