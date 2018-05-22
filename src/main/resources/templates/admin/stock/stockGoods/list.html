@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>库存物品列表</title>
+		<script type="text/javascript">
+			$(function() {
+				$(".delete-obj-href").deleteFun();
+			});
+		</script>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;库存物品列表（<span th:text="${datas.getTotalElements()}"></span>）</h3>
+			<div th:replace="admin/stock/stockGoods/nav :: content" th:remove="tag"></div>
+		</div>
+
+		<div th:replace="admin/stock/stockGoods/filter :: content" th:remove="tag"></div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>位置</th>
+						<th>名称</th>
+						<th>拼音</th>
+						<th>数量/预警</th>
+						<th>状态</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+
+				<tr th:each="obj : ${datas}">
+					<td>
+						<div th:switch="${obj.locationType}" th:remove="tag">
+							<span th:case="1" th:remove="tag">冻库</span>
+							<span th:case="2" th:remove="tag">仓库</span>
+							<span th:case="3" th:remove="tag">店内</span>
+						</div>
+						-<b th:text="${obj.cateName}"></b>
+					</td>
+					<td th:text="${obj.name}"></td>
+					<td th:text="|${obj.nameShort}-${obj.nameFull}|"></td>
+					<td>
+						<span th:text="|${obj.amount} ${obj.unit}|"></span> /
+						<span th:text="|${obj.warnAmount} ${obj.unit}|"></span>
+					</td>
+					<td>
+						<a class="delete-obj-href red auth" sn="AdminStockGoodsController.updateStatus" th:title="|确定设置【${obj.name}】的状态为【${obj.status eq '1'?'不用物品':'在用物品'}】吗？|" th:href="|/admin/stockGoods/updateStatus/${obj.id}/${obj.status eq '1'?0:1}|">
+							<div th:switch="${obj.status}" th:remove="tag">
+								<span th:case="1">在用物品</span>
+								<span th:case="0" style="color:#F00">不用物品</span>
+							</div>
+						</a>
+					</td>
+					<td>
+						<div class="action-buttons">
+							<a class="green auth" sn="AdminStockGoodsController.update" title="修改" th:href="'/admin/stockGoods/update/'+${obj.id}">
+								<i class="fa fa-pencil"></i>
+							</a>
+
+							<a class="delete-obj-href red auth" sn="AdminStockGoodsController.delete" th:title="'此操作不可逆，确定删除【'+${obj.name}+'】吗？'" th:href="'/admin/stockGoods/delete/'+${obj.id}">
+								<i class="fa fa-remove"></i>
+							</a>
+						</div>
+					</td>
+				</tr>
+			</table>
+
+			<div th:include="fragments/page :: pager" th:remove="tag"></div>
+		</div>
+	</div>
+</body>
+</html>

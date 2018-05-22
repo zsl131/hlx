@@ -31,9 +31,6 @@ import java.util.Set;
 @Component
 public class AuthTools {
 
-//	@Autowired
-//	private MenuServiceImpl menuServiceImpl;
-
 	@Autowired
 	private IMenuService menuService;
 
@@ -159,8 +156,8 @@ public class AuthTools {
 					String pinyin = PinyinToolkit.cn2Spell(prSn, "_");
 					Menu pr = menuService.findBySn(pinyin);
 					boolean isAdd = false;
-					if(pr==null) {pr = new Menu(); isAdd = true;}
-					pr.setDisplay(1); pr.setName(prSn); pr.setOrderNum(10);
+					if(pr==null) {pr = new Menu(); pr.setOrderNum(10); isAdd = true;}
+					pr.setDisplay(1); pr.setName(prSn);
 					pr.setSn(pinyin); pr.setPsn("root");
 					pr.setType("1"); pr.setHref("#");
 					if(isAdd) { menuService.save(pr); }
@@ -170,12 +167,14 @@ public class AuthTools {
 			}
 		} catch (Exception e) {
 		}
-		if(m==null) {menuService.save(menu);}
-		else {
+		if(m==null) {
+			menuService.save(menu);
+		} else {
 			m.setDisplay(menu.getDisplay());
 			m.setIcon(menu.getIcon());
 			m.setName(menu.getName());
 			//m.setOrderNum(menu.getOrderNum());
+			m.setOrderNum(m.getOrderNum());
 			m.setPsn(menu.getPsn());
 			if(menu.getPid()!=null && menu.getPid()>0) { //
 				m.setPid(menu.getPid());

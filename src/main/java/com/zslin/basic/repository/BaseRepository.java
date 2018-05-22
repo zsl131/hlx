@@ -1,7 +1,9 @@
 package com.zslin.basic.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,8 +18,12 @@ public interface BaseRepository<T, ID extends Serializable> extends JpaRepositor
 
     List<T> listByHql(String hql, Object... args);
 
+    @Modifying
+    @Transactional
     void updateBySql(String sql, Object... args);
 
+    @Modifying
+    @Transactional
     void updateByHql(String hql, Object... args);
 
     Object queryByHql(String hql, Object... args);

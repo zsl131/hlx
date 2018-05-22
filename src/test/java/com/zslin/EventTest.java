@@ -1,5 +1,6 @@
 package com.zslin;
 
+import com.zslin.stock.tools.GoodsNoTools;
 import com.zslin.web.service.IBuffetOrderService;
 import com.zslin.wx.dto.EventRemarkDto;
 import com.zslin.wx.dto.TemplateParamDto;
@@ -25,6 +26,20 @@ public class EventTest {
 
     @Autowired
     private HlxTools hlxTools;
+
+    @Autowired
+    private GoodsNoTools goodsNoTools;
+
+    @Test
+    public void test04() {
+        System.out.println(goodsNoTools.buildNo("1", 5));
+        System.out.println(goodsNoTools.buildNo("1", 55));
+        System.out.println(goodsNoTools.buildNo("1", 555));
+        System.out.println(goodsNoTools.buildNo("1", 5555));
+        System.out.println(goodsNoTools.buildNo("2", 55555));
+        System.out.println(goodsNoTools.buildNo("1", 555555));
+        System.out.println(goodsNoTools.buildNo("3", 5555556));
+    }
 
     @Test
     public void test03() {

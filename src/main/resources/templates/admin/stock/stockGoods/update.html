@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+	<script type="text/javascript" src="/admin/stock/admin.stockGoods.js"></script>
+	<title>修改库存物品</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+	<div class="header lighter smaller blue">
+		<h3><i class="fa fa-plus"></i>&nbsp;修改库存物品</h3>
+		<div th:replace="admin/stock/stockGoods/nav :: content" th:remove="tag"></div>
+	</div>
+
+	<form method="POST" th:object="${stockGoods}" onsubmit="return checkData()" id="dataForm">
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">所处分类：</div>
+				<div class="form-control" th:switch="${stockGoods.locationType}">
+					<span th:case="1">冻库</span>
+					<span th:case="2">仓库</span>
+					<span th:case="3">店内</span>
+					-<b th:text="${stockGoods.cateName}"></b>
+				</div>
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">物品名称：</div>
+				<input name="name" type="text" class="form-control not-null" th:value="${stockGoods.name}" placeholder="请输入库存物品名称" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">计量单位：</div>
+				<input name="unit" type="text" class="form-control not-null" th:value="${stockGoods.unit}" placeholder="请输入物品计量单位，如：件、桶" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">预警数量：</div>
+				<input name="warnAmount" type="text" class="form-control" onkeyup="value=value.replace(/[^\d]/g,'')" th:value="${stockGoods.warnAmount}" placeholder="请输入预警数量，当库存数量低于此数量时将会自动预警" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">物品状态：</div>
+				<div class="form-control">
+					<input type="radio" name="status" value="1" id="location_1" th:checked="${stockGoods.status == '1'}?'checked'"/><label for="location_1">在用物品</label>
+					<input type="radio" name="status" value="0" id="location_2" th:checked="${stockGoods.status == '0'}?'checked'"/><label for="location_2">不用物品</label>
+				</div>
+			</div>
+		</div>
+
+		<input type="hidden" name="token" value="${session.token}"/>
+		<button type="submit" class="btn btn-primary">确定提交</button>
+	</form>
+	<div id="categoryList" style="display:none">
+		<span th:each="cate: ${cateList}" th:attr="locationType=${cate.locationType}, cateId=${cate.id}, cateName=${cate.name}"></span>
+	</div>
+</div>
+</body>
+</html>
