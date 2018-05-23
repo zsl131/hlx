@@ -67,3 +67,10 @@ function confirmDialog(msg, title, okfn) {
     });
 	return $(("#"+idStr));
 }
+
+/** 刷新页面 */
+function reloadWin() {
+    setTimeout(function() {
+        window.location.reload();
+    }, 1200);
+}

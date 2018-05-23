@@ -57,6 +57,13 @@
 					</div>
 				</div>
 
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">备注信息：</div>
+						<input name="remark" type="text" class="form-control" th:value="${stockGoods.remark}" placeholder="请输入备注信息，如标明一件有几包等" />
+					</div>
+				</div>
+
 				<input type="hidden" name="token" value="${session.token}"/>
 				<input type="hidden" class="not-null" name="cateId" />
 				<input type="hidden" name="cateName" />

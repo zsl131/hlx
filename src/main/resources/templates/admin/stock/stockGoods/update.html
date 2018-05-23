@@ -52,6 +52,13 @@
 
 		<div class="form-group form-group-lg">
 			<div class="input-group">
+				<div class="input-group-addon">备注信息：</div>
+				<input name="remark" type="text" class="form-control" th:value="${stockGoods.remark}" placeholder="请输入备注信息，如标明一件有几包等" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
 				<div class="input-group-addon">物品状态：</div>
 				<div class="form-control">
 					<input type="radio" name="status" value="1" id="location_1" th:checked="${stockGoods.status == '1'}?'checked'"/><label for="location_1">在用物品</label>

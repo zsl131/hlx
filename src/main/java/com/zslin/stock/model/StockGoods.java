@@ -55,6 +55,17 @@ public class StockGoods {
     /** 状态，1-可出入库；0-禁止入库，当status=0且amount=0时 也不可以出库 */
     private String status;
 
+    /** 备注，如标明一件有几包 */
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public Integer getOrderNo() {
         return orderNo;
     }

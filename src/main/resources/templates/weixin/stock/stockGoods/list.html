@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="/weixin/stock/stock-tools.js"></script>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+    <link rel="stylesheet" type="text/css" href="/weixin/stock/stock-goods.css"/>
+    <script type="text/javascript" src="/weixin/stock/stock-goods.js"></script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div id="win-wrapper"></div>
+    <div id="filter-div">
+        ===
+    </div>
+    <div class="">
+        <div class="page">
+            <input name="loginWorker" th:value="${session.loginWorker.operator}" type="hidden"/>
+            <div class="page__bd">
+                <div class="page">
+                    <div class="page__bd" style="height: 100%;">
+                        <div class="weui-tab">
+                            <div class="weui-navbar">
+                                <div class="weui-navbar__item weui-bar__item_on">
+                                    <b class="title">库存物品</b>
+                                    <span class="filter-href" style="float:right; padding-right:15px;">筛选<b class="fa fa-filter"></b></span>
+                                </div>
+                            </div>
+                            <div class="weui-tab__panel">
+                                <div class="weui-panel weui-panel_access">
+                                    <div class="weui-panel__hd">
+                                        <div class="container-fluid"><h4 style="float:left;">文字组合列表</h4><span class="text-right" style="float:right;"><button class="btn btn-small btn-primary" onclick="addGoods()"><b class="fa fa-plus"></b></button></span></div>
+                                    </div>
+                                    <div class="weui-panel__bd">
+                                        <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link" th:each="obj : ${datas}" style="padding-top:0px;padding-bottom:0px;"
+                                        onclick="modifyGoods(this)" th:attr="objId=${obj.id}, cateName=${obj.cateName}, objName=${obj.name}, locationType=${obj.locationType},unit=${obj.unit}, warnAmount=${obj.warnAmount}, remark=${obj.remark}, status=${obj.status}">
+                                            <div class="weui-media-box weui-media-box_text weui-cell__bd">
+                                                <h4 class="weui-media-box__title" th:text="|${obj.locationType eq '1'?'冻库':(obj.locationType eq '2'?'仓库':'店内')}-${obj.cateName}-${obj.name}|">标题二</h4>
+                                                <p class="weui-media-box__desc">
+                                                    库存：<b th:text="${obj.amount}" th:class="${obj.amount le obj.warnAmount?'warn-amount':''}"></b><span th:text="${obj.unit}" th:remove="tag"></span>/
+                                                    预警：<b th:text="${obj.warnAmount}"></b><span th:remove="tag" th:text="${obj.unit}"></span>
+                                                    <p th:if="${obj.remark ne null and obj.remark ne ''}" th:remove="tag"><br/>ps:<span th:remove="tag" th:text="${obj.remark}"></span></p>
+                                                </p>
+                                            </div>
+                                            <div class="weui-cell__ft">修改</div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
+    <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
+</div>
+</body>
+</html>

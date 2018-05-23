@@ -60,6 +60,21 @@ public class Worker {
     /** 状态，1-在职；2-离职 */
     private String status;
 
+    /**
+     *  操作权限，主要用来做库存管理的权限控制
+     *  格式如：-1-2-3-4-，1-采购员；2-出库员；3-入库员；4-审核员；10-管理员
+     *  一个人可拥有多种权限
+     */
+    private String operator;
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
     public String getStatus() {
         return status;
     }

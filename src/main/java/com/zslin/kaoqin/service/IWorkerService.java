@@ -15,6 +15,7 @@ import java.util.List;
 public interface IWorkerService extends BaseRepository<Worker, Integer>, JpaSpecificationExecutor<Worker> {
 
     Worker findByPhone(String phone);
+    Worker findByOpenid(String openid);
 
     @Query("SELECT w.openid FROM Worker w WHERE w.isCashier='1'")
     List<String> findCashierOpenid();

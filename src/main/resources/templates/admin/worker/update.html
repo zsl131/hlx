@@ -7,6 +7,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+	<script type="text/javascript" src="/admin/bus/admin-worker.js"></script>
 	<title>修改员工信息</title>
 </head>
 <body>
@@ -74,6 +75,20 @@
 				<div class="form-control">
 					<input type="radio" name="status" value="1" id="status_1" th:checked="${worker.status == '1'}?'checked'"/><label for="status_1">在职</label>
 					<input type="radio" name="status" value="2" id="status_2" th:checked="${worker.status == '2'}?'checked'"/><label for="status_2">离职</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group input-group-lg">
+				<div class="input-group-addon">仓管职能：</div>
+				<div class="form-control">
+					<input type="checkbox" name="duty" value="1" id="duty_1" /><label for="duty_1">采购员</label>
+					<input type="checkbox" name="duty" value="2" id="duty_2" /><label for="duty_2">出库员</label>
+					<input type="checkbox" name="duty" value="3" id="duty_3" /><label for="duty_3">入库员</label>
+					<input type="checkbox" name="duty" value="4" id="duty_4" /><label for="duty_4">审核员</label>
+					<input type="checkbox" name="duty" value="10" id="duty_10" /><label for="duty_10">管理员</label>
+					<input name="operator" th:value="${worker.operator}" type="hidden"/>
 				</div>
 			</div>
 		</div>

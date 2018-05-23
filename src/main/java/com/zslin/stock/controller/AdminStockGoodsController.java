@@ -40,7 +40,7 @@ public class AdminStockGoodsController {
     private GoodsNoTools goodsNoTools;
 
     @GetMapping(value = "list")
-    @AdminAuth(name = "库存物品管理", orderNum = 1, type = "1", icon = "fa fa-cubes")
+    @AdminAuth(name = "库存物品管理", orderNum = 1, type = "1", icon = "fa fa-gift")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<StockGoods> datas = stockGoodsService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id")));

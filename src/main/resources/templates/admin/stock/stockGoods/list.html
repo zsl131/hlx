@@ -30,6 +30,7 @@
 						<th>名称</th>
 						<th>拼音</th>
 						<th>数量/预警</th>
+						<th>备注</th>
 						<th>状态</th>
 						<th>操作</th>
 					</tr>
@@ -50,6 +51,7 @@
 						<span th:text="|${obj.amount} ${obj.unit}|"></span> /
 						<span th:text="|${obj.warnAmount} ${obj.unit}|"></span>
 					</td>
+					<td th:text="${obj.remark}"></td>
 					<td>
 						<a class="delete-obj-href red auth" sn="AdminStockGoodsController.updateStatus" th:title="|确定设置【${obj.name}】的状态为【${obj.status eq '1'?'不用物品':'在用物品'}】吗？|" th:href="|/admin/stockGoods/updateStatus/${obj.id}/${obj.status eq '1'?0:1}|">
 							<div th:switch="${obj.status}" th:remove="tag">

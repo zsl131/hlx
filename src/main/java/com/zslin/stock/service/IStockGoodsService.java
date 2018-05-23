@@ -19,4 +19,6 @@ public interface IStockGoodsService extends BaseRepository<StockGoods, Integer>,
     @Modifying
     @Transactional
     void updateStatus(String status, Integer id);
+
+
 }

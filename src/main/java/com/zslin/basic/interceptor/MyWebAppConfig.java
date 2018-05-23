@@ -1,5 +1,6 @@
 package com.zslin.basic.interceptor;
 
+import com.zslin.stockWx.tools.WxStockInterceptor;
 import com.zslin.wx.tools.WxInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -16,6 +17,7 @@ public class MyWebAppConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/**");
         registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/admin/**");
         registry.addInterceptor(new WxInterceptor()).addPathPatterns("/wx/**");
+        registry.addInterceptor(new WxStockInterceptor()).addPathPatterns("/wx/stock/**");
         super.addInterceptors(registry);
     }
 }

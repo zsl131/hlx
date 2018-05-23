@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="/weixin/stock/stock-tools.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-category.js"></script>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="">
+        <div class="page">
+            <input name="loginWorker" th:value="${session.loginWorker.operator}" type="hidden"/>
+            <!--<div class="page__hd">
+                <h1 class="page__title">库存管理系统</h1>
+                <p class="page__desc" th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">加载更多</p>
+            </div>-->
+            <div class="page__bd">
+                <div class="page">
+                    <div class="page__bd" style="height: 100%;">
+                        <div class="weui-tab">
+                            <div class="weui-navbar">
+                                <div class="weui-navbar__item weui-bar__item_on" locationType="1">
+                                    冻库（<b th:text="${#lists.size(list1)}"></b>）
+                                </div>
+                                <div class="weui-navbar__item" locationType="2">
+                                    仓库（<b th:text="${#lists.size(list2)}"></b>）
+                                </div>
+                                <div class="weui-navbar__item" locationType="3">
+                                    店内（<b th:text="${#lists.size(list3)}"></b>）
+                                </div>
+                            </div>
+                            <div class="weui-tab__panel">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
+    <div id="list1" style="display:none">
+        <div class="weui-cells__title">带说明、跳转的列表项</div>
+        <div class="weui-cells">
+            <a class="weui-cell weui-cell_access" href="javascript:;" onclick="modifyCategory(this)" th:each="cate : ${list1}">
+                <div class="weui-cell__bd">
+                    <p th:text="${cate.name}" class="categoryName" th:attr="objId=${cate.id}"></p>
+                </div>
+                <div class="weui-cell__ft">修改</div>
+            </a>
+        </div>
+    </div>
+    <div id="list2" style="display:none">
+        <div class="weui-cells__title">带说明、跳转的列表项</div>
+        <div class="weui-cells">
+            <a class="weui-cell weui-cell_access" href="javascript:;" onclick="modifyCategory(this)" th:each="cate : ${list2}">
+                <div class="weui-cell__bd">
+                    <p th:text="${cate.name}" class="categoryName" th:attr="objId=${cate.id}"></p>
+                </div>
+                <div class="weui-cell__ft">修改</div>
+            </a>
+        </div>
+    </div>
+    <div id="list3" style="display:none">
+        <div class="weui-cells__title">带说明、跳转的列表项</div>
+        <div class="weui-cells">
+            <a class="weui-cell weui-cell_access" href="javascript:;" onclick="modifyCategory(this)" th:each="cate : ${list3}">
+                <div class="">
+                    <p th:text="${cate.name}" class="categoryName" th:attr="objId=${cate.id}"></p>
+                </div>
+                <div class="weui-cell__ft">修改</div>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
