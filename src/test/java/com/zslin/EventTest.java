@@ -1,5 +1,7 @@
 package com.zslin;
 
+import com.zslin.stock.dto.GoodsDto;
+import com.zslin.stock.service.IStockGoodsService;
 import com.zslin.stock.tools.GoodsNoTools;
 import com.zslin.web.service.IBuffetOrderService;
 import com.zslin.wx.dto.EventRemarkDto;
@@ -12,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/20 0:23.
@@ -29,6 +33,17 @@ public class EventTest {
 
     @Autowired
     private GoodsNoTools goodsNoTools;
+
+    @Autowired
+    private IStockGoodsService stockGoodsService;
+
+    @Test
+    public void test05() {
+        List<GoodsDto> list = stockGoodsService.listByIds(1, 2, 3,4);
+        for(GoodsDto dto : list) {
+            System.out.println(dto);
+        }
+    }
 
     @Test
     public void test04() {

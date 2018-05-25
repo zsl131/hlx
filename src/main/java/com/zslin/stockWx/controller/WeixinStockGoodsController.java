@@ -8,6 +8,7 @@ import com.zslin.stock.model.StockCategory;
 import com.zslin.stock.model.StockGoods;
 import com.zslin.stock.service.IStockCategoryService;
 import com.zslin.stock.service.IStockGoodsService;
+import com.zslin.stock.tools.GoodsNoTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -33,10 +34,28 @@ public class WeixinStockGoodsController {
     @Autowired
     private IStockGoodsService stockGoodsService;
 
+    @Autowired
+    private GoodsNoTools goodsNoTools;
+
     @GetMapping(value = "list")
     public String list(Model model, Integer page, HttpServletRequest request) {
+        try {
+            String cateIdStr = request.getParameter("filter_cateId");
+            if(cateIdStr!=null && !"".equals(cateIdStr)) {
+                Integer cateId = Integer.parseInt(cateIdStr.split("-")[1]);
+                model.addAttribute("category", stockCategoryService.findOne(cateId));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Page<StockGoods> datas = stockGoodsService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
+        List<StockCategory> list1 = stockCategoryService.listByLocationType("1");
+        List<StockCategory> list2 = stockCategoryService.listByLocationType("2");
+        List<StockCategory> list3 = stockCategoryService.listByLocationType("3");
+        model.addAttribute("list1", list1);
+        model.addAttribute("list2", list2);
+        model.addAttribute("list3", list3);
         model.addAttribute("datas", datas);
         return "weixin/stock/stockGoods/list";
     }
@@ -53,8 +72,14 @@ public class WeixinStockGoodsController {
         sg.setWarnAmount(warnAmount);
         sg.setStatus(status);
         sg.setCateId(cateId);
+        sg.setHasWarn("1");
+        Integer orderNo = goodsNoTools.generateOrderNo();
+        sg.setOrderNo(orderNo);
+        sg.setNo(goodsNoTools.buildNo(sg.getLocationType(), orderNo));
+        sg.setAmount(0); //初次添加数量都为0 ，如有数量应从入库添加
         sg.setCateName(sc.getName());
         sg.setLocationType(sc.getLocationType());
+
         stockGoodsService.save(sg);
         return "1";
     }

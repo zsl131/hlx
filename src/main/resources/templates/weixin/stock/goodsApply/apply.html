@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="/basic/admin/myself/cookie-tools.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-tools.js"></script>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+    <link rel="stylesheet" type="text/css" href="/weixin/stock/stock-goods-apply.css"/>
+    <script type="text/javascript" src="/weixin/stock/stock-goods-apply.js"></script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="">
+        <div class="page">
+            <input name="batch-no" th:if="${apply ne null}" th:value="${apply.batchNo}" th:attr="datas=${apply.datas}" type="hidden"/>
+            <input name="is-verify" th:value="${isVerify}" type="hidden"/>
+            <input name="loginWorker" th:value="${session.loginWorker.operator}" type="hidden"/>
+            <div class="page__bd">
+                <div class="page">
+                    <div class="page__bd" style="height: 100%;">
+                        <div class="weui-tab">
+                            <div class="weui-navbar">
+                                <div class="weui-navbar__item weui-bar__item_on">
+                                    <b class="title">
+                                        <span th:if="${isVerify eq '1'}" th:remove="tag">审核申购</span>
+                                        <span th:unless="${isVerify eq '1'}" th:remove="tag">申购物品</span>
+                                         (已选：<b class="total-count number">0</b> )
+                                    </b>
+                                    <a href="/wx/stock/goodsApply/listApply" style="float:right; padding-right:15px;">记录 <b class="fa fa-list-ul"></b></a>
+                                </div>
+                            </div>
+                            <div class="weui-tab__panel">
+                                <div class="weui-panel weui-panel_access">
+                                    <!--<div class="weui-panel__hd">
+                                        <div class="container-fluid"><h4 style="float:left;">库存物品列表</h4><span class="text-right" style="float:right;"><button class="btn btn-small btn-primary" onclick="addGoods()"><b class="fa fa-plus"></b></button></span></div>
+                                    </div>-->
+                                    <div class="weui-panel__bd">
+                                        <div class="weui-panel__hd single-location-div" show="0" locationType="1"><b class="fa fa-dot-circle-o"></b> 冻库物品 (已选：<b class="category-count number">0</b> )<b class="fa fa-angle-right operator-b"></b></div>
+                                        <div class="goods-list-div goods-list-1">
+                                            <div class="weui-panel__hd" th:each="goods: ${list1}">
+                                                <b class="fa "></b>&nbsp; <span th:text="${goods.name}"></span>
+                                                (库存：<b th:text="${goods.amount}"></b> <span th:text="${goods.unit}" th:remove="tag"></span><span th:if="${goods.hasWarn eq '1' and goods.amount le goods.warnAmount}" class="red-class"> 已预警</span>)
+                                                <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-plus"></b> 申购 <b class="applyCount">0</b></a>
+                                            </div>
+                                        </div>
+
+                                        <div class="weui-panel__hd single-location-div" show="0" locationType="2"><b class="fa fa-dot-circle-o"></b> 仓库物品 (已选：<b class="category-count number">0</b> ) <b class="fa fa-angle-right operator-b"></b></div>
+                                        <div class="goods-list-div goods-list-2">
+                                            <div class="weui-panel__hd" th:each="goods: ${list2}">
+                                                <b class="fa "></b>&nbsp; <span th:text="${goods.name}"></span>
+                                                (库存：<b th:text="${goods.amount}"></b> <span th:text="${goods.unit}" th:remove="tag"></span><span th:if="${goods.hasWarn eq '1' and goods.amount le goods.warnAmount}" class="red-class"> 已预警</span>)
+                                                <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-plus"></b> 申购 <b class="applyCount">0</b></a>
+                                            </div>
+                                        </div>
+
+                                        <div class="weui-panel__hd single-location-div" show="0" locationType="3"><b class="fa fa-dot-circle-o"></b> 店内物品 (已选：<b class="category-count number">0</b> ) <b class="fa fa-angle-right operator-b"></b></div>
+                                        <div class="goods-list-div goods-list-3">
+                                            <div class="weui-panel__hd" th:each="goods: ${list3}">
+                                                <b class="fa "></b>&nbsp; <span th:text="${goods.name}"></span>
+                                                (库存：<b th:text="${goods.amount}"></b> <span th:text="${goods.unit}" th:remove="tag"></span><span th:if="${goods.hasWarn eq '1' and goods.amount le goods.warnAmount}" class="red-class"> 已预警</span>)
+                                                <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-plus"></b> 申购 <b class="applyCount">0</b></a>
+                                            </div>
+                                        </div>
+
+                                        <div class="container" style="padding:20px 40px;">
+                                            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" onclick="submitApplyDatas()" class="btn btn-info"><b class="fa fa-check-circle"></b> 提交申购信息</button>
+                                                </div>
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" onclick="cancelApply()" class="btn btn-default"><b class="fa fa-times-circle"></b> 取消并返回</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
+</div>
+</body>
+</html>

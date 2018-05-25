@@ -45,6 +45,10 @@ public class StockGoods {
     @Column(name = "warn_amount")
     private Integer warnAmount;
 
+    /** 是否预警，当触发预警底线时需要预警，但不能重复预警，初次增加的新品 此值应为1，当有入库行为发生时才修改此值为0 */
+    @Column(name = "has_warn")
+    private String hasWarn;
+
     /** 位置类型，1-冻库；2-仓库；3-店内 */
     @Column(name = "location_type")
     private String locationType;
@@ -57,6 +61,14 @@ public class StockGoods {
 
     /** 备注，如标明一件有几包 */
     private String remark;
+
+    public String getHasWarn() {
+        return hasWarn;
+    }
+
+    public void setHasWarn(String hasWarn) {
+        this.hasWarn = hasWarn;
+    }
 
     public String getRemark() {
         return remark;

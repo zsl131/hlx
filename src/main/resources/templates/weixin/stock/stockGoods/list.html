@@ -15,7 +15,61 @@
 <div th:fragment="content" th:remove="tag">
     <div id="win-wrapper"></div>
     <div id="filter-div">
-        ===
+        <div class="page">
+            <div class="page__bd" style="height: 100%;">
+                <div class="weui-tab">
+                    <div class="weui-navbar">
+                        <div class="weui-navbar__item weui-bar__item_on" locationType="1">
+                            冻库（<b th:text="${#lists.size(list1)}"></b>）
+                        </div>
+                        <div class="weui-navbar__item" locationType="2">
+                            仓库（<b th:text="${#lists.size(list2)}"></b>）
+                        </div>
+                        <div class="weui-navbar__item" locationType="3">
+                            店内（<b th:text="${#lists.size(list3)}"></b>）
+                        </div>
+                    </div>
+                    <div class="weui-tab__panel">
+
+                    </div>
+                    <div class="weui-footer weui-footer_fixed-bottom">
+                        <button onclick="window.location.href='/wx/stock/stockGoods/list'" class="btn btn-default"><b class="fa fa-minus"></b> 清除筛选</button>
+                        <button onclick="window.location.href='/wx/stock/index'" class="btn btn-danger"><b class="fa fa-home"></b> 库存首页</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="list1" style="display:none">
+            <div class="weui-cells">
+                <a class="weui-cell weui-cell_access" th:href="|/wx/stock/stockGoods/list?filter_cateId=eq-${cate.id}&amp;|" th:each="cate : ${list1}">
+                    <div class="weui-cell__bd">
+                        <p th:text="${cate.name}" ></p>
+                    </div>
+                    <div class="weui-cell__ft"></div>
+                </a>
+            </div>
+        </div>
+        <div id="list2" style="display:none">
+            <div class="weui-cells">
+                <a class="weui-cell weui-cell_access" th:href="|/wx/stock/stockGoods/list?filter_cateId=eq-${cate.id}&amp;|" th:each="cate : ${list2}">
+                    <div class="weui-cell__bd">
+                        <p th:text="${cate.name}" ></p>
+                    </div>
+                    <div class="weui-cell__ft"></div>
+                </a>
+            </div>
+        </div>
+        <div id="list3" style="display:none">
+            <div class="weui-cells">
+                <a class="weui-cell weui-cell_access" th:href="|/wx/stock/stockGoods/list?filter_cateId=eq-${cate.id}&amp;|" th:each="cate : ${list3}">
+                    <div class="">
+                        <p th:text="${cate.name}" ></p>
+                    </div>
+                    <div class="weui-cell__ft"></div>
+                </a>
+            </div>
+        </div>
     </div>
     <div class="">
         <div class="page">
@@ -26,14 +80,15 @@
                         <div class="weui-tab">
                             <div class="weui-navbar">
                                 <div class="weui-navbar__item weui-bar__item_on">
-                                    <b class="title">库存物品</b>
+                                    <b class="title">库存物品（<span th:text="${datas.totalElements}" th:remove="tag"></span>）</b>
                                     <span class="filter-href" style="float:right; padding-right:15px;">筛选<b class="fa fa-filter"></b></span>
                                 </div>
                             </div>
                             <div class="weui-tab__panel">
                                 <div class="weui-panel weui-panel_access">
                                     <div class="weui-panel__hd">
-                                        <div class="container-fluid"><h4 style="float:left;">文字组合列表</h4><span class="text-right" style="float:right;"><button class="btn btn-small btn-primary" onclick="addGoods()"><b class="fa fa-plus"></b></button></span></div>
+                                        <input class="category-input" name="category-input" th:attr="cateId=${category.id}, cateName=${category.name}" type="hidden" th:if="${category ne null}"/>
+                                        <div class="container-fluid"><h4 style="float:left;">库存物品列表</h4><span class="text-right" style="float:right;"><button class="btn btn-small btn-primary" onclick="addGoods()"><b class="fa fa-plus"></b></button></span></div>
                                     </div>
                                     <div class="weui-panel__bd">
                                         <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link" th:each="obj : ${datas}" style="padding-top:0px;padding-bottom:0px;"

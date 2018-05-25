@@ -16,7 +16,7 @@ function containAuth(authCode) {
     var res = false;
     var array = getOperatorAuth();
     for(var i=0;i<array.length;i++) {
-        if(authCode == array[i]) {
+        if(authCode == array[i] || "10" == array[i]) { //只要满足是被查权限或管理员均可
             res = true;
         }
     }

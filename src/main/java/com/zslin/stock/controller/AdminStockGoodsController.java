@@ -66,6 +66,7 @@ public class AdminStockGoodsController {
             stockGoods.setNameShort(PinyinToolkit.cn2FirstSpell(stockGoods.getName()));
             Integer orderNo = goodsNoTools.generateOrderNo();
             stockGoods.setOrderNo(orderNo);
+            stockGoods.setHasWarn("1");
             stockGoods.setNo(goodsNoTools.buildNo(stockGoods.getLocationType(), orderNo));
             stockGoods.setAmount(0); //初次添加数量都为0 ，如有数量应从入库添加
             stockGoodsService.save(stockGoods);
@@ -89,7 +90,7 @@ public class AdminStockGoodsController {
             stockGoods.setNameFull(PinyinToolkit.cn2Spell(stockGoods.getName(), ""));
             stockGoods.setNameShort(PinyinToolkit.cn2FirstSpell(stockGoods.getName()));
             StockGoods sg = stockGoodsService.findOne(id);
-            MyBeanUtils.copyProperties(stockGoods, sg, new String[]{"id", "amount", "orderNo", "no","cateId", "cateName", "locationType"});
+            MyBeanUtils.copyProperties(stockGoods, sg, new String[]{"id", "amount", "orderNo", "no","cateId", "cateName", "locationType", "hasWarn"});
 
             stockGoodsService.save(sg);
         }

@@ -4,6 +4,7 @@ import com.zslin.web.vo.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 /**
@@ -19,6 +20,9 @@ public class GoodsApply extends BaseEntity {
     @Column(name = "batch_no")
     private String batchNo;
 
+    /** 编号 */
+    private Integer no;
+
     /** 申请人电话 */
     @Column(name = "apply_phone")
     private String applyPhone;
@@ -31,8 +35,50 @@ public class GoodsApply extends BaseEntity {
     @Column(name = "apply_name")
     private String applyName;
 
+    /** 申购数据，特定格式 */
+    @Lob
+    private String datas;
+
     /** 状态，-1-驳回申请；0-申请状态；1-批准；2-结束 */
     private String status;
+
+    /** 单次申购数量 */
+    private Integer amount;
+
+    /** 备注 */
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public Integer getNo() {
+        return no;
+    }
+
+    public void setNo(Integer no) {
+        this.no = no;
+    }
+
+    public String getDatas() {
+        return datas;
+    }
+
+    public void setDatas(String datas) {
+        this.datas = datas;
+    }
 
     public String getBatchNo() {
         return batchNo;

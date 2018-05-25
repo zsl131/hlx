@@ -1,5 +1,5 @@
 #filter-div {
-    background:#fafafa; border-left:1px solid #ddd; width:80%; height:100%; top:50px; right:0px; position:absolute; z-index:10; padding:10px; display:none;
+    background:#fafafa; border-left:1px solid #ddd; width:80%; height:100%; top:50px; right:0px; position:absolute; z-index:10; display:none;
 }
 
 #win-wrapper {

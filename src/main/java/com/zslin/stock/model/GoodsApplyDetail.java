@@ -28,6 +28,10 @@ public class GoodsApplyDetail {
     @Column(name = "name_short")
     private String nameShort;
 
+    /** 物品Id */
+    @Column(name = "goods_id")
+    private Integer goodsId;
+
     /** 名称全拼 */
     @Column(name = "name_full")
     private String nameFull;
@@ -39,16 +43,16 @@ public class GoodsApplyDetail {
     private String cateName;
 
     /** 申请采购的物品数量 */
-    private Integer amount;
+    private Integer amount=0;
 
     /** 批准采购的物品数量 */
-    private Integer allowAmount;
+    private Integer allowAmount=0;
 
     /** 实际采购数量 */
     @Column(name = "amount_true")
-    private Integer amountTrue;
+    private Integer amountTrue=0;
 
-    /** 状态，1-批准采购；0-驳回采购 */
+    /** 状态，1-批准采购；0-申购中；-1-驳回采购 */
     private String status;
 
     /** 位置类型，1-冻库；2-仓库；3-店内 */
@@ -57,6 +61,14 @@ public class GoodsApplyDetail {
 
     /** 计量单位，如：件、桶等 */
     private String unit;
+
+    public Integer getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(Integer goodsId) {
+        this.goodsId = goodsId;
+    }
 
     public Integer getId() {
         return id;
