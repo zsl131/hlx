@@ -2,14 +2,12 @@ package com.zslin.stockWx.tools;
 
 import com.zslin.basic.tools.DateTools;
 import com.zslin.stock.model.*;
-import com.zslin.stock.service.IGoodsApplyDetailService;
-import com.zslin.stock.service.IGoodsApplyService;
-import com.zslin.stock.service.IOuterApplyDetailService;
-import com.zslin.stock.service.IOuterApplyService;
+import com.zslin.stock.service.*;
 import com.zslin.wx.tools.EventTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +38,15 @@ public class StockNoticeTools {
     @Autowired
     private IOuterApplyService outerApplyService;
 
+    @Autowired
+    private IPreenterService preenterService;
+
+    @Autowired
+    private IPreenterDetailService preenterDetailService;
+
+    @Autowired
+    private IStockCheckService stockCheckService;
+
     /**
      * 收货入库通知
      * @param batchNo 批次编号
@@ -66,6 +73,69 @@ public class StockNoticeTools {
                 }
 
                 eventTools.eventRemind(openids, "收货入库通知", NOTICE_NAME, DateTools.date2Str(new Date(), "yyyy-MM-dd"), sb.toString(), "/wx/stock/goodsApply/show?batchNo="+batchNo);
+            }
+        }).start();
+    }
+
+    /**
+     * 预入库收货入库通知
+     * @param batchNo 批次编号
+     */
+    public void noticeCheckPreenter(String batchNo) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+//                List<String> openids = stockWxTools.getBuyerOpenids(); //采购员
+                Preenter ga = preenterService.findByBatchNo(batchNo);
+//                if(!openids.contains(ga.getApplyOpenid())) {openids.add(ga.getApplyOpenid());} //把申购人也加进去
+                List<PreenterDetail> list = preenterDetailService.listByBatchNo(batchNo);
+                StringBuffer sb = new StringBuffer();
+
+                sb.append("采购数量：").append(ga.getAmount()).append(" \\n")
+                        .append("采购日期：").append(ga.getCreateDay()).append(" \\n")
+                        .append("实到数量：").append(ga.getAmountTrue()).append(" \\n")
+                        .append("收货人员：").append(ga.getCheckName()).append(" \\n");
+
+                for(PreenterDetail gad : list) {
+                    if(gad.getAmount() != gad.getAmountTrue()) { //如果数量不对
+                        Integer amount = gad.getAmount() - gad.getAmountTrue(); //差额
+                        sb.append(gad.getName()).append(amount>0?"差":"多").append("：").append(amount).append(gad.getUnit()).append("\\n");
+                    }
+                }
+
+                eventTools.eventRemind(ga.getOperatorOpenid(), "预入货入库通知", NOTICE_NAME, DateTools.date2Str(new Date(), "yyyy-MM-dd"), sb.toString(), "/wx/stock/preenter/show?batchNo="+batchNo);
+            }
+        }).start();
+    }
+    /**
+     * 库存盘点提交通知
+     * @param batchNo 批次编号
+     */
+    public void noticeStockCheckSubmit(String batchNo, String... revicer) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+//                List<String> openids = stockWxTools.getBuyerOpenids(); //采购员
+                StockCheck sc = stockCheckService.findByBatchNo(batchNo);
+//                if(!openids.contains(ga.getApplyOpenid())) {openids.add(ga.getApplyOpenid());} //把申购人也加进去
+                StringBuffer sb = new StringBuffer();
+                String status = sc.getStatus();
+                String statusStr = "";
+                if("0".equals(status)) { statusStr = "等待复核人员确认"; }
+                else if("1".equals(status)) { statusStr = "等待复核人员复核"; }
+                else if("2".equals(status)) { statusStr = "等待发起人确认"; }
+                else if("3".equals(status)) { statusStr = "盘点完成"; }
+
+                sb.append("盘点发起：").append(sc.getCheckName()).append(" \\n")
+                        .append("盘点日期：").append(sc.getCreateDay()).append(" \\n")
+                        .append("核对人员：").append(sc.getVerifyName()).append(" \\n")
+                        .append("当前状态：").append(statusStr).append(" \\n");
+
+                List<String> openids = new ArrayList<String>();
+                for(String openid : revicer) {
+                    openids.add(openid);
+                }
+                eventTools.eventRemind(openids, "库存盘点数据通知", NOTICE_NAME, DateTools.date2Str(new Date(), "yyyy-MM-dd"), sb.toString(), "/wx/stock/stockCheck/show?batchNo="+batchNo);
             }
         }).start();
     }

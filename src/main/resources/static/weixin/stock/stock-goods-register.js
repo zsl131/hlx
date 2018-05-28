@@ -17,9 +17,9 @@ function addApply(obj) {
     var applyCount = $(obj).find(".applyCount").html();
 
     var html = '<div class="dialog-html-div">'+
-                '<div class="form-group form-group-lg"><div class="input-group"><div class="input-group-addon">出库</div><input name="amount" type="number" class="form-control text-center" placeholder="输入数量" value="'+applyCount+'"/><div class="input-group-addon">'+unit+'</div></div></div>' +
+                '<div class="form-group form-group-lg"><div class="input-group"><div class="input-group-addon">入库</div><input name="amount" type="number" class="form-control text-center" placeholder="输入数量" value="'+applyCount+'"/><div class="input-group-addon">'+unit+'</div></div></div>' +
                 '</div>';
-    var applyDialog = confirmDialog(html, "<b class='fa fa-plus'></b> 出库【"+goodsName+"】", function() {
+    var applyDialog = confirmDialog(html, "<b class='fa fa-plus'></b> 入库【"+goodsName+"】", function() {
         var amount = parseInt($(applyDialog).find("input[name='amount']").val());
         var curAmount = parseInt($(obj).parents(".weui-panel__hd").find(".cur-amount").html());
         amount = (isNaN(amount) || amount==''||amount<=0)?0:amount;

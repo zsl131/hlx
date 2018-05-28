@@ -9,7 +9,7 @@
     <script type="text/javascript" src="/basic/admin/myself/cookie-tools.js"></script>
     <script type="text/javascript" src="/weixin/stock/stock-index.js"></script>
     <script type="text/javascript" src="/weixin/stock/stock-tools.js"></script>
-    <script type="text/javascript" src="/weixin/stock/stock-preenter-check.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-goods-apply-check.js"></script>
 
     <link type="text/css" rel="stylesheet" href="/weixin/stock/stock-goods-apply-check.css"/>
 
@@ -18,36 +18,32 @@
 <body>
     <div th:fragment="content" th:remove="tag">
         <input name="loginWorker" th:value="${session.loginWorker.operator}" type="hidden"/>
-        <input id="batchNo" type="hidden" th:value="${preenter.batchNo}"/>
+        <input id="batchNo" type="hidden" th:value="${goodsApply.batchNo}"/>
         <div class="page">
             <div class="page__hd container">
-                <h1 class="page__title">预录入-收货核对</h1>
-                <p class="page__desc" th:text="${preenter.remark}">表单预览</p>
+                <h1 class="page__title">物品申购-收货核对</h1>
+                <p class="page__desc" th:text="${goodsApply.remark}">表单预览</p>
             </div>
             <div class="page__bd">
                 <div class="weui-form-preview">
                     <div class="weui-form-preview__hd">
-                        <label class="weui-form-preview__label">预入总数</label>
-                        <em class="weui-form-preview__value" th:text="${preenter.amount}">¥2400.00</em>
+                        <label class="weui-form-preview__label">申购总数</label>
+                        <em class="weui-form-preview__value" th:text="${goodsApply.amount}">¥2400.00</em>
                     </div>
                     <div class="weui-form-preview__bd">
                         <div class="weui-form-preview__item">
-                            <label class="weui-form-preview__label">预入日期</label>
-                            <span class="weui-form-preview__value" th:text="|${preenter.createDay} ${preenter.createTime}|">电动打蛋机</span>
+                            <label class="weui-form-preview__label">日期</label>
+                            <span class="weui-form-preview__value" th:text="|${goodsApply.createDay} ${goodsApply.createTime}|">电动打蛋机</span>
                         </div>
                         <div class="weui-form-preview__item">
-                            <label class="weui-form-preview__label">操作人员</label>
-                            <span class="weui-form-preview__value" th:text="|${preenter.operatorName}(${preenter.operatorPhone})|">名字名字名字</span>
-                        </div>
-                        <div class="weui-form-preview__item">
-                            <label class="weui-form-preview__label">预计到货</label>
-                            <span class="weui-form-preview__value" th:text="|${preenter.maybeDay}(${preenter.needDays}天)|">名字名字名字</span>
+                            <label class="weui-form-preview__label">申购人员</label>
+                            <span class="weui-form-preview__value" th:text="|${goodsApply.applyName}(${goodsApply.applyPhone})|">名字名字名字</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="container1">
-                    <div class="weui-cells__title">预入物品列表（预入品种：<b th:text="${#lists.size(detailList)}" class="total-kind-count weui-badge"></b> 种）
+                    <div class="weui-cells__title">申购物品列表（购买品种：<b th:text="${#lists.size(detailList)}" class="total-kind-count weui-badge"></b> 种）
                     <span class="match-span">到齐品种：<b class="match-ok-b weui-badge">0</b> 种</span>
                     </div>
                     <div class="weui-cells">
@@ -56,7 +52,7 @@
                                 <p th:text="${detail.name}" class="goodsName">标题文字</p>
                             </div>
                             <div class="weui-cell__ft">
-                                <span>预入：<b th:text="${detail.amount le 0 ? '-': detail.amount}" class="allow-amount"></b> <span th:text="${detail.unit}"></span></span>
+                                <span>采购：<b th:text="${detail.AllowAmount le 0 ? '-': detail.AllowAmount}" class="allow-amount"></b> <span th:text="${detail.unit}"></span></span>
                                 <span>，实到：<b th:text="${detail.amountTrue le 0 ? '-': detail.amountTrue}" class="amount-true"></b> <span th:text="${detail.unit}"></span></span>
                             </div>
                         </div>

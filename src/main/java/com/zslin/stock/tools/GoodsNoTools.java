@@ -28,6 +28,9 @@ public class GoodsNoTools {
     @Autowired
     private IPreenterService preenterService;
 
+    @Autowired
+    private IStockCheckService stockCheckService;
+
     /** 生成物品编号 */
     public Integer generateOrderNo() {
         Integer maxOrderNo = stockGoodsService.maxOrderNo();
@@ -70,6 +73,13 @@ public class GoodsNoTools {
     /** 生成预录入编号 */
     public Integer generatePreenterNo() {
         Integer maxNo = preenterService.maxNo();
+        maxNo = (maxNo == null)?0:maxNo;
+        return maxNo + 1;
+    }
+
+    /** 生成预录入编号 */
+    public Integer generateGoodsCheckNo() {
+        Integer maxNo = stockCheckService.maxNo();
         maxNo = (maxNo == null)?0:maxNo;
         return maxNo + 1;
     }

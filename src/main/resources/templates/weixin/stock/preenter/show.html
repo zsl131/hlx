@@ -19,51 +19,55 @@
 <body>
     <div th:fragment="content" th:remove="tag">
         <input name="loginWorker" th:value="${session.loginWorker.operator}" type="hidden"/>
-        <input id="batchNo" type="hidden" th:value="${goodsApply.batchNo}"/>
+        <input id="batchNo" type="hidden" th:value="${preenter.batchNo}"/>
         <div class="page">
             <div class="page__hd container">
-                <h1 class="page__title">出库详情</h1>
-                <p class="page__desc" th:text="|出库：${goodsApply.applyRemark}|">表单预览</p>
-                <p class="page__desc" th:if="${goodsApply.status eq '1'}" th:text="|核对：${goodsApply.checkRemark}|">表单预览</p>
+                <h1 class="page__title">预入库详情</h1>
+                <p class="page__desc" th:text="|${preenter.remark}|">表单预览</p>
             </div>
             <div class="page__bd">
                 <div class="weui-form-preview">
                     <div class="weui-form-preview__hd">
-                        <label class="weui-form-preview__label">出库申请总数</label>
-                        <em class="weui-form-preview__value" th:text="${goodsApply.applyAmount}">¥2400.00</em>
+                        <label class="weui-form-preview__label">预入库总数</label>
+                        <em class="weui-form-preview__value" th:text="${preenter.amount}">¥2400.00</em>
                     </div>
                     <div class="weui-form-preview__bd">
                         <div class="weui-form-preview__item">
                             <label class="weui-form-preview__label">日期</label>
-                            <span class="weui-form-preview__value" th:text="|${goodsApply.createDay} ${goodsApply.createTime}|">电动打蛋机</span>
+                            <span class="weui-form-preview__value" th:text="|${preenter.createDay} ${preenter.createTime}|">电动打蛋机</span>
                         </div>
                         <div class="weui-form-preview__item">
-                            <label class="weui-form-preview__label">出库人员</label>
-                            <span class="weui-form-preview__value" th:text="|${goodsApply.applyName}(${goodsApply.applyPhone})|">名字名字名字</span>
+                            <label class="weui-form-preview__label">操作人员</label>
+                            <span class="weui-form-preview__value" th:text="|${preenter.operatorName}(${preenter.operatorPhone})|">名字名字名字</span>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">预计到货</label>
+                            <span class="weui-form-preview__value" th:text="|${preenter.maybeDay}(${preenter.needDays}天)|">名字名字名字</span>
                         </div>
                         <div class="weui-form-preview__item">
                             <label class="weui-form-preview__label">状态</label>
                             <span class="weui-form-preview__value">
-                                <span th:if="${goodsApply.status eq '0'}" style="color:green">出库中，待核对</span>
-                                <span th:if="${goodsApply.status eq '1'}" style="color:blue">已核对，完成</span>
+                                <span th:if="${preenter.status eq '0'}" style="color:green">已提交，待收货</span>
+                                <span th:if="${preenter.status eq '1'}" style="color:blue">已收货，完成</span>
                             </span>
                         </div>
                     </div>
                     <div class="weui-form-preview__ft">
-                        <a th:if="${goodsApply.status eq '0'}" type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" th:href="|/wx/stock/outerApply/modifyApply?batchNo=${goodsApply.batchNo}&amp;isCheck=1|"><b class="fa fa-eye"></b> 核对</a>
+                        <a th:if="${preenter.status eq '0'}" class="weui-form-preview__btn weui-form-preview__btn_primary" th:href="|/wx/stock/preenter/modifyApply?batchNo=${preenter.batchNo}|"><b class="fa fa-pencil"></b> 修改</a>
+                        <a th:if="${preenter.status eq '0'}" class="weui-form-preview__btn weui-form-preview__btn_primary" th:href="|/wx/stock/preenter/modifyApply?batchNo=${preenter.batchNo}&amp;isCheck=1|"><b class="fa fa-eye"></b> 收货</a>
                     </div>
                 </div>
 
                 <div class="container1">
-                    <div class="weui-cells__title">出库物品详细信息</div>
+                    <div class="weui-cells__title">预入库物品详细信息</div>
                     <div class="weui-cells">
                         <div class="weui-cell" th:each="detail : ${detailList}">
                             <div class="weui-cell__bd">
                                 <p th:text="${detail.name}">标题文字</p>
                             </div>
                             <div class="single-data weui-cell__ft">
-                                <span>&nbsp;出库：<b class="verify-count" th:text="${detail.amount le 0 ? '-': detail.amount}"></b> <span th:text="${detail.unit}"></span></span>
-                                <span>&nbsp;核对：<b class="amount-true" th:text="${detail.amountTrue le 0 ? '-': detail.amountTrue}"></b> <span th:text="${detail.unit}"></span></span>
+                                <span>&nbsp;预入：<b class="verify-count" th:text="${detail.amount le 0 ? '-': detail.amount}"></b> <span th:text="${detail.unit}"></span></span>
+                                <span>&nbsp;实到：<b class="amount-true" th:text="${detail.amountTrue le 0 ? '-': detail.amountTrue}"></b> <span th:text="${detail.unit}"></span></span>
                             </div>
                         </div>
                     </div>

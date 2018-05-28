@@ -27,4 +27,8 @@ public interface IWorkerService extends BaseRepository<Worker, Integer>, JpaSpec
     @Modifying
     @Transactional
     void updatePwd(String password, Integer id);
+
+    /** 查询拥有库存权限的员工 */
+    @Query("FROM Worker WHERE operator LIKE '%-%'")
+    List<Worker> findOperators();
 }

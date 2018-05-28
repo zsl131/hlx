@@ -237,6 +237,27 @@ public class WeixinStockPreenterController {
         return "weixin/stock/preenter/checkGoods";
     }
 
+    /** 收货入库，POST提交 */
+    @PostMapping(value = "postCheckGoods")
+    public @ResponseBody String postCheckGoods(String datas, String batchNo, HttpServletRequest request) {
+        String status = preenterService.findStatusByBatchNo(batchNo);
+        if(status==null || !"0".equals(status)) {
+            return "redirect:/wx/stock/preenter/show?batchNo="+batchNo;
+        }
+        String [] array = datas.split("_");
+        for(String str : array) {
+            if(str==null || "".equals(str) || str.indexOf("-")<0) {continue;}
+            Integer goodsId = Integer.parseInt(str.split("-")[0]);
+            Integer amount = Integer.parseInt(str.split("-")[1]);
+            preenterDetailService.updateAmountTrue(batchNo, goodsId, amount);
+            stockGoodsService.plusAmount(goodsId, amount);
+        }
+        preenterService.updateStatus(batchNo, "1"); //修改状态
+        //TODO 通知
+        stockNoticeTools.noticeCheckPreenter(batchNo);
+        return "1";
+    }
+
     @GetMapping(value = "modifyApply")
     public String modifyApply(Model model, String batchNo, String isCheck, HttpServletRequest request) {
         Preenter ga = preenterService.findByBatchNo(batchNo);
@@ -247,7 +268,7 @@ public class WeixinStockPreenterController {
         List<StockGoods> list = stockGoodsService.findAll(SimpleSortBuilder.generateSort("locationType_a", "cateId_a"));
         buildStockGoods(list, model);
         model.addAttribute("isCheck", isCheck);
-        return "weixin/stock/outerApply/apply";
+        return "weixin/stock/preenter/apply";
     }
 
     @GetMapping(value = "apply")

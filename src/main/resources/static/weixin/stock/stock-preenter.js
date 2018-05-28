@@ -1,8 +1,10 @@
 var dataCookieName = "apply-preenter-cookie-name";
 var isAdd;
 var batchNo;
+var needDays;
 $(function() {
     batchNo = $("input[name='batch-no']").val();
+    needDays = $("input[name='batch-no']").attr("needDays");
     isAdd = (batchNo==null || batchNo==''); //是否为添加
     $(".single-location-div").click(function() {
         setShowStatus(this);
@@ -142,8 +144,9 @@ function submitApplyDatas() {
         showDialog("未选任何物品，不可提交预录入", "<b class='fa fa-warning'></b> 系统提示");
     } else {
         var isCheck = $("input[name='is-check']").val();
+        needDays = (needDays==null||isNaN(needDays))?4:needDays;
         var html = '<h4>此次预入库总数量为：<b style="color:#F00">'+totalCount+'</b></h4>'+
-                '<div class="form-group form-group-lg"><div class="input-group"><div class="input-group-addon">预计</div><input name="days" type="number" class="form-control text-center" placeholder="输入天数" value="4"/><div class="input-group-addon">天后到货</div></div></div>' +
+                '<div class="form-group form-group-lg"><div class="input-group"><div class="input-group-addon">预计</div><input name="days" type="number" class="form-control text-center" placeholder="输入天数" value="'+needDays+'"/><div class="input-group-addon">天后到货</div></div></div>' +
                 '<p>是否已选择完成并确定提交预录入信息呢？</p>';
         var applyDialog = confirmDialog(html, "<b class='fa fa-question-circle'></b> 系统提示", function() {
             var days = parseInt($(applyDialog).find("input[name='days']").val());

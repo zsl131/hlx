@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="/weixin/stock/stock-index.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-tools.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-goods-apply-list.js"></script>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+</head>
+<body>
+    <div th:fragment="content" th:remove="tag">
+        <input name="loginWorker" th:value="${session.loginWorker.operator}" type="hidden"/>
+        <div class="page">
+            <div class="page__bd">
+                <div class="page">
+                    <div class="page__bd" style="height: 100%;">
+                        <div class="weui-tab">
+                            <div class="weui-navbar">
+                                <div class="weui-navbar__item weui-bar__item_on">
+                                    <b class="title">预警信息</b>
+                                </div>
+                            </div>
+                            <div class="weui-tab__panel">
+                                <div class="weui-cells__title">带说明的列表项</div>
+                                <div class="weui-cells">
+                                    <div class="weui-cell" th:each="obj : ${list}">
+                                        <div class="weui-cell__bd">
+                                            <p th:text="${obj.name}">标题文字</p>
+                                        </div>
+                                        <div class="weui-cell__ft" th:text="|现有：${obj.amount}${obj.unit}，预警：${obj.warnAmount}${obj.unit}|">说明文字</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
+</body>
+</html>

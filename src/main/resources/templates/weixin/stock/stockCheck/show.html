@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="/weixin/stock/stock-index.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-tools.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-check-show.js"></script>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+    <style>
+        .no-matched {
+            color:#F00;
+        }
+    </style>
+</head>
+<body>
+    <div th:fragment="content" th:remove="tag">
+        <input name="loginWorker" th:value="${session.loginWorker.operator}" type="hidden"/>
+        <input id="batchNo" type="hidden" th:value="${stockCheck.batchNo}"/>
+        <div class="page">
+            <div class="page__hd container">
+                <h1 class="page__title">盘点详情</h1>
+                <!--<p class="page__desc" th:text="|${stockCheck.checkName}|">表单预览</p>-->
+            </div>
+            <div class="page__bd">
+                <div class="weui-form-preview">
+                    <!--<div class="weui-form-preview__hd">
+                        <label class="weui-form-preview__label">出库申请总数</label>
+                        <em class="weui-form-preview__value">¥2400.00</em>
+                    </div>-->
+                    <div class="weui-form-preview__bd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">日期</label>
+                            <span class="weui-form-preview__value" th:text="|${stockCheck.createDay} ${stockCheck.createTime}|">电动打蛋机</span>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">发起人</label>
+                            <span class="weui-form-preview__value" th:text="|${stockCheck.checkName}(${stockCheck.checkPhone})|">名字名字名字</span>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">复核人</label>
+                            <span class="weui-form-preview__value" th:text="|${stockCheck.verifyName}(${stockCheck.verifyPhone})|">名字名字名字</span>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">状态</label>
+                            <span class="weui-form-preview__value">
+                                <span th:if="${stockCheck.status eq '0'}" style="color:green">发起中，待核对</span>
+                                <span th:if="${stockCheck.status eq '1'}" style="color:blue">已接单，待填单</span>
+                                <span th:if="${stockCheck.status eq '2'}" style="color:blue">已填单，待确认</span>
+                                <span th:if="${stockCheck.status eq '3'}" style="color:red">已完成</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="weui-form-preview__ft">
+                        <a th:if="${stockCheck.status ne '3' and stockCheck.verifyOpenid eq session.loginWorker.openid}" class="weui-form-preview__btn weui-form-preview__btn_primary" th:href="|/wx/stock/stockCheck/verify?batchNo=${stockCheck.batchNo}|"><b class="fa fa-eye"></b> 盘点填单</a>
+                        <a th:if="${stockCheck.status eq '2' and stockCheck.checkOpenid eq session.loginWorker.openid}" class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:;" onclick="submitResult()"><b class="fa fa-check"></b> 确认库存</a>
+                    </div>
+                </div>
+
+                <div class="container1" th:if="${stockCheck.status ne '0' and stockCheck.status ne '1'}">
+                    <div class="weui-cells__title">物品详细信息</div>
+                    <div class="weui-cells">
+                        <div class="weui-cell" th:each="detail : ${detailList}">
+                            <div class="weui-cell__bd">
+                                <p th:text="${detail.name}">标题文字</p>
+                            </div>
+                            <div class="single-data weui-cell__ft" th:attr="flag=${detail.flag}">
+                                <span>&nbsp;应有：<b class="verify-count" th:text="${detail.amountOld}"></b> <span th:text="${detail.unit}"></span></span>
+                                <span>&nbsp;实有：<b class="amount-true" th:text="${detail.amountNow}"></b> <span th:text="${detail.unit}"></span></span>
+                                |
+                                <span th:if="${detail.flag eq 0}" style="">持平</span>
+                                <span th:if="${detail.flag eq -1}" style="color:#F00">盘亏</span>
+                                <span th:if="${detail.flag eq 1}" style="color:#00f">盘赢</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
+</body>
+</html>

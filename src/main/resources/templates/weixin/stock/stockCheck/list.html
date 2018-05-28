@@ -21,27 +21,27 @@
                         <div class="weui-tab">
                             <div class="weui-navbar">
                                 <div class="weui-navbar__item weui-bar__item_on">
-                                    <b class="title">物品预录入 ( <b th:text="${datas.totalElements}">0</b> )</b>
+                                    <b class="title">盘点记录 ( <b th:text="${datas.totalElements}">0</b> )</b>
+                                    <a href="/wx/stock/stockCheck/addCheck" style="float:right; padding-right:15px;">发起盘点 <b class="fa fa-balance-scale"></b></a>
                                 </div>
                             </div>
                             <div class="weui-tab__panel">
                                 <div class="weui-panel weui-panel_access">
                                     <div class="weui-panel__bd">
-                                        <div class="weui-media-box weui-media-box_text" th:each="apply : ${datas}">
-                                            <h4 class="weui-media-box__title"><a th:href="|/wx/stock/preenter/show?batchNo=${apply.batchNo}|" th:text="|${apply.operatorName}的预录入信息|"></a>
+                                        <div class="weui-media-box weui-media-box_text" th:each="obj : ${datas}">
+                                            <h4 class="weui-media-box__title"><a th:href="|/wx/stock/stockCheck/show?batchNo=${obj.batchNo}|" th:text="|${obj.checkName}发起的盘点|"></a>
                                             [
-                                                <span th:if="${apply.status eq '0'}" style="color:green">待收货</span>
-                                                <span th:if="${apply.status eq '1'}" style="color:blue">已入库</span>
+                                                <span th:if="${obj.status eq '0'}" style="color:green">发起中</span>
+                                                <span th:if="${obj.status eq '1'}" style="color:blue">盘点中</span>
+                                                <span th:if="${obj.status eq '2'}" style="color:blue">确认中</span>
+                                                <span th:if="${obj.status eq '3'}" style="color:red">已完成</span>
                                             ]
                                             </h4>
-                                            <p class="weui-media-box__desc" th:text="${apply.remark}">备注</p>
-                                            <p class="weui-media-box__desc" th:text="|预计到货：${apply.maybeDay}(${apply.needDays}天)|">备注</p>
+                                            <p class="weui-media-box__desc" th:text="${obj.checkPhone}">备注</p>
                                             <ul class="weui-media-box__info">
-                                                <li class="weui-media-box__info__meta" th:text="${apply.operatorName}">文字来源</li>
-                                                <li class="weui-media-box__info__meta" th:text="${apply.createDay}">时间</li>
-                                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra"><a th:href="|tel:${apply.operatorPhone}|" th:text="${apply.operatorPhone}"></a></li>
-                                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra" th:if="${apply.operatorOpenid eq session.openid and apply.status eq '0'}"><a th:href="|/wx/stock/preenter/modifyApply?batchNo=${apply.batchNo}|" >修改</a></li>
-                                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra verify-apply-href" style="display:none" th:if="${apply.status eq '0'}"><a th:href="|/wx/stock/preenter/checkGoods?batchNo=${apply.batchNo}|">收货</a></li>
+                                                <li class="weui-media-box__info__meta" th:text="|${obj.verifyName}复核|">文字来源</li>
+                                                <li class="weui-media-box__info__meta" th:text="${obj.createDay}">时间</li>
+                                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra" th:if="${obj.verifyOpenid eq session.openid and (obj.status eq '2' or obj.status eq '1')}"><a th:href="|/wx/stock/stockCheck/verify?batchNo=${obj.batchNo}|" >填单</a></li>
                                             </ul>
                                         </div>
                                     </div>

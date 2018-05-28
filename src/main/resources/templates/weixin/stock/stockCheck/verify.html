@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="/weixin/stock/stock-index.js"></script>
+    <script type="text/javascript" src="/basic/admin/myself/cookie-tools.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-tools.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-check-verify.js"></script>
+    <link rel="stylesheet" type="text/css" href="/weixin/stock/stock-goods-apply.css"/>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+    <style>
+        .no-matched {
+            color:#F00;
+        }
+    </style>
+</head>
+<body>
+    <div th:fragment="content" th:remove="tag">
+        <input name="loginWorker" th:value="${session.loginWorker.operator}" type="hidden"/>
+        <input id="batchNo" type="hidden" th:value="${stockCheck.batchNo}" name="batch-no" th:attr="datas=${stockCheck.datas}"/>
+        <input name="curStatus" th:value="${stockCheck.status}" type="hidden"/>
+        <input name="verifyOpenid" th:value="${stockCheck.verifyOpenid}" type="hidden"/>
+        <input name="loginOpenid" th:value="${session.loginWorker.openid}" type="hidden"/>
+        <div class="page">
+            <div class="page__hd container">
+                <h1 class="page__title">盘点详情</h1>
+                <!--<p class="page__desc" th:text="|${stockCheck.checkName}|">表单预览</p>-->
+            </div>
+            <div class="page__bd">
+                <div class="weui-form-preview">
+                    <!--<div class="weui-form-preview__hd">
+                        <label class="weui-form-preview__label">出库申请总数</label>
+                        <em class="weui-form-preview__value">¥2400.00</em>
+                    </div>-->
+                    <div class="weui-form-preview__bd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">日期</label>
+                            <span class="weui-form-preview__value" th:text="|${stockCheck.createDay} ${stockCheck.createTime}|">电动打蛋机</span>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">发起人</label>
+                            <span class="weui-form-preview__value" th:text="|${stockCheck.checkName}(${stockCheck.checkPhone})|">名字名字名字</span>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">复核人</label>
+                            <span class="weui-form-preview__value" th:text="|${stockCheck.verifyName}(${stockCheck.verifyPhone})|">名字名字名字</span>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">状态</label>
+                            <span class="weui-form-preview__value">
+                                <span th:if="${stockCheck.status eq '0'}" style="color:green">发起中，待核对</span>
+                                <span th:if="${stockCheck.status eq '1'}" style="color:blue">已接单，待填单</span>
+                                <span th:if="${stockCheck.status eq '2'}" style="color:blue">已填单，待确认</span>
+                                <span th:if="${stockCheck.status eq '3'}" style="color:red">已完成</span>
+                            </span>
+                        </div>
+                    </div>
+                    <!--<div class="weui-form-preview__ft">
+                        <a th:if="${stockCheck.status ne '3' and stockCheck.verifyOpenid eq session.loginWorker.openid}" type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" th:href="|/wx/stock/stockCheck/verify?batchNo=${stockCheck.batchNo}|"><b class="fa fa-eye"></b> 盘点填单</a>
+                    </div>-->
+                </div>
+
+                <div class="container1" th:if="${stockCheck.status ne '0'}">
+                    <div class="weui-cells__title">物品详细信息(已选：<b class="total-count number">0</b> )</div>
+                    <div class="weui-panel__bd">
+                        <div th:if="${#lists.size(list1) gt 0}" class="weui-panel__hd single-location-div" show="0" locationType="1"><b class="fa fa-dot-circle-o"></b> 冻库物品 (小计：<b class="category-count number">0</b> )<b class="fa fa-angle-right operator-b"></b></div>
+                        <div th:if="${#lists.size(list1) gt 0}" class="goods-list-div goods-list-1">
+                            <div class="weui-panel__hd" th:each="goods: ${list1}">
+                                <b class="fa "></b>&nbsp; <span th:text="${goods.name}"></span>
+                                (库存：<b th:text="${goods.amount}" class="cur-amount"></b> <span th:text="${goods.unit}" th:remove="tag"></span>)
+                                <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-pencil"></b> 现有 <b class="applyCount">0</b></a>
+                            </div>
+                        </div>
+
+                        <div th:if="${#lists.size(list2) gt 0}" class="weui-panel__hd single-location-div" show="0" locationType="2"><b class="fa fa-dot-circle-o"></b> 仓库物品 (小计：<b class="category-count number">0</b> ) <b class="fa fa-angle-right operator-b"></b></div>
+                        <div th:if="${#lists.size(list2) gt 0}" class="goods-list-div goods-list-2">
+                            <div class="weui-panel__hd" th:each="goods: ${list2}">
+                                <b class="fa "></b>&nbsp; <span th:text="${goods.name}"></span>
+                                (库存：<b th:text="${goods.amount}" class="cur-amount"></b> <span th:text="${goods.unit}" th:remove="tag"></span>)
+                                <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-pencil"></b> 现有 <b class="applyCount">0</b></a>
+                            </div>
+                        </div>
+
+                        <div th:if="${#lists.size(list3) gt 0}" class="weui-panel__hd single-location-div" show="0" locationType="3"><b class="fa fa-dot-circle-o"></b> 店内物品 (小计：<b class="category-count number">0</b> ) <b class="fa fa-angle-right operator-b"></b></div>
+                        <div th:if="${#lists.size(list3) gt 0}" class="goods-list-div goods-list-3">
+                            <div class="weui-panel__hd" th:each="goods: ${list3}">
+                                <b class="fa "></b>&nbsp; <span th:text="${goods.name}"></span>
+                                (库存：<b th:text="${goods.amount}" class="cur-amount"></b> <span th:text="${goods.unit}" th:remove="tag"></span>)
+                                <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-pencil"></b> 现有 <b class="applyCount">0</b></a>
+                            </div>
+                        </div>
+
+                        <div class="container" style="padding:20px 30px;">
+                            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                                <div class="btn-group" role="group">
+                                    <button type="button" onclick="submitApplyDatas()" class="btn btn-info"><b class="fa fa-check-circle"></b> 保存</button>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="button" onclick="setShowFlag(this)" class="btn btn-primary show-flag-btn"><b class="fa fa-eye-slash"></b> <span>自动隐藏</span></button>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="button" onclick="cancelApply()" class="btn btn-danger"><b class="fa fa-times-circle"></b> 取消</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
+</body>
+</html>

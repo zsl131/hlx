@@ -275,7 +275,7 @@ public class WeixinStockGoodsApplyController {
                 gad.setCateName(sg.getCateName());
                 gad.setLocationType(sg.getLocationType());
                 gad.setName(sg.getName());
-                gad.setNo(sg.getNo());
+
                 gad.setNameFull(sg.getNameFull());
                 gad.setNameShort(sg.getNameShort());
                 gad.setUnit(sg.getUnit());

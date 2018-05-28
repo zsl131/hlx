@@ -28,7 +28,8 @@ public interface IStockGoodsService extends BaseRepository<StockGoods, Integer>,
     @Transactional
     void updateHasWarn(String hasWarn, Integer id);
 
-    @Query("UPDATE StockGoods s SET s.amount=s.amount+?2 WHERE s.id=?1")
+    /** 在库存发生变化时，修改通知属性为0 */
+    @Query("UPDATE StockGoods s SET s.amount=s.amount+?2, s.hasWarn='0' WHERE s.id=?1")
     @Modifying
     @Transactional
     void plusAmount(Integer id, Integer amount);
@@ -38,4 +39,18 @@ public interface IStockGoodsService extends BaseRepository<StockGoods, Integer>,
 
     @Query("FROM StockGoods WHERE amount>0")
     List<StockGoods> findByCanOuter();
+
+    /** 用于盘点 */
+    @Query("UPDATE StockGoods s SET s.amount=?2 WHERE s.id=?1")
+    @Modifying
+    @Transactional
+    void updateAmount(Integer id, Integer amount);
+
+    /** 获取需要预警的物品 */
+    @Query("FROM StockGoods WHERE hasWarn='0' AND amount<=warnAmount")
+    List<StockGoods> findByWarn();
+
+    /** 获取需要预警的物品 */
+    @Query("FROM StockGoods WHERE amount<=warnAmount")
+    List<StockGoods> findAllWarn();
 }

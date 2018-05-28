@@ -43,7 +43,7 @@
                                         <div th:if="${#lists.size(list1) gt 0}" class="goods-list-div goods-list-1">
                                             <div class="weui-panel__hd" th:each="goods: ${list1}">
                                                 <b class="fa "></b>&nbsp; <span th:text="${goods.name}"></span>
-                                                (库存：<b th:text="${goods.amount}" class="cur-amount"></b> <span th:text="${goods.unit}" th:remove="tag"></span><span th:if="${goods.hasWarn eq '1' and goods.amount le goods.warnAmount}" class="red-class"> 已预警</span>)
+                                                (库存：<b th:text="${goods.amount}" class="cur-amount"></b> <span th:text="${goods.unit}" th:remove="tag"></span><span th:if="${goods.amount le goods.warnAmount}" class="red-class"> 已预警</span>)
                                                 <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-plus"></b> 出库 <b class="applyCount">0</b></a>
                                             </div>
                                         </div>
@@ -52,7 +52,7 @@
                                         <div th:if="${#lists.size(list2) gt 0}" class="goods-list-div goods-list-2">
                                             <div class="weui-panel__hd" th:each="goods: ${list2}">
                                                 <b class="fa "></b>&nbsp; <span th:text="${goods.name}"></span>
-                                                (库存：<b th:text="${goods.amount}" class="cur-amount"></b> <span th:text="${goods.unit}" th:remove="tag"></span><span th:if="${goods.hasWarn eq '1' and goods.amount le goods.warnAmount}" class="red-class"> 已预警</span>)
+                                                (库存：<b th:text="${goods.amount}" class="cur-amount"></b> <span th:text="${goods.unit}" th:remove="tag"></span><span th:if="${goods.amount le goods.warnAmount}" class="red-class"> 已预警</span>)
                                                 <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-plus"></b> 出库 <b class="applyCount">0</b></a>
                                             </div>
                                         </div>
@@ -61,7 +61,7 @@
                                         <div th:if="${#lists.size(list3) gt 0}" class="goods-list-div goods-list-3">
                                             <div class="weui-panel__hd" th:each="goods: ${list3}">
                                                 <b class="fa "></b>&nbsp; <span th:text="${goods.name}"></span>
-                                                (库存：<b th:text="${goods.amount}" class="cur-amount"></b> <span th:text="${goods.unit}" th:remove="tag"></span><span th:if="${goods.hasWarn eq '1' and goods.amount le goods.warnAmount}" class="red-class"> 已预警</span>)
+                                                (库存：<b th:text="${goods.amount}" class="cur-amount"></b> <span th:text="${goods.unit}" th:remove="tag"></span><span th:if="${goods.amount le goods.warnAmount}" class="red-class"> 已预警</span>)
                                                 <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-plus"></b> 出库 <b class="applyCount">0</b></a>
                                             </div>
                                         </div>

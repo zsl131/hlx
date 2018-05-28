@@ -20,7 +20,7 @@ function setCurrentAmount() {
 function updateStatus(status) {
     if(containAuth("2")) { //如果是采购员才可以驳回
         var batchNo = $("#batchNo").val();
-        console.log(batchNo+"===="+status);
+//        console.log(batchNo+"===="+status);
         var html = '<b class="fa fa-question"></b> 确定<b style="color:#F00">驳回</b>此次的申购申请吗？此操作不可逆！';
         if(status=='1') {
             html = '<b class="fa fa-question"></b> 确定<b style="color:blue">通过</b>此次的申购申请吗？此操作不可逆！';

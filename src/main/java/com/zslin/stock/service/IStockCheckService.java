@@ -1,7 +1,7 @@
 package com.zslin.stock.service;
 
 import com.zslin.basic.repository.BaseRepository;
-import com.zslin.stock.model.Preenter;
+import com.zslin.stock.model.StockCheck;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,18 +10,18 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created by zsl on 2018/5/21.
  */
-public interface IPreenterService extends BaseRepository<Preenter, Integer>, JpaSpecificationExecutor<Preenter> {
+public interface IStockCheckService extends BaseRepository<StockCheck, Integer>, JpaSpecificationExecutor<StockCheck> {
 
-    Preenter findByBatchNo(String batchNo);
+    StockCheck findByBatchNo(String batchNo);
 
-    @Query("SELECT MAX(no) FROM Preenter")
+    @Query("SELECT MAX(no) FROM StockCheck")
     Integer maxNo();
 
-    @Query("UPDATE Preenter set status=?2 WHERE batchNo=?1")
+    @Query("UPDATE StockCheck set status=?2 WHERE batchNo=?1")
     @Modifying
     @Transactional
     void updateStatus(String batchNo, String status);
 
-    @Query("SELECT status FROM Preenter WHERE batchNo=?1")
+    @Query("SELECT status FROM StockCheck WHERE batchNo=?1")
     String findStatusByBatchNo(String batchNo);
 }

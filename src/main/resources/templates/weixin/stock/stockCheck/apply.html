@@ -10,13 +10,13 @@
     <script type="text/javascript" src="/weixin/stock/stock-tools.js"></script>
     <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
     <link rel="stylesheet" type="text/css" href="/weixin/stock/stock-goods-apply.css"/>
-    <script type="text/javascript" src="/weixin/stock/stock-preenter.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-outer-apply.js"></script>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
     <div class="">
         <div class="page">
-            <input name="batch-no" th:if="${preenter ne null}" th:value="${preenter.batchNo}" th:attr="datas=${preenter.datas}, needDays=${preenter.needDays}" type="hidden"/>
+            <input name="batch-no" th:if="${apply ne null}" th:value="${apply.batchNo}" th:attr="datas=${apply.applyDatas}" type="hidden"/>
             <input name="is-check" th:value="${isCheck}" type="hidden"/>
             <input name="loginWorker" th:value="${session.loginWorker.operator}" type="hidden"/>
             <div class="page__bd">
@@ -26,21 +26,25 @@
                             <div class="weui-navbar">
                                 <div class="weui-navbar__item weui-bar__item_on">
                                     <b class="title">
-                                        <span th:remove="tag">物品预录入</span>
+                                        <span th:if="${isCheck eq '1'}" th:remove="tag">出库核对</span>
+                                        <span th:unless="${isCheck eq '1'}" th:remove="tag">出库登记</span>
                                          (已选：<b class="total-count number">0</b> )
                                     </b>
-                                    <a href="/wx/stock/preenter/listApply" style="float:right; padding-right:15px;">记录 <b class="fa fa-list-ul"></b></a>
+                                    <a href="/wx/stock/outerApply/listApply" style="float:right; padding-right:15px;">记录 <b class="fa fa-list-ul"></b></a>
                                 </div>
                             </div>
                             <div class="weui-tab__panel">
                                 <div class="weui-panel weui-panel_access">
+                                    <!--<div class="weui-panel__hd">
+                                        <div class="container-fluid"><h4 style="float:left;">库存物品列表</h4><span class="text-right" style="float:right;"><button class="btn btn-small btn-primary" onclick="addGoods()"><b class="fa fa-plus"></b></button></span></div>
+                                    </div>-->
                                     <div class="weui-panel__bd">
                                         <div th:if="${#lists.size(list1) gt 0}" class="weui-panel__hd single-location-div" show="0" locationType="1"><b class="fa fa-dot-circle-o"></b> 冻库物品 (已选：<b class="category-count number">0</b> )<b class="fa fa-angle-right operator-b"></b></div>
                                         <div th:if="${#lists.size(list1) gt 0}" class="goods-list-div goods-list-1">
                                             <div class="weui-panel__hd" th:each="goods: ${list1}">
                                                 <b class="fa "></b>&nbsp; <span th:text="${goods.name}"></span>
                                                 (库存：<b th:text="${goods.amount}" class="cur-amount"></b> <span th:text="${goods.unit}" th:remove="tag"></span><span th:if="${goods.hasWarn eq '1' and goods.amount le goods.warnAmount}" class="red-class"> 已预警</span>)
-                                                <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-plus"></b> 预入 <b class="applyCount">0</b></a>
+                                                <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-plus"></b> 出库 <b class="applyCount">0</b></a>
                                             </div>
                                         </div>
 
@@ -49,7 +53,7 @@
                                             <div class="weui-panel__hd" th:each="goods: ${list2}">
                                                 <b class="fa "></b>&nbsp; <span th:text="${goods.name}"></span>
                                                 (库存：<b th:text="${goods.amount}" class="cur-amount"></b> <span th:text="${goods.unit}" th:remove="tag"></span><span th:if="${goods.hasWarn eq '1' and goods.amount le goods.warnAmount}" class="red-class"> 已预警</span>)
-                                                <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-plus"></b> 预入 <b class="applyCount">0</b></a>
+                                                <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-plus"></b> 出库 <b class="applyCount">0</b></a>
                                             </div>
                                         </div>
 
@@ -58,14 +62,14 @@
                                             <div class="weui-panel__hd" th:each="goods: ${list3}">
                                                 <b class="fa "></b>&nbsp; <span th:text="${goods.name}"></span>
                                                 (库存：<b th:text="${goods.amount}" class="cur-amount"></b> <span th:text="${goods.unit}" th:remove="tag"></span><span th:if="${goods.hasWarn eq '1' and goods.amount le goods.warnAmount}" class="red-class"> 已预警</span>)
-                                                <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-plus"></b> 预入 <b class="applyCount">0</b></a>
+                                                <a href="javascript:;" th:attr="goodsId=${goods.id}, goodsName=${goods.name}, unit=${goods.unit}" onclick="addApply(this)" class="btn btn-info btn-sm apply-href"><b class="fa fa-plus"></b> 出库 <b class="applyCount">0</b></a>
                                             </div>
                                         </div>
 
                                         <div class="container" style="padding:20px 40px;">
                                             <div class="btn-group btn-group-justified" role="group" aria-label="...">
                                                 <div class="btn-group" role="group">
-                                                    <button type="button" onclick="submitApplyDatas()" class="btn btn-info"><b class="fa fa-check-circle"></b> 提交预录入</button>
+                                                    <button type="button" onclick="submitApplyDatas()" class="btn btn-info"><b class="fa fa-check-circle"></b> <span th:if="${isCheck eq '1'}">物品核对完成</span><span th:unless="${isCheck eq '1'}">提交出库申请</span></button>
                                                 </div>
                                                 <div class="btn-group" role="group">
                                                     <button type="button" onclick="cancelApply()" class="btn btn-default"><b class="fa fa-times-circle"></b> 取消并返回</button>
