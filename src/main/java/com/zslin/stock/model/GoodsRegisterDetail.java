@@ -1,40 +1,35 @@
 package com.zslin.stock.model;
 
-import com.zslin.web.vo.BaseEntity;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
- * Created by zsl on 2018/5/21.
- * 物品入库记录
+ * Created by zsl on 2018/5/27.
+ * 入库登记物品信息
  */
 @Entity
-@Table(name = "s_stock_goods_detail")
-public class StockGoodsDetail extends BaseEntity {
+@Table(name = "s_goods_register_detail")
+public class GoodsRegisterDetail {
 
-    /** 操作人员姓名 */
-    @Column(name = "operator_name")
-    private String operatorName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
-    /** 操作人员电话号码 */
-    @Column(name = "operator_phone")
-    private String operatorPhone;
+    /** 申请批次编辑 */
+    @Column(name = "batch_no")
+    private String batchNo;
 
-    /** 操作人员Openid */
-    @Column(name = "operator_openid")
-    private String operatorOpenid;
+    private String no;
 
     /** 物品名称 */
     private String name;
 
-    /** 编码，由系统自动生成 */
-    private String no;
-
     /** 名称缩写 */
     @Column(name = "name_short")
     private String nameShort;
+
+    /** 物品Id */
+    @Column(name = "goods_id")
+    private Integer goodsId;
 
     /** 名称全拼 */
     @Column(name = "name_full")
@@ -46,8 +41,8 @@ public class StockGoodsDetail extends BaseEntity {
     @Column(name = "cate_name")
     private String cateName;
 
-    /** 入库物品数量 */
-    private Integer amount;
+    /** 申请出库的物品数量 */
+    private Integer amount=0;
 
     /** 位置类型，1-冻库；2-仓库；3-店内 */
     @Column(name = "location_type")
@@ -56,36 +51,20 @@ public class StockGoodsDetail extends BaseEntity {
     /** 计量单位，如：件、桶等 */
     private String unit;
 
-    public String getOperatorName() {
-        return operatorName;
+    public Integer getId() {
+        return id;
     }
 
-    public void setOperatorName(String operatorName) {
-        this.operatorName = operatorName;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getOperatorPhone() {
-        return operatorPhone;
+    public String getBatchNo() {
+        return batchNo;
     }
 
-    public void setOperatorPhone(String operatorPhone) {
-        this.operatorPhone = operatorPhone;
-    }
-
-    public String getOperatorOpenid() {
-        return operatorOpenid;
-    }
-
-    public void setOperatorOpenid(String operatorOpenid) {
-        this.operatorOpenid = operatorOpenid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo;
     }
 
     public String getNo() {
@@ -96,12 +75,28 @@ public class StockGoodsDetail extends BaseEntity {
         this.no = no;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getNameShort() {
         return nameShort;
     }
 
     public void setNameShort(String nameShort) {
         this.nameShort = nameShort;
+    }
+
+    public Integer getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(Integer goodsId) {
+        this.goodsId = goodsId;
     }
 
     public String getNameFull() {

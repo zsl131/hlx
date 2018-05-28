@@ -1,0 +1,12 @@
+.no-match {
+    color:#F00;
+}
+.no-match .amount-true {
+    color:#F00;
+}
+.match-span {
+    float:right;
+}
+.has-matched {
+    display: none;
+}

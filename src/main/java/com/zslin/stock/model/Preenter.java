@@ -4,6 +4,7 @@ import com.zslin.web.vo.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 /**
@@ -36,6 +37,125 @@ public class Preenter extends BaseEntity {
 
     /** 状态，-1-逾期未处理；0-新增；1-完成 */
     private String status;
+
+    private Integer no;
+
+    @Lob
+    private String datas;
+
+    private Integer amount;
+
+    @Column(name = "amount_true")
+    private Integer amountTrue;
+
+    private String remark;
+
+    @Column(name = "check_remark")
+    private String checkRemark;
+
+    @Column(name = "check_datas")
+    private String checkDatas;
+
+    @Column(name = "check_name")
+    private String checkName;
+
+    @Column(name = "check_phone")
+    private String checkPhone;
+
+    @Column(name = "check_openid")
+    private String checkOpenid;
+
+    /** 预计到货日期 */
+    @Column(name = "maybe_day")
+    private String maybeDay;
+
+    public String getMaybeDay() {
+        return maybeDay;
+    }
+
+    public void setMaybeDay(String maybeDay) {
+        this.maybeDay = maybeDay;
+    }
+
+    public String getCheckDatas() {
+        return checkDatas;
+    }
+
+    public void setCheckDatas(String checkDatas) {
+        this.checkDatas = checkDatas;
+    }
+
+    public String getCheckName() {
+        return checkName;
+    }
+
+    public void setCheckName(String checkName) {
+        this.checkName = checkName;
+    }
+
+    public String getCheckPhone() {
+        return checkPhone;
+    }
+
+    public void setCheckPhone(String checkPhone) {
+        this.checkPhone = checkPhone;
+    }
+
+    public String getCheckOpenid() {
+        return checkOpenid;
+    }
+
+    public void setCheckOpenid(String checkOpenid) {
+        this.checkOpenid = checkOpenid;
+    }
+
+    public String getDatas() {
+        return datas;
+    }
+
+    public void setDatas(String datas) {
+        this.datas = datas;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public Integer getAmountTrue() {
+        return amountTrue;
+    }
+
+    public void setAmountTrue(Integer amountTrue) {
+        this.amountTrue = amountTrue;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getCheckRemark() {
+        return checkRemark;
+    }
+
+    public void setCheckRemark(String checkRemark) {
+        this.checkRemark = checkRemark;
+    }
+
+    public Integer getNo() {
+        return no;
+    }
+
+    public void setNo(Integer no) {
+        this.no = no;
+    }
 
     public String getOperatorName() {
         return operatorName;

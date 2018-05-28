@@ -7,6 +7,14 @@ function setCurrentAmount() {
         var amount = $(this).val();
         $(".now-amount[goodsId='"+goodsId+"']").html(amount);
     });
+
+    $(".single-data").each(function() {
+        var verifyCount = parseInt($(this).find(".verify-count").html());
+        var amountTrue = parseInt($(this).find(".amount-true").html());
+        if(verifyCount!=amountTrue) {
+            $(this).find(".amount-true").addClass("no-matched");
+        }
+    });
 }
 
 function updateStatus(status) {

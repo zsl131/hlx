@@ -21,29 +21,26 @@
                         <div class="weui-tab">
                             <div class="weui-navbar">
                                 <div class="weui-navbar__item weui-bar__item_on">
-                                    <b class="title">申购记录 ( <b th:text="${datas.totalElements}">0</b> )</b>
+                                    <b class="title">物品预录入 ( <b th:text="${datas.totalElements}">0</b> )</b>
                                 </div>
                             </div>
                             <div class="weui-tab__panel">
                                 <div class="weui-panel weui-panel_access">
                                     <div class="weui-panel__bd">
                                         <div class="weui-media-box weui-media-box_text" th:each="apply : ${datas}">
-                                            <h4 class="weui-media-box__title"><a th:href="|/wx/stock/goodsApply/show?batchNo=${apply.batchNo}|" th:text="|${apply.applyName}的申购信息|"></a>
+                                            <h4 class="weui-media-box__title"><a th:href="|/wx/stock/preenter/show?batchNo=${apply.batchNo}|" th:text="|${apply.operatorName}的预录入信息|"></a>
                                             [
-                                                <span th:if="${apply.status eq '-1'}" style="color:#F00">被驳回</span>
-                                                <span th:if="${apply.status eq '0'}" style="color:green">申请中</span>
-                                                <span th:if="${apply.status eq '1'}" style="color:blue">已批准</span>
-                                                <span th:if="${apply.status eq '2'}">已入库</span>
+                                                <span th:if="${apply.status eq '0'}" style="color:green">待收货</span>
+                                                <span th:if="${apply.status eq '1'}" style="color:blue">已入库</span>
                                             ]
                                             </h4>
                                             <p class="weui-media-box__desc" th:text="${apply.remark}">备注</p>
                                             <ul class="weui-media-box__info">
-                                                <li class="weui-media-box__info__meta" th:text="${apply.applyName}">文字来源</li>
+                                                <li class="weui-media-box__info__meta" th:text="${apply.operatorName}">文字来源</li>
                                                 <li class="weui-media-box__info__meta" th:text="${apply.createDay}">时间</li>
-                                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra"><a th:href="|tel:${apply.applyPhone}|" th:text="${apply.applyPhone}"></a></li>
-                                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra" th:if="${apply.applyOpenid eq session.openid and apply.status eq '0'}"><a th:href="|/wx/stock/goodsApply/modifyApply?batchNo=${apply.batchNo}|" >修改</a></li>
-                                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra verify-apply-href" style="display:none" th:if="${apply.status eq '0'}"><a th:href="|/wx/stock/goodsApply/modifyApply?batchNo=${apply.batchNo}&amp;isVerify=1|">审核</a></li>
-                                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra" th:if="${apply.status eq '1'}"><a th:href="|/wx/stock/goodsApply/checkGoods?batchNo=${apply.batchNo}|">收货</a></li>
+                                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra"><a th:href="|tel:${apply.operatorPhone}|" th:text="${apply.operatorPhone}"></a></li>
+                                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra" th:if="${apply.operatorOpenid eq session.openid and apply.status eq '0'}"><a th:href="|/wx/stock/preenter/modifyApply?batchNo=${apply.batchNo}|" >修改</a></li>
+                                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra verify-apply-href" style="display:none" th:if="${apply.status eq '0'}"><a th:href="|/wx/stock/operatorPhone/modifyApply?batchNo=${apply.batchNo}&amp;isCheck=1|">收货</a></li>
                                             </ul>
                                         </div>
                                     </div>

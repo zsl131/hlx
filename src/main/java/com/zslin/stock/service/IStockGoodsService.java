@@ -28,6 +28,14 @@ public interface IStockGoodsService extends BaseRepository<StockGoods, Integer>,
     @Transactional
     void updateHasWarn(String hasWarn, Integer id);
 
+    @Query("UPDATE StockGoods s SET s.amount=s.amount+?2 WHERE s.id=?1")
+    @Modifying
+    @Transactional
+    void plusAmount(Integer id, Integer amount);
+
     @Query("SELECT new com.zslin.stock.dto.GoodsDto(id, amount) FROM StockGoods WHERE id in (?1)")
     List<GoodsDto> listByIds(Integer... ids);
+
+    @Query("FROM StockGoods WHERE amount>0")
+    List<StockGoods> findByCanOuter();
 }

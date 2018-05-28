@@ -20,6 +20,9 @@ public interface IWorkerService extends BaseRepository<Worker, Integer>, JpaSpec
     @Query("SELECT w.openid FROM Worker w WHERE w.isCashier='1'")
     List<String> findCashierOpenid();
 
+    @Query("SELECT openid FROM Worker WHERE operator LIKE %?1%")
+    List<String> findOpenidByOperator(String str);
+
     @Query("UPDATE Worker w SET w.password=?1 WHERE w.id=?2")
     @Modifying
     @Transactional

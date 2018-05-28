@@ -1,8 +1,7 @@
 package com.zslin.stock.tools;
 
 import com.zslin.basic.tools.DateTools;
-import com.zslin.stock.service.IGoodsApplyService;
-import com.zslin.stock.service.IStockGoodsService;
+import com.zslin.stock.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +18,15 @@ public class GoodsNoTools {
 
     @Autowired
     private IGoodsApplyService goodsApplyService;
+
+    @Autowired
+    private IOuterApplyService outerApplyService;
+
+    @Autowired
+    private IGoodsRegisterService goodsRegisterService;
+
+    @Autowired
+    private IPreenterService preenterService;
 
     /** 生成物品编号 */
     public Integer generateOrderNo() {
@@ -41,6 +49,27 @@ public class GoodsNoTools {
     /** 生成申购编号 */
     public Integer generateApplyNo() {
         Integer maxNo = goodsApplyService.maxNo();
+        maxNo = (maxNo == null)?0:maxNo;
+        return maxNo + 1;
+    }
+
+    /** 生成库出申购编号 */
+    public Integer generateOuterApplyNo() {
+        Integer maxNo = outerApplyService.maxNo();
+        maxNo = (maxNo == null)?0:maxNo;
+        return maxNo + 1;
+    }
+
+    /** 生成入库编号 */
+    public Integer generateGoodsRegisterNo() {
+        Integer maxNo = goodsRegisterService.maxNo();
+        maxNo = (maxNo == null)?0:maxNo;
+        return maxNo + 1;
+    }
+
+    /** 生成预录入编号 */
+    public Integer generatePreenterNo() {
+        Integer maxNo = preenterService.maxNo();
         maxNo = (maxNo == null)?0:maxNo;
         return maxNo + 1;
     }

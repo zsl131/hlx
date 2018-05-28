@@ -1,5 +1,6 @@
 package com.zslin;
 
+import com.zslin.kaoqin.service.IWorkerService;
 import com.zslin.stock.dto.GoodsDto;
 import com.zslin.stock.service.IStockGoodsService;
 import com.zslin.stock.tools.GoodsNoTools;
@@ -15,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,6 +39,23 @@ public class EventTest {
 
     @Autowired
     private IStockGoodsService stockGoodsService;
+
+    @Autowired
+    private IWorkerService workerService;
+
+    @Test
+    public void test07() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd E");
+        System.out.println("==="+sdf.format(new Date()));
+    }
+
+    @Test
+    public void test06() {
+        List<String> openids = workerService.findOpenidByOperator("-1-");
+        for(String o : openids) {
+            System.out.println("======="+o);
+        }
+    }
 
     @Test
     public void test05() {

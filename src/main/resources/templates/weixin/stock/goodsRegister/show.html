@@ -22,14 +22,14 @@
         <input id="batchNo" type="hidden" th:value="${goodsApply.batchNo}"/>
         <div class="page">
             <div class="page__hd container">
-                <h1 class="page__title">物品申购详情</h1>
-                <p class="page__desc" th:text="${goodsApply.remark}">表单预览</p>
+                <h1 class="page__title">入库详情</h1>
+                <p class="page__desc" th:text="|${goodsApply.applyRemark}|">表单预览</p>
             </div>
             <div class="page__bd">
                 <div class="weui-form-preview">
                     <div class="weui-form-preview__hd">
-                        <label class="weui-form-preview__label">申购总数</label>
-                        <em class="weui-form-preview__value" th:text="${goodsApply.amount}">¥2400.00</em>
+                        <label class="weui-form-preview__label">入库申请总数</label>
+                        <em class="weui-form-preview__value" th:text="${goodsApply.applyAmount}">¥2400.00</em>
                     </div>
                     <div class="weui-form-preview__bd">
                         <div class="weui-form-preview__item">
@@ -37,39 +37,21 @@
                             <span class="weui-form-preview__value" th:text="|${goodsApply.createDay} ${goodsApply.createTime}|">电动打蛋机</span>
                         </div>
                         <div class="weui-form-preview__item">
-                            <label class="weui-form-preview__label">申购人员</label>
+                            <label class="weui-form-preview__label">出库人员</label>
                             <span class="weui-form-preview__value" th:text="|${goodsApply.applyName}(${goodsApply.applyPhone})|">名字名字名字</span>
                         </div>
-                        <div class="weui-form-preview__item">
-                            <label class="weui-form-preview__label">状态</label>
-                            <span class="weui-form-preview__value">
-                                <span th:if="${goodsApply.status eq '-1'}" style="color:#F00">被驳回，已结束</span>
-                                <span th:if="${goodsApply.status eq '0'}" style="color:green">申请中，待审核</span>
-                                <span th:if="${goodsApply.status eq '1'}" style="color:blue">已批准，待收货</span>
-                                <span th:if="${goodsApply.status eq '2'}">货入库，已完成</span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="weui-form-preview__ft">
-                        <a th:if="${goodsApply.status eq '0'}" class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:;" onclick="updateStatus('-1')">驳回申购</a>
-                        <a th:if="${goodsApply.status eq '0'}" type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" th:href="|/wx/stock/goodsApply/modifyApply?batchNo=${goodsApply.batchNo}&amp;isVerify=1|">修改</a>
-                        <button th:if="${goodsApply.status eq '0'}" type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" onclick="updateStatus('1')">通过申购</button>
                     </div>
                 </div>
 
                 <div class="container1">
-                    <div class="weui-cells__title">申购物品详细信息</div>
+                    <div class="weui-cells__title">入库物品详细信息</div>
                     <div class="weui-cells">
                         <div class="weui-cell" th:each="detail : ${detailList}">
                             <div class="weui-cell__bd">
                                 <p th:text="${detail.name}">标题文字</p>
                             </div>
                             <div class="single-data weui-cell__ft">
-                                <span th:if="${goodsApply.status eq '0'}">现有：<b class="now-amount" th:attr="goodsId=${detail.goodsId}">0</b> <span th:text="${detail.unit}"></span></span>
-                                <p>申：<b th:text="${detail.amount le 0 ? '-': detail.amount}"></b> <span th:text="${detail.unit}"></span>
-                                <span>&nbsp;核：<b class="verify-count" th:text="${detail.AllowAmount le 0 ? '-': detail.AllowAmount}"></b> <span th:text="${detail.unit}"></span></span>
-                                <span>&nbsp;实：<b class="amount-true" th:text="${detail.amountTrue le 0 ? '-': detail.amountTrue}"></b> <span th:text="${detail.unit}"></span></span>
-                                </p>
+                                <span>&nbsp;入库：<b class="verify-count" th:text="${detail.amount le 0 ? '-': detail.amount}"></b> <span th:text="${detail.unit}"></span></span>
                             </div>
                         </div>
                     </div>

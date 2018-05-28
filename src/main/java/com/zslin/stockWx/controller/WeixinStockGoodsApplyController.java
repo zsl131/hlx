@@ -16,6 +16,7 @@ import com.zslin.stock.service.IGoodsApplyService;
 import com.zslin.stock.service.IStockCategoryService;
 import com.zslin.stock.service.IStockGoodsService;
 import com.zslin.stock.tools.GoodsNoTools;
+import com.zslin.stockWx.tools.StockNoticeTools;
 import com.zslin.stockWx.tools.StockWxTools;
 import com.zslin.wx.tools.SessionTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,9 @@ public class WeixinStockGoodsApplyController {
     @Autowired
     private GoodsNoTools goodsNoTools;
 
+    @Autowired
+    private StockNoticeTools stockNoticeTools;
+
     @GetMapping(value = "listApply")
     public String listApply(Model model, Integer page, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
@@ -80,6 +84,7 @@ public class WeixinStockGoodsApplyController {
     @PostMapping(value = "updateStatus")
     public @ResponseBody String updateStatus(String batchNo, String status, HttpServletRequest request) {
         goodsApplyService.updateStatus(batchNo, status); //2-驳回申购申请,1-通过申购申请
+        stockNoticeTools.noticeApplyStatus(goodsApplyService.findByBatchNo(batchNo)); //通知
         return "1";
     }
 
@@ -168,6 +173,7 @@ public class WeixinStockGoodsApplyController {
                 gad.setCateName(sg.getCateName());
                 gad.setLocationType(sg.getLocationType());
                 gad.setName(sg.getName());
+                gad.setNo(sg.getNo());
                 gad.setNameFull(sg.getNameFull());
                 gad.setNameShort(sg.getNameShort());
                 gad.setUnit(sg.getUnit());
@@ -179,14 +185,16 @@ public class WeixinStockGoodsApplyController {
             if(isVerify) { //如果是审核
                 gad.setAllowAmount(amount);
             } else { //如果是初次申请或修改
-                gad.setAllowAmount(amount);
+//                gad.setAllowAmount(amount);
                 gad.setAmount(amount);
-                gad.setAmountTrue(amount);
+//                gad.setAmountTrue(amount);
             }
             if(amount<=0 && !isVerify) { //如果数量为0，且不是审核
                 goodsApplyDetailService.deleteByBatchNoAndGoodsId(batchNo, goodsId);
             } else {
-                goodsApplyDetailService.save(gad);
+                if(amount>0 || goodsApplyDetailService.findByBatchNoAndGoodsId(batchNo, goodsId) != null) {
+                    goodsApplyDetailService.save(gad);
+                }
             }
             totalAmount += amount;
             amount1 += amount;
@@ -216,6 +224,7 @@ public class WeixinStockGoodsApplyController {
                 gad.setCateName(sg.getCateName());
                 gad.setLocationType(sg.getLocationType());
                 gad.setName(sg.getName());
+                gad.setNo(sg.getNo());
                 gad.setNameFull(sg.getNameFull());
                 gad.setNameShort(sg.getNameShort());
                 gad.setUnit(sg.getUnit());
@@ -227,14 +236,16 @@ public class WeixinStockGoodsApplyController {
             if(isVerify) { //如果是审核
                 gad.setAllowAmount(amount);
             } else { //如果是初次申请或修改
-                gad.setAllowAmount(amount);
+//                gad.setAllowAmount(amount);
                 gad.setAmount(amount);
-                gad.setAmountTrue(amount);
+//                gad.setAmountTrue(amount);
             }
             if(amount<=0 && !isVerify) { //如果数量为0，且不是审核
                 goodsApplyDetailService.deleteByBatchNoAndGoodsId(batchNo, goodsId);
             } else {
-                goodsApplyDetailService.save(gad);
+                if(amount>0 || goodsApplyDetailService.findByBatchNoAndGoodsId(batchNo, goodsId) != null) {
+                    goodsApplyDetailService.save(gad);
+                }
             }
             totalAmount += amount;
             amount2 += amount;
@@ -264,6 +275,7 @@ public class WeixinStockGoodsApplyController {
                 gad.setCateName(sg.getCateName());
                 gad.setLocationType(sg.getLocationType());
                 gad.setName(sg.getName());
+                gad.setNo(sg.getNo());
                 gad.setNameFull(sg.getNameFull());
                 gad.setNameShort(sg.getNameShort());
                 gad.setUnit(sg.getUnit());
@@ -282,7 +294,9 @@ public class WeixinStockGoodsApplyController {
             if(amount<=0 && !isVerify) { //如果数量为0，且不是审核
                 goodsApplyDetailService.deleteByBatchNoAndGoodsId(batchNo, goodsId);
             } else {
-                goodsApplyDetailService.save(gad);
+                if(amount>0 || goodsApplyDetailService.findByBatchNoAndGoodsId(batchNo, goodsId) != null) {
+                    goodsApplyDetailService.save(gad);
+                }
             }
             totalAmount += amount;
             amount3 += amount;
@@ -303,12 +317,55 @@ public class WeixinStockGoodsApplyController {
         /*if(isVerify) {
             ga.setStatus("1");
         }*/
+
+        if(isAdd) {
+            //TODO 通知
+            stockNoticeTools.noticeNewApply(ga); //新增时通知
+        }
+
         goodsApplyService.save(ga);
+    }
+
+    /** 收货入库，POST提交 */
+    @PostMapping(value = "postCheckGoods")
+    public @ResponseBody String postCheckGoods(String datas, String batchNo, HttpServletRequest request) {
+        String status = goodsApplyService.findStatusByBatchNo(batchNo);
+        if(status==null || !"1".equals(status)) {
+            return "redirect:/wx/stock/goodsApply/show?batchNo="+batchNo;
+        }
+        String [] array = datas.split("_");
+        for(String str : array) {
+            if(str==null || "".equals(str) || str.indexOf("-")<0) {continue;}
+            Integer goodsId = Integer.parseInt(str.split("-")[0]);
+            Integer amount = Integer.parseInt(str.split("-")[1]);
+            goodsApplyDetailService.updateAmountTrue(batchNo, goodsId, amount);
+            stockGoodsService.plusAmount(goodsId, amount);
+        }
+        goodsApplyService.updateStatus(batchNo, "2"); //修改状态
+        //TODO 通知
+        stockNoticeTools.noticeCheckGoodsApply(batchNo);
+        return "1";
+    }
+
+    /** 收货入库 */
+    @GetMapping(value = "checkGoods")
+    public String checkGoods(Model model, String batchNo, HttpServletRequest request) {
+        GoodsApply ga = goodsApplyService.findByBatchNo(batchNo);
+        if(!"1".equals(ga.getStatus())) {
+            return "redirect:/wx/stock/goodsApply/show?batchNo="+batchNo;
+        }
+        List<GoodsApplyDetail> detailList = goodsApplyDetailService.listByBatchNo(batchNo);
+        model.addAttribute("goodsApply", ga);
+        model.addAttribute("detailList", detailList);
+        return "weixin/stock/goodsApply/checkGoods";
     }
 
     @GetMapping(value = "modifyApply")
     public String modifyApply(Model model, String batchNo, String isVerify, HttpServletRequest request) {
         GoodsApply ga = goodsApplyService.findByBatchNo(batchNo);
+        if(!"0".equals(ga.getStatus())) {
+            return "redirect:/wx/stock/goodsApply/show?batchNo="+batchNo;
+        }
         model.addAttribute("apply", ga);
         List<StockGoods> list = stockGoodsService.findAll(SimpleSortBuilder.generateSort("locationType_a", "cateId_a", "amount_a"));
         buildStockGoods(list, model);

@@ -1,5 +1,4 @@
-var dataCookieName = "apply-cookie-name";
-var locationSpe = "-_-";
+var dataCookieName = "apply-preenter-cookie-name";
 var isAdd;
 var batchNo;
 $(function() {
@@ -8,6 +7,7 @@ $(function() {
     $(".single-location-div").click(function() {
         setShowStatus(this);
     });
+    console.log(getCookie(dataCookieName));
     resetDatas(); //重新打开时自动取Cookie中的数据加载
 })
 
@@ -17,10 +17,11 @@ function addApply(obj) {
     var applyCount = $(obj).find(".applyCount").html();
 
     var html = '<div class="dialog-html-div">'+
-                '<div class="form-group form-group-lg"><div class="input-group"><div class="input-group-addon">申购</div><input name="amount" type="number" class="form-control text-center" placeholder="输入数量" value="'+applyCount+'"/><div class="input-group-addon">'+unit+'</div></div></div>' +
+                '<div class="form-group form-group-lg"><div class="input-group"><div class="input-group-addon">预入</div><input name="amount" type="number" class="form-control text-center" placeholder="输入数量" value="'+applyCount+'"/><div class="input-group-addon">'+unit+'</div></div></div>' +
                 '</div>';
-    var applyDialog = confirmDialog(html, "<b class='fa fa-plus'></b> 申购【"+goodsName+"】", function() {
+    var applyDialog = confirmDialog(html, "<b class='fa fa-plus'></b> 预入【"+goodsName+"】", function() {
         var amount = parseInt($(applyDialog).find("input[name='amount']").val());
+        var curAmount = parseInt($(obj).parents(".weui-panel__hd").find(".cur-amount").html());
         amount = (isNaN(amount) || amount==''||amount<=0)?0:amount;
         modifyBtnStyle(obj, amount);
         $(obj).find(".applyCount").html(amount);
@@ -80,12 +81,12 @@ function buildApplyData() {
     $(".single-location-div").each(function() {
         var thisObj = $(this);
         var locationType = $(thisObj).attr("locationType");
-        datas += locationSpe+locationType+locationSpe;
+        //datas += locationSpe+locationType+locationSpe;
         //goods-list-1
         $((".goods-list-"+locationType)).find(".apply-href").each(function() {
             var amount = parseInt($(this).find(".applyCount").html());
 //            if(amount>0) {
-                datas += $(this).attr("goodsId")+"_"+amount+"-";
+                datas += $(this).attr("goodsId")+"-"+amount+"_";
 //            }
         });
 //        datas+="|";
@@ -99,49 +100,34 @@ function resetDatas() {
     var datas = getCookie(dataCookieName);
     if(!isAdd) {datas = $("input[name='batch-no']").attr("datas");}
     if(datas != null && datas != '') {
-        var locationArray = datas.split(locationSpe);
-        var data1 = locationArray[2];
-        var data2 = locationArray[4];
-        var data3 = locationArray[6];
-
-        var array1 = data1.split("-");
-        var array2 = data2.split("-");
-        var array3 = data3.split("-");
+        var array = datas.split("_");
         var total = 0, total1 = 0, total2 = 0, total3 = 0;
-        for(var i=0;i<array1.length;i++) {
-            if(array1[i] != null && array1[i] != '') {
-                var goodsId = array1[i].split("_")[0];
-                var amount = parseInt(array1[i].split("_")[1]);
-                total1 += amount;
+        for(var i=0;i<array.length;i++) {
+            if(array[i] != null && array[i] != '') {
+                var goodsId = array[i].split("-")[0];
+                var amount = parseInt(array[i].split("-")[1]);
                 modifyBtnStyle($("a.apply-href[goodsId='"+goodsId+"']"), amount);
             }
         }
-        $(".single-location-div[locationType='1']").find(".category-count").html(total1);
-
-        for(var i=0;i<array2.length;i++) {
-            if(array2[i] != null && array2[i] != '') {
-                var goodsId = array2[i].split("_")[0];
-                var amount = parseInt(array2[i].split("_")[1]);
-                total2 += amount;
-                modifyBtnStyle($("a.apply-href[goodsId='"+goodsId+"']"), amount);
-            }
-        }
-        $(".single-location-div[locationType='2']").find(".category-count").html(total2);
-
-        for(var i=0;i<array3.length;i++) {
-            if(array3[i] != null && array3[i] != '') {
-                var goodsId = array3[i].split("_")[0];
-                var amount = parseInt(array3[i].split("_")[1]);
-                total3 += amount;
-                modifyBtnStyle($("a.apply-href[goodsId='"+goodsId+"']"), amount);
-            }
-        }
-        $(".single-location-div[locationType='3']").find(".category-count").html(total3);
-
-        total = total1 + total2 + total3;
-
-        $(".total-count").html(total);
+        buildCount();
     }
+}
+
+function buildCount() {
+    var amount1=0, amount2=0,amount3=0;
+    $(".goods-list-1").find(".applyCount").each(function() {
+        amount1 += parseInt($(this).html());
+    });
+    $(".goods-list-2").find(".applyCount").each(function() {
+        amount2 += parseInt($(this).html());
+    });
+    $(".goods-list-3").find(".applyCount").each(function() {
+        amount3 += parseInt($(this).html());
+    });
+    $(".single-location-div[locationType='1']").find(".category-count").html(amount1);
+    $(".single-location-div[locationType='2']").find(".category-count").html(amount2);
+    $(".single-location-div[locationType='3']").find(".category-count").html(amount3);
+    $(".total-count").html(amount1+amount2+amount3);
 }
 
 // 提交申购数据
@@ -153,26 +139,34 @@ function submitApplyDatas() {
     datas = getCookie(dataCookieName);
     var totalCount = parseInt($(".total-count").html());
     if(datas == null || datas == '' || isNaN(totalCount) || totalCount<=0) {
-        showDialog("未选任何物品，不可提交申购", "<b class='fa fa-warning'></b> 系统提示");
+        showDialog("未选任何物品，不可提交预录入", "<b class='fa fa-warning'></b> 系统提示");
     } else {
-        var isVerify = $("input[name='is-verify']").val();
-        var html = '<h4>此次申购总数量为：<b style="color:#F00">'+totalCount+'</b></h4>是否已选择完成并确定提交申购申请呢？';
+        var isCheck = $("input[name='is-check']").val();
+        var html = '<h4>此次预入库总数量为：<b style="color:#F00">'+totalCount+'</b></h4>'+
+                '<div class="form-group form-group-lg"><div class="input-group"><div class="input-group-addon">预计</div><input name="days" type="number" class="form-control text-center" placeholder="输入天数" value="4"/><div class="input-group-addon">天后到货</div></div></div>' +
+                '<p>是否已选择完成并确定提交预录入信息呢？</p>';
         var applyDialog = confirmDialog(html, "<b class='fa fa-question-circle'></b> 系统提示", function() {
-            $.post("/wx/stock/goodsApply/applyPost", {datas: datas, batchNo: batchNo, isVerify: isVerify}, function(res) {
-                if(res == '1') {
-                    delCookie(dataCookieName);
-                    showToast("申购成功，等待审核");
-                    window.location.href = '/wx/stock/goodsApply/listApply';
-                }
-            }, "json");
-            applyDialog.remove();
+            var days = parseInt($(applyDialog).find("input[name='days']").val());
+            days = (days == null || isNaN(days))?-1:days;
+            if(days<0) {
+                showDialog("<b class='fa fa-warning'></b> 请输入预计到货天数，方便通知店员收货", "<b class='fa fa-info'></b> 系统提示");
+            } else {
+                $.post("/wx/stock/preenter/applyPost", {datas: datas, days:days, batchNo: batchNo, isCheck: isCheck}, function(res) {
+                    if(res == '1') {
+                        delCookie(dataCookieName);
+                        showToast("提交成功，等待收货");
+                        window.location.href = '/wx/stock/preenter/listApply';
+                    }
+                }, "json");
+                applyDialog.remove();
+            }
         });
     }
 }
 
 /** 关闭返回 */
 function cancelApply() {
-    var html = '确定取消申购并返回吗？此操作将清空此次所有您已申购的物品';
+    var html = '确定取消出库并返回吗？此操作将清空此次所有您已选择的所有物品';
     var myDialog = confirmDialog(html, "<b class='fa fa-warning'></b> 系统提示", function() {
         delCookie(dataCookieName);
         window.history.back(-1);

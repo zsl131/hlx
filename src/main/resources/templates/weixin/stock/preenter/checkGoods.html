@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="/basic/admin/myself/cookie-tools.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-index.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-tools.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-goods-apply-check.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="/weixin/stock/stock-goods-apply-check.css"/>
+
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+</head>
+<body>
+    <div th:fragment="content" th:remove="tag">
+        <input name="loginWorker" th:value="${session.loginWorker.operator}" type="hidden"/>
+        <input id="batchNo" type="hidden" th:value="${goodsApply.batchNo}"/>
+        <div class="page">
+            <div class="page__hd container">
+                <h1 class="page__title">物品申购-收货核对</h1>
+                <p class="page__desc" th:text="${goodsApply.remark}">表单预览</p>
+            </div>
+            <div class="page__bd">
+                <div class="weui-form-preview">
+                    <div class="weui-form-preview__hd">
+                        <label class="weui-form-preview__label">申购总数</label>
+                        <em class="weui-form-preview__value" th:text="${goodsApply.amount}">¥2400.00</em>
+                    </div>
+                    <div class="weui-form-preview__bd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">日期</label>
+                            <span class="weui-form-preview__value" th:text="|${goodsApply.createDay} ${goodsApply.createTime}|">电动打蛋机</span>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">申购人员</label>
+                            <span class="weui-form-preview__value" th:text="|${goodsApply.applyName}(${goodsApply.applyPhone})|">名字名字名字</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container1">
+                    <div class="weui-cells__title">申购物品列表（购买品种：<b th:text="${#lists.size(detailList)}" class="total-kind-count weui-badge"></b> 种）
+                    <span class="match-span">到齐品种：<b class="match-ok-b weui-badge">0</b> 种</span>
+                    </div>
+                    <div class="weui-cells">
+                        <div class="weui-cell single-goods" th:each="detail : ${detailList}" th:attr="goodsId=${detail.goodsId}, unit=${detail.unit}">
+                            <div class="weui-cell__bd">
+                                <p th:text="${detail.name}" class="goodsName">标题文字</p>
+                            </div>
+                            <div class="weui-cell__ft">
+                                <span>采购：<b th:text="${detail.AllowAmount le 0 ? '-': detail.AllowAmount}" class="allow-amount"></b> <span th:text="${detail.unit}"></span></span>
+                                <span>，实到：<b th:text="${detail.amountTrue le 0 ? '-': detail.amountTrue}" class="amount-true"></b> <span th:text="${detail.unit}"></span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="weui-form-preview__ft" style="border-bottom:1px #ECECEC solid;">
+                    <!--<a class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:;" onclick="updateStatus('-1')">驳回申购</a>-->
+                    <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" onclick="submitDatas()"><b class="fa fa-check-circle"></b> 核对完成，确定入库</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
+</body>
+</html>
