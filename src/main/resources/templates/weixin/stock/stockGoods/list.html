@@ -10,6 +10,7 @@
     <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
     <link rel="stylesheet" type="text/css" href="/weixin/stock/stock-goods.css"/>
     <script type="text/javascript" src="/weixin/stock/stock-goods.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-search.js"></script>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
@@ -88,11 +89,11 @@
                                 <div class="weui-panel weui-panel_access">
                                     <div class="weui-panel__hd">
                                         <input class="category-input" name="category-input" th:attr="cateId=${category.id}, cateName=${category.name}" type="hidden" th:if="${category ne null}"/>
-                                        <div class="container-fluid"><h4 style="float:left;">库存物品列表</h4><span class="text-right" style="float:right;"><button class="btn btn-small btn-primary" onclick="addGoods()"><b class="fa fa-plus"></b></button></span></div>
+                                        <div class="container-fluid"><h4 style="float:left; margin:0px; width:78%;"><input class="form-control search-input" placeholder="输入名称、全拼或首字母检索"/></h4><span class="text-right" style="float:right;"><button class="btn btn-small btn-primary" onclick="addGoods()"><b class="fa fa-plus"></b></button></span></div>
                                     </div>
                                     <div class="weui-panel__bd">
-                                        <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link" th:each="obj : ${datas}" style="padding-top:0px;padding-bottom:0px;"
-                                        onclick="modifyGoods(this)" th:attr="objId=${obj.id}, cateName=${obj.cateName}, objName=${obj.name}, locationType=${obj.locationType},unit=${obj.unit}, warnAmount=${obj.warnAmount}, remark=${obj.remark}, status=${obj.status}">
+                                        <a href="javascript:void(0);" class="single-goods-item weui-cell weui-cell_access weui-cell_link" th:each="obj : ${datas}" style="padding-top:0px;padding-bottom:0px;"
+                                        onclick="modifyGoods(this)" th:attr="objId=${obj.id}, cateName=${obj.cateName}, objName=${obj.name}, locationType=${obj.locationType},unit=${obj.unit}, warnAmount=${obj.warnAmount}, remark=${obj.remark}, status=${obj.status},nameShort=${obj.nameShort}, nameFull=${obj.nameFull}">
                                             <div class="weui-media-box weui-media-box_text weui-cell__bd">
                                                 <h4 class="weui-media-box__title" th:text="|${obj.locationType eq '1'?'冻库':(obj.locationType eq '2'?'仓库':'店内')}-${obj.cateName}-${obj.name}|">标题二</h4>
                                                 <p class="weui-media-box__desc">

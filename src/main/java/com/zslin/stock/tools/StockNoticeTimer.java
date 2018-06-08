@@ -28,7 +28,7 @@ public class StockNoticeTimer {
     private StockWxTools stockWxTools;
 
     /** 每天早上9点通知预警物品 */
-    @Scheduled(cron = "0 17 1 * * ?")
+    @Scheduled(cron = "0 0 9 * * ?")
     public void noticeWarnGoods() {
         List<StockGoods> list = stockGoodsService.findByWarn();
         if(list!=null && list.size()>0) {

@@ -6,6 +6,7 @@ import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.sms.model.SendRecord;
 import com.zslin.sms.service.ISendRecordService;
+import com.zslin.sms.tools.SmsConfig;
 import com.zslin.sms.tools.SmsTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +31,9 @@ public class AdminSendRecordController {
     @Autowired
     private SmsTools smsTools;
 
+    @Autowired
+    private SmsConfig smsConfig;
+
     @GetMapping(value = "list")
     @AdminAuth(name = "短信发送记录", orderNum = 1, type = "1", icon = "fa fa-file-text-o")
     public String list(Model model, Integer page, HttpServletRequest request) {
@@ -38,5 +42,12 @@ public class AdminSendRecordController {
         model.addAttribute("datas", datas);
         model.addAttribute("surplus", smsTools.surplus());
         return "admin/sendRecord/list";
+    }
+
+    @GetMapping(value = "testSend")
+    @AdminAuth(name = "模拟发送短信", orderNum = 1, type = "1", icon = "fa fa-file-text-o")
+    public String testSend() {
+        smsTools.sendMsg(Integer.parseInt(smsConfig.getSendCodeIid()), "15925061256", "code", "00000");
+        return "redirect:/admin/sendRecord/list";
     }
 }

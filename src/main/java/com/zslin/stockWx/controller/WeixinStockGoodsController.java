@@ -73,12 +73,12 @@ public class WeixinStockGoodsController {
         sg.setStatus(status);
         sg.setCateId(cateId);
         sg.setHasWarn("1");
-        Integer orderNo = goodsNoTools.generateOrderNo();
-        sg.setOrderNo(orderNo);
-        sg.setNo(goodsNoTools.buildNo(sg.getLocationType(), orderNo));
         sg.setAmount(0); //初次添加数量都为0 ，如有数量应从入库添加
         sg.setCateName(sc.getName());
         sg.setLocationType(sc.getLocationType());
+        Integer orderNo = goodsNoTools.generateOrderNo();
+        sg.setOrderNo(orderNo);
+        sg.setNo(goodsNoTools.buildNo(sg.getLocationType(), orderNo));
 
         stockGoodsService.save(sg);
         return "1";
