@@ -53,4 +53,8 @@ public interface IStockGoodsService extends BaseRepository<StockGoods, Integer>,
     /** 获取需要预警的物品 */
     @Query("FROM StockGoods WHERE amount<=warnAmount")
     List<StockGoods> findAllWarn();
+
+    /** 获取所有物品，用于显示给客人看的 */
+    @Query("FROM StockGoods WHERE status='1'")
+    List<StockGoods> findAllShow();
 }

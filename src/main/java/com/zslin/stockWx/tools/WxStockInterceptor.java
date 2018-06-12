@@ -22,7 +22,7 @@ public class WxStockInterceptor extends HandlerInterceptorAdapter {
             StockWxTools stockWxTools = (StockWxTools) factory.getBean("stockWxTools");
             Worker w = stockWxTools.getLoginWorker(openid);
             if(w==null || w.getOperator()==null || "".equals(w.getOperator())) {
-                response.sendRedirect(request.getContextPath()+"/wx/stock/index");
+                response.sendRedirect(request.getContextPath()+"/weixin/stock/index");
             } else {
                 StockWxTools.setWorker(request, w);
             }

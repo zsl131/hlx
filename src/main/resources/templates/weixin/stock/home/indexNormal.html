@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="/weixin/stock/stock-index.js"></script>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="container">
+        <div class="page">
+            <div class="page__hd">
+                <h1 class="page__title">库存管理系统</h1>
+                <p class="page__desc">本店提供以下菜品（这里只显示一部份）<h4 th:text="|${#lists.size(goodsList)} 种 |"></h4></p>
+            </div>
+            <div class="page__bd">
+                <div class="page">
+                    <div class="weui-grids">
+                        <a href="/wx/stock/stockCategory/list" class="weui-grid" th:each="goods: ${goodsList}">
+                            <p class="weui-grid__label" th:text="${goods.name}">物品类别</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
+</div>
+</body>
+</html>

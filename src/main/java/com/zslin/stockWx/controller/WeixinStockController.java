@@ -40,6 +40,11 @@ public class WeixinStockController {
         String openid = SessionTools.getOpenid(request);
         Worker w = stockWxTools.getLoginWorker(openid);
         model.addAttribute("loginWorker", w);
-        return "weixin/stock/home/index";
+        if(w==null || w.getOperator()==null || "".equals(w.getOperator())) {
+            model.addAttribute("goodsList", stockGoodsService.findAllShow());
+            return "weixin/stock/home/indexNormal";
+        } else {
+            return "weixin/stock/home/index";
+        }
     }
 }

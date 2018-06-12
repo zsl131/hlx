@@ -46,8 +46,11 @@ public class AdminSendRecordController {
 
     @GetMapping(value = "testSend")
     @AdminAuth(name = "模拟发送短信", orderNum = 1, type = "1", icon = "fa fa-file-text-o")
-    public String testSend() {
-        smsTools.sendMsg(Integer.parseInt(smsConfig.getSendCodeIid()), "15925061256", "code", "00000");
+    public String testSend(String phone) {
+        if(phone==null || "".equals(phone)) {
+            phone = "15925061256";
+        }
+        smsTools.sendMsg(Integer.parseInt(smsConfig.getSendCodeIid()), phone, "code", "00000");
         return "redirect:/admin/sendRecord/list";
     }
 }

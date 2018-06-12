@@ -67,6 +67,11 @@ public class NormalTest {
     private RestdayTools restdayTools;
 
     @Test
+    public void test29() {
+        smsTools.sendMsg(Integer.parseInt(smsConfig.getSendCodeIid()), "15925061256", "code", "00000");
+    }
+
+    @Test
     public void test28() throws Exception {
         String pwd = "";
         String p = SecurityUtil.md5("root", "111111");
