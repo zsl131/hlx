@@ -249,9 +249,38 @@ public class ClientSimpleProcessHandler {
      * @param jsonObj
      */
     public void handlerWallet(JSONObject jsonObj) {
-        System.out.println("========="+jsonObj.toString());
+        //System.out.println("========="+jsonObj.toString());
         String openid = jsonObj.getString("key");
         Integer score = Integer.parseInt(jsonObj.getString("value"));
         scoreTools.processScoreByAmount(false, openid, score, "消费抵扣");
+    }
+
+    @Autowired
+    private IIncomeService incomeService;
+
+    /**
+     * 营收处理
+     * @param jsonObj
+     */
+    public void handlerIncome(JSONObject jsonObj) {
+        //System.out.println("========="+jsonObj.toString());
+        String day = jsonObj.getString("comeDay");
+        Float money = Float.parseFloat(jsonObj.get("money").toString());
+
+        Income income = incomeService.findByComeDay(day);
+        if(income==null) {
+            income = new Income();
+            income.setComeDay(day);
+            income.setComeMonth(day.substring(0, 6));
+            income.setComeYear(day.substring(0, 4));
+            income.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
+            income.setCash(money);
+            income.setTotalMoney((double) money);
+            income.setFromClient("1");
+        } else if(income!=null && "1".equalsIgnoreCase(income.getFromClient())) {
+            income.setCash(money);
+            income.setTotalMoney((double) money);
+        }
+        incomeService.save(income);
     }
 }

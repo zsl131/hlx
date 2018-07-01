@@ -27,4 +27,9 @@ public interface IGoodsApplyDetailService extends BaseRepository<GoodsApplyDetai
     @Modifying
     @Transactional
     void updateAmountTrue(String batchNo, Integer goodsId, Integer amountTrue);
+
+    @Query("UPDATE GoodsApplyDetail SET allowAmount=amount WHERE batchNo=?1 AND hasCheck='0'")
+    @Modifying
+    @Transactional
+    void updateAmountAllow(String batchNo);
 }

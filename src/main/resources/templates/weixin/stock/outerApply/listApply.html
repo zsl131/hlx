@@ -41,7 +41,7 @@
                                                 <li class="weui-media-box__info__meta" th:text="${apply.createDay}">时间</li>
                                                 <li class="weui-media-box__info__meta weui-media-box__info__meta_extra"><a th:href="|tel:${apply.applyPhone}|" th:text="${apply.applyPhone}"></a></li>
                                                 <li class="weui-media-box__info__meta weui-media-box__info__meta_extra" th:if="${apply.applyOpenid eq session.openid and apply.status eq '0'}"><a th:href="|/wx/stock/outerApply/modifyApply?batchNo=${apply.batchNo}|" >修改</a></li>
-                                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra verify-apply-href" style="display:none" th:if="${apply.status eq '0'}"><a th:href="|/wx/stock/outerApply/modifyApply?batchNo=${apply.batchNo}&amp;isCheck=1|">核对</a></li>
+                                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra verify-apply-href auth-operator" style="display:none" th:if="${apply.status eq '0' and apply.applyOpenid ne session.openid}" auth="4-10"><a th:href="|/wx/stock/outerApply/modifyApply?batchNo=${apply.batchNo}&amp;isCheck=1|">核对</a></li>
                                             </ul>
                                         </div>
                                     </div>

@@ -59,6 +59,8 @@ public class ClientPostHandler {
             clientSimpleProcessHandler.handlerInitPassword(dataObj);
         } else if ("wallet".equalsIgnoreCase(type)) { //积分钱包发生变化
             clientSimpleProcessHandler.handlerWallet(dataObj);
+        } else if ("income".equalsIgnoreCase(type)) { //营收
+            clientSimpleProcessHandler.handlerIncome(dataObj);
         }
     }
 

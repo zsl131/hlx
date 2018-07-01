@@ -19,4 +19,6 @@ public interface IIncomeService extends BaseRepository<Income, Integer>, JpaSpec
 
     @Query("SELECT SUM(totalMoney) FROM Income WHERE comeMonth=?1")
     Double totalMoney(String comeMonth);
+
+    Income findByComeDay(String comeDay);
 }

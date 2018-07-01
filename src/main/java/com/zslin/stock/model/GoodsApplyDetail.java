@@ -62,6 +62,18 @@ public class GoodsApplyDetail {
     /** 计量单位，如：件、桶等 */
     private String unit;
 
+    /** 是否审核，在未审核但直接通过时，允许采购数量应为申请数量 */
+    @Column(name = "has_check")
+    private String hasCheck="0";
+
+    public String getHasCheck() {
+        return hasCheck;
+    }
+
+    public void setHasCheck(String hasCheck) {
+        this.hasCheck = hasCheck;
+    }
+
     public Integer getGoodsId() {
         return goodsId;
     }

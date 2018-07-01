@@ -70,6 +70,18 @@ public class Income {
     //收入类别，1-营业收入；2-其他收入
     private String type="1";
 
+    /** 来源于客户端 */
+    @Column(name = "from_client")
+    private String fromClient;
+
+    public String getFromClient() {
+        return fromClient;
+    }
+
+    public void setFromClient(String fromClient) {
+        this.fromClient = fromClient;
+    }
+
     public String getType() {
         return type;
     }

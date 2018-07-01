@@ -84,6 +84,9 @@ public class WeixinStockGoodsApplyController {
     @PostMapping(value = "updateStatus")
     public @ResponseBody String updateStatus(String batchNo, String status, HttpServletRequest request) {
         goodsApplyService.updateStatus(batchNo, status); //2-驳回申购申请,1-通过申购申请
+        if("1".equals(status)) {
+            goodsApplyDetailService.updateAmountAllow(batchNo);
+        }
         stockNoticeTools.noticeApplyStatus(goodsApplyService.findByBatchNo(batchNo)); //通知
         return "1";
     }
@@ -184,6 +187,7 @@ public class WeixinStockGoodsApplyController {
             }*/
             if(isVerify) { //如果是审核
                 gad.setAllowAmount(amount);
+                gad.setHasCheck("1");
             } else { //如果是初次申请或修改
 //                gad.setAllowAmount(amount);
                 gad.setAmount(amount);

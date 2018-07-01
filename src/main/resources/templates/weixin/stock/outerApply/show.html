@@ -41,6 +41,10 @@
                             <label class="weui-form-preview__label">出库人员</label>
                             <span class="weui-form-preview__value" th:text="|${goodsApply.applyName}(${goodsApply.applyPhone})|">名字名字名字</span>
                         </div>
+                        <div class="weui-form-preview__item" th:if="${goodsApply.status eq '1'}">
+                            <label class="weui-form-preview__label">核对人员</label>
+                            <span class="weui-form-preview__value" th:text="|${goodsApply.checkName}(${goodsApply.checkPhone})|">名字名字名字</span>
+                        </div>
                         <div class="weui-form-preview__item">
                             <label class="weui-form-preview__label">状态</label>
                             <span class="weui-form-preview__value">
@@ -50,7 +54,7 @@
                         </div>
                     </div>
                     <div class="weui-form-preview__ft">
-                        <a th:if="${goodsApply.status eq '0'}" type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" th:href="|/wx/stock/outerApply/modifyApply?batchNo=${goodsApply.batchNo}&amp;isCheck=1|"><b class="fa fa-eye"></b> 核对</a>
+                        <a th:if="${goodsApply.status eq '0' and goodsApply.applyOpenid ne session.openid}" type="submit" auth="4-10" class="weui-form-preview__btn weui-form-preview__btn_primary auth-operator" th:href="|/wx/stock/outerApply/modifyApply?batchNo=${goodsApply.batchNo}&amp;isCheck=1|"><b class="fa fa-eye"></b> 核对</a>
                     </div>
                 </div>
 

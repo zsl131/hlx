@@ -18,7 +18,7 @@ function setCurrentAmount() {
 }
 
 function updateStatus(status) {
-    if(containAuth("2")) { //如果是采购员才可以驳回
+    if(containAuth("1")) { //如果是采购员才可以驳回
         var batchNo = $("#batchNo").val();
 //        console.log(batchNo+"===="+status);
         var html = '<b class="fa fa-question"></b> 确定<b style="color:#F00">驳回</b>此次的申购申请吗？此操作不可逆！';
@@ -28,7 +28,11 @@ function updateStatus(status) {
         var rejectDialog = confirmDialog(html, "<b class='fa fa-info-circle'></b> 系统提示", function() {
             $.post("/wx/stock/goodsApply/updateStatus", {batchNo: batchNo, status: status}, function(res) {
                 if(res == '1') {
-                    showToast("驳回成功");
+                    if(status=='-1') {
+                        showToast("驳回成功");
+                    } else {
+                        showToast("操作成功");
+                    }
                     reloadWin();
                 }
             }, "json");
