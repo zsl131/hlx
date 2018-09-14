@@ -9,6 +9,7 @@
     <script type="text/javascript" src="/weixin/stock/stock-index.js"></script>
     <script type="text/javascript" src="/weixin/stock/stock-tools.js"></script>
     <script type="text/javascript" src="/weixin/stock/stock-goods-apply-list.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-goods-apply-check-finish.js"></script>
     <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
 </head>
 <body>
@@ -39,11 +40,12 @@
                                             <p class="weui-media-box__desc" th:text="${apply.remark}">备注</p>
                                             <ul class="weui-media-box__info">
                                                 <li class="weui-media-box__info__meta" th:text="${apply.applyName}">文字来源</li>
-                                                <li class="weui-media-box__info__meta" th:text="${apply.createDay}">时间</li>
+                                                <li class="weui-media-box__info__meta" th:text="${#strings.substring(apply.createDay,5,10)}">时间</li>
                                                 <li class="weui-media-box__info__meta weui-media-box__info__meta_extra"><a th:href="|tel:${apply.applyPhone}|" th:text="${apply.applyPhone}"></a></li>
                                                 <li class="weui-media-box__info__meta weui-media-box__info__meta_extra" th:if="${apply.applyOpenid eq session.openid and apply.status eq '0'}"><a th:href="|/wx/stock/goodsApply/modifyApply?batchNo=${apply.batchNo}|" >修改</a></li>
                                                 <li class="weui-media-box__info__meta weui-media-box__info__meta_extra verify-apply-href" style="display:none" th:if="${apply.status eq '0'}"><a th:href="|/wx/stock/goodsApply/modifyApply?batchNo=${apply.batchNo}&amp;isVerify=1|">审核</a></li>
                                                 <li class="weui-media-box__info__meta weui-media-box__info__meta_extra" th:if="${apply.status eq '1'}"><a th:href="|/wx/stock/goodsApply/checkGoods?batchNo=${apply.batchNo}|">收货</a></li>
+                                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra" th:if="${apply.status eq '1'}"><a href="javascript:void(0)" onclick="checkFinish(this)" th:attr="batchNo=${apply.batchNo}">完结</a></li>
                                             </ul>
                                         </div>
                                     </div>

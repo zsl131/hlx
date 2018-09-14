@@ -67,6 +67,16 @@ public class NormalTest {
     private RestdayTools restdayTools;
 
     @Test
+    public void test30() {
+        for(int i=0;i<100000;i++) {
+            String code = RandomTools.randomNum4();
+            if(code.length()!=4) {
+                System.out.println("==============="+code);
+            }
+        }
+    }
+
+    @Test
     public void test29() {
         smsTools.sendMsg(Integer.parseInt(smsConfig.getSendCodeIid()), "15925061256", "code", "00000");
     }

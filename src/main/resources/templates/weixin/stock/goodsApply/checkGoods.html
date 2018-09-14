@@ -10,6 +10,7 @@
     <script type="text/javascript" src="/weixin/stock/stock-index.js"></script>
     <script type="text/javascript" src="/weixin/stock/stock-tools.js"></script>
     <script type="text/javascript" src="/weixin/stock/stock-goods-apply-check.js"></script>
+    <script type="text/javascript" src="/weixin/stock/stock-goods-apply-check-finish.js"></script>
 
     <link type="text/css" rel="stylesheet" href="/weixin/stock/stock-goods-apply-check.css"/>
 
@@ -61,7 +62,8 @@
                 </div>
                 <div class="weui-form-preview__ft" style="border-bottom:1px #ECECEC solid;">
                     <!--<a class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:;" onclick="updateStatus('-1')">驳回申购</a>-->
-                    <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" onclick="submitDatas()"><b class="fa fa-check-circle"></b> 核对完成，确定入库</button>
+                    <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" onclick="submitDatas()"><b class="fa fa-check-circle"></b> 确定入库</button>
+                    <button type="submit" class="weui-form-preview__btn weui-form-preview__btn_default" onclick="checkFinish(this)" th:attr="batchNo=${goodsApply.batchNo}"><b class="fa fa-check"></b> 收货完成</button>
                 </div>
             </div>
         </div>

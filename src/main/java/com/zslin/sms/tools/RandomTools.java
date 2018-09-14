@@ -12,17 +12,17 @@ public class RandomTools {
     private static char[] numbersAndLetters = null;
 
     public static String randomNum4() {
-        int num = 9999;
-        return randomNum(num);
+        int num = 9000;
+        return randomNum(num, 1000);
     }
 
     public static String randomNum6() {
-        int num = 999999;
-        return randomNum(num);
+        int num = 900000;
+        return randomNum(num, 100000);
     }
 
-    private static String randomNum(int num) {
-        int res = (int)(Math.random()*num);
+    private static String randomNum(int num, int plus) {
+        int res = (int)((Math.random()*num)+plus);
         return res+"";
     }
 

@@ -68,7 +68,7 @@ public class StockNoticeTools {
                 for(GoodsApplyDetail gad : list) {
                     if(gad.getAllowAmount() != gad.getAmountTrue()) { //如果数量不对
                         Integer amount = gad.getAllowAmount() - gad.getAmountTrue(); //差额
-                        sb.append(gad.getName()).append(amount>0?"差":"多").append("：").append(amount).append(gad.getUnit()).append("\\n");
+                        sb.append(gad.getName()).append(amount>0?"差":"多").append("：").append(Math.abs(amount)).append(gad.getUnit()).append("\\n");
                     }
                 }
 

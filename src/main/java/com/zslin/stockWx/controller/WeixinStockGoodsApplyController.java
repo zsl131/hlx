@@ -330,6 +330,19 @@ public class WeixinStockGoodsApplyController {
         goodsApplyService.save(ga);
     }
 
+    /** 收货完成 */
+    @PostMapping(value = "checkFinish")
+    public @ResponseBody String checkFinish(String batchNo) {
+//        GoodsApply apply = goodsApplyService.findByBatchNo(batchNo);
+        List<GoodsApplyDetail> list = goodsApplyDetailService.listByBatchNo(batchNo);
+        for(GoodsApplyDetail gad : list) {
+            stockGoodsService.plusAmount(gad.getGoodsId(), gad.getAmountTrue());
+        }
+
+        goodsApplyService.updateStatus(batchNo, "2"); //修改状态
+        return "1";
+    }
+
     /** 收货入库，POST提交 */
     @PostMapping(value = "postCheckGoods")
     public @ResponseBody String postCheckGoods(String datas, String batchNo, HttpServletRequest request) {
@@ -343,9 +356,9 @@ public class WeixinStockGoodsApplyController {
             Integer goodsId = Integer.parseInt(str.split("-")[0]);
             Integer amount = Integer.parseInt(str.split("-")[1]);
             goodsApplyDetailService.updateAmountTrue(batchNo, goodsId, amount);
-            stockGoodsService.plusAmount(goodsId, amount);
+//            stockGoodsService.plusAmount(goodsId, amount); //移到checkFinish中执行
         }
-        goodsApplyService.updateStatus(batchNo, "2"); //修改状态
+//        goodsApplyService.updateStatus(batchNo, "2"); //修改状态，移到checkFinish中执行
         //TODO 通知
         stockNoticeTools.noticeCheckGoodsApply(batchNo);
         return "1";
