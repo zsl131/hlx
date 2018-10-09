@@ -308,4 +308,12 @@ public class DatasTools {
         walletDetailService.update(a.getNickname(), a.getOpenid());
         qrcodeService.update(a.getNickname(), a.getHeadimgurl(), a.getOpenid());
     }
+
+    /**
+     * 检测在数据库中是否存在该用户
+     * @param fromOpenid
+     */
+    public void checkWxAccount(String fromOpenid) {
+        new Thread(()->onSubscribe(fromOpenid)).start();
+    }
 }

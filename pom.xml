@@ -106,7 +106,7 @@
 
         <!-- 以下是使用美团相关功能所需依赖 -->
 
-        <dependency>
+        <!--<dependency>
             <groupId>com.sankuai.sjst</groupId>
             <artifactId>platform.developer-client</artifactId>
             <version>1.6</version>
@@ -150,7 +150,7 @@
             <groupId>com.fasterxml</groupId>
             <artifactId>classmate</artifactId>
             <version>1.1.0</version>
-        </dependency>
+        </dependency>-->
 
         <!-- 以上是使用美团相关功能所需依赖 -->
     </dependencies>

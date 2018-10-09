@@ -30,7 +30,7 @@ public class InternetTools {
 				conn.connect();
 				BufferedReader reader =new BufferedReader(new InputStreamReader(conn.getInputStream(),"utf-8"));
 				result = reader.readLine();
-				System.out.println("res::"+result);
+//				System.out.println("res::"+result);
 			} catch (Exception e) {
 				System.out.println("InternetTools.toGet 出现异常："+e.getMessage());
 			}
@@ -54,7 +54,6 @@ public class InternetTools {
 				sb.append("&").append(key).append("=").append(params.get(key));
 			}
 		}
-		System.out.println("===url::"+sb.toString());
 		return sb.toString();
 	}
 }

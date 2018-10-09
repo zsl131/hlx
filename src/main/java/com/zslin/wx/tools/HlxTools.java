@@ -172,7 +172,7 @@ public class HlxTools {
             cal.setTime(sdf.parse(monthStr+"01"));
             String theMonth = sdf.format(cal.getTime()).substring(0, 6);
             if(curMonth.equals(theMonth)) {
-                System.out.printf("current day : "+ day);
+//                System.out.printf("current day : "+ day);
                 if(hour<21) { //晚上9点之前
                     return day - 1;
                 } else {

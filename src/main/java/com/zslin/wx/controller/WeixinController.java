@@ -105,6 +105,7 @@ public class WeixinController {
 
                 }
 
+//                datasTools.checkWxAccount(fromOpenid);
                 if("event".equalsIgnoreCase(msgTypeStr)) { //如果是事件
                     String eventStr = event.getTextContent(); //事件
                     if("subscribe".equalsIgnoreCase(eventStr)) { //关注

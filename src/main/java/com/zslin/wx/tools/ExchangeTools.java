@@ -1,6 +1,7 @@
 package com.zslin.wx.tools;
 
 import com.zslin.web.model.WeixinConfig;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,8 +29,32 @@ public class ExchangeTools {
     @Autowired
     private WxConfig wxConfig;
 
+    @Autowired
+    private DatasTools datasTools;
+
     public WeixinConfig getWxConfig() {
         return wxConfig.getConfig();
+    }
+
+    public void listWxUsers(String nextOpenid) {
+        Map<String, Object> params = new HashMap<>();
+        try {
+            params.put("access_token", accessTokenTools.getAccessToken());
+            params.put("next_openid", nextOpenid==null?"":nextOpenid);
+
+            String result = InternetTools.doGet("https://api.weixin.qq.com/cgi-bin/user/get", params);
+
+            JSONObject jsonObj = new JSONObject(result);
+            System.out.println(jsonObj.toString());
+            JSONArray array = jsonObj.getJSONObject("data").getJSONArray("openid");
+            for(int i=0;i<array.length();i++) {
+                String openid = array.getString(i);
+//                System.out.println(openid);
+                datasTools.onSubscribe(openid); //处理关注
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public JSONObject getUserInfo(String openid) {

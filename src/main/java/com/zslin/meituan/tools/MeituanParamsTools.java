@@ -1,8 +1,5 @@
 package com.zslin.meituan.tools;
 
-import com.sankuai.sjst.platform.developer.domain.RequestSysParams;
-import com.zslin.meituan.model.MeituanConfig;
-import com.zslin.meituan.model.MeituanShop;
 import com.zslin.meituan.service.IMeituanConfigService;
 import com.zslin.meituan.service.IMeituanShopService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +21,10 @@ public class MeituanParamsTools {
     @Autowired
     private IMeituanShopService meituanShopService;
 
-    public RequestSysParams getSysParams() {
+    /*public RequestSysParams getSysParams() {
         MeituanConfig config = meituanConfigService.loadOne();
         MeituanShop shop = meituanShopService.findByPoiId(poiId);
         RequestSysParams requestSysParams = new RequestSysParams(config.getSignKey(), shop.getToken());
         return requestSysParams;
-    }
+    }*/
 }

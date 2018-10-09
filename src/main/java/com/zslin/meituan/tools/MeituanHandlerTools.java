@@ -2,11 +2,6 @@ package com.zslin.meituan.tools;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.sankuai.sjst.platform.developer.domain.RequestSysParams;
-import com.sankuai.sjst.platform.developer.request.CipCaterCouponConsumeRequest;
-import com.sankuai.sjst.platform.developer.request.CipCaterCouponConsumptionCancelRequest;
-import com.sankuai.sjst.platform.developer.request.CipCaterCouponConsumptionPrepareRequest;
-import com.zslin.meituan.dto.ReadyDto;
 import com.zslin.meituan.dto.ReturnDto;
 import com.zslin.wx.tools.JsonTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +28,9 @@ public class MeituanHandlerTools {
      * @param code 12位纯数字券码
      * @return
      */
-    public ReturnDto handlerReady(String code) {
+    public ReturnDto handlerReady1(String code) {
         try {
-            RequestSysParams requestSysParams = meituanParamsTools.getSysParams();
+            /*RequestSysParams requestSysParams = meituanParamsTools.getSysParams();
             CipCaterCouponConsumptionPrepareRequest request = new CipCaterCouponConsumptionPrepareRequest();
             request.setRequestSysParams(requestSysParams);
             request.setCouponCode(code);
@@ -50,7 +45,8 @@ public class MeituanHandlerTools {
             } else {
                 ReadyDto dto = JSON.toJavaObject(JSON.parseObject(data.toString()), ReadyDto.class);
                 return new ReturnDto(resCode, resMsg, dto);
-            }
+            }*/
+            return new ReturnDto(0, "", null);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnDto(0, e.getMessage(), null);
@@ -63,10 +59,10 @@ public class MeituanHandlerTools {
      * @param orderNo 收银系统订单编号
      * @return
      */
-    public ReturnDto handlerCheck(String code, Integer count, String orderNo) {
+    public ReturnDto handlerCheck1(String code, Integer count, String orderNo) {
         if(code==null || "".equals(code.trim())) {return null;}
         try {
-            RequestSysParams requestSysParams = meituanParamsTools.getSysParams();
+            /*RequestSysParams requestSysParams = meituanParamsTools.getSysParams();
             CipCaterCouponConsumeRequest request = new CipCaterCouponConsumeRequest();
             request.setRequestSysParams(requestSysParams);
             request.seteId(eid);
@@ -87,7 +83,7 @@ public class MeituanHandlerTools {
             } else {
 //                ReadyDto dto = JSON.toJavaObject(JSON.parseObject(data.toString()), ReadyDto.class);
                 return new ReturnDto(resCode, resMsg, buildCheckNos(data.toString()));
-            }
+            }*/
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -95,7 +91,7 @@ public class MeituanHandlerTools {
         return null;
     }
 
-    private String buildCheckNos(String data) {
+    private String buildCheckNos1(String data) {
         JSONArray array = JSON.parseArray(JsonTools.getJsonParam(data, "couponCodes").toString());
         StringBuffer sb = new StringBuffer();
         for(int i=0; i<array.size(); i++) {
@@ -110,9 +106,9 @@ public class MeituanHandlerTools {
      * @param code 美团券验证码
      * @return
      */
-    public ReturnDto handlerUndo(String code) {
+    public ReturnDto handlerUndo1(String code) {
         try {
-            RequestSysParams requestSysParams = meituanParamsTools.getSysParams();
+            /*RequestSysParams requestSysParams = meituanParamsTools.getSysParams();
             CipCaterCouponConsumptionCancelRequest request = new CipCaterCouponConsumptionCancelRequest();
             request.setRequestSysParams(requestSysParams);
             request.seteId(eid);
@@ -120,7 +116,7 @@ public class MeituanHandlerTools {
             request.setType(1);
             request.setCouponCode(code);
             String str = request.doRequest();
-            System.out.println("++++++++++"+str);
+            System.out.println("++++++++++"+str);*/
         } catch (Exception e) {
             e.printStackTrace();
         }

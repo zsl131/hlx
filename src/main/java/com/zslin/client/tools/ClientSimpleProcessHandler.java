@@ -130,14 +130,14 @@ public class ClientSimpleProcessHandler {
                     new EventRemarkDto("美团编号", o.getDiscountReason()),
                     new EventRemarkDto("", "点击查看可确认！"));
 
-            try { //TODO 应该判断当mtStatus不为1时才执行以下代码
+            /*try { //TODO 应该判断当mtStatus不为1时才执行以下代码
                 String [] tmpArray = o.getDiscountReason().split(",");
                 for(String code : tmpArray) {
                     meituanHandlerTools.handlerCheck(code, 1, o.getNo());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
         }
     }
 

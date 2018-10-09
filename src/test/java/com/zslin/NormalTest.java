@@ -18,6 +18,7 @@ import com.zslin.web.service.IBuffetOrderDetailService;
 import com.zslin.web.service.IBuffetOrderService;
 import com.zslin.web.service.IIncomeService;
 import com.zslin.web.tools.CommonTools;
+import com.zslin.wx.tools.ExchangeTools;
 import com.zslin.wx.tools.WxConfig;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -65,6 +66,14 @@ public class NormalTest {
 
     @Autowired
     private RestdayTools restdayTools;
+
+    @Autowired
+    private ExchangeTools exchangeTools;
+
+    @Test
+    public void test31() {
+        exchangeTools.listWxUsers(null);
+    }
 
     @Test
     public void test30() {
