@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>卡券到店记录</title>
+		<script type="text/javascript">
+			$(function() {
+				$(".delete-obj-href").deleteFun();
+			});
+		</script>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;卡券到店记录<small>（<span th:text="${datas.getTotalElements()}"></span>）</small></h3>
+			<div th:replace="admin/grantCard/nav :: content" th:remove="tag"></div>
+		</div>
+
+        <div th:replace="admin/grantCard/filter :: content" th:remove="tag"></div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>批次</th>
+						<th>类型</th>
+						<th>卡号</th>
+						<th>状态</th>
+						<!--<th>操作</th>-->
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:each="obj : ${datas}">
+						<td th:text="${obj.batchNo}"></td>
+						<td>
+							<span  th:switch="${obj.cardType}" >
+                                <span th:case="1">10元券</span>
+                                <span th:case="2">45元券</span>
+                                <span th:case="3">55元券</span>
+                            </span>
+						</td>
+						<td th:text="${obj.cardNo}">卡号</td>
+						<td>
+							<span  th:switch="${obj.status}" >
+                                <span th:case="0">在店</span>
+                                <span th:case="1" style="color:#00F">已发出</span>
+                            </span>
+						</td>
+						<!--<td>
+							<div class="action-buttons">
+								<a class="delete-obj-href red auth" sn="AdminCardController.abolish" th:title="'此操作不可逆，确定作废【'+${obj.no}+'】吗？'" th:href="'/admin/card/abolish/'+${obj.id}">
+									<i class="fa fa-remove"></i>
+								</a>
+							</div>
+						</td>-->
+					</tr>
+				</tbody>
+			</table>
+			<div th:include="fragments/page :: pager" th:remove="tag"></div>
+		</div>
+	</div>
+</body>
+</html>

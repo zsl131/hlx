@@ -3,6 +3,7 @@ package com.zslin;
 import com.zslin.admin.dto.MyTicketDto;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.tools.SecurityUtil;
+import com.zslin.card.tools.CardNoTools;
 import com.zslin.client.tools.RestdayTools;
 import com.zslin.kaoqin.dto.DayDto;
 import com.zslin.kaoqin.dto.MonthDto;
@@ -69,6 +70,31 @@ public class NormalTest {
 
     @Autowired
     private ExchangeTools exchangeTools;
+
+    @Autowired
+    private CardNoTools cardNoTools;
+
+    @Test
+    public void test33() {
+        String str = "";
+        System.out.printf("========"+isCardNo(str));
+        System.out.printf("========"+isCardNo("12345678"));
+        System.out.printf("========"+isCardNo("5000002"));
+        System.out.printf("========"+isCardNo("100000d"));
+        System.out.printf("========"+isCardNo("2000235"));
+    }
+
+    private boolean isCardNo(String str) {
+        return (str.length()==7 && (str.startsWith("1") || str.startsWith("2") || str.startsWith("3")) && str.matches("[0-9]+")) ;
+    }
+
+    @Test
+    public void test32() {
+        List<Integer> list = cardNoTools.buildCardNos("1", 10);
+        for(int i=0;i<list.size();i++) {
+            System.out.println(list.get(i));
+        }
+    }
 
     @Test
     public void test31() {

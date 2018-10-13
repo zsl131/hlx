@@ -3,6 +3,8 @@ package com.zslin.wx.tools;
 import com.zslin.basic.tools.ConfigTools;
 import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
+import com.zslin.card.model.Card;
+import com.zslin.card.service.ICardService;
 import com.zslin.client.tools.RestdayTools;
 import com.zslin.web.model.*;
 import com.zslin.web.service.*;
@@ -76,6 +78,9 @@ public class DatasTools {
     @Autowired
     private HlxTools hlxTools;
 
+    @Autowired
+    private ICardService cardService;
+
     /** 当用户取消关注时 */
     public void onUnsubscribe(String openid) {
         accountService.updateStatus(openid, "0");
@@ -103,6 +108,8 @@ public class DatasTools {
                 "jifen".equals(content.toLowerCase().trim()) || "积分".equals(content.trim())) { //ID为2的文章
             Article article = articleService.findOne(2);
             return WeixinXmlTools.buildArticleStr(openid, builderName, article, config.getUrl());
+        } else if(isCardNo(content.trim())) { //如果输入卡号
+            return WeixinXmlTools.createTextXml(openid, builderName, buildCardStr(content.trim()));
         } else if("hlx".equals(content.toLowerCase())) { //关注情况
             eventTools.eventRemind(openid, "查询提醒", "关注情况如下", DateTools.date2Str(new Date(), "yyyy-MM-dd"), accountTools.buildAccountStr(), "");
             return "";
@@ -167,6 +174,12 @@ public class DatasTools {
         return false;
     }
 
+    //判断是否为代金券卡号
+    private boolean isCardNo(String str) {
+        //长度为7，1  2  3开头，纯数字
+        return (str.length()==7 && (str.startsWith("1") || str.startsWith("2") || str.startsWith("3")) && str.matches("[0-9]+"));
+    }
+
     //判断用户发送的消息是否为中奖码
     private boolean isPrizeCode(String content) {
         try {
@@ -178,6 +191,19 @@ public class DatasTools {
             return false;
         }
         return false;
+    }
+
+    private String buildCardStr(String cardNo) {
+        StringBuffer sb = new StringBuffer();
+        Card card = cardService.findByNo(Integer.parseInt(cardNo));
+        String status = "未入库，不可使用";
+        if(card!=null) {
+            String type = card.getType();
+            status = "0".equals(type)?"可以使用":("1".equals(type)?"已经使用，不可再用":"已经作废，不可再用");
+        }
+        sb.append("查询卡号：").append(cardNo).append("\n")
+            .append("此卡状态：").append(status);
+        return sb.toString();
     }
 
     private String buildHelpStr() {

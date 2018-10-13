@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public class MyBeanUtils extends BeanUtils {
 	
-	public static void copyProperties(Object source, Object target, String [] ignoreFields)
+	public static void copyProperties(Object source, Object target, String... ignoreFields)
 			throws BeansException {
 //		BeanUtils.copyProperties(source, target, concat(concat(ignoreFields, new String[]{"id","createDate", "createTime", "createLong", "createDay"}), getNullPropertyNames(source)));
         copyProperties(source, target, ignoreFields, false);

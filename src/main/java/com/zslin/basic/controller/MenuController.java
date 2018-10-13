@@ -8,6 +8,7 @@ import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.repository.SimpleSpecification;
 import com.zslin.basic.repository.SimpleSpecificationBuilder;
 import com.zslin.basic.service.IMenuService;
+import com.zslin.basic.tools.AuthRoleMenuTools;
 import com.zslin.basic.tools.AuthTools;
 import com.zslin.basic.tools.TokenTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class MenuController {
     @Autowired
     private AuthTools authTools;
 
+    @Autowired
+    private AuthRoleMenuTools authRoleMenuTools;
+
     /** 列表 */
     @AdminAuth(name = "菜单管理", orderNum = 1, icon="fa fa-bars", type="1")
     @RequestMapping(value="list", method= RequestMethod.GET)
@@ -64,6 +68,7 @@ public class MenuController {
     @RequestMapping(value="rebuildMenus", method=RequestMethod.POST)
     public @ResponseBody String rebuildMenus(Model model, HttpServletRequest request) {
         authTools.buildSystemMenu();
+        authRoleMenuTools.authAdmin();
         return "1";
     }
 

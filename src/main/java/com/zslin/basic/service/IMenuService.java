@@ -23,4 +23,7 @@ public interface IMenuService extends BaseRepository<Menu, Integer>, JpaSpecific
 
     @Query("FROM Menu m WHERE m.href is not null AND m.href!='' AND m.href!='#' ")
     List<Menu> listAllUrlMenu();
+
+    @Query("SELECT id from Menu")
+    List<Integer> findAllIds();
 }

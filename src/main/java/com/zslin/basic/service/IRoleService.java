@@ -15,4 +15,6 @@ public interface IRoleService extends BaseRepository<Role, Integer>, JpaSpecific
 
     @Query("SELECT rm.mid FROM RoleMenu rm WHERE rm.rid=?1")
     List<Integer> listRoleMenuIds(Integer roleId);
+
+    Role findBySn(String sn);
 }
