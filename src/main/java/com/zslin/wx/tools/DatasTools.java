@@ -108,7 +108,7 @@ public class DatasTools {
                 "jifen".equals(content.toLowerCase().trim()) || "积分".equals(content.trim())) { //ID为2的文章
             Article article = articleService.findOne(2);
             return WeixinXmlTools.buildArticleStr(openid, builderName, article, config.getUrl());
-        } else if(isCardNo(content.trim())) { //如果输入卡号
+        } else if(isCardNo(content.trim())) { //如果输入代金券卡号
             return WeixinXmlTools.createTextXml(openid, builderName, buildCardStr(content.trim()));
         } else if("hlx".equals(content.toLowerCase())) { //关注情况
             eventTools.eventRemind(openid, "查询提醒", "关注情况如下", DateTools.date2Str(new Date(), "yyyy-MM-dd"), accountTools.buildAccountStr(), "");
@@ -121,6 +121,9 @@ public class DatasTools {
             return WeixinXmlTools.createTextXml(openid, builderName, res);
         } else if(isFinance(content.trim(), openid)) {
             String res = hlxTools.queryFinance(content.trim());
+            return WeixinXmlTools.createTextXml(openid, builderName, res);
+        } else if(isCardCheck(content.trim())) { //查询卡券回收情况
+            String res = hlxTools.queryCardCheck(content.trim());
             return WeixinXmlTools.createTextXml(openid, builderName, res);
         } else {
             Feedback f = new Feedback();
@@ -161,6 +164,11 @@ public class DatasTools {
             }
         }
         return false;
+    }
+
+    //k201810
+    private boolean isCardCheck(String content) {
+        return (content!=null && content.length()==7 && (content.startsWith("k20") || content.startsWith("K20")));
     }
 
     //是否为设置工作日的指令

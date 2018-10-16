@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * Created by zsl on 2018/10/13.
  */
 public interface ICardApplyService extends BaseRepository<CardApply, Integer>, JpaSpecificationExecutor<CardApply> {
+
+    CardApply findByCardNo(Integer cardNo);
 }

@@ -2,6 +2,7 @@ package com.zslin.basic.controller;
 
 import com.zslin.basic.exception.ErrorInfo;
 import com.zslin.basic.exception.SystemException;
+import com.zslin.basic.exception.WeixinException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +26,19 @@ public class GlobalExceptionHandler {
         model.addAttribute("errorInfo", er);
         e.printStackTrace();
         return "admin/basic/errors/system";
+    }
+
+    @ExceptionHandler(value = WeixinException.class)
+    public String weixinExceptionHandler(Model model, HttpServletRequest req, SystemException e) {
+        ErrorInfo<String> er = new ErrorInfo<>();
+        er.setCode(ErrorInfo.ERROR);
+        er.setMessage(e.getMessage());
+        er.setUrl(req.getRequestURL().toString());
+        er.setParams(req.getQueryString());
+        er.setDatas("发生异常！");
+        model.addAttribute("errorInfo", er);
+        e.printStackTrace();
+        return "weixin/error";
     }
 
     @ExceptionHandler(value = Exception.class)

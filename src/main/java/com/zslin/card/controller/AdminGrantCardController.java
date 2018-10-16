@@ -8,6 +8,8 @@ import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.card.model.GrantCard;
 import com.zslin.card.service.IGrantCardService;
 import com.zslin.card.tools.CardNoTools;
+import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,9 @@ public class AdminGrantCardController {
 
     @Autowired
     private CardNoTools cardNoTools;
+
+    @Autowired
+    private ClientFileTools clientFileTools;
 
     @GetMapping(value = "list")
     @AdminAuth(name = "卡券到店管理", type = "1", orderNum = 1, icon = "fa fa-credit-card")
@@ -68,6 +73,8 @@ public class AdminGrantCardController {
             gc.setCreateTime(NormalTools.curDate("yyyy-MM-dd HH:mm:ss"));
             gc.setOrderNo(orderNo);
             grantCardService.save(gc);
+            //TODO 需要发到客户端
+            sendGrantCard2Client("addOrUpdate", gc);
         }
 
         return "redirect:/admin/grantCard/list";
@@ -77,5 +84,10 @@ public class AdminGrantCardController {
     public @ResponseBody List<Integer> queryNos(String type, Integer count) {
         List<Integer> list = cardNoTools.buildGrantCardNos(type, count);
         return list;
+    }
+
+    private void sendGrantCard2Client(String action, GrantCard obj) {
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildGrantCard(action, obj));
+        clientFileTools.setChangeContext(content, true);
     }
 }

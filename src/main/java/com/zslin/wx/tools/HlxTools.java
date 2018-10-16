@@ -1,6 +1,8 @@
 package com.zslin.wx.tools;
 
 import com.zslin.basic.tools.DateTools;
+import com.zslin.card.dto.CardCheckDto;
+import com.zslin.card.service.ICardCheckService;
 import com.zslin.web.model.BuffetOrder;
 import com.zslin.web.service.IBuffetOrderService;
 import com.zslin.web.service.IIncomeService;
@@ -25,6 +27,9 @@ public class HlxTools {
 
     @Autowired
     private IIncomeService incomeService;
+
+    @Autowired
+    private ICardCheckService cardCheckService;
 
     /**
      * 定时器自动查询的营业信息
@@ -155,6 +160,18 @@ public class HlxTools {
 
     public String queryFinance(String content) {
         return queryFinance(content, "\n");
+    }
+
+    public String queryCardCheck(String content) {
+        String month = content.substring(1);
+        List<CardCheckDto> list = cardCheckService.findCheckDtoByMonth(month);
+        if(list==null || list.size()<=0) {return "此月无卡回收";}
+        String spe = "\\n";
+        StringBuffer sb = new StringBuffer();
+        for(CardCheckDto dto : list) {
+            sb.append(dto.getName()).append("：").append(dto.getCount()).append(spe);
+        }
+        return sb.toString();
     }
 
     /**

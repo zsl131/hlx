@@ -52,4 +52,8 @@ public class NormalTools {
     public static String curDate() {
         return curDate("yyyy-MM-dd HH:mm:ss");
     }
+
+    public static boolean isNull(String val) {
+        return val==null || "".equals(val);
+    }
 }

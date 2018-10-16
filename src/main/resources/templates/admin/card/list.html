@@ -52,7 +52,7 @@
 						</td>
 						<td>
 							<div class="action-buttons">
-								<a class="delete-obj-href red auth" sn="AdminCardController.abolish" th:title="'此操作不可逆，确定作废【'+${obj.no}+'】吗？'" th:href="'/admin/card/abolish/'+${obj.id}">
+								<a class="delete-obj-href red auth" th:if="${obj.status eq '0'}" sn="AdminCardController.abolish" th:title="'此操作不可逆，确定作废【'+${obj.no}+'】吗？'" th:href="'/admin/card/abolish/'+${obj.id}">
 									<i class="fa fa-remove"></i>
 								</a>
 							</div>

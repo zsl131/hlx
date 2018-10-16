@@ -9,6 +9,7 @@
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-account-me.css"/>
     <script type="text/javascript" src="/weixin/weixin-bind-phone.js"></script>
     <script type="text/javascript" src="/weixin/weixin-key-set.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-card.js"></script>
     <script src="/weixin/weixin-account-me.js"></script>
     <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
 </head>
@@ -107,16 +108,6 @@
                         </div>
                     </a>
 
-                    <!--<a class="weui-cell weui-cell_access" href="/wx/account/own" >
-                        <div class="weui-cell__hd"><i class="list-icon fa fa-cart-arrow-down"></i></div>
-                        <div class="weui-cell__bd">
-                            <span>消费记录</span>
-                        </div>
-                        <div class="weui-cell__ft">
-                            <span th:text="${ownCount}"></span>
-                        </div>
-                    </a>-->
-
                     <a class="weui-cell weui-cell_access" href="/wx/buffetOrders/listAdmin" th:if="${friendOrdersCount ne null}">
                         <div class="weui-cell__hd"><i class="list-icon fa fa-bar-chart"></i></div>
                         <div class="weui-cell__bd">
@@ -161,6 +152,57 @@
                         </div>
                         <div class="weui-cell__ft">
                             <span>点击前往</span>
+                        </div>
+                    </a>
+
+                    <!--员工管理-->
+                    <a class="weui-cell weui-cell_access" href="/wx/worker/list" th:if="${account.type eq '5' || account.type eq '10'|| account.type eq '2'}">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-group"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>员工列表</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span>点击前往</span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" href="/wx/worker/add" th:if="${account.type eq '5' || account.type eq '10'|| account.type eq '2'}">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-user-circle"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>添加员工</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span>点击前往</span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" href="/wx/card/allot" th:if="${account.type eq '5' || account.type eq '10'|| account.type eq '2'}">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-credit-card"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>分发卡券</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span>发代金券</span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" href="/wx/card/listCardApply" th:if="${account.type eq '5' || account.type eq '10'|| account.type eq '2'}">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-magnet"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>卡券申请</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span>查看记录</span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access card-shop-href" href="javascript:void(0)" th:if="${account.type eq '5' || account.type eq '10'}">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-cube"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>送卡到店</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span>点击操作</span>
                         </div>
                     </a>
                 </div>

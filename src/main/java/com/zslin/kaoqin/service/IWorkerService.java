@@ -28,7 +28,15 @@ public interface IWorkerService extends BaseRepository<Worker, Integer>, JpaSpec
     @Transactional
     void updatePwd(String password, Integer id);
 
+    @Query("UPDATE Worker w SET w.status=?1 WHERE w.id=?2")
+    @Modifying
+    @Transactional
+    void updateStatus(String status, Integer id);
+
     /** 查询拥有库存权限的员工 */
     @Query("FROM Worker WHERE operator LIKE '%-%'")
     List<Worker> findOperators();
+
+    @Query("FROM Worker WHERE canSendCard='1' AND status='1'")
+    List<Worker> findCanSendCard();
 }

@@ -25,8 +25,6 @@ public class JsonDto {
         this.data = data;
     }
 
-    
-
     public void setDataId(Integer dataId) {
         this.dataId = dataId;
     }

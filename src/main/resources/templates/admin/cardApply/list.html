@@ -6,7 +6,7 @@
 	  layout:decorator="fragments/adminModel">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<title>卡券到店记录</title>
+		<title>代金券申请记录</title>
 		<script type="text/javascript">
 			$(function() {
 				$(".delete-obj-href").deleteFun();
@@ -16,19 +16,21 @@
 <body>
 	<div th:fragment="content" th:remove="tag">
 		<div class="header lighter smaller blue">
-			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;卡券到店记录<small>（<span th:text="${datas.getTotalElements()}"></span>）</small></h3>
-			<div th:replace="admin/grantCard/nav :: content" th:remove="tag"></div>
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;代金券申请记录<small>（<span th:text="${datas.getTotalElements()}"></span>）</small></h3>
+			<div th:replace="admin/cardApply/nav :: content" th:remove="tag"></div>
 		</div>
 
-        <div th:replace="admin/grantCard/filter :: content" th:remove="tag"></div>
+        <div th:replace="admin/cardApply/filter :: content" th:remove="tag"></div>
 
 		<div class="table-responsive">
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th>批次</th>
 						<th>类型</th>
 						<th>卡号</th>
+						<th>申请原因</th>
+						<th>申请人</th>
+						<th>审核人</th>
 						<th>状态</th>
 						<!--<th>操作</th>-->
 					</tr>
@@ -36,7 +38,6 @@
 
 				<tbody>
 					<tr th:each="obj : ${datas}">
-						<td th:text="${obj.batchNo}"></td>
 						<td>
 							<span  th:switch="${obj.cardType}" >
                                 <span th:case="1">10元券</span>
@@ -45,11 +46,23 @@
                             </span>
 						</td>
 						<td th:text="${obj.cardNo}">卡号</td>
+						<td th:text="${obj.applyReason}"></td>
+						<td>
+							<p th:text="${obj.applyName}"></p>
+							<p th:text="${obj.applyCreateTime}"></p>
+						</td>
+						<td>
+							<div th:remove="tag" th:if="${obj.verifyName ne null}">
+								<p th:text="${obj.verifyName}"></p>
+								<p th:text="${obj.verifyCreateTime}"></p>
+							</div>
+							<div th:remove="tag" th:if="${obj.verifyName eq null}">未审核</div>
+						</td>
 						<td>
 							<span  th:switch="${obj.status}" >
-                                <span th:case="0">在店</span>
-                                <span th:case="1" style="color:#00F">已发出</span>
-								<span th:case="2" style="color:#F00">申请中</span>
+                                <span th:case="0">待审核</span>
+                                <span th:case="1" style="color:#00F">通过审核</span>
+								<span th:case="2" style="color:#F00">被驳回</span>
                             </span>
 						</td>
 						<!--<td>

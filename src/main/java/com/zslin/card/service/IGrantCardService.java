@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by zsl on 2018/10/13.
  */
@@ -25,4 +27,14 @@ public interface IGrantCardService extends BaseRepository<GrantCard, Integer>, J
     @Modifying
     @Transactional
     void updateStatus(String status, Integer no);
+
+    @Query("UPDATE GrantCard c SET c.status=?1 WHERE c.cardNo in ?2")
+    @Modifying
+    @Transactional
+    void updateStatus(String status, Integer... nos);
+
+    @Query("FROM GrantCard c WHERE c.cardNo in ?1")
+    List<GrantCard> findByNos(Integer... nos);
+
+    GrantCard findByCardNo(Integer cardNo);
 }

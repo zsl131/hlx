@@ -133,6 +133,7 @@ public class WeixinStockOuterApplyController {
         }
         boolean isCheckOpt = (isCheck!=null && "1".equals(isCheck));
         if(isCheckOpt) {
+            if(openid.equals(ga.getApplyOpenid())) {return "不能审核自己的申请";}
             ga.setCheckDatas(datas);
             ga.setCheckName(worker.getName());
             ga.setCheckOpenid(worker.getOpenid());

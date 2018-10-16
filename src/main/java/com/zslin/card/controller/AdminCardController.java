@@ -10,6 +10,8 @@ import com.zslin.card.model.GrantCard;
 import com.zslin.card.service.ICardService;
 import com.zslin.card.service.IGrantCardService;
 import com.zslin.card.tools.CardNoTools;
+import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -35,6 +37,9 @@ public class AdminCardController {
 
     @Autowired
     private CardNoTools cardNoTools;
+
+    @Autowired
+    private ClientFileTools clientFileTools;
 
     @GetMapping(value = "list")
     @AdminAuth(name = "代金券管理", type = "1", orderNum = 1, icon = "fa fa-credit-card")
@@ -63,6 +68,9 @@ public class AdminCardController {
             c.setStatus("0");
             c.setType(type);
             cardService.save(c);
+            //TODO 需要发到客户端
+
+            sendCard2Client("addOrUpdate", c);
         }
 
         String createDay = NormalTools.curDate("yyyyMMdd");
@@ -79,6 +87,7 @@ public class AdminCardController {
             gc.setOrderNo(orderNo);
             grantCardService.save(gc);
             //TODO 需要发到客户端
+            sendGrantCard2Client("addOrUpdate", gc);
         }
 
         return "redirect:/admin/card/list";
@@ -96,9 +105,20 @@ public class AdminCardController {
     String abolish(@PathVariable Integer id) {
         try {
             cardService.updateStatus("2", id); //作废
+            sendCard2Client("addOrUpdate", cardService.findOne(id));
             return "1";
         } catch (Exception e) {
             return "0";
         }
+    }
+
+    private void sendGrantCard2Client(String action, GrantCard obj) {
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildGrantCard(action, obj));
+        clientFileTools.setChangeContext(content, true);
+    }
+
+    private void sendCard2Client(String action, Card obj) {
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildCard(action, obj));
+        clientFileTools.setChangeContext(content, true);
     }
 }

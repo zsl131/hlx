@@ -1,5 +1,6 @@
 package com.zslin.client.tools;
 
+import com.zslin.card.tools.CardHandlerTools;
 import com.zslin.kaoqin.service.IWorkerService;
 import com.zslin.wx.tools.JsonTools;
 import org.json.JSONArray;
@@ -21,6 +22,9 @@ public class ClientPostHandler {
 
     @Autowired
     private ClientSimpleProcessHandler clientSimpleProcessHandler;
+
+    @Autowired
+    private CardHandlerTools cardHandlerTools;
 
     public void handler(String json) {
         Integer status = Integer.parseInt(JsonTools.getJsonParam(json, "status"));
@@ -61,6 +65,14 @@ public class ClientPostHandler {
             clientSimpleProcessHandler.handlerWallet(dataObj);
         } else if ("income".equalsIgnoreCase(type)) { //营收
             clientSimpleProcessHandler.handlerIncome(dataObj);
+        } else if("cardGrantCard".equalsIgnoreCase(type)) { //
+            cardHandlerTools.handleGrantCard(dataObj);
+        } else if("card".equalsIgnoreCase(type)) {
+            cardHandlerTools.handlCard(dataObj);
+        } else if("cardApply".equalsIgnoreCase(type)) {
+            cardHandlerTools.handCardApply(dataObj);
+        } else if("cardCheck".equalsIgnoreCase(type)) {
+            cardHandlerTools.handCardCheck(dataObj);
         }
     }
 

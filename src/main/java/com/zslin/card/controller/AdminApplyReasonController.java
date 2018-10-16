@@ -9,6 +9,8 @@ import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.card.model.ApplyReason;
 import com.zslin.card.service.IApplyReasonService;
+import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,9 @@ public class AdminApplyReasonController {
 
     @Autowired
     private IApplyReasonService applyReasonService;
+
+    @Autowired
+    private ClientFileTools clientFileTools;
 
     @GetMapping(value = "list")
     @AdminAuth(name = "申请原因管理", type = "1", orderNum = 1, icon = "fa fa-comment-o")
@@ -50,6 +55,7 @@ public class AdminApplyReasonController {
     public String add(Model model, ApplyReason applyReason, HttpServletRequest request) {
         if(TokenTools.isNoRepeat(request)) { //不是重复提交
             applyReasonService.save(applyReason);
+            sendReason2Client("add", applyReason);
         }
         return "redirect:/admin/applyReason/list";
     }
@@ -70,6 +76,8 @@ public class AdminApplyReasonController {
             ApplyReason ar = applyReasonService.findOne(id);
             MyBeanUtils.copyProperties(applyReason, ar, "id");
             applyReasonService.save(ar);
+
+            sendReason2Client("update", ar);
         }
         return "redirect:/admin/applyReason/list";
     }
@@ -79,10 +87,16 @@ public class AdminApplyReasonController {
     public @ResponseBody
     String delete(@PathVariable Integer id) {
         try {
+            sendReason2Client("delete", applyReasonService.findOne(id));
             applyReasonService.delete(id);
             return "1";
         } catch (Exception e) {
             return "0";
         }
+    }
+
+    private void sendReason2Client(String action, ApplyReason w) {
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildCardApplyReason(action, w));
+        clientFileTools.setChangeContext(content, true);
     }
 }

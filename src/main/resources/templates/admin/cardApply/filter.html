@@ -5,6 +5,13 @@
         <div th:fragment="content" th:remove="tag">
             <div id="sys_filter" class="form-inline" style="padding-bottom:10px;">
                 <div class="input-group">
+                    <span class="input-group-addon">原因</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_applyReason'>
+                        <option value="">=全部=</option>
+                        <option th:each="reason: ${reasonList}" th:value="${reason.name}" th:text="${reason.name}">10元券</option>
+                    </select>
+                </div>
+                <div class="input-group">
                     <span class="input-group-addon">类型</span>
                     <select class='filter_element form-control' opt="eq" name='filter_cardType'>
                         <option value="">=全部=</option>
@@ -23,9 +30,9 @@
                     <span class="input-group-addon">状态</span>
                     <select class='filter_element form-control' opt="eq" name='filter_status'>
                         <option value="">=全部=</option>
-                        <option value="0">在店</option>
-                        <option value="1">已发出</option>
-                        <option value="2">申请中</option>
+                        <option value="0">待审核</option>
+                        <option value="1">通过审核</option>
+                        <option value="2">被驳回</option>
                     </select>
                 </div>
 

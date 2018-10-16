@@ -21,6 +21,23 @@ public class CardNoTools {
     @Autowired
     private IGrantCardService grantCardService;
 
+    public List<Integer> buildAllotNos(String type, Integer count) {
+        List<Integer> result = new ArrayList<>();
+        Integer firstNo = grantCardService.findMinNo(type);
+        Integer maxNo = queryGrantMaxNo(type);
+        System.out.println("========firstNo:"+firstNo+"---------maxNo:"+maxNo);
+        if(firstNo!=null) {
+            result.add(firstNo);
+            for (int i = 0; i < count-1; i++) {
+                Integer no = firstNo + i + 1;
+                if (no <= maxNo) {
+                    result.add(no);
+                }
+            }
+        }
+        return result;
+    }
+
     /** 从GrantCard中取最大编号 */
     public List<Integer> buildGrantCardNos(String type, Integer count) {
         Integer firstNo = queryGrantMaxNo(type); //起始编码

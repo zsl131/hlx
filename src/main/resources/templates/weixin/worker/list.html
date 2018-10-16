@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-member-level.css"/>
+    <script type="text/javascript" src="/weixin/weixin-worker.js"></script>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div>
+        <div class="head-part">
+            <div class="info" style="width:100%;">
+                <p class="title">员工列表（<b th:text="${datas.getTotalElements()}"></b>）
+                    <a href="/wx/worker/add" style="float:right; padding-right:25px;"><b class="fa fa-plus"></b> 新增</a>
+                </p>
+            </div>
+        </div>
+        <div class="line-div"></div>
+
+        <div class="level-div" th:if="${datas ne null}">
+            <ul class="level-ul">
+                <li th:each="obj : ${datas}">
+                    <p class="name" style="color:#777; font-size:13px;">
+                        <a th:href="'/wx/worker/update?id='+${obj.id}"><b th:text="${obj.name}+'（'+${obj.canSendCard eq '1'?'可发卡':'不可发卡'}+'）'"></b></a>
+                        <span style="float:right;" th:switch="${obj.status}">
+                            <button class="btn btn-sm status-btn" th:attr="status=${obj.status}, objName = ${obj.name}, objId=${obj.id}">
+                                <span style="color:#00F" th:case="1">在职</span>
+                                <span style="color:#F00" th:case="2">离职</span>
+                            </button>
+                        </span>
+                    </p>
+                    <p class="con">
+                        <span>手机号码：<a th:href="'tel:'+${obj.phone}" th:text="${obj.phone}"></a></span>
+                        <span>身份证号：<b th:text="${obj.identity}"></b></span>
+                    </p>
+                </li>
+            </ul>
+            <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
+        </div>
+
+        <div th:if="${datas eq null}">
+            <p style="text-align:center; width:100%; line-height:140px; float:left; color:#eee;"><i class="fa fa-info-circle"></i> 暂无任何员工信息</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

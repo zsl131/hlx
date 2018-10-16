@@ -154,6 +154,8 @@ function submitApplyDatas() {
                     delCookie(dataCookieName);
                     showToast("提交出库申请成功，等待核对");
                     window.location.href = '/wx/stock/outerApply/listApply';
+                } else {
+                    showToast(res);
                 }
             }, "json");
             applyDialog.remove();

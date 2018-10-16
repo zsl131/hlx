@@ -3,6 +3,8 @@ package com.zslin;
 import com.zslin.admin.dto.MyTicketDto;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.tools.SecurityUtil;
+import com.zslin.card.dto.CardCheckDto;
+import com.zslin.card.service.ICardCheckService;
 import com.zslin.card.tools.CardNoTools;
 import com.zslin.client.tools.RestdayTools;
 import com.zslin.kaoqin.dto.DayDto;
@@ -74,6 +76,22 @@ public class NormalTest {
     @Autowired
     private CardNoTools cardNoTools;
 
+    @Autowired
+    private ICardCheckService cardCheckService;
+
+    @Test
+    public void test34() {
+        List<CardCheckDto> list = cardCheckService.findCheckDtoByDay("20181016");
+        for(CardCheckDto dto : list) {
+            System.out.println("======"+dto);
+        }
+
+        List<CardCheckDto> list2 = cardCheckService.findCheckDtoByMonth("201810");
+        for(CardCheckDto dto : list2) {
+            System.out.println("======"+dto);
+        }
+    }
+
     @Test
     public void test33() {
         String str = "";
@@ -113,7 +131,7 @@ public class NormalTest {
 
     @Test
     public void test29() {
-        smsTools.sendMsg(Integer.parseInt(smsConfig.getSendCodeIid()), "15925061256", "code", "00000");
+        smsTools.sendMsg(Integer.parseInt(smsConfig.getSendCodeIid()), "18214274897", "code", "00000");
     }
 
     @Test

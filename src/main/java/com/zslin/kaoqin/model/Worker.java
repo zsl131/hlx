@@ -67,6 +67,18 @@ public class Worker {
      */
     private String operator;
 
+    /** 是否可以发卡 */
+    @Column(name = "can_send_card")
+    private String canSendCard = "0";
+
+    public String getCanSendCard() {
+        return canSendCard;
+    }
+
+    public void setCanSendCard(String canSendCard) {
+        this.canSendCard = canSendCard;
+    }
+
     public String getOperator() {
         return operator;
     }

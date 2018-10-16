@@ -1,6 +1,8 @@
 package com.zslin.client.tools;
 
 import com.alibaba.fastjson.JSON;
+import com.zslin.card.model.*;
+import com.zslin.client.dto.GrantCardStatusDto;
 import com.zslin.client.dto.JsonDto;
 import com.zslin.client.dto.NormalDto;
 import com.zslin.client.model.ClientConfig;
@@ -11,6 +13,8 @@ import com.zslin.meituan.model.MeituanConfig;
 import com.zslin.meituan.model.MeituanShop;
 import com.zslin.web.dto.AdminPhoneDto;
 import com.zslin.web.model.*;
+
+import java.util.List;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/10 11:29.
@@ -117,4 +121,31 @@ public class ClientJsonTools {
         JsonDto jd = new JsonDto("wallet", "update", w.getId(), w);
         return JSON.toJSONString(jd);
     }
+
+    /** 卡券相关 */
+    public static String buildCardApplyReason(String action, ApplyReason obj) {
+        JsonDto jd = new JsonDto("cardApplyReason", action, obj.getId(), obj);
+        return JSON.toJSONString(jd);
+    }
+    public static String buildGrantCard(String action, GrantCard obj) {
+        JsonDto jd = new JsonDto("cardGrantCard", action, obj.getId(), obj);
+        return JSON.toJSONString(jd);
+    }
+    public static String buildGrantCardStatus(String status, List<Integer> nos) {
+        JsonDto jd = new JsonDto("cardGrantCardStatus", "updateStatus", 0, new GrantCardStatusDto(status, nos));
+        return JSON.toJSONString(jd);
+    }
+    public static String buildCard(String action, Card obj) {
+        JsonDto jd = new JsonDto("card", action, obj.getId(), obj);
+        return JSON.toJSONString(jd);
+    }
+    public static String buildCardApply(CardApply obj) {
+        JsonDto jd = new JsonDto("cardApply", "update", obj.getId(), obj);
+        return JSON.toJSONString(jd);
+    }
+    public static String buildCardUnder(CardUnder obj) {
+        JsonDto jd = new JsonDto("cardUnder", "add", obj.getId(), obj);
+        return JSON.toJSONString(jd);
+    }
+    /** 以上是卡券相关 */
 }
