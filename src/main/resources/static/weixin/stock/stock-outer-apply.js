@@ -7,7 +7,7 @@ $(function() {
     $(".single-location-div").click(function() {
         setShowStatus(this);
     });
-    console.log(getCookie(dataCookieName));
+//    console.log(getCookie(dataCookieName));
     resetDatas(); //重新打开时自动取Cookie中的数据加载
 })
 
