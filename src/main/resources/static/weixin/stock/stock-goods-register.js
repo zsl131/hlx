@@ -7,7 +7,7 @@ $(function() {
     $(".single-location-div").click(function() {
         setShowStatus(this);
     });
-    console.log(getCookie(dataCookieName));
+    //console.log(getCookie(dataCookieName));
     resetDatas(); //重新打开时自动取Cookie中的数据加载
 })
 
@@ -92,7 +92,7 @@ function buildApplyData() {
 //        datas+="|";
     });
 
-    console.log(datas);
+    //console.log(datas);
     setCookie(dataCookieName, datas, 5*60); //存5小时
 }
 
@@ -131,7 +131,7 @@ function buildCount() {
 }
 
 // 提交申购数据
-function submitApplyDatas() {
+function submitApplyDatas(thisObj) {
     var datas = getCookie(dataCookieName);
     if(datas==null || datas == '') {
         buildApplyData();
@@ -144,6 +144,7 @@ function submitApplyDatas() {
         var isCheck = $("input[name='is-check']").val();
         var html = '<h4>此次入库总数量为：<b style="color:#F00">'+totalCount+'</b></h4>是否已设置完成并确定提交入库信息呢？';
         var applyDialog = confirmDialog(html, "<b class='fa fa-question-circle'></b> 系统提示", function() {
+            $(thisObj).attr("disabled", true);
             $.post("/wx/stock/goodsRegister/applyPost", {datas: datas}, function(res) {
                 if(res == '1') {
                     delCookie(dataCookieName);

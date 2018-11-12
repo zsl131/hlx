@@ -91,7 +91,7 @@ function buildApplyData() {
 //        datas+="|";
     });
 
-    console.log(datas);
+    //console.log(datas);
     setCookie(dataCookieName, datas, 5*60); //存5小时
 }
 
@@ -145,19 +145,21 @@ function resetDatas() {
 }
 
 // 提交申购数据
-function submitApplyDatas() {
+function submitApplyDatas(thisObj) {
     var datas = getCookie(dataCookieName);
     if(datas==null || datas == '') {
         buildApplyData();
     }
     datas = getCookie(dataCookieName);
     var totalCount = parseInt($(".total-count").html());
+    //$(thisObj).attr("disabled", true);
     if(datas == null || datas == '' || isNaN(totalCount) || totalCount<=0) {
         showDialog("未选任何物品，不可提交申购", "<b class='fa fa-warning'></b> 系统提示");
     } else {
         var isVerify = $("input[name='is-verify']").val();
         var html = '<h4>此次申购总数量为：<b style="color:#F00">'+totalCount+'</b></h4>是否已选择完成并确定提交申购申请呢？';
         var applyDialog = confirmDialog(html, "<b class='fa fa-question-circle'></b> 系统提示", function() {
+            $(thisObj).attr("disabled", true);
             $.post("/wx/stock/goodsApply/applyPost", {datas: datas, batchNo: batchNo, isVerify: isVerify}, function(res) {
                 if(res == '1') {
                     delCookie(dataCookieName);

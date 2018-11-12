@@ -97,7 +97,7 @@ function buildApplyData() {
 //        datas+="|";
     });
 
-    console.log(datas);
+    //console.log(datas);
     setCookie(dataCookieName, datas, 5*60); //存5小时
 }
 
@@ -136,7 +136,7 @@ function buildCount() {
 }
 
 // 提交申购数据
-function submitApplyDatas() {
+function submitApplyDatas(thisObj) {
     var datas = getCookie(dataCookieName);
     if(datas==null || datas == '') {
         buildApplyData();
@@ -149,6 +149,7 @@ function submitApplyDatas() {
         var isCheck = $("input[name='is-check']").val();
         var html = '<h4>此次出库总数量为：<b style="color:#F00">'+totalCount+'</b></h4>是否已选择完成并确定提交出库申请呢？';
         var applyDialog = confirmDialog(html, "<b class='fa fa-question-circle'></b> 系统提示", function() {
+            $(thisObj).attr("disabled", true);
             $.post("/wx/stock/outerApply/applyPost", {datas: datas, batchNo: batchNo, isCheck: isCheck}, function(res) {
                 if(res == '1') {
                     delCookie(dataCookieName);

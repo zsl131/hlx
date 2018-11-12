@@ -71,7 +71,7 @@
                                         <div class="container" style="padding:20px 40px;">
                                             <div class="btn-group btn-group-justified" role="group" aria-label="...">
                                                 <div class="btn-group" role="group">
-                                                    <button type="button" onclick="submitApplyDatas()" class="btn btn-info"><b class="fa fa-check-circle"></b> <span th:if="${isCheck eq '1'}">物品核对完成</span><span th:unless="${isCheck eq '1'}">提交出库申请</span></button>
+                                                    <button type="button" onclick="submitApplyDatas(this)" class="btn btn-info"><b class="fa fa-check-circle"></b> <span th:if="${isCheck eq '1'}">物品核对完成</span><span th:unless="${isCheck eq '1'}">提交出库申请</span></button>
                                                 </div>
                                                 <div class="btn-group" role="group">
                                                     <button type="button" onclick="cancelApply()" class="btn btn-default"><b class="fa fa-times-circle"></b> 取消并返回</button>
