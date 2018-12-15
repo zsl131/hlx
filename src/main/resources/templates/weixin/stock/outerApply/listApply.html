@@ -52,8 +52,8 @@
                 </div>
             </div>
         </div>
+        <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
+        <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
     </div>
-    <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
-    <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
 </body>
 </html>

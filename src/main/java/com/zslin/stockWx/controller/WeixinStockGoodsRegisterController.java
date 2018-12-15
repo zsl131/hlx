@@ -64,8 +64,9 @@ public class WeixinStockGoodsRegisterController {
     @GetMapping(value = "listApply")
     public String listApply(Model model, Integer page, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
-        Page<GoodsRegister> datas = goodsRegisterService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
-                new SpecificationOperator("applyOpenid", "=", openid)),
+        Page<GoodsRegister> datas = goodsRegisterService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request
+                ,new SpecificationOperator("applyOpenid", "=", openid)
+                ),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
         return "weixin/stock/goodsRegister/listApply";
