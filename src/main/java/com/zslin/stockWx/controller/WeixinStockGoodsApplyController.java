@@ -239,6 +239,7 @@ public class WeixinStockGoodsApplyController {
             }*/
             if(isVerify) { //如果是审核
                 gad.setAllowAmount(amount);
+                gad.setHasCheck("1");
             } else { //如果是初次申请或修改
 //                gad.setAllowAmount(amount);
                 gad.setAmount(amount);
@@ -290,6 +291,7 @@ public class WeixinStockGoodsApplyController {
             }*/
             if(isVerify) { //如果是审核
                 gad.setAllowAmount(amount);
+                gad.setHasCheck("1");
             } else { //如果是初次申请或修改
 //                gad.setAllowAmount(amount);
                 gad.setAmount(amount);
