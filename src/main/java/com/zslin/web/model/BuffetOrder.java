@@ -145,6 +145,30 @@ public class BuffetOrder {
     @Column(name = "mt_status")
     private String mtStatus;
 
+    /** 是否已经完成上传 */
+    @Column(name = "finish_flag")
+    private String finishFlag = "0";
+
+    /** 如果是会员订单是否已经扣款 */
+    @Column(name = "has_take_off")
+    private String hasTakeOff = "0";
+
+    public String getHasTakeOff() {
+        return hasTakeOff;
+    }
+
+    public void setHasTakeOff(String hasTakeOff) {
+        this.hasTakeOff = hasTakeOff;
+    }
+
+    public String getFinishFlag() {
+        return finishFlag;
+    }
+
+    public void setFinishFlag(String finishFlag) {
+        this.finishFlag = finishFlag;
+    }
+
     public String getMtStatus() {
         return mtStatus;
     }

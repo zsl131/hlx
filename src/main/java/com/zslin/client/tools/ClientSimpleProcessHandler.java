@@ -58,6 +58,9 @@ public class ClientSimpleProcessHandler {
     @Autowired
     private AccountTools accountTools;
 
+    @Autowired
+    private ClientFileTools clientFileTools;
+
     /** 处理充值或消费记录，只有添加 */
     public void handlerMemberCharge(JSONObject jsonObj) {
         MemberCharge mc = JSON.toJavaObject(JSON.parseObject(jsonObj.toString()), MemberCharge.class);
@@ -103,6 +106,12 @@ public class ClientSimpleProcessHandler {
         }
 
         shopTools.onShopping(order); //处理账户余额等信息
+        sendOrderResult2Client(order); //将处理结果告知客户端
+    }
+
+    private void sendOrderResult2Client(BuffetOrder order) {
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildOrderResult(order));
+        clientFileTools.setChangeContext(content, true);
     }
 
     @Autowired

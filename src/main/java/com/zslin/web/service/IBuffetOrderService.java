@@ -3,7 +3,9 @@ package com.zslin.web.service;
 import com.zslin.basic.repository.BaseRepository;
 import com.zslin.web.model.BuffetOrder;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -107,4 +109,13 @@ public interface IBuffetOrderService extends BaseRepository<BuffetOrder, Integer
 
     @Query("SELECT SUM(discountMoney) FROM BuffetOrder WHERE discountType=?1 AND createDay LIKE ?2 AND status NOT IN ('-1', '-2')")
     Double sumDiscountMoney(String discountType, String month);
+
+    @Query("UPDATE BuffetOrder SET hasTakeOff=?1 WHERE no=?2")
+    @Modifying
+    @Transactional
+    void updateHasTakeOff(String flag, String orderNo);
+
+    /** 获取会员订单且未扣款的订单 */
+    @Query("FROM BuffetOrder WHERE hasTakeOff='0' AND type='5'")
+    List<BuffetOrder> findNoTakeOff();
 }

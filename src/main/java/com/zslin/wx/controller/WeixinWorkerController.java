@@ -66,7 +66,7 @@ public class WeixinWorkerController {
         }
         SimpleSpecificationBuilder builder = new SimpleSpecificationBuilder();
         Page<Worker> datas = workerService.findAll(builder.generate(),
-                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("status_a", "id_d")));
         model.addAttribute("datas", datas);
         return "weixin/worker/list";
     }

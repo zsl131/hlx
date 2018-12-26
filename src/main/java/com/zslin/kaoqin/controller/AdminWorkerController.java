@@ -68,7 +68,7 @@ public class AdminWorkerController {
     @AdminAuth(name = "员工信息列表", type = "1", orderNum = 1, icon = "fa fa-users")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<Worker> datas = workerService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
-                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("status_a","id_d")));
         model.addAttribute("datas", datas);
         return "admin/worker/list";
     }

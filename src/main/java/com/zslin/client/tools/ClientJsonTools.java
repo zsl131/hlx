@@ -122,6 +122,11 @@ public class ClientJsonTools {
         return JSON.toJSONString(jd);
     }
 
+    public static String buildOrderResult(BuffetOrder order) {
+        JsonDto jd = new JsonDto("orderResult", "update", order.getId(), new NormalDto(order.getNo(), "1"));
+        return JSON.toJSONString(jd);
+    }
+
     /** 卡券相关 */
     public static String buildCardApplyReason(String action, ApplyReason obj) {
         JsonDto jd = new JsonDto("cardApplyReason", action, obj.getId(), obj);
