@@ -25,7 +25,7 @@ public class ShopTools {
     @Autowired
     private IBuffetOrderService buffetOrderService;
 
-    public void onShoppingNoStatus(BuffetOrder order) {
+    public synchronized void onShoppingNoStatus(BuffetOrder order) {
         if("5".equals(order.getType()) && !"1".equals(order.getHasTakeOff())) {
             Integer orderType = Integer.parseInt(order.getType());
             String orderNo = order.getNo();
@@ -48,7 +48,7 @@ public class ShopTools {
         }
     }
 
-    public void onShopping(BuffetOrder order) {
+    public synchronized void onShopping(BuffetOrder order) {
         if("5".equals(order.getType()) && "2".equals(order.getStatus()) && !"1".equals(order.getHasTakeOff())) { //如果是会员订单则需要做相应处理
             Integer orderType = Integer.parseInt(order.getType());
             String orderNo = order.getNo();
