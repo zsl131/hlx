@@ -8,6 +8,7 @@ import com.zslin.card.service.ICardService;
 import com.zslin.client.tools.RestdayTools;
 import com.zslin.web.model.*;
 import com.zslin.web.service.*;
+import com.zslin.web.tools.DiscountDayTools;
 import com.zslin.web.tools.GamePrizeTools;
 import com.zslin.wx.dbtools.ScoreTools;
 import org.json.JSONObject;
@@ -76,6 +77,9 @@ public class DatasTools {
     private RestdayTools restdayTools;
 
     @Autowired
+    private DiscountDayTools discountDayTools;
+
+    @Autowired
     private HlxTools hlxTools;
 
     @Autowired
@@ -116,6 +120,9 @@ public class DatasTools {
         } else if(isPrizeCode(content.trim())) { //如果是中奖代码
             gamePrizeTools.processMessage(openid, content.trim());
             return WeixinXmlTools.createTextXml(openid, builderName, "已成功提交兑奖码，请注意查收对奖信息！\n感谢您的参与！");
+        } else if(isSetDiscountDay(content.trim(), openid)) { //设置是否为折扣日
+            String res = discountDayTools.setDiscountDay(content.trim());//
+            return WeixinXmlTools.createTextXml(openid, builderName, res);
         } else if(isSetRestday(content.trim(), openid)) {
             String res = restdayTools.setRestday(content.trim());
             return WeixinXmlTools.createTextXml(openid, builderName, res);
@@ -174,6 +181,17 @@ public class DatasTools {
     //是否为设置工作日的指令
     private boolean isSetRestday(String content, String openid) {
         if(content!=null && content.length()==10 && content.indexOf("_")==8) {
+            List<String> openids = accountTools.getOpenid(AccountTools.ADMIN, AccountTools.PARTNER);
+            if(openids.contains(openid)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //是否为设置折扣日的指令:20190312-1
+    private boolean isSetDiscountDay(String content, String openid) {
+        if(content!=null && content.length()==10 && content.indexOf("-")==8) {
             List<String> openids = accountTools.getOpenid(AccountTools.ADMIN, AccountTools.PARTNER);
             if(openids.contains(openid)) {
                 return true;

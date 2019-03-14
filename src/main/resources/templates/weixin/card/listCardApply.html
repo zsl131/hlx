@@ -27,8 +27,8 @@
                     <p class="name" style="color:#777; font-size:13px;">
                         <b th:switch="${obj.cardType}">
                             <span th:remove="tag" th:case="1">10元券</span>
-                            <span th:remove="tag" th:case="2">45元券</span>
-                            <span th:remove="tag" th:case="3">55元券</span>
+                            <span th:remove="tag" th:case="2">午餐券</span>
+                            <span th:remove="tag" th:case="3">晚餐券</span>
                         </b>
                         <span style="float:right;" th:switch="${obj.status}">
                             <button class="btn btn-sm apply-status-btn" th:attr="status=${obj.status}, cardNo = ${obj.cardNo}, objId=${obj.id}">
@@ -40,6 +40,7 @@
                     </p>
                     <p class="con">
                         <span>卡号：<b th:text="${obj.cardNo}"></b>（原因：<b th:text="${obj.applyReason}"></b>）</span>
+                        <span>时间：<b style="font-weight:normal" th:text="${obj.applyCreateTime}"></b></span>
                     </p>
                 </li>
             </ul>

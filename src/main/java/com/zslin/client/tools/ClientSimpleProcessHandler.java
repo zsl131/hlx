@@ -93,7 +93,7 @@ public class ClientSimpleProcessHandler {
         if(order==null) {
             order = new BuffetOrder();
         }
-        MyBeanUtils.copyProperties(bo, order, "hasTakeOff","finishFlag","createDate", "createTime", "createLong", "createDay");
+        MyBeanUtils.copyProperties(bo, order, true, "hasTakeOff","finishFlag");
         buffetOrderService.save(order);
         if("0".equalsIgnoreCase(order.getStatus()) && "4".equalsIgnoreCase(order.getType())) {
             noticeAdmin(order); //需要通知管理人员

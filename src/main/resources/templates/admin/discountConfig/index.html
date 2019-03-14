@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+	<title>折扣配置管理</title>
+	<script type="text/javascript">
+		$(function() {
+			//$("#addForm").platformvalidate();
+		});
+	</script>
+	</head>
+	<body>
+		<div th:fragment="content" th:remove="tag">
+			<div class="header lighter smaller blue">
+				<h3><span class="glyphicon glyphicon-th-list"></span><i class="icon-setting"></i>&nbsp;折扣配置管理<small>&nbsp;</small></h3>
+			</div>
+
+			<form method="POST" th:object="${config}" id="dataForm">
+				<div class="form-group form-group-lg">
+					<div class="input-group input-group-lg">
+						<div class="input-group-addon">是否启用：</div>
+						<div class="form-control">
+							<input type="radio" name="status" value="1" id="pay_1" th:checked="${config.status == '1'}?'checked'"/><label for="pay_1">启用</label>
+							<input type="radio" name="status" value="0" id="pay_0" th:checked="${config.status == '0'}?'checked'"/><label for="pay_0">停用</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+					  <div class="input-group-addon">午餐优惠（全票）：</div>
+					  <input name="discountAM" id="discountAM" type="text" class="form-control" th:value="${config.discountAM}" placeholder="输入午餐优惠金额（全票，每人），单位：元" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">午餐优惠（全票）：</div>
+						<input name="discountPM" id="discountPM" type="text" class="form-control" th:value="${config.discountPM}" placeholder="输入晚餐优惠金额（全票，每人），单位：元" />
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">午餐优惠（半票）：</div>
+						<input name="discountHalfAM" id="discountHalfAM" type="text" class="form-control" th:value="${config.discountHalfAM}" placeholder="输入午餐优惠金额（半票，每人），单位：元" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">午餐优惠（半票）：</div>
+						<input name="discountHalfPM" id="discountHalfPM" type="text" class="form-control" th:value="${config.discountHalfPM}" placeholder="输入晚餐优惠金额（半票，每人），单位：元" />
+					</div>
+				</div>
+				<button type="submit" class="btn btn-primary submit-update-btn">保存设置</button>
+			</form>
+
+			<script type="text/javascript">
+				jQuery(function($) {
+					$('#dataForm').bootstrapValidator({
+		//		        live: 'disabled',
+						message: '验证不通过',
+						feedbackIcons: {
+							valid: 'glyphicon glyphicon-ok',
+							invalid: 'glyphicon glyphicon-remove',
+							validating: 'glyphicon glyphicon-refresh'
+						},
+						fields: {
+							breakfastPrice: {
+								validators: {
+									notEmpty: {
+										message: '请输入早餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							},
+							dinnerPrice: {
+								validators: {
+									notEmpty: {
+										message: '请输入晚餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							},
+							friendDinnerPrice: {
+								validators: {
+									notEmpty: {
+										message: '请输入亲情晚餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							},
+							friendBreakfastPrice: {
+								validators: {
+									notEmpty: {
+										message: '请输入亲情早餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							},
+							bondMoney: {
+								validators: {
+									notEmpty: {
+										message: '请输入压金金额，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							}
+						}
+					});
+				});
+			</script>
+		</div>
+	</body>
+</html>

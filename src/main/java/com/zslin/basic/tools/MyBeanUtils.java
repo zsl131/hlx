@@ -13,6 +13,10 @@ import java.util.Set;
  * @author zslin.com 20160522
  */
 public class MyBeanUtils extends BeanUtils {
+
+    public static void copyProperties(Object source, Object target, boolean noAuto, String ...ignoreFields) {
+        copyProperties(source, target, ignoreFields, noAuto);
+    }
 	
 	public static void copyProperties(Object source, Object target, String... ignoreFields)
 			throws BeansException {

@@ -111,6 +111,16 @@ public class ClientJsonTools {
         return JSON.toJSONString(jd);
     }
 
+    public static String buildDiscountDay(DiscountDay dd) {
+        JsonDto jd = new JsonDto("discountDay", "save", dd.getId(), dd);
+        return JSON.toJSONString(jd);
+    }
+
+    public static String buildDiscountConfig(DiscountConfig dc) {
+        JsonDto jd = new JsonDto("discountConfig", "save", dc.getId(), dc);
+        return JSON.toJSONString(jd);
+    }
+
     public static String buildUpdatePassword(String phone, String password) {
         JsonDto jd = new JsonDto("password", "update",0, new NormalDto(phone, password));
         return JSON.toJSONString(jd);
