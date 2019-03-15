@@ -69,6 +69,14 @@ public class WeixinCashCalController {
             model.addAttribute("discountMoneyPM", discountMoneyPM); //时段折扣金额
             model.addAttribute("discountMoney", discountMoneyAM+discountMoneyPM);
 
+            Float discountDayMoneyAM = buffetOrderService.queryDiscountDayMoneyByTime(mtd.getStartTimeAM(), mtd.getEndTimeAM());
+            discountDayMoneyAM = discountDayMoneyAM==null?0:discountDayMoneyAM;
+            model.addAttribute("discountDayMoneyAM", discountDayMoneyAM); //折扣日金额
+            Float discountDayMoneyPM = buffetOrderService.queryDiscountDayMoneyByTime(mtd.getStartTimePM(), mtd.getEndTimePM());
+            discountDayMoneyPM = discountDayMoneyPM==null?0:discountDayMoneyPM;
+            model.addAttribute("discountDayMoneyPM", discountDayMoneyPM); //折扣日金额
+            model.addAttribute("discountDayMoney", discountDayMoneyAM+discountDayMoneyPM);
+
             Float marketMoneyAM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimeAM(), mtd.getEndTimeAM(), "5");
             model.addAttribute("marketMoneyAM", marketMoneyAM==null?0:marketMoneyAM); //商场签单
             Float marketMoneyPM = buffetOrderService.queryTotalMoneyByPayType(mtd.getStartTimePM(), mtd.getEndTimePM(), "5");
