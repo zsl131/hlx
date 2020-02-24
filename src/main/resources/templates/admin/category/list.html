@@ -20,12 +20,15 @@
 			<div th:replace="admin/category/nav :: content" th:remove="tag"></div>
 		</div>
 
+		<div th:replace="admin/category/filter :: content" th:remove="tag"></div>
+
 		<div class="table-responsive">
 			<table class="table table-hover">
 				<thead>
 					<tr>
 						<th>图片</th>
 						<th>序号</th>
+						<th>店铺</th>
 						<th>名称</th>
 						<th>备注</th>
 						<th>操作</th>
@@ -37,6 +40,7 @@
 						<a th:href="${obj.picPath}" target="_blank"><img th:src="${obj.picPath}" style="width:120px"/></a>
 					</td>
 					<td th:text="${obj.orderNo}"></td>
+					<td><span th:text="${obj.storeName}"></span>[<span th:text="${obj.storeSn}"></span>]</td>
 					<td th:text="${obj.name}"></td>
 					<td th:text="${obj.remark}"></td>
 					<td>

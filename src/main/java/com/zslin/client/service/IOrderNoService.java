@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface IOrderNoService extends BaseRepository<OrderNo, Integer> {
 
+    @Query("FROM OrderNo o WHERE o.days=?1 AND o.type=?2")
     OrderNo findByDays(String days, String type);
 
     @Query("SELECT o.curNo FROM OrderNo o WHERE o.days=?1 AND o.type=?2")

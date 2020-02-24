@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class StockGoods {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 物品名称 */

@@ -29,7 +29,7 @@ public class CacheTools {
      * @return
      */
     private String rebuildKey(String key) {
-        return configTools.getName()+"-"+key;
+        return configTools.getAppName()+"-"+key;
     }
 
     /**

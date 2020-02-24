@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class GoodsApplyDetail {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 申请批次编辑 */

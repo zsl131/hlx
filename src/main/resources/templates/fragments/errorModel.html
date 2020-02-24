@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN"
       xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="mymodel">
 <head>
     <title th:text="${session.appConfig ne null ? session.appConfig.appName:'未初始化'}+'-用户登陆'">用户登陆</title>
     <meta charset="utf-8"/>
@@ -36,12 +37,15 @@
     <div class="container text-center">
         <div class="login-main">
             <div th:include="this :: content"></div>
+            <!--<div th:replace="${content}">
+                <p>Layout content</p>
+            </div>-->
         </div>
     </div>
 
     <div class="navbar navbar-default navbar-fixed-bottom" role="navigation">
         <div class="container text-center login-bottom">
-            &copy;<span class="show-year">2016</span><span th:text="${session.appConfig ne null ? session.appConfig.contant:'系统管理员'}"></span>
+            &copy;<span class="show-year">2020</span><span th:text="${session.appConfig ne null ? session.appConfig.contant:'系统管理员'}"></span>
         </div>
     </div>
 </body>

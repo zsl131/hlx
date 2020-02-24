@@ -1,7 +1,8 @@
 package com.zslin.basic.tools;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -31,9 +32,32 @@ public class NormalTools {
         return false;
     }
 
+    public static String getNow(String pattern) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(pattern);
+        String res = df.format(LocalDateTime.now());
+        return res;
+    }
+
+    public static Date getDate(String dateStr, String pattern) {
+        try {
+            DateTimeFormatter df = DateTimeFormatter.ofPattern(pattern);
+            LocalDateTime ldt = LocalDateTime.parse(dateStr, df);
+            return Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+        } catch (Exception e) {return null;}
+    }
+
+    public static String curDatetime() {
+        return getNow("yyyy-MM-dd HH:mm:ss");
+    }
+
+    public static String curDate() {
+        return getNow("yyyy-MM-dd");
+        /*LocalDate localDate = LocalDate.now();
+        return localDate.toString();*/
+    }
+
     public static String curDate(String pattern) {
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        return sdf.format(new Date());
+        return getNow(pattern);
     }
 
     /**
@@ -47,10 +71,6 @@ public class NormalTools {
         f1 = Math.rint(f1);
         return f1;*/
         return Math.ceil(d);
-    }
-
-    public static String curDate() {
-        return curDate("yyyy-MM-dd HH:mm:ss");
     }
 
     public static boolean isNull(String val) {

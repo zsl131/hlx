@@ -1,6 +1,7 @@
 package com.zslin.web.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/18 16:53.
@@ -8,10 +9,10 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "t_weixin_config")
-public class WeixinConfig {
+public class WeixinConfig implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     //链接地址，即主域名，如：http://zsl8.5166.info
     private String url;

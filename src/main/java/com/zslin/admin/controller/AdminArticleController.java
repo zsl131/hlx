@@ -88,8 +88,8 @@ public class AdminArticleController {
                 try {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        article.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        article.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -129,11 +129,11 @@ public class AdminArticleController {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
 
-                        File oldFile = new File(configTools.getUploadPath()+a.getPicPath());
+                        File oldFile = new File(configTools.getFilePath()+a.getPicPath());
                         if(oldFile.exists()) {oldFile.delete();}
 
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        a.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        a.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -159,7 +159,7 @@ public class AdminArticleController {
         try {
 
             Article a = articleService.findOne(id);
-            File oldFile = new File(configTools.getUploadPath()+a.getPicPath());
+            File oldFile = new File(configTools.getFilePath()+a.getPicPath());
             if(oldFile.exists()) {oldFile.delete();}
 
             articleService.delete(id);

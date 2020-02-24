@@ -51,12 +51,12 @@ public class AdminController {
                 String fileName = files[0].getOriginalFilename();
                 if (fileName != null) {
 
-                    File oldFile = new File(configTools.getUploadPath() + fileName);
+                    File oldFile = new File(configTools.getFilePath() + fileName);
                     if (oldFile.exists()) {
                         oldFile.delete();
                     }
 
-                    File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + fileName);
+                    File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + fileName);
                     FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                 }
             } catch (IOException e) {

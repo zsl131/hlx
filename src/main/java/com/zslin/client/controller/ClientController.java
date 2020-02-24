@@ -44,16 +44,22 @@ public class ClientController {
         clientPostHandler.handler(json);
     }
 
-    //设备从服务端下载数据
+    /**
+     * 设备从服务端下载数据
+     * @param token 用于每个店铺的唯一标识
+     * @param request
+     * @return
+     */
     @GetMapping(value = "download")
     public String download(String token, HttpServletRequest request) {
 
-        String json = clientFileTools.getChangeContext();
+        System.out.println("-------token:::"+token);
+        String json = clientFileTools.getChangeContext(token);
         if(json==null || "".equals(json.trim())) {
-            json = clientFileTools.getConfigContext();
+            json = clientFileTools.getConfigContext(token);
         }
-//        System.out.println(json);
-        clientFileTools.setChangeContext("", false); //处理完成后清空内容
+        System.out.println(json);
+        clientFileTools.setChangeContext(token,"", false); //处理完成后清空内容
         return json;
     }
 }

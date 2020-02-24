@@ -1,6 +1,7 @@
 package com.zslin.web.model;
 
 import com.zslin.web.vo.BaseEntity;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "t_food")
+@Data
 public class Food extends BaseEntity {
 
     @Column(name = "cate_id")
@@ -41,78 +43,19 @@ public class Food extends BaseEntity {
     /** 名称 */
     private String name;
 
-    public Integer getCateId() {
-        return cateId;
-    }
+    @Column(name = "store_id")
+    private Integer storeId;
 
-    public void setCateId(Integer cateId) {
-        this.cateId = cateId;
-    }
+    @Column(name = "store_name")
+    private String storeName;
 
-    public String getCateName() {
-        return cateName;
-    }
-
-    public void setCateName(String cateName) {
-        this.cateName = cateName;
-    }
-
-    public Integer getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(Integer orderNo) {
-        this.orderNo = orderNo;
-    }
-
-    public Integer getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(Integer commentCount) {
-        this.commentCount = commentCount;
-    }
-
-    public Integer getGoodCount() {
-        return goodCount;
-    }
-
-    public void setGoodCount(Integer goodCount) {
-        this.goodCount = goodCount;
-    }
-
-    public String getPicPath() {
-        return picPath;
-    }
-
-    public void setPicPath(String picPath) {
-        this.picPath = picPath;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
+    @Column(name = "store_sn")
+    private String storeSn;
 
     /** 备注 */
     private String remark;
+
+    /** 单位名称 */
+    @Column(name = "unit_name")
+    private String unitName;
 }

@@ -2,6 +2,7 @@ package com.zslin.client.tools;
 
 import com.zslin.card.tools.CardHandlerTools;
 import com.zslin.kaoqin.service.IWorkerService;
+import com.zslin.rabbit.RabbitUpdateTools;
 import com.zslin.wx.tools.JsonTools;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/12 21:55.
  */
-@Component
+@Component(value = "clientPostHandler")
 public class ClientPostHandler {
 
     @Autowired
@@ -26,15 +27,21 @@ public class ClientPostHandler {
     @Autowired
     private CardHandlerTools cardHandlerTools;
 
+    @Autowired
+    private RabbitUpdateTools rabbitUpdateTools;
+
     public void handler(String json) {
         Integer status = Integer.parseInt(JsonTools.getJsonParam(json, "status"));
         if (status != null && status == 1) { //表示获取成功
             String datas = JsonTools.getJsonParam(json, "data");
-            processDatas(datas);
+            //修改为Rabbit处理
+            rabbitUpdateTools.updateData("clientPostHandler", "processDatas", datas);
+            //原来的直接处理先取消
+//            processDatas(datas);
         }
     }
 
-    private void processDatas(String dataJson) {
+    public void processDatas(String dataJson) {
         JSONArray array = new JSONArray(dataJson);
         for (int i = 0; i < array.length(); i++) {
             JSONObject jsonObj = array.getJSONObject(i);

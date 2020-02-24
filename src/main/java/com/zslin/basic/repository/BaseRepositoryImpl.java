@@ -1,6 +1,9 @@
 package com.zslin.basic.repository;
 
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -13,9 +16,9 @@ import java.util.List;
 public class BaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements BaseRepository<T, ID> {
 
     private final EntityManager em;
-
-    public BaseRepositoryImpl(Class<T> domainClass, EntityManager em) {
-        super(domainClass, em);
+    public BaseRepositoryImpl(JpaEntityInformation<T, ID> entityInformation,
+                              EntityManager em) {
+        super(entityInformation, em);
         this.em = em;
     }
 
@@ -63,5 +66,23 @@ public class BaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRep
     public Object queryByHql(String hql, Object... args) {
         List list = listByHql(hql, args);
         return (list==null||list.size()<=0)?null:list.get(0);
+    }
+
+    @Override
+    public T findOne(Integer id) {
+        try {
+            T t = this.findById((ID) id).get();
+            return t;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    @Modifying
+    @Transactional
+    public void delete(Integer id) {
+        T t = findOne(id);
+        this.delete(t);
     }
 }

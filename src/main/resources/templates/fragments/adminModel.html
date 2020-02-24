@@ -5,6 +5,7 @@
       th:fragment="mymodel">
 
 <head th:fragment="head">
+    <!--<title>后台首页</title>-->
     <title>后台首页</title>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -60,6 +61,9 @@
     </div>
     <div class="main-right">
         <div th:include="this :: content" style="margin:10px;"></div>
+        <!--<div th:replace="${content}" style="margin:10px;">
+            <p>Layout content</p>
+        </div>-->
     </div>
 </div>
 

@@ -53,7 +53,7 @@ public class KaoqinFileTools {
     }
 
     private File getFile(String fileName) {
-        File file = new File(configTools.getUploadPath()+fileName);
+        File file = new File(configTools.getFilePath()+fileName);
         if(!file.exists()) {createFile(fileName);}
         return file;
     }

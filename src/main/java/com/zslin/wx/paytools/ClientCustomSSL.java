@@ -74,7 +74,7 @@ public class ClientCustomSSL {
      */
     public String doRequest(String password, String url,String data) throws Exception {
         KeyStore keyStore  = KeyStore.getInstance("PKCS12");
-        FileInputStream instream = new FileInputStream(new File(configTools.getUploadPath("/")+"apiclient_cert.p12"));//P12文件目录
+        FileInputStream instream = new FileInputStream(new File(configTools.getFilePath("/")+"apiclient_cert.p12"));//P12文件目录
         try {
             keyStore.load(instream, password.toCharArray());//这里写密码..默认是你的MCHID
         } finally {

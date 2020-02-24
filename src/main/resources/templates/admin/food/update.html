@@ -9,8 +9,8 @@
 	<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
 	<script src="/js/jedate/jquery.jedate.min.js"></script>
 	<link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
-	<script src="/admin/bus/my-date.js"></script>
-	<script src="/admin/bus/admin-food.js"></script>
+	<script src="/back-admin/bus/my-date.js"></script>
+	<script src="/back-admin/bus/admin-food.js"></script>
 	<title>修改食品</title>
 </head>
 <body>
@@ -52,7 +52,11 @@
 			</div>
 		</div>
 
-		<input type="hidden" name="token" value="${session.token}"/>
+		<input name="storeName" type="hidden" th:value="${food.storeName}"/>
+		<input name="storeSn" type="hidden" th:value="${food.storeSn}"/>
+		<input name="storeId" type="hidden" th:value="${food.storeId}"/>
+
+		<input type="hidden" name="token" :value="${session.token}"/>
 		<button type="submit" class="btn btn-primary">确定提交</button>
 	</form>
 

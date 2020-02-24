@@ -1,6 +1,7 @@
 package com.zslin.web.model;
 
 import com.zslin.web.vo.BaseEntity;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "t_category")
+@Data
 public class Category extends BaseEntity {
 
     private String name;
@@ -23,35 +25,13 @@ public class Category extends BaseEntity {
     @Column(name = "pic_path")
     private String picPath;
 
-    public void setPicPath(String picPath) {
-        this.picPath = picPath;
-    }
+    @Column(name = "store_id")
+    private Integer storeId;
 
-    public String getPicPath() {
-        return picPath;
-    }
+    @Column(name = "store_name")
+    private String storeName;
 
-    public String getName() {
-        return name;
-    }
+    @Column(name = "store_sn")
+    private String storeSn;
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(Integer orderNo) {
-        this.orderNo = orderNo;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
 }

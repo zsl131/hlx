@@ -18,6 +18,8 @@ public interface ICategoryService extends BaseRepository<Category, Integer>, Jpa
     @Cacheable(cacheNames = "category-list")
     List<Category> findByOrder();
 
+    List<Category> findByStoreId(Integer storeId);
+
     @Override
     @CacheEvict(cacheNames = "category-list", allEntries = true)
     <S extends Category> S save(S s);

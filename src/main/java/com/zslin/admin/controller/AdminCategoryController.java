@@ -9,6 +9,10 @@ import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.web.model.Category;
 import com.zslin.web.service.ICategoryService;
 import org.apache.commons.io.FileUtils;
@@ -23,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -30,7 +35,7 @@ import java.util.UUID;
  */
 @Controller
 @RequestMapping(value = "admin/category")
-@AdminAuth(name = "分类管理", psn = "应用管理", orderNum = 6, porderNum = 1, pentity = 0, icon = "fa fa-tasks")
+@AdminAuth(name = "分类管理", psn = "多店管理", orderNum = 6, porderNum = 1, pentity = 0, icon = "fa fa-tasks")
 public class AdminCategoryController {
 
     @Autowired
@@ -38,6 +43,12 @@ public class AdminCategoryController {
 
     @Autowired
     private ConfigTools configTools;
+
+    @Autowired
+    private IStoreDao storeDao;
+
+    @Autowired
+    private ClientFileTools clientFileTools;
 
     private static final String PATH_PRE = "category";
 
@@ -47,6 +58,9 @@ public class AdminCategoryController {
         Page<Category> datas = categoryService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("orderNo")));
         model.addAttribute("datas", datas);
+
+        List<Store> storeList = storeDao.findAll();
+        model.addAttribute("storeList", storeList);
         return "admin/category/list";
     }
 
@@ -55,6 +69,8 @@ public class AdminCategoryController {
     @RequestMapping(value="add", method= RequestMethod.GET)
     public String add(Model model, HttpServletRequest request) {
         model.addAttribute("category", new Category());
+        List<Store> storeList = storeDao.findAll();
+        model.addAttribute("storeList", storeList);
         return "admin/category/add";
     }
 
@@ -67,8 +83,8 @@ public class AdminCategoryController {
                 try {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        category.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        category.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -82,6 +98,7 @@ public class AdminCategoryController {
                 }
             }
             categoryService.save(category);
+            send2Client(category, "save");
         }
         return "redirect:/admin/category/list";
     }
@@ -108,11 +125,11 @@ public class AdminCategoryController {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
 
-                        File oldFile = new File(configTools.getUploadPath()+c.getPicPath());
+                        File oldFile = new File(configTools.getFilePath()+c.getPicPath());
                         if(oldFile.exists()) {oldFile.delete();}
 
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        c.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        c.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -127,6 +144,7 @@ public class AdminCategoryController {
             }
 
             categoryService.save(c);
+            send2Client(c, "save");
         }
         return "redirect:/admin/category/list";
     }
@@ -138,13 +156,19 @@ public class AdminCategoryController {
         try {
 
             Category c = categoryService.findOne(id);
-            File oldFile = new File(configTools.getUploadPath()+c.getPicPath());
+            File oldFile = new File(configTools.getFilePath()+c.getPicPath());
             if(oldFile.exists()) {oldFile.delete();}
 
             categoryService.delete(id);
+            send2Client(c, "delete");
             return "1";
         } catch (Exception e) {
             return "0";
         }
+    }
+
+    private void send2Client(Category category, String action) {
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildCategory(category, action));
+        clientFileTools.setChangeContext(category.getStoreSn(), content, true);
     }
 }

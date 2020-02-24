@@ -5,6 +5,13 @@
         <div th:fragment="content" th:remove="tag">
             <div id="sys_filter" class="form-inline" style="padding-bottom:10px;">
                 <div class="input-group">
+                    <span class="input-group-addon">所属店铺</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_storeId'>
+                        <option value="">=全部=</option>
+                        <option th:each="store : ${storeList}" th:value="${store.id}" th:text="${store.name}"></option>
+                    </select>
+                </div>
+                <div class="input-group">
                     <span class="input-group-addon">分类</span>
                     <select class='filter_element form-control' opt="eq" name='filter_cateId'>
                         <option value="">=全部=</option>

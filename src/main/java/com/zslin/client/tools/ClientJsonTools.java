@@ -163,4 +163,16 @@ public class ClientJsonTools {
         return JSON.toJSONString(jd);
     }
     /** 以上是卡券相关 */
+
+
+    /** 以下是多店管理的 **/
+    public static String buildFood(Food food, String action) {
+        JsonDto jd = new JsonDto("food", action, food.getId(), food);
+        return JSON.toJSONString(jd);
+    }
+    public static String buildCategory(Category category, String action) {
+        JsonDto jd = new JsonDto("category", action, category.getId(), category);
+        return JSON.toJSONString(jd);
+    }
+    /** 以上是多店管理的 **/
 }

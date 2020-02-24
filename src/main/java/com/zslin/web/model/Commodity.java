@@ -30,7 +30,7 @@ public class Commodity {
     public static final String SPE_HALF_NO = "22222";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 商品名称 */

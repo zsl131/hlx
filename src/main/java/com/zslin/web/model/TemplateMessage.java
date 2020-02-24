@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class TemplateMessage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 模板标题 */

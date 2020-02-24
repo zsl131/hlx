@@ -66,8 +66,8 @@ public class AdminGalleryController {
                 try {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        gallery.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        gallery.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -107,11 +107,11 @@ public class AdminGalleryController {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
 
-                        File oldFile = new File(configTools.getUploadPath()+g.getPicPath());
+                        File oldFile = new File(configTools.getFilePath()+g.getPicPath());
                         if(oldFile.exists()) {oldFile.delete();}
 
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        g.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        g.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -137,7 +137,7 @@ public class AdminGalleryController {
         try {
 
             Gallery g = galleryService.findOne(id);
-            File oldFile = new File(configTools.getUploadPath()+g.getPicPath());
+            File oldFile = new File(configTools.getFilePath()+g.getPicPath());
             if(oldFile.exists()) {oldFile.delete();}
 
             galleryService.delete(id);

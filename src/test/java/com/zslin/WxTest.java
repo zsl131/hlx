@@ -26,7 +26,7 @@ public class WxTest {
     @Test
     public void test01() {
         String mediaId = "e-olCFDPbLlEA5RHqQ7sScB2sXNpBu5GkiW3SpijVBF_TKaUBjYifK81rBq6-KmV";
-        exchangeTools.saveMedia(mediaId, configTools.getUploadPath()+"123");
+        exchangeTools.saveMedia(mediaId, configTools.getFilePath()+"123");
 //        System.out.println(res);
     }
 }

@@ -1,13 +1,12 @@
 package com.zslin.client.tools;
 
 import com.alibaba.fastjson.JSON;
-import com.zslin.admin.dto.MyTimeDto;
 import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.client.model.Member;
-import com.zslin.client.model.Orders;
 import com.zslin.client.service.IMemberService;
 import com.zslin.meituan.tools.MeituanHandlerTools;
+import com.zslin.rabbit.RabbitUpdateTools;
 import com.zslin.web.model.*;
 import com.zslin.web.service.*;
 import com.zslin.wx.dbtools.MoneyTools;
@@ -61,6 +60,9 @@ public class ClientSimpleProcessHandler {
     @Autowired
     private ClientFileTools clientFileTools;
 
+    @Autowired
+    private RabbitUpdateTools rabbitUpdateTools;
+
     /** 处理充值或消费记录，只有添加 */
     public void handlerMemberCharge(JSONObject jsonObj) {
         MemberCharge mc = JSON.toJavaObject(JSON.parseObject(jsonObj.toString()), MemberCharge.class);
@@ -69,7 +71,9 @@ public class ClientSimpleProcessHandler {
         memberChargeService.save(mc);
 
         //店内会员充值
-        moneyTools.processScoreByPhone(mc.getPhone(), (int)(mc.getChargeMoney()+mc.getGiveMoney())*100, mc.getChargeMoney()<=0?"会员消费":"会员充值");
+//        moneyTools.processScoreByPhone(mc.getPhone(), (int)(mc.getChargeMoney()+mc.getGiveMoney())*100, mc.getChargeMoney()<=0?"会员消费":"会员充值");
+        rabbitUpdateTools.updateData("moneyTools", "processScoreByPhoneRabbit",
+                mc.getPhone(), (int)(mc.getChargeMoney()+mc.getGiveMoney())*100, mc.getChargeMoney()<=0?"会员消费":"会员充值");
     }
 
     //当电话号码匹配时需要设置充值记录相应字段
@@ -284,6 +288,10 @@ public class ClientSimpleProcessHandler {
             income.setComeYear(day.substring(0, 4));
             income.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
             income.setCash(money);
+            try {
+                income.setPeopleCount(jsonObj.getInt("peopleCount"));
+            } catch (Exception e) {
+            }
             income.setTotalMoney((double) money);
             income.setFromClient("1");
         } else if(income!=null && "1".equalsIgnoreCase(income.getFromClient())) {

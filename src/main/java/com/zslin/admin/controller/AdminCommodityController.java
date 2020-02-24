@@ -33,7 +33,7 @@ import java.util.UUID;
  */
 @Controller
 @RequestMapping(value = "admin/commodity")
-@AdminAuth(name = "商品管理", psn = "应用管理", orderNum = 6, porderNum = 1, pentity = 0, icon = "fa fa-podcast")
+@AdminAuth(name = "商品管理", psn = "多店管理", orderNum = 6, porderNum = 1, pentity = 0, icon = "fa fa-podcast")
 public class AdminCommodityController {
 
     @Autowired
@@ -47,8 +47,10 @@ public class AdminCommodityController {
     @Autowired
     private ClientFileTools clientFileTools;
 
+
+
     @GetMapping(value = "list")
-    @AdminAuth(name = "商品管理", orderNum = 1, type = "1", icon = "fa fa-podcast")
+    @AdminAuth(name = "商品管理", orderNum = 1, type = "1", icon = "fa fa-list")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<Commodity> datas = commodityService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
@@ -82,8 +84,8 @@ public class AdminCommodityController {
                 try {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        commodity.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        commodity.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -126,13 +128,13 @@ public class AdminCommodityController {
                     String fileName = files[0].getOriginalFilename();
                     if (fileName != null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
 
-                        File oldFile = new File(configTools.getUploadPath() + c.getPicPath());
+                        File oldFile = new File(configTools.getFilePath() + c.getPicPath());
                         if (oldFile.exists()) {
                             oldFile.delete();
                         }
 
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString() + NormalTools.getFileType(fileName));
-                        c.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + UUID.randomUUID().toString() + NormalTools.getFileType(fileName));
+                        c.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -163,7 +165,7 @@ public class AdminCommodityController {
             if(!"3".equalsIgnoreCase(c.getType())) { //只能删除外卖单品
                 return "1";
             }
-            File oldFile = new File(configTools.getUploadPath()+c.getPicPath());
+            File oldFile = new File(configTools.getFilePath()+c.getPicPath());
             if(oldFile.exists()) {oldFile.delete();}
 
             send2Client(c, "delete");

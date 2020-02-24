@@ -1,6 +1,8 @@
 package com.zslin;
 
 import com.zslin.admin.dto.MyTicketDto;
+import com.zslin.basic.model.AppConfig;
+import com.zslin.basic.service.IAppConfigService;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.tools.SecurityUtil;
 import com.zslin.card.dto.CardCheckDto;
@@ -23,8 +25,6 @@ import com.zslin.web.service.IIncomeService;
 import com.zslin.web.tools.CommonTools;
 import com.zslin.wx.tools.ExchangeTools;
 import com.zslin.wx.tools.WxConfig;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +78,22 @@ public class NormalTest {
 
     @Autowired
     private ICardCheckService cardCheckService;
+
+    @Autowired
+    private IAppConfigService appConfigService;
+
+    @Test
+    public void test36() {
+        System.out.println("---------->");
+        System.out.println(smsConfig);
+    }
+
+    @Test
+    public void test35() {
+        AppConfig ac = appConfigService.loadOne();
+        System.out.println(ac.getAppName());
+        System.out.println(ac.getAdminEmail());
+    }
 
     @Test
     public void test34() {
@@ -305,50 +321,6 @@ public class NormalTest {
     public void test09() {
         System.out.println(CommonTools.keep2Point(33d/10));
         System.out.println(CommonTools.daysOfTwo("2017-03-09", "2017-03-18"));
-    }
-
-    @Test
-    public void test10() {
-        String str = "{\n" +
-                "  \"errcode\": 0,\n" +
-                "  \"data\": {\n" +
-                "    \"totalcount\": 16,\n" +
-                "    \"pageindex\": 1,\n" +
-                "    \"pagecount\": 8,\n" +
-                "    \"records\": [\n" +
-                "      {\n" +
-                "        \"shop_id\": 429620,\n" +
-                "        \"shop_name\": \"南山店\",\n" +
-                "        \"ssid\": \"WX123\",\n" +
-                "        \"ssid_list\": [\n" +
-                "          \"WX123\",\n" +
-                "          \"WX456\"\n" +
-                "        ],\n" +
-                "        \"protocol_type\": 4,\n" +
-                "        \"sid\": \"\",\n" +
-                "        \"poi_id\":\"285633617\"\n" +
-                "      },\n" +
-                "      {\n" +
-                "        \"shop_id\": 7921527,\n" +
-                "        \"shop_name\": \"宝安店\",\n" +
-                "        \"ssid\": \"\",\n" +
-                "        \"ssid_list\": [],\n" +
-                "        \"protocol_type\": 0,\n" +
-                "        \"sid\": \"\",\n" +
-                "        \"poi_id\":\"285623614\"\n" +
-                "      }\n" +
-                "    ]\n" +
-                "  }\n" +
-                "}";
-
-        JSONObject jsonObj = new JSONObject(str);
-        JSONObject data = jsonObj.getJSONObject("data");
-        System.out.println(data.getInt("totalcount"));
-        JSONArray array = data.getJSONArray("records");
-        for(int i=0;i<array.length();i++) {
-            JSONObject single = array.getJSONObject(i);
-            System.out.println("single===="+single.getString("shop_name")+"===="+single.getInt("shop_id"));
-        }
     }
 
     @Test

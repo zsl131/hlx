@@ -12,27 +12,44 @@ import java.io.*;
 @Component
 public class ClientFileTools {
 
+    //汉丽轩的sn
+    public static final String HLX_SN = "hlx";
+
     private static final String GET_FILE = "client-get.txt";
     private static final String CONF_FILE = "client-config.txt";
 
     @Autowired
     private ConfigTools configTools;
 
-    private File getConfigFile() {
-        return getFile(CONF_FILE);
+    private File getConfigFile(String storeSn) {
+        return getFile(storeSn, CONF_FILE);
     }
 
-    private File getChangeFile() {
-        return getFile(GET_FILE);
+    private File getChangeFile(String storeSn) {
+        return getFile(storeSn, GET_FILE);
     }
 
+    /**
+     * 默认是汉丽轩
+     */
     public void setConfigContext(String content) {
-        setFileContext(getConfigFile(), content);
+        setConfigContext(HLX_SN, content);
     }
 
+    /**
+     * 默认是汉丽轩
+     */
     public void setChangeContext(String content, boolean isAppend) {
+        setChangeContext(HLX_SN, content, isAppend);
+    }
+
+    public void setConfigContext(String storeSn, String content) {
+        setFileContext(getConfigFile(storeSn), content);
+    }
+
+    public void setChangeContext(String storeSn, String content, boolean isAppend) {
         if(isAppend) { //如果是追加则需要修改里面的内容
-            String con = getChangeContext();
+            String con = getChangeContext(storeSn);
             if(con!=null && !"".equals(con.trim())) {
                 int minus =2;
                 if(con.endsWith("\n")) {minus+=1;}
@@ -40,27 +57,42 @@ public class ClientFileTools {
                 content = con.substring(0, con.length() - minus) + "," + content.replace(temp, "");
             }
         }
-        setFileContext(getChangeFile(), content);
+        setFileContext(getChangeFile(storeSn), content);
     }
 
-    public String getConfigContext() {
-        return getFileContext(getConfigFile());
+    /**
+     * 默认是汉丽轩
+     * @return
+     */
+    /*public String getConfigContext() {
+        return getConfigContext(HLX_SN);
+    }*/
+
+    /**
+     * 默认是汉丽轩
+     */
+    /*public String getChangeContext() {
+        return getChangeContext(HLX_SN);
+    }*/
+
+    public String getConfigContext(String storeSn) {
+        return getFileContext(getConfigFile(storeSn));
     }
 
-    public String getChangeContext() {
-        return getFileContext(getChangeFile());
+    public String getChangeContext(String storeSn) {
+        return getFileContext(getChangeFile(storeSn));
     }
 
-    private File getFile(String fileName) {
-        File file = new File(configTools.getUploadPath("client")+fileName);
-        if(!file.exists()) {createFile(fileName);}
+    private File getFile(String storeSn, String fileName) {
+        File file = new File(configTools.getFilePath("client"+File.separator+storeSn)+fileName);
+        if(!file.exists()) {createFile(file);}
         return file;
     }
 
-    private void createFile(String fileName) {
+    private void createFile(File file) {
         BufferedWriter bw = null;
         try {
-            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8"));
+            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
             bw.write("");
             bw.flush();
             bw.close();

@@ -32,7 +32,7 @@ public class QrTools {
     public String genUserQr(String value, String headimg) {
         value = USER_TYPE+value;
         String picPath = genQr(value, "user");
-        PictureTools.markImageByUrl(headimg, configTools.getUploadPath()+picPath, configTools.getUploadPath()+picPath);
+        PictureTools.markImageByUrl(headimg, configTools.getFilePath()+picPath, configTools.getFilePath()+picPath);
         return picPath;
     }
 
@@ -67,7 +67,7 @@ public class QrTools {
             // 读取到的数据长度
             int len;
             // 输出的文件流
-            OutputStream os = new FileOutputStream(configTools.getUploadPath("/wxqr/"+path) + value+".jpg");
+            OutputStream os = new FileOutputStream(configTools.getFilePath("/wxqr/"+path) + value+".jpg");
             // 开始读取
             while ((len = is.read(bs)) != -1) {
                 os.write(bs, 0, len);

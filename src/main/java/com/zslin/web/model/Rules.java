@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Rules {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 积分过期天数 */

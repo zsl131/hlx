@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class MemberLevel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 等级 */

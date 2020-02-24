@@ -71,8 +71,8 @@ public class AdminPrizeController {
                 try {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        prize.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        prize.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -113,11 +113,11 @@ public class AdminPrizeController {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
 
-                        File oldFile = new File(configTools.getUploadPath()+p.getPicPath());
+                        File oldFile = new File(configTools.getFilePath()+p.getPicPath());
                         if(oldFile.exists()) {oldFile.delete();}
 
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        p.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        p.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -142,7 +142,7 @@ public class AdminPrizeController {
     String delete(@PathVariable Integer id) {
         try {
             Prize p = prizeService.findOne(id);
-            File oldFile = new File(configTools.getUploadPath()+p.getPicPath());
+            File oldFile = new File(configTools.getFilePath()+p.getPicPath());
             if(oldFile.exists()) {oldFile.delete();}
 
             prizeService.delete(p);

@@ -9,6 +9,10 @@ import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.client.tools.ClientFileTools;
+import com.zslin.client.tools.ClientJsonTools;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.web.model.Category;
 import com.zslin.web.model.Food;
 import com.zslin.web.service.ICategoryService;
@@ -25,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,7 +38,7 @@ import java.util.UUID;
  */
 @Controller
 @RequestMapping(value = "admin/food")
-@AdminAuth(name = "食品管理", psn = "应用管理", orderNum = 9, porderNum = 1, pentity = 0, icon = "fa fa-cutlery")
+@AdminAuth(name = "食品管理", psn = "多店管理", orderNum = 9, porderNum = 1, pentity = 0, icon = "fa fa-cutlery")
 public class AdminFoodController {
 
     @Autowired
@@ -45,16 +50,30 @@ public class AdminFoodController {
     @Autowired
     private ConfigTools configTools;
 
+    @Autowired
+    private ClientFileTools clientFileTools;
+
+    @Autowired
+    private IStoreDao storeDao;
+
     private static final String PATH_PRE = "food";
 
     @GetMapping(value = "list")
     @AdminAuth(name = "食品管理", type = "1", orderNum = 1, icon = "fa fa-cutlery")
     public String list(Model model, Integer page, HttpServletRequest request) {
-        Page<Food> datas = foodService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
+        ParamFilterUtil pfu = ParamFilterUtil.getInstance();
+        Page<Food> datas = foodService.findAll(pfu.buildSearch(model, request),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("orderNo")));
         model.addAttribute("datas", datas);
-        List<Category> cateList = categoryService.findAll();
+        List<Category> cateList = new ArrayList<>();
+        Integer storeId = pfu.getIntegerParam("storeId", request);
+        if(storeId!=null && storeId>0) {
+            cateList = categoryService.findByStoreId(storeId);
+        }
+
         model.addAttribute("cateList", cateList);
+        List<Store> storeList = storeDao.findAll();
+        model.addAttribute("storeList", storeList);
         return "admin/food/list";
     }
 
@@ -63,8 +82,11 @@ public class AdminFoodController {
     @RequestMapping(value="add", method= RequestMethod.GET)
     public String add(Model model, HttpServletRequest request) {
         model.addAttribute("food", new Food());
-        List<Category> cateList = categoryService.findAll();
-        model.addAttribute("cateList", cateList);
+//        List<Category> cateList = categoryService.findAll();
+//        model.addAttribute("cateList", cateList);
+
+        List<Store> storeList = storeDao.findAll();
+        model.addAttribute("storeList", storeList);
         return "admin/food/add";
     }
 
@@ -77,8 +99,8 @@ public class AdminFoodController {
                 try {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        food.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        food.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -92,8 +114,10 @@ public class AdminFoodController {
                 }
             }
             foodService.save(food);
+
+            send2Client(food, "save");
         }
-        return "redirect:/admin/food/list";
+        return "redirect:/admin/food/list?filter_storeId=eq-"+food.getStoreId();
     }
 
     @Token(flag= Token.READY)
@@ -102,7 +126,7 @@ public class AdminFoodController {
     public String update(Model model, @PathVariable Integer id, HttpServletRequest request) {
         Food f = foodService.findOne(id);
         model.addAttribute("food", f);
-        List<Category> cateList = categoryService.findAll();
+        List<Category> cateList = categoryService.findByStoreId(f.getStoreId());
         model.addAttribute("cateList", cateList);
         return "admin/food/update";
     }
@@ -120,11 +144,11 @@ public class AdminFoodController {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
 
-                        File oldFile = new File(configTools.getUploadPath()+f.getPicPath());
+                        File oldFile = new File(configTools.getFilePath()+f.getPicPath());
                         if(oldFile.exists()) {oldFile.delete();}
 
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        f.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        f.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -139,6 +163,8 @@ public class AdminFoodController {
             }
 
             foodService.save(f);
+
+            send2Client(f, "save");
         }
         return "redirect:/admin/food/list";
     }
@@ -149,13 +175,19 @@ public class AdminFoodController {
     String delete(@PathVariable Integer id) {
         try {
             Food f = foodService.findOne(id);
-            File oldFile = new File(configTools.getUploadPath()+f.getPicPath());
+            File oldFile = new File(configTools.getFilePath()+f.getPicPath());
             if(oldFile.exists()) {oldFile.delete();}
 
             foodService.delete(f);
+            send2Client(f, "delete");
             return "1";
         } catch (Exception e) {
             return "0";
         }
+    }
+
+    private void send2Client(Food food, String action) {
+        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildFood(food, action));
+        clientFileTools.setChangeContext(food.getStoreSn(), content, true);
     }
 }

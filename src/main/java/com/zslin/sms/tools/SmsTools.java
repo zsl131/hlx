@@ -98,7 +98,8 @@ public class SmsTools {
         if("0".equals(err)) {
             return Integer.parseInt(JsonTools.getJsonParam(res, "res"));
         } else {
-            throw new SystemException(err, JsonTools.getJsonParam(res, "msg"));
+            return -99999; //表示出错
+//            throw new SystemException(err, JsonTools.getJsonParam(res, "msg"));
         }
     }
 

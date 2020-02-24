@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class BuffetOrderDetail {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 所属订单Id */

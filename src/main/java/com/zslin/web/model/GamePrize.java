@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class GamePrize {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 游戏名称，用于分批次显示 */

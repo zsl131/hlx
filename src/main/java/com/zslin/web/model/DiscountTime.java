@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class DiscountTime {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 开始时间点，如：1700 */

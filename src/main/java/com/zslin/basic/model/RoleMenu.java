@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class RoleMenu {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 角色Id */

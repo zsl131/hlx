@@ -22,6 +22,29 @@ public class ParamFilterUtil<T> {
         return new ParamFilterUtil();
     }
 
+    public String getStringParam(String fieldName, HttpServletRequest request) {
+        String res = request.getParameter("filter_"+fieldName);
+        return getValue(res);
+    }
+
+    public Integer getIntegerParam(String fieldName, HttpServletRequest request) {
+        try {
+            String val = getStringParam(fieldName, request);
+            return Integer.parseInt(val);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private String getValue(String value) {
+        try {
+            String [] array = value.split("-");
+            return array[1];
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public Specification<T> buildSearch(Model model, HttpServletRequest request, SpecificationOperator... ops) {
         Map<String, Object> args = new HashMap<>();
         Map<String, String[]> paramMap = request.getParameterMap();

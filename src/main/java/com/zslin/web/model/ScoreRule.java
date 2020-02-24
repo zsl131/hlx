@@ -30,7 +30,7 @@ public class ScoreRule {
     public static final String EXCELLET_COMMENT = "EXCELLET-COMMENT";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     //编码
     private String code;

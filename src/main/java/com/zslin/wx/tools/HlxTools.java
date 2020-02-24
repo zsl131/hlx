@@ -4,6 +4,7 @@ import com.zslin.basic.tools.DateTools;
 import com.zslin.card.dto.CardCheckDto;
 import com.zslin.card.service.ICardCheckService;
 import com.zslin.web.model.BuffetOrder;
+import com.zslin.web.model.Income;
 import com.zslin.web.service.IBuffetOrderService;
 import com.zslin.web.service.IIncomeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,6 +127,27 @@ public class HlxTools {
 
     /**
      * 查询营业信息
+     * @param day 月份，如：20200122
+     * @param spe 分隔
+     * @return
+     */
+    public String queryFinanceByDay(String day, String spe) {
+        if(day!=null && day.length()==8) {
+            StringBuffer sb = new StringBuffer();
+
+            Income income = incomeService.findByComeDay(day);
+            if(income==null) {return "【"+day+"】未登记";}
+
+            sb.append("查询日期：").append(day).append(spe)
+                .append("消费人次：").append(income.getPeopleCount()).append(" 人").append(spe)
+                .append("当天营收：").append(formatValue(income.getTotalMoney(), 2)).append(" 元").append(spe);
+            return sb.toString();
+        }
+        return "查询失败，数据格式出错【yyyyMM】";
+    }
+
+    /**
+     * 查询营业信息
      * @param month 月份，如：201805
      * @param spe 分隔
      * @return
@@ -160,6 +182,10 @@ public class HlxTools {
 
     public String queryFinance(String content) {
         return queryFinance(content, "\n");
+    }
+
+    public String queryFinanceByDay(String content) {
+        return queryFinanceByDay(content, "\n");
     }
 
     public String queryCardCheck(String content) {

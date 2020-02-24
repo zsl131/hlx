@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Price {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 早餐价格，单位：元 */

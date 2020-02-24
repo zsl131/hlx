@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/2 8:59.
  */
-@Component
+@Component(value = "moneyTools")
 public class MoneyTools {
 
     @Autowired
@@ -41,7 +41,12 @@ public class MoneyTools {
      * @param money 操作金额，单位分
      * @param type 操作原因
      */
-    public void processScoreByPhone(String phone, Integer money, String type) {
+    /*public void processScoreByPhone(String phone, Integer money, String type) {
+        processScoreByPhone(phone, money, type, type);
+    }*/
+
+
+    public void processScoreByPhoneRabbit(String phone, Integer money, String type) {
         processScoreByPhone(phone, money, type, type);
     }
 

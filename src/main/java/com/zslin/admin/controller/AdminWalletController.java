@@ -9,6 +9,7 @@ import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.client.service.IMemberService;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.ClientJsonTools;
+import com.zslin.rabbit.RabbitUpdateTools;
 import com.zslin.web.model.Wallet;
 import com.zslin.web.model.WalletDetail;
 import com.zslin.web.service.IWalletService;
@@ -50,6 +51,9 @@ public class AdminWalletController {
 
     @Autowired
     private EventTools eventTools;
+
+    @Autowired
+    private RabbitUpdateTools rabbitUpdateTools;
 
     /**
      * 由于最开始没有设计支付密码，现在新增该功能后需要为每个用户初始化一个密码
@@ -114,7 +118,9 @@ public class AdminWalletController {
         try {
             //type-1-积分；type-2-现金
             if("2".equals(type)) {
-                moneyTools.processScoreByPhone(phone, (int) (amount * 100), reason);
+                rabbitUpdateTools.updateData("moneyTools", "processScoreByPhoneRabbit",
+                        phone, (int) (amount * 100), reason);
+//                moneyTools.processScoreByPhone(phone, (int) (amount * 100), reason);
                 sendWalletDetail2Client(phone, (int) (amount * 100));
             } else if("1".equals(type)) { //如果是对积分的操作，页面传过来的phone应该为openid
                 scoreTools.processScoreByAmount(phone, (int) (amount*1), reason);

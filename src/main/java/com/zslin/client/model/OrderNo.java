@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class OrderNo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 日期，yyyyMMdd */

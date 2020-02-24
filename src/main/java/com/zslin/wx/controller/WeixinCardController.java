@@ -172,7 +172,7 @@ public class WeixinCardController {
         CardApply ca = cardApplyService.findByCardNo(cardNo);
         if(ca==null) {return "无数据";} else if(!"0".equals(ca.getStatus())) {
             return "不可再次审核";
-        } else if(a.getPhone().equalsIgnoreCase(ca.getApplyKey())) {
+        } else if(a.getPhone().equalsIgnoreCase(ca.getApplyKey()) && !AccountTools.ADMIN.equals(a.getType())) {
             return "不可审核自己的申请";
         } else {
             ca.setStatus(status);

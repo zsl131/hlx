@@ -117,9 +117,11 @@ public class DatasTools {
         } else if("hlx".equals(content.toLowerCase())) { //关注情况
             eventTools.eventRemind(openid, "查询提醒", "关注情况如下", DateTools.date2Str(new Date(), "yyyy-MM-dd"), accountTools.buildAccountStr(), "");
             return "";
-        } else if(isPrizeCode(content.trim())) { //如果是中奖代码
-            gamePrizeTools.processMessage(openid, content.trim());
-            return WeixinXmlTools.createTextXml(openid, builderName, "已成功提交兑奖码，请注意查收对奖信息！\n感谢您的参与！");
+        } else if(isPrizeCode(content.trim())) { //如果是查询当天营收
+//            gamePrizeTools.processMessage(openid, content.trim());
+//            return WeixinXmlTools.createTextXml(openid, builderName, "已成功提交兑奖码，请注意查收对奖信息！\n感谢您的参与！");
+            String res = hlxTools.queryFinanceByDay(content.trim());
+            return WeixinXmlTools.createTextXml(openid, builderName, res);
         } else if(isSetDiscountDay(content.trim(), openid)) { //设置是否为折扣日
             String res = discountDayTools.setDiscountDay(content.trim());//
             return WeixinXmlTools.createTextXml(openid, builderName, res);
@@ -253,7 +255,7 @@ public class DatasTools {
         f.setType("image");
         f.setPicUrl(picPath);
         f.setMediaId(mediaId);
-        f.setFilePath(exchangeTools.saveMedia(mediaId, configTools.getUploadPath("feedback/")+ UUID.randomUUID().toString()).replace(configTools.getUploadPath(), "\\"));
+        f.setFilePath(exchangeTools.saveMedia(mediaId, configTools.getFilePath("feedback/")+ UUID.randomUUID().toString()).replace(configTools.getFilePath(), "\\"));
         Account a = accountService.findByOpenid(openid);
         if(a!=null) {
             f.setAccountId(a.getId());

@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Gallery {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "pic_path")

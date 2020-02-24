@@ -27,4 +27,8 @@ public interface BaseRepository<T, ID extends Serializable> extends JpaRepositor
     void updateByHql(String hql, Object... args);
 
     Object queryByHql(String hql, Object... args);
+
+    T findOne(Integer id);
+
+    void delete(Integer id);
 }

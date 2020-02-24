@@ -1,6 +1,7 @@
 package com.zslin.client.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/10 10:18.
@@ -8,10 +9,10 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "c_client_config")
-public class ClientConfig {
+public class ClientConfig implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 公司简称 */

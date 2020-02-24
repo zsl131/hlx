@@ -73,8 +73,8 @@ public class AdminDeviceAdvertController {
                 try {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        deviceAdvert.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        deviceAdvert.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -114,11 +114,11 @@ public class AdminDeviceAdvertController {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
 
-                        File oldFile = new File(configTools.getUploadPath()+d.getPicPath());
+                        File oldFile = new File(configTools.getFilePath()+d.getPicPath());
                         if(oldFile.exists()) {oldFile.delete();}
 
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
-                        d.setPicPath(outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + File.separator + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        d.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), File.separator));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -144,7 +144,7 @@ public class AdminDeviceAdvertController {
         try {
 
             DeviceAdvert d = deviceAdvertService.findOne(id);
-            File oldFile = new File(configTools.getUploadPath()+d.getPicPath());
+            File oldFile = new File(configTools.getFilePath()+d.getPicPath());
             if(oldFile.exists()) {oldFile.delete();}
 
             deviceAdvertService.delete(id);
@@ -160,7 +160,7 @@ public class AdminDeviceAdvertController {
     String send() {
         try {
             List<DeviceAdvert> list = deviceAdvertService.findUse();
-            String content = GetJsonTools.buildDataJson(GetJsonTools.buildAdvertJson(list, configTools.getUploadPath()));
+            String content = GetJsonTools.buildDataJson(GetJsonTools.buildAdvertJson(list, configTools.getFilePath()));
             kaoqinFileTools.setChangeContext(content, true);
             return "1";
         } catch (Exception e) {

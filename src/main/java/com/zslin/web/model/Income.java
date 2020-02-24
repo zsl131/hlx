@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Income {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 收入日期，格式yyyyMMdd */
@@ -70,9 +70,20 @@ public class Income {
     //收入类别，1-营业收入；2-其他收入
     private String type="1";
 
+    @Column(name = "people_count")
+    private Integer peopleCount;
+
     /** 来源于客户端 */
     @Column(name = "from_client")
     private String fromClient;
+
+    public Integer getPeopleCount() {
+        return peopleCount;
+    }
+
+    public void setPeopleCount(Integer peopleCount) {
+        this.peopleCount = peopleCount;
+    }
 
     public String getFromClient() {
         return fromClient;

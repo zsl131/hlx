@@ -9,8 +9,8 @@
 		<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
 		<script src="/js/jedate/jquery.jedate.min.js"></script>
 		<link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
-		<script src="/admin/bus/my-date.js"></script>
-		<script src="/admin/bus/admin-food.js"></script>
+		<script src="/back-admin/bus/my-date.js"></script>
+		<script src="/back-admin/bus/admin-food.js"></script>
 		<title>添加食品</title>
 	</head>
 	<body>
@@ -20,13 +20,25 @@
 				<div th:replace="admin/food/nav :: content" th:remove="tag"></div>
 			</div>
 
-			<form method="POST" th:object="${food}" id="dataForm" enctype="multipart/form-data">
+			<form method="POST" th:object="${food}" onsubmit="return checkData()" id="dataForm" enctype="multipart/form-data">
+				<input name="storeName" type="hidden"/>
+				<input name="storeSn" type="hidden"/>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">所属店铺1：</div>
+						<select name="storeId" class="form-control">
+							<option value="-1">选择所属店铺</option>
+							<option th:each="store:${storeList}" th:attr="sn=${store.sn}" th:value="${store.id}" th:text="${store.name}"></option>
+						</select>
+					</div>
+				</div>
+
 				<input name="cateName" type="hidden"/>
 				<div class="form-group form-group-lg">
 					<div class="input-group">
 						<div class="input-group-addon">所在分类：</div>
 						<select name="cateId" class="form-control">
-							<option th:each="cate:${cateList}" th:value="${cate.id}" th:text="${cate.name}"></option>
+							<!--<option th:each="cate:${cateList}" th:value="${cate.id}" th:text="${cate.name}"></option>-->
 						</select>
 					</div>
 				</div>
@@ -49,14 +61,14 @@
 					</div>
 				</div>
 
-				<input type="hidden" name="token" value="${session.token}"/>
+				<input type="hidden" name="token" th:value="${session.token}"/>
 				<button type="submit" class="btn btn-primary">确定提交</button>
 			</form>
 
 			<script type="text/javascript">
 				jQuery(function($) {
 					$('#dataForm').bootstrapValidator({
-		//		        live: 'disabled',
+				        live: 'disabled',
 						message: '验证不通过',
 						feedbackIcons: {
 							valid: 'glyphicon glyphicon-ok',

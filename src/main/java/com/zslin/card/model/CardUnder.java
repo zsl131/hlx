@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class CardUnder {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 卡券类型 */

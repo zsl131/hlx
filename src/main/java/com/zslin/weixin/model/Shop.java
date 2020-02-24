@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Shop {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 对应微信门店的ShopId */

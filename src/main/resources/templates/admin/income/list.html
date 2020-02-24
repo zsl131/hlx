@@ -39,6 +39,7 @@
 						<th>午餐券</th>
 						<th>晚餐券</th>
 						<th>10元券</th>
+						<th>人数</th>
 						<th>小计</th>
 						<th>操作</th>
 					</tr>
@@ -63,6 +64,7 @@
 					<td th:text="${obj.noonTicket}"></td>
 					<td th:text="${obj.nightTicket}"></td>
 					<td th:text="${obj.tenTicket}"></td>
+					<td th:text="${obj.peopleCount}" style="color:#F00"></td>
 					<td th:text="|${#numbers.formatDecimal(obj.totalMoney, 0, 2)} 元|" style="color:#F00"></td>
 					<td>
 						<div class="action-buttons">

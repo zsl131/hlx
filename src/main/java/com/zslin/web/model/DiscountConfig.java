@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class DiscountConfig {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /** 状态，0-停用；1-启用 */
