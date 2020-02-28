@@ -45,7 +45,9 @@
 					<td>
 						<a th:if="${obj.headPic ne NULL and obj.headPic ne ''}" th:href="${obj.headPic}" target="_blank"><img th:src="${obj.headPic}" style="width:120px"/></a>
 					</td>
-					<td><span th:text="${obj.name}" th:remove="tag"></span><span th:if="${obj.isCashier eq '1'}">（收银员）</span></td>
+					<td>
+						<p><a th:href="'/admin/worker/list?filter_storeId=eq-'+${obj.storeId}" th:text="${obj.storeName}"></a></p>
+						<span th:text="${obj.name}" th:remove="tag"></span><span th:if="${obj.isCashier eq '1'}">（收银员）</span></td>
 					<td>
 						<span th:if="${obj.openid eq NULL or obj.openid eq ''}" style="color:#F00;">未绑定</span>
 						<span th:if="${obj.openid ne NULL and obj.openid ne ''}">

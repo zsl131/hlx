@@ -11,6 +11,7 @@ import com.zslin.client.model.Restday;
 import com.zslin.kaoqin.model.Worker;
 import com.zslin.meituan.model.MeituanConfig;
 import com.zslin.meituan.model.MeituanShop;
+import com.zslin.multi.model.DiningTable;
 import com.zslin.web.dto.AdminPhoneDto;
 import com.zslin.web.model.*;
 
@@ -172,6 +173,10 @@ public class ClientJsonTools {
     }
     public static String buildCategory(Category category, String action) {
         JsonDto jd = new JsonDto("category", action, category.getId(), category);
+        return JSON.toJSONString(jd);
+    }
+    public static String buildDiningTable(DiningTable table, String action) {
+        JsonDto jd = new JsonDto("table", action, table.getId(), table);
         return JSON.toJSONString(jd);
     }
     /** 以上是多店管理的 **/

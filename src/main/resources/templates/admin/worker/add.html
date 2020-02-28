@@ -8,6 +8,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
 		<script type="text/javascript" src="/back-admin/bus/admin-worker.js"></script>
+		<script type="text/javascript" src="/back-admin/bus/admin-select-store.js"></script>
 		<title>添加员工信息</title>
 	</head>
 	<body>
@@ -16,7 +17,18 @@
 				<h3><i class="fa fa-plus"></i>&nbsp;添加员工信息</h3>
 				<div th:replace="admin/worker/nav :: content" th:remove="tag"></div>
 			</div>
-			<form method="POST" th:object="${worker}" id="dataForm" enctype="multipart/form-data">
+			<form method="POST" th:object="${worker}" id="dataForm" onsubmit="return checkStoreData()" enctype="multipart/form-data">
+				<input name="storeName" type="hidden"/>
+				<input name="storeSn" type="hidden"/>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">所属店铺：</div>
+						<select name="storeId" class="form-control store-select">
+							<option value="-1">选择所属店铺</option>
+							<option th:each="store:${storeList}" th:attr="sn=${store.sn}" th:value="${store.id}" th:text="${store.name}"></option>
+						</select>
+					</div>
+				</div>
 				<div class="form-group form-group-lg">
 					<div class="input-group">
 						<div class="input-group-addon">姓名：</div>
@@ -86,7 +98,7 @@
 			<script type="text/javascript">
 				jQuery(function($) {
 					$('#dataForm').bootstrapValidator({
-		//		        live: 'disabled',
+				        live: 'disabled',
 						message: '验证不通过',
 						feedbackIcons: {
 							valid: 'glyphicon glyphicon-ok',

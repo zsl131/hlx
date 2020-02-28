@@ -55,3 +55,14 @@ body, html {
 #dataForm {
     padding-top:30px;
 }
+
+
+.red {
+    color:#F00;
+}
+.blue {
+    color:#00f;
+}
+.dark {
+    color:#999;
+}

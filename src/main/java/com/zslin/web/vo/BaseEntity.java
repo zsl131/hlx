@@ -1,5 +1,7 @@
 package com.zslin.web.vo;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -8,6 +10,7 @@ import java.util.Date;
  * 基础基类,所有的vo都继承于该类,里面放了一些共有属性
  */
 @MappedSuperclass
+@Data
 public class BaseEntity {
 
     @Id
@@ -33,60 +36,4 @@ public class BaseEntity {
     private String reserve1;
 
     private String reserve2;
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Long getCreateLong() {
-        return createLong;
-    }
-
-    public void setCreateLong(Long createLong) {
-        this.createLong = createLong;
-    }
-
-    public String getCreateDay() {
-        return createDay;
-    }
-
-    public void setCreateDay(String createDay) {
-        this.createDay = createDay;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getReserve1() {
-        return reserve1;
-    }
-
-    public String getReserve2() {
-        return reserve2;
-    }
-
-    public void setReserve1(String reserve1) {
-        this.reserve1 = reserve1;
-    }
-
-    public void setReserve2(String reserve2) {
-        this.reserve2 = reserve2;
-    }
 }

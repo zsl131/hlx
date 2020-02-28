@@ -54,14 +54,14 @@ public class KaoqinFileTools {
 
     private File getFile(String fileName) {
         File file = new File(configTools.getFilePath()+fileName);
-        if(!file.exists()) {createFile(fileName);}
+        if(!file.exists()) {createFile(file);}
         return file;
     }
 
-    private void createFile(String fileName) {
+    private void createFile(File file) {
         BufferedWriter bw = null;
         try {
-            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8"));
+            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
             bw.write("");
             bw.flush();
             bw.close();

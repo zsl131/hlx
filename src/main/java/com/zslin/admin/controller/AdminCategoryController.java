@@ -168,7 +168,9 @@ public class AdminCategoryController {
     }
 
     private void send2Client(Category category, String action) {
-        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildCategory(category, action));
-        clientFileTools.setChangeContext(category.getStoreSn(), content, true);
+        if(!"hlx".equals(category.getStoreSn())) { //如果不是hlx则需要传至客户端
+            String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildCategory(category, action));
+            clientFileTools.setChangeContext(category.getStoreSn(), content, true);
+        }
     }
 }

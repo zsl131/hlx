@@ -44,10 +44,12 @@ public class ClientFileTools {
     }
 
     public void setConfigContext(String storeSn, String content) {
+        if(storeSn==null || "".equals(storeSn)) {storeSn = "hlx";} //默认为hlx
         setFileContext(getConfigFile(storeSn), content);
     }
 
     public void setChangeContext(String storeSn, String content, boolean isAppend) {
+        if(storeSn==null || "".equals(storeSn)) {storeSn = "hlx";}
         if(isAppend) { //如果是追加则需要修改里面的内容
             String con = getChangeContext(storeSn);
             if(con!=null && !"".equals(con.trim())) {

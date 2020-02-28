@@ -1,5 +1,7 @@
 package com.zslin.kaoqin.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 /**
@@ -8,6 +10,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "k_worker")
+@Data
 public class Worker {
 
     @Id
@@ -71,155 +74,12 @@ public class Worker {
     @Column(name = "can_send_card")
     private String canSendCard = "0";
 
-    public String getCanSendCard() {
-        return canSendCard;
-    }
+    @Column(name = "store_id")
+    private Integer storeId;
 
-    public void setCanSendCard(String canSendCard) {
-        this.canSendCard = canSendCard;
-    }
+    @Column(name = "store_name")
+    private String storeName;
 
-    public String getOperator() {
-        return operator;
-    }
-
-    public void setOperator(String operator) {
-        this.operator = operator;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getHeadPic() {
-        return headPic;
-    }
-
-    public void setHeadPic(String headPic) {
-        this.headPic = headPic;
-    }
-
-    public String getIsCashier() {
-        return isCashier;
-    }
-
-    public void setIsCashier(String isCashier) {
-        this.isCashier = isCashier;
-    }
-
-    public String getIdentity() {
-        return identity;
-    }
-
-    public void setIdentity(String identity) {
-        this.identity = identity;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getOpenid() {
-        return openid;
-    }
-
-    public void setOpenid(String openid) {
-        this.openid = openid;
-    }
-
-    public Integer getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Integer accountId) {
-        this.accountId = accountId;
-    }
-
-    public String getHeadimgurl() {
-        return headimgurl;
-    }
-
-    public void setHeadimgurl(String headimgurl) {
-        this.headimgurl = headimgurl;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Integer getDepId() {
-        return depId;
-    }
-
-    public void setDepId(Integer depId) {
-        this.depId = depId;
-    }
-
-    public Integer getAuth() {
-        return auth;
-    }
-
-    public void setAuth(Integer auth) {
-        this.auth = auth;
-    }
-
-    public String getFinger1() {
-        return finger1;
-    }
-
-    public void setFinger1(String finger1) {
-        this.finger1 = finger1;
-    }
-
-    public String getFinger2() {
-        return finger2;
-    }
-
-    public void setFinger2(String finger2) {
-        this.finger2 = finger2;
-    }
-
-    public String getFace1() {
-        return face1;
-    }
-
-    public void setFace1(String face1) {
-        this.face1 = face1;
-    }
-
-    public String getFace2() {
-        return face2;
-    }
-
-    public void setFace2(String face2) {
-        this.face2 = face2;
-    }
+    @Column(name = "store_sn")
+    private String storeSn;
 }

@@ -38,7 +38,7 @@ public class ClientController {
 
     @PostMapping(value = "upload")
     public void upload(String token, @RequestBody String json) {
-//        System.out.println("========"+token);
+        System.out.println("==ClientController.upload======"+token);
 //        System.out.println("========json:"+json);
 
         clientPostHandler.handler(json);
@@ -53,7 +53,7 @@ public class ClientController {
     @GetMapping(value = "download")
     public String download(String token, HttpServletRequest request) {
 
-        System.out.println("-------token:::"+token);
+        System.out.println("--ClientController.download-----token:::"+token);
         String json = clientFileTools.getChangeContext(token);
         if(json==null || "".equals(json.trim())) {
             json = clientFileTools.getConfigContext(token);

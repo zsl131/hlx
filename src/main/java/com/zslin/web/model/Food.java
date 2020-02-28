@@ -58,4 +58,18 @@ public class Food extends BaseEntity {
     /** 单位名称 */
     @Column(name = "unit_name")
     private String unitName;
+
+    private Float price;
+
+    /** 售卖类型，1-堂食；2-外卖；3-均可 */
+    @Column(name = "sale_mode")
+    private String saleMode="3";
+
+    /** 编号 */
+    private String sn;
+
+    /** 名称字母 */
+    private String nameLetter;
+
+    private Integer snNo;
 }

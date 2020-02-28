@@ -21,4 +21,7 @@ public interface IFoodService extends BaseRepository<Food, Integer>, JpaSpecific
     @Modifying
     @Transactional
     void plusCommentCount(Integer id);
+
+    @Query("SELECT MAX(f.snNo) FROM Food f WHERE f.storeId=?1")
+    Integer maxSnNo(Integer storeId);
 }

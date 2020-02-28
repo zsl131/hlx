@@ -15,6 +15,8 @@ import com.zslin.kaoqin.service.IWorkdayService;
 import com.zslin.kaoqin.service.IWorkerService;
 import com.zslin.kaoqin.tools.GetJsonTools;
 import com.zslin.kaoqin.tools.KaoqinFileTools;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.web.model.Account;
 import com.zslin.web.service.IAccountService;
 import com.zslin.wx.tools.EventTools;
@@ -31,6 +33,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -38,7 +41,7 @@ import java.util.UUID;
  */
 @Controller
 @RequestMapping(value="admin/worker")
-@AdminAuth(name="员工信息维护", orderNum=10, psn="考勤管理", pentity=0, porderNum=20)
+@AdminAuth(name="员工信息维护", orderNum=10, psn="多店管理", pentity=0, porderNum=20)
 public class AdminWorkerController {
 
     @Autowired
@@ -59,6 +62,9 @@ public class AdminWorkerController {
     @Autowired
     private IWorkdayService workdayService;
 
+    @Autowired
+    private IStoreDao storeDao;
+
     private static final String PATH_PRE = "worker/";
 
     @Autowired
@@ -70,6 +76,9 @@ public class AdminWorkerController {
         Page<Worker> datas = workerService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("status_a","id_d")));
         model.addAttribute("datas", datas);
+
+        List<Store> storeList = storeDao.findAll();
+        model.addAttribute("storeList", storeList);
         return "admin/worker/list";
     }
 
@@ -78,6 +87,9 @@ public class AdminWorkerController {
     @RequestMapping(value="add", method= RequestMethod.GET)
     public String add(Model model, HttpServletRequest request) {
         model.addAttribute("worker", new Worker());
+
+        List<Store> storeList = storeDao.findAll();
+        model.addAttribute("storeList", storeList);
         return "admin/worker/add";
     }
 
@@ -100,9 +112,9 @@ public class AdminWorkerController {
                 try {
                     String fileName = files[0].getOriginalFilename();
                     if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
-                        File outFile = new File(configTools.getFilePath(PATH_PRE) + "/" + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
 
-                        worker.setHeadPic(outFile.getAbsolutePath().replace(configTools.getFilePath(), "\\"));
+                        worker.setHeadPic(outFile.getAbsolutePath().replace(configTools.getFilePath(), "/"));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -117,6 +129,8 @@ public class AdminWorkerController {
             }
 
             bind(worker);
+
+            System.out.println(worker);
 
             workerService.save(worker);
             buildWorkday(worker);
@@ -143,6 +157,9 @@ public class AdminWorkerController {
     public String update(Model model, @PathVariable Integer id, HttpServletRequest request) {
         Worker w = workerService.findOne(id);
         model.addAttribute("worker", w);
+
+        List<Store> storeList = storeDao.findAll();
+        model.addAttribute("storeList", storeList);
         return "admin/worker/update";
     }
 
@@ -157,7 +174,7 @@ public class AdminWorkerController {
                 throw new SystemException("手机号码【"+worker.getPhone()+"】已经存在");
             }
 
-            MyBeanUtils.copyProperties(worker, w, new String[]{"id", "password"});
+            MyBeanUtils.copyProperties(worker, w, "id", "password", "storeId", "storeSn", "storeName");
 
             if(files!=null && files.length>=1) {
                 BufferedOutputStream bw = null;
@@ -168,9 +185,9 @@ public class AdminWorkerController {
                         File oldFile = new File(configTools.getFilePath()+w.getHeadPic());
                         if(oldFile.exists()) {oldFile.delete();}
 
-                        File outFile = new File(configTools.getFilePath(PATH_PRE) + "/" + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+                        File outFile = new File(configTools.getFilePath(PATH_PRE) + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
 
-                        w.setHeadPic(outFile.getAbsolutePath().replace(configTools.getFilePath(), "\\"));
+                        w.setHeadPic(outFile.getAbsolutePath().replace(configTools.getFilePath(), "/"));
                         FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
                     }
                 } catch (IOException e) {
@@ -247,7 +264,7 @@ public class AdminWorkerController {
 
     private void sendWorker2Client(String action, Worker w) {
         String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildWorker(action, w));
-        clientFileTools.setChangeContext(content, true);
+        clientFileTools.setChangeContext(w.getStoreSn(), content, true);
     }
 
     private void sendDelWorker2Device(Integer id) {

@@ -4,10 +4,7 @@ import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.annotations.Token;
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
-import com.zslin.basic.tools.ConfigTools;
-import com.zslin.basic.tools.MyBeanUtils;
-import com.zslin.basic.tools.NormalTools;
-import com.zslin.basic.tools.TokenTools;
+import com.zslin.basic.tools.*;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.ClientJsonTools;
@@ -113,11 +110,29 @@ public class AdminFoodController {
                     }
                 }
             }
+            try {
+                food.setNameLetter(PinyinToolkit.cn2FirstSpell(food.getName()).toUpperCase());
+            } catch (Exception e) {
+            }
+            Integer maxSnNo = foodService.maxSnNo(food.getStoreId());
+            maxSnNo = maxSnNo==null||maxSnNo<0?0:maxSnNo;
+            food.setSnNo(maxSnNo+1);
+            food.setSn(buildSn(maxSnNo+1));
             foodService.save(food);
 
             send2Client(food, "save");
         }
         return "redirect:/admin/food/list?filter_storeId=eq-"+food.getStoreId();
+    }
+
+    private String buildSn(Integer snNo) {
+        String str = snNo + "";
+        StringBuffer sb = new StringBuffer();
+        for(int i = 6-str.length();i>0; i--) {
+            sb.append("0");
+        }
+        sb.append(str);
+        return sb.toString();
     }
 
     @Token(flag= Token.READY)
@@ -136,7 +151,7 @@ public class AdminFoodController {
     public String update(Model model, @PathVariable Integer id, Food food, HttpServletRequest request, @RequestParam("file")MultipartFile[] files) {
         if(TokenTools.isNoRepeat(request)) {
             Food f = foodService.findOne(id);
-            MyBeanUtils.copyProperties(food, f, new String[]{"commentCount", "goodCount"});
+            MyBeanUtils.copyProperties(food, f, "commentCount", "goodCount", "sn", "snNo");
 
             if(files!=null && files.length>=1) {
                 BufferedOutputStream bw = null;
@@ -162,11 +177,23 @@ public class AdminFoodController {
                 }
             }
 
+            try {
+                f.setNameLetter(PinyinToolkit.cn2FirstSpell(f.getName()).toUpperCase());
+            } catch (Exception e) {
+//                e.printStackTrace();
+            }
+
+            if(f.getSn()==null) {
+                Integer maxSnNo = foodService.maxSnNo(f.getStoreId());
+                maxSnNo = maxSnNo==null||maxSnNo<0?0:maxSnNo;
+                f.setSnNo(maxSnNo+1);
+                f.setSn(buildSn(maxSnNo+1));
+            }
             foodService.save(f);
 
             send2Client(f, "save");
         }
-        return "redirect:/admin/food/list";
+        return "redirect:/admin/food/list?filter_storeId=eq-"+food.getStoreId();
     }
 
     @AdminAuth(name="删除食品", orderNum=4, icon = "fa fa-remove")
@@ -187,7 +214,9 @@ public class AdminFoodController {
     }
 
     private void send2Client(Food food, String action) {
-        String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildFood(food, action));
-        clientFileTools.setChangeContext(food.getStoreSn(), content, true);
+        if(!"hlx".equals(food.getStoreSn())) { //如果不是hlx则需要传至客户端
+            String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildFood(food, action));
+            clientFileTools.setChangeContext(food.getStoreSn(), content, true);
+        }
     }
 }

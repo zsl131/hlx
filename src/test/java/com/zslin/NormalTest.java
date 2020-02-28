@@ -84,8 +84,20 @@ public class NormalTest {
 
     @Test
     public void test36() {
-        System.out.println("---------->");
-        System.out.println(smsConfig);
+        System.out.println(buildSn(1));
+        System.out.println(buildSn(8));
+        System.out.println(buildSn(15));
+        System.out.println(buildSn(555));
+    }
+
+    private String buildSn(Integer snNo) {
+        String str = snNo + "";
+        StringBuffer sb = new StringBuffer();
+        for(int i = 6-str.length();i>0; i--) {
+            sb.append("0");
+        }
+        sb.append(str);
+        return sb.toString();
     }
 
     @Test

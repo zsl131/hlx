@@ -34,12 +34,34 @@
 			<div class="input-group">
 				<div class="input-group-addon">食品名称：</div>
 				<input name="name" type="text" class="form-control" id="name" th:value="${food.name}" placeholder="请输入食品名称" />
+
+				<div class="input-group-addon">售卖顾炎武：</div>
+				<div class="form-control">
+					<input type="radio" name="saleMode" value="1" id="saleMode_1" th:checked="${food.saleMode == '1'}?'checked'"/><label for="saleMode_1">堂食</label>
+					<input type="radio" name="saleMode" value="2" id="saleMode_2" th:checked="${food.saleMode == '2'}?'checked'"/><label for="saleMode_2">外卖</label>
+					<input type="radio" name="saleMode" value="3" id="saleMode_3" th:checked="${food.saleMode == '3'}?'checked'"/><label for="saleMode_3">均可</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">单价：</div>
+				<input name="price" type="text" class="form-control" th:value="${food.price}" placeholder="请输入食品单价，元" />
+
+				<div class="input-group-addon">单位：</div>
+				<input name="unitName" type="text" class="form-control" th:value="${food.unitName}" placeholder="请输入单位，如：份" />
 			</div>
 		</div>
 		<div class="form-group form-group-lg">
 			<div class="input-group">
 				<div class="input-group-addon">序号：</div>
 				<input name="orderNo" id="orderNo" type="text" class="form-control" th:value="${food.orderNo}" placeholder="请输入序号，越小越靠前，只能输入整数" />
+
+				<div class="input-group-addon">状态：</div>
+				<div class="form-control">
+					<input type="radio" name="status" value="1" id="status_1" th:checked="${food.status == '1'}?'checked'"/><label for="status_1">可销售</label>
+					<input type="radio" name="status" value="0" id="status_0" th:checked="${food.status == '0'}?'checked'"/><label for="status_0">不可售</label>
+				</div>
 			</div>
 		</div>
 		<div class="form-group form-group-lg">
