@@ -279,6 +279,8 @@ public class ClientSimpleProcessHandler {
         //System.out.println("========="+jsonObj.toString());
         String day = jsonObj.getString("comeDay");
         Float money = Float.parseFloat(jsonObj.get("money").toString());
+        Float extraMoney = 0f;
+        try { extraMoney = Float.parseFloat(jsonObj.getString("extraMoney")); }catch (Exception e) { }
 
         Income income = incomeService.findByComeDay(day);
         if(income==null) {
@@ -292,7 +294,8 @@ public class ClientSimpleProcessHandler {
                 income.setPeopleCount(jsonObj.getInt("peopleCount"));
             } catch (Exception e) {
             }
-            income.setTotalMoney((double) money);
+            income.setTotalMoney((double) (money + extraMoney));
+            income.setOther(extraMoney);
             income.setFromClient("1");
         } else if(income!=null && "1".equalsIgnoreCase(income.getFromClient())) {
             income.setCash(money);

@@ -71,7 +71,7 @@ public class Income {
     private String type="1";
 
     @Column(name = "people_count")
-    private Integer peopleCount;
+    private Integer peopleCount=0;
 
     /** 来源于客户端 */
     @Column(name = "from_client")

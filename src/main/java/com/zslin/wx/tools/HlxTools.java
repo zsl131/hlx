@@ -1,6 +1,7 @@
 package com.zslin.wx.tools;
 
 import com.zslin.basic.tools.DateTools;
+import com.zslin.basic.tools.NormalTools;
 import com.zslin.card.dto.CardCheckDto;
 import com.zslin.card.service.ICardCheckService;
 import com.zslin.web.model.BuffetOrder;
@@ -68,9 +69,18 @@ public class HlxTools {
      */
     public String calDay(int days) {
         String spe = "\\n";
+
+        Integer sum = 0;
+        Income income = incomeService.findByComeDay(NormalTools.curDate("yyyyMMdd"));
+        if(income!=null) { //先获取是否登记
+            sum = income.getPeopleCount();
+        }
+
         String lastDay = getLastDay(0-days);
-        Integer sum = buffetOrderService.sumByDay(lastDay); //消费总数
-        sum = sum==null?0:sum;
+        if(sum==null || sum<=0) {
+            sum = buffetOrderService.sumByDay(lastDay); //消费总人数
+            sum = sum == null ? 0 : sum;
+        }
         List<BuffetOrder> list = buffetOrderService.findMeiTuanByDay(lastDay);
 //        Integer sumMt = buffetOrderService.sumByDay(lastDay, "3"); //美团人数
         Integer sumMt = buildMeituanAmount(list); //美团人数
@@ -140,7 +150,8 @@ public class HlxTools {
 
             sb.append("查询日期：").append(day).append(spe)
                 .append("消费人次：").append(income.getPeopleCount()).append(" 人").append(spe)
-                .append("当天营收：").append(formatValue(income.getTotalMoney(), 2)).append(" 元").append(spe);
+                .append("当天营收：").append(formatValue(income.getCash()*1.0, 2)).append(" 元").append(spe)
+                .append("其他收入：").append(formatValue(income.getOther()*1.0, 2)).append(" 元").append(spe);
             return sb.toString();
         }
         return "查询失败，数据格式出错【yyyyMM】";
@@ -178,6 +189,98 @@ public class HlxTools {
             return sb.toString();
         }
         return "查询失败，数据格式出错【yyyyMM】";
+    }
+
+    /**
+     * 新版查询营业情况
+     * 20200421
+     * @param month 月份，格式：yyyyMM
+     * @param spe 分隔符，如：\n
+     * @return
+     */
+    public String queryFinanceNew(String month, String spe) {
+        List<Income> incomeList = incomeService.findByMonth(month);
+
+        if(month!=null && month.length()==6) {
+            StringBuffer sb = new StringBuffer();
+            Integer days = getDaysOfMonth(month);
+            Double sum = buffetOrderService.sumByMonth(formatMonthStr(month));
+            sum = sum==null?0:sum;
+            Double sumMoney = incomeService.totalMoney(month);
+            sumMoney = sumMoney==null?0:sumMoney;
+
+            Double ticketDiscountMoney = buffetOrderService.sumDiscountMoney("3", formatMonthStr(month)); //卡券抵扣
+            ticketDiscountMoney = ticketDiscountMoney==null?0:ticketDiscountMoney;
+            Double scoreDiscountMoney = buffetOrderService.sumDiscountMoney("1", formatMonthStr(month)); //积分抵扣
+            scoreDiscountMoney = scoreDiscountMoney==null?0:scoreDiscountMoney;
+
+            Integer totalPeople = genPeopleCount(incomeList); //总人数
+            Integer totalDays = genDays(incomeList); //总天数
+            Double totalMoney = genTotalMoney(incomeList); //总营收
+            Integer goodDays = genGoodDays(incomeList); //超2万天数
+            Double extraMoney = genExtraMoney(incomeList); //其他收入
+
+            sb.append("查询月份：").append(month).append(spe);
+            sb.append("当月天数：").append(totalDays).append(" 天").append(spe);
+            sb.append("消费人次：").append(totalPeople).append(" 人").append(spe);
+            sb.append("平均每天：").append(formatValue(totalPeople/days*1.0, 2)).append(" 人").append(spe);
+            sb.append("当月营收：").append(totalMoney).append(" 元").append(spe)
+                    .append("平均每日：").append(formatValue(totalMoney/days*1.0, 2)).append(" 元").append(spe)
+                    .append("其他收入：").append(extraMoney).append(" 元").append(spe)
+                    .append("超过两万：").append(goodDays).append(" 天").append(spe)
+                    .append("卡券抵扣：").append(ticketDiscountMoney).append(" 元").append(spe)
+                    .append("积分抵扣：").append(scoreDiscountMoney).append(" 元");
+            return sb.toString();
+
+        }
+        return "查询失败，数据格式出错【yyyyMM】";
+    }
+
+    /** 其他收入 */
+    private Double genExtraMoney(List<Income> incomeList) {
+        double d = 0;
+        for(Income i : incomeList) {
+            if(i.getOther()!=null) {d += i.getOther();}
+        }
+        return d;
+    }
+
+    /** 总人数 */
+    private Integer genPeopleCount(List<Income> incomeList) {
+        int res = 0;
+        for(Income i : incomeList) {
+            if(i.getPeopleCount()!=null) {res += i.getPeopleCount();}
+        }
+        return res;
+    }
+
+    /** 超过2万的天数 */
+    private Integer genGoodDays(List<Income> incomeList) {
+        int res = 0;
+        for(Income i : incomeList) {
+            if(i.getCash()>=20000) {res ++;}
+        }
+        return res;
+    }
+    /** 获取当月总收入 */
+    private double genTotalMoney(List<Income> incomeList) {
+        double d = 0;
+        for(Income i : incomeList) {
+//            d += i.getTotalMoney();
+            if(i.getCash()!=null) {
+                d += i.getCash();
+            }
+        }
+        return d;
+    }
+
+    /** 获取多少天 */
+    private Integer genDays(List<Income> incomeList) {
+        Integer res = 0;
+        for(Income i : incomeList) {
+            if(i.getTotalMoney()!=null && i.getTotalMoney()>0) {res ++;}
+        }
+        return res;
     }
 
     public String queryFinance(String content) {

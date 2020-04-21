@@ -5,6 +5,8 @@ import com.zslin.web.model.Income;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 /**
  * Created by 钟述林 393156105@qq.com on 2017/8/30 8:55.
  */
@@ -24,4 +26,7 @@ public interface IIncomeService extends BaseRepository<Income, Integer>, JpaSpec
     Integer totalPeopleCount(String comeMonth);
 
     Income findByComeDay(String comeDay);
+
+    @Query("FROM Income i WHERE i.comeMonth=?1")
+    List<Income> findByMonth(String comeMonth);
 }

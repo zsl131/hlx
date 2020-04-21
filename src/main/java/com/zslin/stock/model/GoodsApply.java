@@ -46,6 +46,7 @@ public class GoodsApply extends BaseEntity {
     private Integer amount;
 
     /** 备注 */
+    @Lob
     private String remark;
 
     public String getRemark() {

@@ -53,7 +53,7 @@ public class ClientController {
     @GetMapping(value = "download")
     public String download(String token, HttpServletRequest request) {
 
-        System.out.println("--ClientController.download-----token:::"+token);
+        //System.out.println("--ClientController.download-----token:::"+token);
         String json = clientFileTools.getChangeContext(token);
         if(json==null || "".equals(json.trim())) {
             json = clientFileTools.getConfigContext(token);

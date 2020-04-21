@@ -24,6 +24,7 @@ import com.zslin.web.service.IBuffetOrderService;
 import com.zslin.web.service.IIncomeService;
 import com.zslin.web.tools.CommonTools;
 import com.zslin.wx.tools.ExchangeTools;
+import com.zslin.wx.tools.HlxTools;
 import com.zslin.wx.tools.WxConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -81,6 +82,15 @@ public class NormalTest {
 
     @Autowired
     private IAppConfigService appConfigService;
+
+    @Autowired
+    private HlxTools hlxTools;
+
+    @Test
+    public void test37() {
+        String str = hlxTools.calDay();
+        System.out.println(str);
+    }
 
     @Test
     public void test36() {
