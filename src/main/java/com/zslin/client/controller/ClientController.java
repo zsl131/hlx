@@ -38,7 +38,7 @@ public class ClientController {
 
     @PostMapping(value = "upload")
     public void upload(String token, @RequestBody String json) {
-        System.out.println("==ClientController.upload======"+token);
+//        System.out.println("==ClientController.upload======"+token);
 //        System.out.println("========json:"+json);
 
         clientPostHandler.handler(json);
@@ -57,8 +57,9 @@ public class ClientController {
         String json = clientFileTools.getChangeContext(token);
         if(json==null || "".equals(json.trim())) {
             json = clientFileTools.getConfigContext(token);
+            clientFileTools.setConfigContext(token, ""); //获取之后也需要清空内容
         }
-        System.out.println(json);
+        //System.out.println(json);
         clientFileTools.setChangeContext(token,"", false); //处理完成后清空内容
         return json;
     }

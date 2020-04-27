@@ -17,7 +17,10 @@
 <div th:fragment="content" th:remove="tag">
     <div class="page__bd page__bd_spacing">
         <div class="weui-flex">
-            <div class="weui-flex__item">
+            <div style="text-align:center;padding-top: 20px;width:100%;" th:if="${message ne null}">
+                <h3 th:text="${message}" style="color:#F00;"></h3>
+            </div>
+            <div class="weui-flex__item" th:if="${message eq null}">
                 <div class="center-head"  style="width:100%; float:left;">
                     <span class="head-img" style="float:left;"><img th:src="${account.headimgurl}"/></span>
                     <span class="head-info" style="float:left;">

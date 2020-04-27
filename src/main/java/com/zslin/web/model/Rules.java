@@ -1,6 +1,7 @@
 package com.zslin.web.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/9 9:15.
@@ -8,7 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "t_rules")
-public class Rules {
+public class Rules implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

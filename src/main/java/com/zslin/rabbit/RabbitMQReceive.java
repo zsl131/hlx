@@ -47,7 +47,7 @@ public class RabbitMQReceive implements ApplicationContextAware {
     /** 相对通用的处理方法 */
     @RabbitHandler
     public void handlerUpdate(RabbitUpdateDto dto) {
-        log.info("处理数据对象 {} ", dto.toString());
+//        log.info("处理数据对象 {} ", dto.toString());
         try {
             List<Object> params = dto.getParams();
             Object obj = getApplicationContext().getBean(dto.getBeanName());

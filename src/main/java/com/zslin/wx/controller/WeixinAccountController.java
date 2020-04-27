@@ -155,18 +155,24 @@ public class WeixinAccountController {
     public String me(Model model, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         Account account = accountService.findByOpenid(openid);
-        model.addAttribute("account", account);
-        model.addAttribute("wallet", walletService.findByOpenid(openid));
-        model.addAttribute("pullCount", accountService.findPullCount(account.getId()));
-        model.addAttribute("ownCount", ownService.findCount(openid)); //礼物数量
-        model.addAttribute("commentCount", commentService.findCount(openid)); //评论数量
-        model.addAttribute("feedbackCount", feedbackService.findCount(openid)); //消息数量
-        model.addAttribute("chargeCount", memberChargeService.findCount(openid)); //充值次数
+        if(account==null) {
+            model.addAttribute("hasError", true);
+            model.addAttribute("message", "请取消关注后再重新关注");
+        } else {
+            model.addAttribute("hadError", false);
+            model.addAttribute("account", account);
+            model.addAttribute("wallet", walletService.findByOpenid(openid));
+            model.addAttribute("pullCount", accountService.findPullCount(account.getId()));
+            model.addAttribute("ownCount", ownService.findCount(openid)); //礼物数量
+            model.addAttribute("commentCount", commentService.findCount(openid)); //评论数量
+            model.addAttribute("feedbackCount", feedbackService.findCount(openid)); //消息数量
+            model.addAttribute("chargeCount", memberChargeService.findCount(openid)); //充值次数
 
-        if(AccountTools.isPartner(account.getType())) {
-            model.addAttribute("friendOrdersCount", buffetOrderService.findFriendCount(account.getPhone())); //友情折扣的次数
-            Double incomeMoney = incomeService.totalMoney(NormalTools.curDate("yyyyMM"));
-            model.addAttribute("incomeMoney", incomeMoney==null?0:incomeMoney);
+            if (AccountTools.isPartner(account.getType())) {
+                model.addAttribute("friendOrdersCount", buffetOrderService.findFriendCount(account.getPhone())); //友情折扣的次数
+                Double incomeMoney = incomeService.totalMoney(NormalTools.curDate("yyyyMM"));
+                model.addAttribute("incomeMoney", incomeMoney == null ? 0 : incomeMoney);
+            }
         }
         return "weixin/account/me";
     }

@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/1/23 11:34.
@@ -13,7 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "t_category")
 @Data
-public class Category extends BaseEntity {
+public class Category extends BaseEntity implements Serializable {
 
     private String name;
 
