@@ -31,6 +31,10 @@ public class Price implements Serializable {
     @Column(name = "friend_dinner_price")
     private Float friendDinnerPrice;
 
+    /** 友情价折扣率 */
+    @Column(name = "friend_rate")
+    private Float friendRate;
+
     /** 压金金额 */
     @Column(name = "bond_money")
     private Float bondMoney;
@@ -42,6 +46,14 @@ public class Price implements Serializable {
     /** 简餐半票 */
     @Column(name = "spe_money_half")
     private Float speMoneyHalf;
+
+    public Float getFriendRate() {
+        return friendRate;
+    }
+
+    public void setFriendRate(Float friendRate) {
+        this.friendRate = friendRate;
+    }
 
     public Float getSpeMoneyHalf() {
         return speMoneyHalf;

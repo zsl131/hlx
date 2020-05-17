@@ -103,6 +103,7 @@ public class AdminIncomeController {
             in.setComeDay(comeDay);
             in.setComeMonth(comeMonth);
             in.setComeYear(comeYear);
+            //in.setPeopleCount(income.getPeopleCount());
             incomeService.save(in);
 
             incomeNoticeTools.notice(in); //通知

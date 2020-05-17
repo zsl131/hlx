@@ -20,6 +20,7 @@ public class AccountTools {
     public static final String CUSTOMER = "0"; //顾客
     public static final String WORKER = "1"; //员工
     public static final String MANAGER = "2"; //部门经理
+    public static final String DISCOUNT = "3"; //折扣用户
     public static final String PARTNER = "5"; //股东
     public static final String ADMIN = "10"; //超级管理员
 

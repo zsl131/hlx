@@ -154,7 +154,7 @@ public class HlxTools {
                 .append("其他收入：").append(formatValue(income.getOther()*1.0, 2)).append(" 元").append(spe);
             return sb.toString();
         }
-        return "查询失败，数据格式出错【yyyyMM】";
+        return "查询失败，数据格式出错【yyyyMMdd】";
     }
 
     /**
@@ -183,7 +183,7 @@ public class HlxTools {
             sb.append("平均每天：").append(formatValue(sum/days, 2)).append(" 人").append(spe);
             sb.append("当月营收：").append(formatValue(sumMoney, 2)).append(" 元").append(spe)
                     .append("平均每日：").append(formatValue(incomeService.average(month), 2)).append(" 元").append(spe)
-                    .append("超过两万：").append(incomeService.moreThan(month, 20000d)).append(" 天").append(spe)
+                    .append("超过两万伍：").append(incomeService.moreThan(month, 25000d)).append(" 天").append(spe)
                     .append("卡券抵扣：").append(ticketDiscountMoney).append(" 元").append(spe)
                     .append("积分抵扣：").append(scoreDiscountMoney).append(" 元");
             return sb.toString();

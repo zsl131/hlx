@@ -60,7 +60,7 @@ public class AdminAccountController {
         try {
             accountService.updateType(id, type);
             Account a = accountService.findOne(id);
-            if("5".equals(type) || "10".equals(type)) {
+            if("3".equals(type) || "5".equals(type) || "10".equals(type)) {
                 send2Client("update", a);
             } else {
                 send2Client("delete", a);

@@ -51,7 +51,7 @@ public class WeixinIncomeController {
                     SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("comeDay_d")));
             month = (month==null||"".equalsIgnoreCase(month) || month.indexOf("-")<0)?NormalTools.curDate("yyyyMM"):month.substring(month.indexOf("-")+1, month.length());
             Double avg = incomeService.average(month);
-            Integer moreThan = incomeService.moreThan(month, 20000d);
+            Integer moreThan = incomeService.moreThan(month, 25000d);
             Double totalMoney = incomeService.totalMoney(month);
             model.addAttribute("avg", avg==null?0:avg);
             model.addAttribute("moreThan", moreThan==null?0:moreThan);

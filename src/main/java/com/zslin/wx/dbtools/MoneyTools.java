@@ -2,7 +2,6 @@ package com.zslin.wx.dbtools;
 
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.client.service.IMemberService;
-import com.zslin.web.model.Account;
 import com.zslin.web.model.Wallet;
 import com.zslin.web.service.IAccountService;
 import com.zslin.web.service.IWalletDetailService;
