@@ -53,13 +53,14 @@ public class ClientController {
     @GetMapping(value = "download")
     public String download(String token, HttpServletRequest request) {
 
-        //System.out.println("--ClientController.download-----token:::"+token);
+        if(token==null || "".equals(token.trim())) {token = "hlx";}
+        System.out.println("--ClientController.download-----token:::"+token);
         String json = clientFileTools.getChangeContext(token);
         if(json==null || "".equals(json.trim())) {
             json = clientFileTools.getConfigContext(token);
             clientFileTools.setConfigContext(token, ""); //获取之后也需要清空内容
         }
-        //System.out.println(json);
+        System.out.println(json);
         clientFileTools.setChangeContext(token,"", false); //处理完成后清空内容
         return json;
     }
