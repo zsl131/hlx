@@ -23,6 +23,8 @@ import com.zslin.web.service.IBuffetOrderDetailService;
 import com.zslin.web.service.IBuffetOrderService;
 import com.zslin.web.service.IIncomeService;
 import com.zslin.web.tools.CommonTools;
+import com.zslin.weixin.model.HlxTicket;
+import com.zslin.weixin.service.IHlxTicketService;
 import com.zslin.wx.tools.ExchangeTools;
 import com.zslin.wx.tools.HlxTools;
 import com.zslin.wx.tools.WxConfig;
@@ -85,6 +87,67 @@ public class NormalTest {
 
     @Autowired
     private HlxTools hlxTools;
+
+//    private IdLeafService
+
+    @Autowired
+    private IHlxTicketService hlxTicketService;
+
+    @Test
+    public void test41() {
+        Integer count1 = hlxTicketService.queryAll();
+        Integer count2 = hlxTicketService.queryAll("1");
+
+        Integer count3 = hlxTicketService.queryByDay("2020-06-04");
+        Integer count4 = hlxTicketService.queryWriteOffCount("2020-06-04");
+
+        System.out.println("count1::"+count1);
+        System.out.println("count2::"+count2);
+        System.out.println("count3::"+count3);
+        System.out.println("count4::"+count4);
+    }
+
+    @Test
+    public void test40() {
+        HlxTicket ticket;
+        String code = "";
+        int i=0;
+        do {
+            code = RandomTools.genCode7();
+            if(i++<50) {
+                HlxTicket h = new HlxTicket();
+                h.setTicketNo(code);
+                hlxTicketService.save(h);
+            }
+            ticket = hlxTicketService.findByTicketNo(code);
+            if(ticket==null) {break;}
+        } while(ticket!=null);
+
+        System.out.println(code);
+    }
+
+    @Test
+    public void test39() {
+        for(int i=0;i<100;i++) {
+            System.out.print(RandomTools.genCode7() + "      ");
+            if(i%50==0) {
+                System.out.println();
+            }
+        }
+    }
+
+    @Test
+    public void test38() {
+
+        /*@Bean(initMethod = "init")
+        public IdLeafService idLeafService() {
+            MysqlIdLeafServiceImpl mysqlIdLeafService = new MysqlIdLeafServiceImpl();
+            mysqlIdLeafService.setJdbcTemplate(jdbcTemplate);
+            mysqlIdLeafService.setAsynLoadingSegment(true);
+            mysqlIdLeafService.setBizTag("Order");
+            return mysqlIdLeafService;
+        }*/
+    }
 
     @Test
     public void test37() {

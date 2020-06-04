@@ -122,8 +122,12 @@ public class AdminWxMenuController {
     String gen() {
         try {
             String json = createMenuJson();
+            System.out.println("======AdminWxMenuController=====");
+            System.out.println(json);
             String url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token="+accessTokenTools.getAccessToken();
             JSONObject jsonObj = WeixinUtil.httpRequest(url, "POST", json);
+            System.out.println("------------------AdminWxMenuController-----------------");
+            System.out.println(jsonObj.toString());
             String code = JsonTools.getJsonParam(jsonObj.toString(), "errcode");
             if("0".equals(code)) {
                 return "redirect:/admin/wxMenu/list";
@@ -173,7 +177,7 @@ public class AdminWxMenuController {
     }
 
     private String createMenu(WxMenu menu) {
-        String url = menu.getUrl();
+        /*String url = menu.getUrl();
         if(!url.toLowerCase().startsWith("http://") && !url.toLowerCase().startsWith("https://")) { //如果不是http链接
             if(!url.startsWith("/")) {url = "/"+url;}
             url = wxConfig.getConfig().getUrl()+url;
@@ -181,6 +185,25 @@ public class AdminWxMenuController {
         StringBuffer sb = new StringBuffer();
         sb.append(",\"type\":\"view\"");
         sb.append(",\"url\":\"").append(url).append("\"");
+        return sb.toString();*/
+
+        StringBuffer sb = new StringBuffer();
+        String type = menu.getType();
+        sb.append(",\"type\":\"").append(type).append("\"");
+        if("view".equalsIgnoreCase(type)) {
+            String url = menu.getUrl();
+            if(!url.toLowerCase().startsWith("http://") && !url.toLowerCase().startsWith("https://")) { //如果不是http链接
+                if(!url.startsWith("/")) {url = "/"+url;}
+                url = wxConfig.getConfig().getUrl()+url;
+            }
+            sb.append(",\"url\":\"").append(url).append("\"");
+        } else if("click".equalsIgnoreCase(type)) {
+            sb.append(",\"key\":\"").append(menu.getOptKey()).append("\"");
+        } else if("miniprogram".equalsIgnoreCase(type)) {
+            sb.append(",\"appid\":\"").append(menu.getAppid()).append("\"");
+            sb.append(",\"url\":\"").append(menu.getPagePath()).append("\"");
+            sb.append(",\"pagepath\":\"").append(menu.getPagePath()).append("\"");
+        }
         return sb.toString();
     }
 }

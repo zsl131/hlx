@@ -4,6 +4,7 @@ import com.zslin.basic.tools.DateTools;
 import com.zslin.web.model.Account;
 import com.zslin.web.model.ScoreRule;
 import com.zslin.web.service.IAccountService;
+import com.zslin.weixin.tools.HlxTicketTools;
 import com.zslin.wx.dbtools.ScoreAdditionalDto;
 import com.zslin.wx.dbtools.ScoreTools;
 import org.json.JSONObject;
@@ -34,6 +35,9 @@ public class QrsceneTools {
     @Autowired
     private ScoreTools scoreTools;
 
+    @Autowired
+    private HlxTicketTools hlxTicketTools;
+
     /**
      * 处理二维码
      * @param openid 操作的用户openid
@@ -43,6 +47,9 @@ public class QrsceneTools {
         sceneStr = sceneStr.replace(prefix, "");
         if(sceneStr.startsWith(QrTools.USER_TYPE)) { //用户个人二维码
             userFollow(openid, sceneStr);
+        } else if(sceneStr.startsWith(QrTools.TICKET_TYPE)) { //10元优惠券
+            sceneStr = sceneStr.replace(QrTools.TICKET_TYPE, ""); //只获取值
+            hlxTicketTools.receiveTicket(openid, sceneStr);
         }
     }
 

@@ -26,7 +26,11 @@
 					<tr>
 						<th>名称</th>
 						<th>序号</th>
+						<th>类型</th>
 						<th>链接</th>
+						<th>点击值</th>
+						<th>appid</th>
+						<th>访问地址</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -34,7 +38,11 @@
 				<tr th:each="obj : ${datas}">
 					<td th:text="${obj.name}"></td>
 					<td th:text="${obj.orderNo}"></td>
+					<td th:text="${obj.type}"></td>
 					<td th:text="${obj.url}"></td>
+					<td th:text="${obj.optKey}"></td>
+					<td th:text="${obj.appid}"></td>
+					<td th:text="${obj.pagePath}"></td>
 					<td>
 						<div class="action-buttons">
 							<a th:if="${obj.pid eq null}" th:href="@{/admin/wxMenu/list(pid=${obj.id})}" title="查看子菜单">

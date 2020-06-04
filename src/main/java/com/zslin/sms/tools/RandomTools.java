@@ -16,6 +16,12 @@ public class RandomTools {
         return randomNum(num, 1000);
     }
 
+    /** 新版生成12位随机数 */
+    public static String genCode7() {
+        long code = (long)((Math.random()*9+1)*1000000);
+        return code+"";
+    }
+
     public static String randomNum6() {
         int num = 900000;
         return randomNum(num, 100000);

@@ -25,6 +25,72 @@ public class WxMenu {
     /** 状态，1-启用；0-停用 */
     private String status = "1";
 
+    /**
+     * 小程序appid
+     */
+    private String appid;
+
+    /**
+     * 小程序路径
+     */
+    private String pagePath;
+
+    /**
+     * 菜单类型
+     * @remark view、click、miniprogram
+     */
+    private String type;
+
+    /**
+     * 点击时的值
+     */
+    private String optKey;
+
+    /**
+     * 微信素材ID
+     */
+    private String mediaId;
+
+    public String getAppid() {
+        return appid;
+    }
+
+    public void setAppid(String appid) {
+        this.appid = appid;
+    }
+
+    public String getPagePath() {
+        return pagePath;
+    }
+
+    public void setPagePath(String pagePath) {
+        this.pagePath = pagePath;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getOptKey() {
+        return optKey;
+    }
+
+    public void setOptKey(String optKey) {
+        this.optKey = optKey;
+    }
+
+    public String getMediaId() {
+        return mediaId;
+    }
+
+    public void setMediaId(String mediaId) {
+        this.mediaId = mediaId;
+    }
+
     public Integer getId() {
         return id;
     }

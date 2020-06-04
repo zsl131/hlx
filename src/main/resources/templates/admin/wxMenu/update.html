@@ -31,8 +31,44 @@
 		</div>
 		<div class="form-group form-group-lg">
 			<div class="input-group">
+				<div class="input-group-addon">类型：</div>
+				<div class="form-control">
+					<label class="radio-inline">
+						<input type="radio" name="type" id="inlineRadio1" value="view"> view
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="type" id="inlineRadio2" value="click"> click
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="type" id="inlineRadio3" value="miniprogram"> 小程序
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
 				<div class="input-group-addon">链接地址：</div>
 				<input name="url" type="text" class="form-control" th:value="${wxMenu.url}" placeholder="请输入链接地址，以http://开头" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">点击值：</div>
+				<input name="optKey" type="text" class="form-control" th:value="${wxMenu.optKey}" placeholder="点击值，click时填" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">appID：</div>
+				<input name="appid" type="text" class="form-control" th:value="${wxMenu.appid}" placeholder="appid，小程序时填" />
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">访问地址：</div>
+				<input name="pagePath" type="text" class="form-control" th:value="${wxMenu.pagePath}" placeholder="访问地址，小程序时填" />
 			</div>
 		</div>
 

@@ -23,11 +23,22 @@ public class QrTools {
     //用户标识
     public static final String USER_TYPE = "user_";
 
+    //券标识
+    public static final String TICKET_TYPE = "ticket_";
+
     @Autowired
     private AccessTokenTools accessTokenTools;
 
     @Autowired
     private ConfigTools configTools;
+
+    /** 生成券二维码 */
+    public String genTicketQr(String value) {
+        value = TICKET_TYPE+value;
+        String picPath = genQr(value, "ticket");
+        PictureTools.markImageByUrl("http://img.zslin.com/hlx.jpg", configTools.getFilePath()+picPath, configTools.getFilePath()+picPath);
+        return picPath;
+    }
 
     public String genUserQr(String value, String headimg) {
         value = USER_TYPE+value;

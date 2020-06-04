@@ -1,6 +1,8 @@
 package com.zslin.wx.controller;
 
+import com.zslin.wx.tools.QrTools;
 import com.zslin.wx.tools.SessionTools;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,6 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "weixin/test")
 public class WxTestController {
 
+    @Autowired
+    private QrTools qrTools;
+
     @GetMapping(value = "index")
     public String index(HttpServletRequest request) {
 
@@ -28,5 +33,16 @@ public class WxTestController {
         String o = "1".equals(from)?"o_TZkwbz0pzuCTmrWqMGNHriMHTo":"orLIDuFuyeOygL0FBIuEilwCF1lU";
         SessionTools.setOpenid(request, o);
         return "ok";
+    }
+
+    /**
+     * 生成卡券二维码
+     * @param value
+     * @return
+     */
+    @GetMapping(value = "ticketQr")
+    public @ResponseBody String ticketQr(String value) {
+        String path = qrTools.genTicketQr(value);
+        return path;
     }
 }

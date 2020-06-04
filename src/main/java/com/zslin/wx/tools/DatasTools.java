@@ -10,6 +10,7 @@ import com.zslin.web.model.*;
 import com.zslin.web.service.*;
 import com.zslin.web.tools.DiscountDayTools;
 import com.zslin.web.tools.GamePrizeTools;
+import com.zslin.weixin.tools.HlxTicketTools;
 import com.zslin.wx.dbtools.ScoreTools;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,9 @@ public class DatasTools {
     @Autowired
     private ICardService cardService;
 
+    @Autowired
+    private HlxTicketTools hlxTicketTools;
+
     /** 当用户取消关注时 */
     public void onUnsubscribe(String openid) {
         accountService.updateStatus(openid, "0");
@@ -116,6 +120,9 @@ public class DatasTools {
             return WeixinXmlTools.createTextXml(openid, builderName, buildCardStr(content.trim()));
         } else if("hlx".equals(content.toLowerCase())) { //关注情况
             eventTools.eventRemind(openid, "查询提醒", "关注情况如下", DateTools.date2Str(new Date(), "yyyy-MM-dd"), accountTools.buildAccountStr(), "");
+            return "";
+        } else if("ticket".equalsIgnoreCase(content.toLowerCase())) { //如果是查询卡券
+            eventTools.eventRemind(openid, "领券情况统计", "领券情况如下", NormalTools.curDate(), hlxTicketTools.buildEventCalContent(), "");
             return "";
         } else if(isPrizeCode(content.trim())) { //如果是查询当天营收
 //            gamePrizeTools.processMessage(openid, content.trim());
