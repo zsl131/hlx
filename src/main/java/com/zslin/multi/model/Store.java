@@ -4,6 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+/**
+ * 店铺
+ */
 @Entity
 @Table(name = "m_store")
 @Data

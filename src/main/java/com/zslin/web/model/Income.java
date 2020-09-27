@@ -77,6 +77,17 @@ public class Income {
     @Column(name = "from_client")
     private String fromClient;
 
+    @Column(name = "desk_count")
+    private Integer deskCount = 0;
+
+    public Integer getDeskCount() {
+        return deskCount;
+    }
+
+    public void setDeskCount(Integer deskCount) {
+        this.deskCount = deskCount;
+    }
+
     public Integer getPeopleCount() {
         return peopleCount;
     }

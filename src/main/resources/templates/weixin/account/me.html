@@ -209,6 +209,26 @@
                             <span>点击操作</span>
                         </div>
                     </a>
+
+                    <a class="weui-cell weui-cell_access" href="/wx/stock/index" th:if="${account.type eq '2' || account.type eq '5' || account.type eq '10'}">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-cube"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>库存管理</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span>点击操作</span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" href="/weixin/index" th:if="${account.type eq '2' || account.type eq '5' || account.type eq '10'}">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-cube"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>汉丽轩首页</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span>点击查看</span>
+                        </div>
+                    </a>
                 </div>
 
                 <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>

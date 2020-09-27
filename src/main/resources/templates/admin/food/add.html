@@ -51,7 +51,7 @@
 						<div class="input-group-addon">食品名称：</div>
 						<input name="name" type="text" class="form-control" id="name" th:value="${food.name}" placeholder="请输入食品名称" />
 
-						<div class="input-group-addon">售卖顾炎武：</div>
+						<div class="input-group-addon">售卖方式：</div>
 						<div class="form-control">
 							<input type="radio" name="saleMode" value="1" id="saleMode_1" th:checked="${food.saleMode == '1'}?'checked'"/><label for="saleMode_1">堂食</label>
 							<input type="radio" name="saleMode" value="2" id="saleMode_2" th:checked="${food.saleMode == '2'}?'checked'"/><label for="saleMode_2">外卖</label>
@@ -84,6 +84,14 @@
 					<div class="input-group">
 						<div class="input-group-addon">食品图片：</div>
 						<input name="file" type="file" class="form-control" />
+
+						<div class="input-group-addon">打印模式：</div>
+						<div class="form-control">
+							<input type="radio" name="printFlag" value="1" id="printFlag_1" th:checked="${food.printFlag == '1'}?'checked'"/><label for="printFlag_1">吧台打印</label>
+							<input type="radio" name="printFlag" value="2" id="printFlag_2" th:checked="${food.printFlag == '2'}?'checked'"/><label for="printFlag_2">厨房打印</label>
+							<input type="radio" name="printFlag" value="3" id="printFlag_3" th:checked="${food.printFlag == '3'}?'checked'"/><label for="printFlag_3">甜品站打印</label>
+							<input type="radio" name="printFlag" value="all" id="printFlag_all" th:checked="${food.printFlag == 'all'}?'checked'"/><label for="printFlag_all">全部打印</label>
+						</div>
 					</div>
 				</div>
 

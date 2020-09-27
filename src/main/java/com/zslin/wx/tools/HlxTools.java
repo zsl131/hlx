@@ -8,6 +8,7 @@ import com.zslin.web.model.BuffetOrder;
 import com.zslin.web.model.Income;
 import com.zslin.web.service.IBuffetOrderService;
 import com.zslin.web.service.IIncomeService;
+import com.zslin.weixin.service.IHlxTicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,9 @@ public class HlxTools {
 
     @Autowired
     private ICardCheckService cardCheckService;
+
+    @Autowired
+    private IHlxTicketService hlxTicketService;
 
     /**
      * 定时器自动查询的营业信息
@@ -144,14 +148,26 @@ public class HlxTools {
     public String queryFinanceByDay(String day, String spe) {
         if(day!=null && day.length()==8) {
             StringBuffer sb = new StringBuffer();
+            String curDay = day.substring(0,4)+"-"+day.substring(4,6)+"-"+day.substring(6,8);
+            Integer count3 = hlxTicketService.queryByDay(curDay);
+            Integer count4 = hlxTicketService.queryWriteOffCount(curDay);
 
             Income income = incomeService.findByComeDay(day);
-            if(income==null) {return "【"+day+"】未登记";}
+            if(income==null) {
+                sb.append("查询日期：").append(day).append(spe)
+                    .append("当天领券：").append(count3).append(" 张").append(spe)
+                    .append("当天核销：").append(count4).append(" 张").append(spe)
+                    .append("其他信息未登记");
+                return sb.toString();
+            }
 
             sb.append("查询日期：").append(day).append(spe)
                 .append("消费人次：").append(income.getPeopleCount()).append(" 人").append(spe)
                 .append("当天营收：").append(formatValue(income.getCash()*1.0, 2)).append(" 元").append(spe)
-                .append("其他收入：").append(formatValue(income.getOther()*1.0, 2)).append(" 元").append(spe);
+                .append("其他收入：").append(formatValue(income.getOther()*1.0, 2)).append(" 元").append(spe)
+                .append("-------------").append(spe)
+                .append("当天领券：").append(count3).append(" 张").append(spe)
+                .append("当天核销：").append(count4).append(" 张").append(spe);
             return sb.toString();
         }
         return "查询失败，数据格式出错【yyyyMMdd】";

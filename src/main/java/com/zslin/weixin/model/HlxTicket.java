@@ -17,6 +17,25 @@ public class HlxTicket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    /**
+     * 类型：1-10元券；2-午餐券；3-晚餐券；10-电子券
+     */
+    private String type;
+
+    /**
+     * 使用方式
+     * 1-正常使用，价值多少，抵扣多少
+     * 2-满减
+     */
+    @Column(name = "use_type")
+    private String useType;
+
+    /** 满减才有值，即满多少钱才可以使用这张券 */
+    @Column(name = "reach_money")
+    private Integer reachMoney;
+
+    private String phone;
+
     private String openid;
 
     private String nickname;

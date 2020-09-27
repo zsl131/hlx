@@ -296,6 +296,7 @@ public class ClientSimpleProcessHandler {
             }
             income.setTotalMoney((double) (money + extraMoney));
             income.setOther(extraMoney);
+            income.setDeskCount(jsonObj.getInt("deskCount"));
             income.setFromClient("1");
         } else if(income!=null && "1".equalsIgnoreCase(income.getFromClient())) {
             income.setCash(money);

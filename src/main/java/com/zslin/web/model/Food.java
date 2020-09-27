@@ -72,4 +72,8 @@ public class Food extends BaseEntity {
     private String nameLetter;
 
     private Integer snNo;
+
+    /** 打印标记，1-吧台；2-厨房；3-甜品店；all-全部 */
+    @Column(name = "print_flag")
+    private String printFlag;
 }

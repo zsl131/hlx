@@ -59,7 +59,14 @@
 						<p th:text="${obj.nameLetter}"></p>
 						<p th:text="${obj.sn}"></p>
 					</td>
-					<td><b th:text="${obj.price}"></b> 元/ <span th:text="${obj.unitName}"></span></td>
+					<td><p><b th:text="${obj.price}"></b> 元/ <span th:text="${obj.unitName}"></span></p>
+						<p>
+							<span th:if="${obj.printFlag eq '1'}" class="blue">吧台打印</span>
+							<span th:if="${obj.printFlag eq '2'}" class="dark">厨房打印</span>
+							<span th:if="${obj.printFlag eq '3'}" class="dark">甜品站打印</span>
+							<span th:if="${obj.printFlag eq 'all'}" class="red">全部打印</span>
+						</p>
+					</td>
 					<td th:text="${obj.orderNo}">序号</td>
 					<td th:text="${obj.commentCount}">0</td>
 					<td th:text="${obj.goodCount}">0</td>
