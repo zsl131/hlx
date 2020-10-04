@@ -12,6 +12,8 @@ import com.zslin.kaoqin.model.Worker;
 import com.zslin.meituan.model.MeituanConfig;
 import com.zslin.meituan.model.MeituanShop;
 import com.zslin.multi.model.DiningTable;
+import com.zslin.multi.model.DiscountFood;
+import com.zslin.multi.model.DiscountModel;
 import com.zslin.web.dto.AdminPhoneDto;
 import com.zslin.web.model.*;
 
@@ -177,6 +179,14 @@ public class ClientJsonTools {
     }
     public static String buildDiningTable(DiningTable table, String action) {
         JsonDto jd = new JsonDto("table", action, table.getId(), table);
+        return JSON.toJSONString(jd);
+    }
+    public static String buildDiscountModel(DiscountModel dm, String action) {
+        JsonDto jd = new JsonDto("discountModel", action, dm.getId(), dm);
+        return JSON.toJSONString(jd);
+    }
+    public static String buildDiscountFood(DiscountFood d, String action) {
+        JsonDto jd = new JsonDto("discountFood", action, d.getId(), d);
         return JSON.toJSONString(jd);
     }
     /** 以上是多店管理的 **/

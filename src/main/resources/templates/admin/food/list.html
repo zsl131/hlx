@@ -61,6 +61,7 @@
 					</td>
 					<td><p><b th:text="${obj.price}"></b> 元/ <span th:text="${obj.unitName}"></span></p>
 						<p>
+							<span th:if="${obj.printFlag eq '0'}" class="blue">不打印</span>
 							<span th:if="${obj.printFlag eq '1'}" class="blue">吧台打印</span>
 							<span th:if="${obj.printFlag eq '2'}" class="dark">厨房打印</span>
 							<span th:if="${obj.printFlag eq '3'}" class="dark">甜品站打印</span>

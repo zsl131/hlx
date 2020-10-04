@@ -80,6 +80,39 @@ public class Income {
     @Column(name = "desk_count")
     private Integer deskCount = 0;
 
+    @Column(name = "store_id")
+    private Integer storeId;
+
+    @Column(name = "store_name")
+    private String storeName;
+
+    @Column(name = "store_sn")
+    private String storeSn;
+
+    public Integer getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Integer storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getStoreSn() {
+        return storeSn;
+    }
+
+    public void setStoreSn(String storeSn) {
+        this.storeSn = storeSn;
+    }
+
     public Integer getDeskCount() {
         return deskCount;
     }

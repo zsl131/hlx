@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+	<script src="/js/jedate/jedate.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
+	<script src="/back-admin/bus/my-date.js"></script>
+	<script src="/back-admin/bus/admin-food.js"></script>
+	<title>修改打折开关</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+	<div class="header lighter smaller blue">
+		<h3><i class="fa fa-plus"></i>&nbsp;修改打折开关</h3>
+		<div th:replace="admin/multi/discountModel/nav :: content" th:remove="tag"></div>
+	</div>
+
+	<form method="POST" th:object="${discountModel}" onsubmit="return checkData()" id="dataForm">
+		<input name="storeName" type="hidden"/>
+		<input name="storeSn" type="hidden"/>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">所属店铺：</div>
+				<select name="storeId" class="form-control">
+					<option value="-1">选择所属店铺</option>
+					<option th:each="store:${storeList}" th:selected="${(store.id eq discountModel.storeId)?true:false}" th:attr="sn=${store.sn}" th:value="${store.id}" th:text="${store.name}"></option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+
+			<div class="input-group">
+				<div class="input-group-addon">打折折扣：</div>
+				<input name="percent" th:value="${discountModel.percent}" placeholder="输入折扣，如：0.8，即8折" class="form-control"/>
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">起始时间：</div>
+				<input name="startTime" th:value="${discountModel.startTime}" placeholder="选择起始时间" class="form-control start-time" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+
+				<div class="input-group-addon">开关模式：</div>
+				<div class="form-control">
+					<input type="radio" name="status" value="1" id="status_1" th:checked="${discountModel.status == '1'}?'checked'"/><label for="status_1">开启</label>
+					<input type="radio" name="status" value="0" id="status_0" th:checked="${discountModel.status == '2'}?'checked'"/><label for="status_0">关闭</label>
+				</div>
+			</div>
+		</div>
+
+		<input type="hidden" name="token" th:value="${session.token}"/>
+		<button type="submit" class="btn btn-primary">确定提交</button>
+	</form>
+
+	<script type="text/javascript">
+				jQuery(function($) {
+					$('#dataForm').bootstrapValidator({
+		//		        live: 'disabled',
+						message: '验证不通过',
+						feedbackIcons: {
+							valid: 'glyphicon glyphicon-ok',
+							invalid: 'glyphicon glyphicon-remove',
+							validating: 'glyphicon glyphicon-refresh'
+						},
+						fields: {
+							name: {
+								validators: {
+									notEmpty: {
+										message: '请输入名称'
+									}
+								}
+							},
+							orderNo: {
+								validators: {
+									notEmpty: {
+										message: '请输入序号'
+									},
+									regexp: {
+										regexp: "^[1-9][0-9]*$",
+            							message: '序号必须为大于0的正整数'
+									}
+								}
+							}
+						}
+					});
+				});
+			</script>
+</div>
+</body>
+</html>

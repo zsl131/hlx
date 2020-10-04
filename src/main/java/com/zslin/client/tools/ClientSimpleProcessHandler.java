@@ -14,6 +14,7 @@ import com.zslin.wx.dbtools.ScoreTools;
 import com.zslin.wx.dto.EventRemarkDto;
 import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.EventTools;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -296,7 +297,15 @@ public class ClientSimpleProcessHandler {
             }
             income.setTotalMoney((double) (money + extraMoney));
             income.setOther(extraMoney);
-            income.setDeskCount(jsonObj.getInt("deskCount"));
+            try {
+                income.setDeskCount(jsonObj.getInt("deskCount"));
+            } catch (Exception e) {
+               // e.printStackTrace();
+            }
+            String sn = ""; //店铺SN
+            try {sn = jsonObj.getString("storeSn"); } catch (Exception e) { }
+            if(sn==null || "".equals(sn.trim())) {sn = "hlx";}
+            income.setStoreSn(sn);
             income.setFromClient("1");
         } else if(income!=null && "1".equalsIgnoreCase(income.getFromClient())) {
             income.setCash(money);

@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/2/26 23:36.
+ * 
  * 员工
  */
 @Entity
