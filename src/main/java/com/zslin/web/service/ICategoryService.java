@@ -14,9 +14,9 @@ import java.util.List;
  */
 public interface ICategoryService extends BaseRepository<Category, Integer>, JpaSpecificationExecutor<Category> {
 
-    @Query("FROM Category c ORDER BY c.orderNo ASC")
+    @Query("FROM Category c WHERE c.storeSn=?1 ORDER BY c.orderNo ASC")
     @Cacheable(cacheNames = "category-list")
-    List<Category> findByOrder();
+    List<Category> findByOrder(String storeSn);
 
     List<Category> findByStoreId(Integer storeId);
 

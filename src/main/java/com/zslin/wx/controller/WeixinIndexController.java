@@ -46,8 +46,9 @@ public class WeixinIndexController {
     private IBuffetOrderDetailService buffetOrderDetailService;
 
     @GetMapping(value = "index")
-    public String index(Model model, HttpServletRequest request) {
-        model.addAttribute("categoryList", categoryService.findByOrder()); //分类
+    public String index(Model model, String storeSn, HttpServletRequest request) {
+        storeSn = (storeSn==null||"".equals(storeSn.trim()))?"hlx":storeSn;
+        model.addAttribute("categoryList", categoryService.findByOrder(storeSn)); //分类
         model.addAttribute("galleryList", galleryService.findShow()); //微信画廊
         model.addAttribute("ordersList", buffetOrderService.findAll(SimplePageBuilder.generate(0, 6, SimpleSortBuilder.generateSort("id_d")))); //最新订单
         model.addAttribute("ordersCount", buffetOrderService.queryCount());
