@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+		<title>修改二维码</title>
+	</head>
+	<body>
+		<div th:fragment="content" th:remove="tag">
+			<div class="header lighter smaller blue">
+				<h3><i class="fa fa-pencil"></i>&nbsp;修改二维码 </h3>
+				<div th:replace="admin/multi/baseQrcode/nav :: content" th:remove="tag"></div>
+			</div>
+
+			<form method="POST" th:object="${baseQrcode}" id="dataForm">
+				<div class="form-group form-group-lg">
+					<label for="name">二维码名称</label>
+					<input type="text" name="name" th:value="${baseQrcode.name}" class="form-control" id="name" placeholder="请输入名称"/>
+				</div>
+				<div class="form-group form-group-lg">
+					<label for="name">跳转地址</label>
+					<input type="text" name="url" th:value="${baseQrcode.url}" class="form-control" placeholder="请输入跳转地址"/>
+				</div>
+				<input type="hidden" name="token" value="${session.token}"/>
+				<button type="submit" class="btn btn-primary">确定提交</button>
+			</form>
+			<script type="text/javascript">
+				jQuery(function($) {
+					$('#dataForm').bootstrapValidator({
+		//		        live: 'disabled',
+						message: '验证不通过',
+						feedbackIcons: {
+							valid: 'glyphicon glyphicon-ok',
+							invalid: 'glyphicon glyphicon-remove',
+							validating: 'glyphicon glyphicon-refresh'
+						},
+						fields: {
+							name: {
+								validators: {
+									notEmpty: {
+										message: '请输入角色名称'
+									}
+								}
+							}
+						}
+					});
+				});
+			</script>
+		</div>
+	</body>
+</html>

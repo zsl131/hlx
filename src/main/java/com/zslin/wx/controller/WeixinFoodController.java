@@ -60,9 +60,9 @@ public class WeixinFoodController {
     private ScoreTools scoreTools;
 
     @GetMapping(value = "index")
-    public String index(Model model, Integer page, HttpServletRequest request) {
-
-        model.addAttribute("cateList", categoryService.findByOrder());
+    public String index(Model model, Integer page, String storeSn, HttpServletRequest request) {
+        storeSn = (storeSn==null||"".equals(storeSn.trim()))?"hlx":storeSn;
+        model.addAttribute("cateList", categoryService.findByOrder(storeSn));
         Page<Food> datas = foodService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("orderNo")));
         model.addAttribute("datas", datas);

@@ -27,7 +27,7 @@
 
 				<div class="form-group form-group-lg">
 					<div class="input-group">
-						<div class="input-group-addon">所属店铺1：</div>
+						<div class="input-group-addon">所属店铺：</div>
 						<select name="storeId" class="form-control">
 							<option value="-1">选择所属店铺</option>
 							<option th:each="store:${storeList}" th:attr="sn=${store.sn}" th:value="${store.id}" th:text="${store.name}"></option>

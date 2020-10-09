@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>会员系统-问渠餐饮</title>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-moneybag.css"/>
+    <script type="text/javascript" src="/weixin/weixin-addBag.js"></script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="container main-div">
+        <h3>会员充值</h3>
+        <h3>标记：<b th:text="${sn}"></b></h3>
+        <input name="sn" type="hidden" th:value="${sn}"/>
+        <div class="form-group form-group-lg">
+            <div class="input-group">
+                <div class="input-group-addon">姓名：</div>
+                <input type="text" name="name" class="form-control"  placeholder="顾客姓名"/>
+            </div>
+        </div>
+
+        <div class="form-group form-group-lg">
+            <div class="input-group">
+                <div class="input-group-addon">电话：</div>
+                <input type="number" name="phone" maxlength="11" class="form-control"  placeholder="顾客手机号码"/>
+            </div>
+        </div>
+
+        <div class="form-group form-group-lg">
+            <div class="input-group">
+                <div class="input-group-addon">金额：</div>
+                <input type="number" name="money" class="form-control"  placeholder="充值金额，单位元"/>
+            </div>
+        </div>
+
+        <button class="btn btn-primary btn-lg submit-btn" onclick="submitBag()">确定充值</button>
+        <div class="remark"><b>注意：</b>请确保顾客信息和充值金额的正确性，建议先让顾客在笔记本上写好自己的姓名和电话，密码是手机号码的后4位（消费时需要），顾客可以关注“问渠餐饮”绑定手机后查看账户余额。</div>
+    </div>
+</div>
+</body>
+</html>

@@ -94,6 +94,12 @@ public class NormalTest {
     private IHlxTicketService hlxTicketService;
 
     @Test
+    public void test42() {
+        String phone = "15925061256";
+        System.out.println(phone.substring(phone.length()-4));
+    }
+
+    @Test
     public void test41() {
         Integer count1 = hlxTicketService.queryAll();
         Integer count2 = hlxTicketService.queryAll("1");

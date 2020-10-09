@@ -1,0 +1,50 @@
+.main-div {
+    padding-top: 12px;
+}
+.need-center {
+    text-align:center; padding: 0px 5%; padding-bottom: 0px;
+}
+
+.single-data-div {
+    width: 100%; border:1px #0f436d solid; border-radius: 10px; padding-bottom: 0px;
+}
+.single-data-div div.value {
+    padding: 30px 0px;
+}
+.single-data-div div.value b {
+    font-size: 32px;
+}
+
+.single-data-div div.value span { font-size: 14px; color:#aaa; padding-left: 5px;}
+
+.single-data-div div.name {
+    border-top: 1px #f0f0f0 solid; line-height: 55px; background:#84c8ff; color:#0f436d; border-radius: 0px 0px 10px 10px;
+}
+
+.is-consume {
+    border:1px #ff7a7a solid;
+}
+.is-consume div.name {
+    background:#ff7a7a; color:#761912;
+}
+
+div.remark {
+    color:#aaa; line-height: 28px; margin-top: 12px; text-indent: 2em;
+}
+
+
+.single-detail {
+    border-bottom:1px #e8e8e8 solid; margin-bottom: 10px;
+}
+
+.single-detail .date {
+    width: 100%; text-align: left; color:#999;
+}
+.detail-con {
+    text-align:left; line-height: 25px; padding: 5px 0px 10px 0px; color:#888;
+}
+.detail-con b {padding: 0px 4px; color:#333;}
+.detail-con .red {
+    color:#F00;
+}
+.detail-con .blue {color:blue;}

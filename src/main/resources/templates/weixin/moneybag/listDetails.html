@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>会员系统-问渠餐饮</title>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-moneybag.css"/>
+    <script type="text/javascript" src="/weixin/weixin-bag-index.js"></script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="container main-div">
+
+        <h3>标记：<b th:text="${sn}"></b></h3>
+
+        <input type="hidden" th:value="${sn}" name="sn"/>
+        <div class="form-group form-group-lg">
+            <div class="input-group">
+                <div class="input-group-addon">日期：</div>
+                <input type="number" name="day" th:value="${day}" class="form-control" id="day" placeholder="格式：yyyyMMdd"/>
+                <div class="input-group-addon" onclick="onFilter('listDetails')">检索</div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-12 col-sm-12 col-xs-12 need-center">
+                <div class="single-detail" th:each="detail: ${detailList}">
+                    <div class="date" th:text="${detail.createTime}"></div>
+                    <div class="detail-con"><b th:text="${detail.name}"></b>(<span th:text="${detail.phone}"></span>)在<b th:text="${detail.optStoreName}"></b>
+                        <b th:if="${detail.flag eq '1'}" class="red">充值</b>
+                        <b th:if="${detail.flag eq '2'}" class="blue">消费</b>
+                        <b th:text="${detail.money}" class="red"></b>元。
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content" th:remove="tag">
+            <div id="sys_filter" class="form-inline" style="padding-bottom:10px;">
+                <div class="input-group">
+                    <span class="input-group-addon">所属店铺</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_storeId'>
+                        <option value="">=全部=</option>
+                        <option th:each="store : ${storeList}" th:value="${store.id}" th:text="${store.name}"></option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">标记</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_flag'>
+                        <option value="">=全部=</option>
+                        <option value="1">充值</option>
+                        <option value="2">消费</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">姓名</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_name'/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">电话</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_phone'/>
+                </div>
+
+                <span><button type="button" class="btn btn-primary btn-sm" id="beginFilter">查询</button></span>
+            </div>
+        </div>
+    </body>
+</html>
