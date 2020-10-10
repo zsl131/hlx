@@ -19,11 +19,17 @@
         <input name="sn" type="hidden" th:value="${sn}"/>
         <input name="bagId" type="hidden"/>
         <input name="surplus" type="hidden"/>
-        <input name="realMoney" type="hidden"/>
         <div class="form-group form-group-lg">
             <div class="input-group">
                 <div class="input-group-addon">电话：</div>
                 <input type="tel" name="phone" maxlength="11" class="form-control"  placeholder="顾客手机号码"/>
+            </div>
+        </div>
+
+        <div class="form-group form-group-lg">
+            <div class="input-group">
+                <div class="input-group-addon">密码：</div>
+                <input type="number" name="password" maxlength="4" class="form-control"  placeholder="输入密码"/>
                 <div class="input-group-addon" onclick="checkBag()">检索</div>
             </div>
         </div>
@@ -32,25 +38,12 @@
             <div class="input-group">
                 <div class="input-group-addon">金额：</div>
                 <input type="number" name="money" disabled="disabled" class="form-control"  placeholder="输入消费金额"/>
-                <div class="input-group-addon" onclick="setMoney()">确定</div>
             </div>
         </div>
         <h4 id="bagName"></h4>
 
-        <div class="form-group form-group-lg">
-            <div class="input-group">
-                <div class="input-group-addon">密码：</div>
-                <input type="password" name="password" disabled="disabled" onkeyup="changePwd()" maxlength="4" class="form-control"  placeholder="输入消费密码"/>
-            </div>
-        </div>
-
         <button class="btn btn-danger btn-lg submit-btn" disabled="disabled" onclick="submitDetail()">确定扣款</button>
-        <div class="remark"><b>注意：</b>
-            <p>1. 输入顾客手机号码，点“检索”查询顾客信息及余额；</p>
-            <p>2. 输入消费金额，点“确定”；</p>
-            <p>3. 请顾客输入密码；</p>
-            <p>4. 消费密码默认是手机号码后4位，可在“问渠餐饮”公众号中查看和修改。</p>
-        </div>
+        <div class="remark"><b>注意：</b>请先输入电话和密码点击“检索”，检索成功后再输入消费金额后可点击“扣款”按钮。默认密码是手机号码后4位，若顾客修改后可在“问渠餐饮”公众号中查看！</div>
     </div>
 </div>
 </body>

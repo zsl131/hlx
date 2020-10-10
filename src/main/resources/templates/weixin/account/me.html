@@ -51,16 +51,18 @@
                             <span>账户余额</span>
                         </div>
                         <div class="weui-cell__ft">
-                            <span th:text="${wallet.money*1.0/100} + ' 元'"></span>
+                            <span th:if="${moneybag ne null}" th:text="${moneybag.money} + ' 元'"></span>
+                            <span th:if="${moneybag eq null}">非会员</span>
+                            <!--<span th:text="${wallet.money*1.0/100} + ' 元'"></span>-->
                         </div>
                     </a>
-                    <a class="weui-cell weui-cell_access show-password-cls" href="javascript:void(0)" onclick="showPassword()">
+                    <a th:if="${moneybag ne null}" class="weui-cell weui-cell_access show-password-cls" href="javascript:void(0)" onclick="showPassword()">
                         <div class="weui-cell__hd"><i class="list-icon fa fa-key"></i></div>
                         <div class="weui-cell__bd">
                             <span>消费密码</span>
                         </div>
                         <div class="weui-cell__ft">
-                            <span th:text="${wallet.password}">查看或修改</span>
+                            <span th:text="${moneybag.password}">查看或修改</span>
                         </div>
                     </a>
                     <a class="weui-cell weui-cell_access" href="/wx/account/score" >

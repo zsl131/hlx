@@ -2,6 +2,7 @@ package com.zslin.multi.dao;
 
 import com.zslin.basic.repository.BaseRepository;
 import com.zslin.multi.model.MoneybagDetail;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,5 +17,5 @@ public interface IMoneybagDetailDao extends BaseRepository<MoneybagDetail, Integ
     Float queryMoney(String flag, String sn, String day);
 
     @Query("FROM MoneybagDetail m WHERE m.createDate=?1 AND m.optStoreSn=?2")
-    List<MoneybagDetail> listByDay(String day, String sn);
+    List<MoneybagDetail> listByDay(String day, String sn, Sort sort);
 }

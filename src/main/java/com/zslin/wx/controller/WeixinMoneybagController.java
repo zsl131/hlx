@@ -1,5 +1,6 @@
 package com.zslin.wx.controller;
 
+import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.multi.dao.IMoneybagDao;
 import com.zslin.multi.dao.IMoneybagDetailDao;
@@ -31,7 +32,7 @@ public class WeixinMoneybagController {
     @Autowired
     private IStoreDao storeDao;
 
-    @PostMapping(value = "queryBag")
+    /*@PostMapping(value = "queryBag")
     public @ResponseBody Moneybag queryBag(String phone, String password) {
         Moneybag bag = moneybagDao.findByPhone(phone);
 //System.out.println(bag);
@@ -45,6 +46,18 @@ public class WeixinMoneybagController {
             bag.setName("密码不正确");
             return bag;
         } //密码不正确
+        else {return bag;}
+    }*/
+
+    @PostMapping(value = "queryBag")
+    public @ResponseBody Moneybag queryBag(String phone) {
+        Moneybag bag = moneybagDao.findByPhone(phone);
+//System.out.println(bag);
+        if(bag==null) {
+            bag = new Moneybag();
+            bag.setName("未检索到会员信息，请检查手机号码是否正确");
+            return bag;
+        } //未检索到会员信息
         else {return bag;}
     }
 
@@ -76,12 +89,14 @@ public class WeixinMoneybagController {
 
     /** 消费 */
     @PostMapping(value = "addDetail")
-    public @ResponseBody String addDetail(Integer bagId, String sn, Float money) {
+    public @ResponseBody String addDetail(Integer bagId, String sn, Float money, String password) {
         Moneybag bag = moneybagDao.findOne(bagId);
         Store store = storeDao.findBySn(sn);
         if(bag==null) {return "-1";} //没有找到会员信息
         if(store==null) {return "-2";} //没有找到店铺信息
+        if(!password.equals(bag.getPassword())) {return "-10";} //密码不正确
         if(money>bag.getMoney()) {return "-3";} //账户余额不足
+
         addDetail(bag, store, 0-money, store.getName()+"-消费");
         return "1";
     }
@@ -158,7 +173,7 @@ public class WeixinMoneybagController {
     @GetMapping(value = "listDetails")
     public String listDetails(Model model, String sn, String day) {
         day = buildDay(day); //重构Day
-        List<MoneybagDetail> detailList = moneybagDetailDao.listByDay(day, sn);
+        List<MoneybagDetail> detailList = moneybagDetailDao.listByDay(day, sn, SimpleSortBuilder.generateSort("id_d"));
         model.addAttribute("detailList", detailList);
         model.addAttribute("day", day);
         model.addAttribute("sn", sn);

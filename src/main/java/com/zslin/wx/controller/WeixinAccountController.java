@@ -10,6 +10,10 @@ import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.ClientJsonTools;
 import com.zslin.kaoqin.model.Worker;
 import com.zslin.kaoqin.service.IWorkerService;
+import com.zslin.multi.dao.IMoneybagDao;
+import com.zslin.multi.dao.IMoneybagDetailDao;
+import com.zslin.multi.model.Moneybag;
+import com.zslin.multi.model.MoneybagDetail;
 import com.zslin.sms.tools.RandomTools;
 import com.zslin.sms.tools.SmsConfig;
 import com.zslin.sms.tools.SmsTools;
@@ -103,6 +107,12 @@ public class WeixinAccountController {
     @Autowired
     private ClientFileTools clientFileTools;
 
+    @Autowired
+    private IMoneybagDao moneybagDao;
+
+    @Autowired
+    private IMoneybagDetailDao moneybagDetailDao;
+
     //修改密码
     @PostMapping(value = "setPassword")
     public @ResponseBody String setPassword(String password, HttpServletRequest request) {
@@ -113,6 +123,7 @@ public class WeixinAccountController {
             Wallet w = walletService.findByOpenid(openid);
             if(w.getPhone()!=null && !"".equals(w.getPhone())) {
                 memberService.updatePassword(password, w.getPhone());
+                moneybagDao.updatePasswordByPhone(password, w.getPhone());
                 //TODO 此时应通知收银前端
                 send2Client(w.getPhone(), password);
                 send2Client(w);
@@ -161,6 +172,9 @@ public class WeixinAccountController {
         } else {
             model.addAttribute("hadError", false);
             model.addAttribute("account", account);
+            if(account.getPhone()!=null && !"".equals(account.getPhone())) { //如果已经绑定手机
+                model.addAttribute("moneybag", moneybagDao.findByPhone(account.getPhone()));
+            }
             model.addAttribute("wallet", walletService.findByOpenid(openid));
             model.addAttribute("pullCount", accountService.findPullCount(account.getId()));
             model.addAttribute("ownCount", ownService.findCount(openid)); //礼物数量
@@ -206,12 +220,22 @@ public class WeixinAccountController {
     @GetMapping(value = "money")
     public String money(Model model, Integer page, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
-        SimpleSpecificationBuilder builder = new SimpleSpecificationBuilder("openid", "eq", openid);
+        Account account = accountService.findByOpenid(openid);
+        /*SimpleSpecificationBuilder builder = new SimpleSpecificationBuilder("openid", "eq", openid);
         builder.add("type", "eq", "1");
         model.addAttribute("wallet", walletService.findByOpenid(openid));
         Page<WalletDetail> datas = walletDetailService.findAll(builder.generate(),
-                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));
-        model.addAttribute("datas", datas);
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createDate_d")));*/
+
+        Moneybag bag = moneybagDao.findByPhone(account.getPhone());
+        if(bag!=null) {
+            SimpleSpecificationBuilder builder = new SimpleSpecificationBuilder("phone", "eq", bag.getPhone());
+
+            Page<MoneybagDetail> datas = moneybagDetailDao.findAll(builder.generate(),
+                    SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
+            model.addAttribute("datas", datas);
+            model.addAttribute("bag", bag);
+        }
         return "weixin/account/money";
     }
 
