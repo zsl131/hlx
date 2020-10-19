@@ -6,6 +6,7 @@ import com.zslin.basic.tools.NormalTools;
 import com.zslin.card.model.Card;
 import com.zslin.card.service.ICardService;
 import com.zslin.client.tools.RestdayTools;
+import com.zslin.multi.tools.MoneyBagTools;
 import com.zslin.web.model.*;
 import com.zslin.web.service.*;
 import com.zslin.web.tools.DiscountDayTools;
@@ -89,6 +90,9 @@ public class DatasTools {
     @Autowired
     private HlxTicketTools hlxTicketTools;
 
+    @Autowired
+    private MoneyBagTools moneyBagTools;
+
     /** 当用户取消关注时 */
     public void onUnsubscribe(String openid) {
         accountService.updateStatus(openid, "0");
@@ -118,6 +122,8 @@ public class DatasTools {
             return WeixinXmlTools.buildArticleStr(openid, builderName, article, config.getUrl());
         } else if(isCardNo(content.trim())) { //如果输入代金券卡号
             return WeixinXmlTools.createTextXml(openid, builderName, buildCardStr(content.trim()));
+        } else if(moneyBagTools.isBagStr(content.trim())) { //如果是查会员办理情况
+            return WeixinXmlTools.createTextXml(openid, builderName, moneyBagTools.buildBagStr(content.trim()));
         } else if("hlx".equals(content.toLowerCase())) { //关注情况
             eventTools.eventRemind(openid, "查询提醒", "关注情况如下", DateTools.date2Str(new Date(), "yyyy-MM-dd"), accountTools.buildAccountStr(), "");
             return "";

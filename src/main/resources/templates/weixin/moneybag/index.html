@@ -9,6 +9,7 @@
     <title>会员系统-问渠餐饮</title>
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-moneybag.css"/>
     <script type="text/javascript" src="/weixin/weixin-bag-index.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-bag-cal.js"></script>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
@@ -67,6 +68,9 @@
         <div class="row" style="margin-top: 20px;">
             <div class="col-md-12 col-sm-12 col-xs-12 need-center">
                 <a th:href="|/weixin/moneybag/listDetails?sn=${sn}&day=${day}|">收支详情</a>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12 need-center">
+                <a href="javascript:void(0)" class="btn btn-info btn-lg" onclick="onCal()">计算器</a>
             </div>
         </div>
     </div>

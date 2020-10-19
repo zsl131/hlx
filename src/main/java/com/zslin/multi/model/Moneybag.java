@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class Moneybag {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "store_sn")

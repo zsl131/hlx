@@ -14,6 +14,7 @@ import com.zslin.kaoqin.dto.MonthDto;
 import com.zslin.kaoqin.model.Clockin;
 import com.zslin.kaoqin.service.IClockinService;
 import com.zslin.kaoqin.tools.*;
+import com.zslin.multi.tools.MoneyBagTools;
 import com.zslin.sms.tools.RandomTools;
 import com.zslin.sms.tools.SmsConfig;
 import com.zslin.sms.tools.SmsTools;
@@ -92,6 +93,26 @@ public class NormalTest {
 
     @Autowired
     private IHlxTicketService hlxTicketService;
+
+    @Autowired
+    private MoneyBagTools moneyBagTools;
+
+    @Test
+    public void test44() {
+        String str = moneyBagTools.buildBagStr("w20201018");
+        System.out.println(str);
+    }
+
+    @Test
+    public void test43() {
+        String str = "20201019";
+        System.out.println(str);
+        System.out.println(Integer.parseInt(str));
+        System.out.println(moneyBagTools.isBagStr("W20201019"));
+        System.out.println(moneyBagTools.isBagStr("w20201019"));
+        System.out.println(moneyBagTools.isBagStr("W2020101 9"));
+        System.out.println(moneyBagTools.isBagStr("W20201s19"));
+    }
 
     @Test
     public void test42() {

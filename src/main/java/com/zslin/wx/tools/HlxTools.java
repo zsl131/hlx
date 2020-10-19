@@ -367,10 +367,11 @@ public class HlxTools {
      * @return
      */
     public String formatValue(Double value, Integer len) {
-        if(value==null) {return "-";}
+        /*if(value==null) {return "-";}
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(len==null?2:len, RoundingMode.HALF_UP);
-        return bd.toString();
+        return bd.toString();*/
+        return NormalTools.formatValue(value, len);
     }
 
     private String getLastMonth(int amount) {

@@ -1,6 +1,7 @@
 package com.zslin.wx.tools;
 
 import com.zslin.basic.tools.NormalTools;
+import com.zslin.web.model.Account;
 import com.zslin.web.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -76,5 +77,15 @@ public class AccountTools {
                 append(accountService.findFollowCountByDay(NormalTools.curDate("yyyy-MM-dd"))).append(" 人")
                 .append("\\n已取消：").append((allCount-followCount)).append(" 人");
         return sb.toString();
+    }
+
+    /**
+     * 通过手机号码查询Openid
+     * @param phone
+     * @return
+     */
+    public String queryOpenid(String phone) {
+        String openid = accountService.findOpenidByPhone(phone);
+        return openid;
     }
 }

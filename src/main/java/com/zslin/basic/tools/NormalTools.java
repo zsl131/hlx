@@ -1,5 +1,7 @@
 package com.zslin.basic.tools;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -71,6 +73,19 @@ public class NormalTools {
         f1 = Math.rint(f1);
         return f1;*/
         return Math.ceil(d);
+    }
+
+    /**
+     * 保留几位有效数
+     * @param value 数值
+     * @param len 保留几位,默认2位
+     * @return
+     */
+    public static String formatValue(Double value, Integer len) {
+        if(value==null) {return "-";}
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(len==null?2:len, RoundingMode.HALF_UP);
+        return bd.toString();
     }
 
     public static boolean isNull(String val) {

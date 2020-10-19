@@ -49,7 +49,7 @@ function submitDetail() {
     var surplus = parseFloat($("input[name='surplus']").val());
     var money = parseFloat($("input[name='realMoney']").val()); //真实金额
     var pwd = $("input[name='password']").val();
-    console.log(money)
+    //console.log(money)
     if(!bagId) {alert("请先检索会员信息");}
     else if(isNaN(money) || money<=0) {alert("请输入大于0的金额")}
     else if(money>surplus) {alert("消费金额不能大于账户余额【"+surplus+"】");}

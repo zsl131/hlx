@@ -1,6 +1,7 @@
 package com.zslin.wx.controller;
 
 import com.zslin.basic.repository.SimpleSortBuilder;
+import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.multi.dao.IMoneybagDao;
 import com.zslin.multi.dao.IMoneybagDetailDao;
@@ -8,6 +9,8 @@ import com.zslin.multi.dao.IStoreDao;
 import com.zslin.multi.model.Moneybag;
 import com.zslin.multi.model.MoneybagDetail;
 import com.zslin.multi.model.Store;
+import com.zslin.wx.tools.AccountTools;
+import com.zslin.wx.tools.EventTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -31,6 +36,12 @@ public class WeixinMoneybagController {
 
     @Autowired
     private IStoreDao storeDao;
+
+    @Autowired
+    private EventTools eventTools;
+
+    @Autowired
+    private AccountTools accountTools;
 
     /*@PostMapping(value = "queryBag")
     public @ResponseBody Moneybag queryBag(String phone, String password) {
@@ -84,7 +95,28 @@ public class WeixinMoneybagController {
         }
         if(bag==null) {return "-1"; } //无法创建会员信息，可能店铺信息出错
         addDetail(bag, store, money, "会员充值");
+        noticeAdmin(bag, store, money);
         return "1";
+    }
+
+    private void noticeAdmin(Moneybag bag, Store store, Float money) {
+        List<String> openids = buildOpenids();
+        String sep = "\\n";
+        StringBuffer sb = new StringBuffer();
+        sb.append("变化类型：").append("会员充值").append(sep)
+                .append("会员姓名：").append(bag.getName()).append(sep)
+                .append("手机号码：").append(bag.getPhone()).append(sep)
+                .append("变化金额：").append(money).append(sep)
+                .append("当前余额：").append(bag.getMoney()).append(sep)
+                .append("操作店铺：").append(store.getName()).append(sep)
+                .append("如有疑问，请与店长联系。");
+        eventTools.eventRemind(openids, "有会员充值", buildFlagName("1"), DateTools.date2Str(new Date()), sb.toString(), "/wx/account/me");
+    }
+
+    private List<String> buildOpenids() {
+        List<String> list = new ArrayList<>();
+        list.add("o_TZkwbz0pzuCTmrWqMGNHriMHTo");
+        return list;
     }
 
     /** 消费 */
@@ -125,7 +157,24 @@ public class WeixinMoneybagController {
         bag.setMoney(surplus);
 
         moneybagDao.save(bag);
+
+        String openid = accountTools.queryOpenid(bag.getPhone());
+        if(openid!=null && !"".equals(openid)) {
+            String sep = "\\n";
+            StringBuffer sb = new StringBuffer();
+            sb.append("变化类型：").append(buildFlagName(detail.getFlag())).append(sep)
+                    .append("变化金额：").append(money).append(sep)
+                    .append("当前余额：").append(surplus).append(sep)
+                    .append("操作店铺：").append(store.getName()).append(sep)
+                    .append("若非本人操作，请及联系我们！");
+            eventTools.eventRemind(openid, "会员账户发生变化", buildFlagName(detail.getFlag()), DateTools.date2Str(new Date()), sb.toString(), "/wx/account/money");
+        }
         return detail;
+    }
+
+    private String buildFlagName(String flag) {
+        if(MoneybagDetail.FLAG_IN.equals(flag)) {return "会员充值";}
+        else {return  "消费扣款";}
     }
 
     private Moneybag addBag(Store store, String name, String phone) {
