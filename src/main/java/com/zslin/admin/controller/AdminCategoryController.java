@@ -98,7 +98,9 @@ public class AdminCategoryController {
                 }
             }
             categoryService.save(category);
-            send2Client(category, "save");
+            if(!"1".equals(category.getOutFoodFlag())) { //如果不是外卖
+                send2Client(category, "save");
+            }
         }
         return "redirect:/admin/category/list";
     }
@@ -144,7 +146,9 @@ public class AdminCategoryController {
             }
 
             categoryService.save(c);
-            send2Client(c, "save");
+            if(!"1".equals(c.getOutFoodFlag())) {
+                send2Client(c, "save");
+            }
         }
         return "redirect:/admin/category/list";
     }

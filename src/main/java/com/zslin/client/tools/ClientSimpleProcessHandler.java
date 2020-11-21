@@ -14,7 +14,6 @@ import com.zslin.wx.dbtools.ScoreTools;
 import com.zslin.wx.dto.EventRemarkDto;
 import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.EventTools;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -160,21 +159,19 @@ public class ClientSimpleProcessHandler {
         if("2".equals(o.getStatus()) && "9".equalsIgnoreCase(o.getType())) {
             List<String> openids = accountTools.getOpenid(AccountTools.ADMIN);
 
-            String day = NormalTools.curDate("yyyy-MM-dd");
+//            String day = NormalTools.curDate("yyyy-MM-dd");
 
-            Integer halfAm = buffetOrderDetailService.queryCount(day, "66666"); //午餐半票人数
-            Integer fullAm = buffetOrderDetailService.queryCount(day, "88888"); //午餐全票人数
-            Integer halfPm = buffetOrderDetailService.queryCount(day, "77777"); //晚餐半票人数
-            Integer fullPm = buffetOrderDetailService.queryCount(day, "99999"); //晚餐全票人数
+//            Integer halfAm = buffetOrderDetailService.queryCount(day, "66666"); //午餐半票人数
+//            Integer fullAm = buffetOrderDetailService.queryCount(day, "88888"); //午餐全票人数
+//            Integer halfPm = buffetOrderDetailService.queryCount(day, "77777"); //晚餐半票人数
+//            Integer fullPm = buffetOrderDetailService.queryCount(day, "99999"); //晚餐全票人数
 
             //当有友情价是discountReason必须存老板手机号码
-            boolean res = eventTools.eventRemind(openids,"飞凡抵价通知", "有顾客使用飞凡购票", NormalTools.curDate("yyyy-MM-dd HH:mm"),
+            boolean res = eventTools.eventRemind(openids,"伙时抵价通知", "有顾客使用伙时购票", NormalTools.curDate("yyyy-MM-dd HH:mm"),
                     "/wx/buffetOrders/show?no="+o.getNo(),
                     new EventRemarkDto("订单编号", o.getNo()),
-                    new EventRemarkDto("商品总数", o.getCommodityCount()+""),
-                    new EventRemarkDto("午餐人数", halfAm+"+"+fullAm+"="+(halfAm+fullAm)),
-                    new EventRemarkDto("晚餐人数", halfPm+"+"+fullPm+"="+(halfPm+fullPm)),
-                    new EventRemarkDto("飞凡编号", o.getDiscountReason()),
+                    new EventRemarkDto("用餐人数", o.getCommodityCount()+""),
+                    new EventRemarkDto("伙时编号", o.getDiscountReason()),
                     new EventRemarkDto("", "点击查看可确认！"));
 
         }

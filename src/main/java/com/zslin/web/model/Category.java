@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/1/23 11:34.
+ * 菜品分类
  */
 @Entity
 @Table(name = "t_category")
@@ -35,4 +36,6 @@ public class Category extends BaseEntity implements Serializable {
     @Column(name = "store_sn")
     private String storeSn;
 
+    /** 外卖标识 */
+    private String outFoodFlag = "0";
 }

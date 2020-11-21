@@ -120,7 +120,9 @@ public class AdminFoodController {
             food.setSn(buildSn(maxSnNo+1));
             foodService.save(food);
 
-            send2Client(food, "save");
+            if(!"1".equals(food.getOutFoodFlag())) {
+                send2Client(food, "save");
+            }
         }
         return "redirect:/admin/food/list?filter_storeId=eq-"+food.getStoreId();
     }
@@ -191,7 +193,9 @@ public class AdminFoodController {
             }
             foodService.save(f);
 
-            send2Client(f, "save");
+            if(!"1".equals(f.getOutFoodFlag())) {
+                send2Client(f, "save");
+            }
         }
         return "redirect:/admin/food/list?filter_storeId=eq-"+food.getStoreId();
     }

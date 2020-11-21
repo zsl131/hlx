@@ -44,10 +44,11 @@ public class QrsceneTools {
      * @param sceneStr 二维码值
      */
     public void processQrscene(String openid, String sceneStr) {
+        //System.out.println("------>QrSceneTools--->"+openid+"---->"+sceneStr);
         sceneStr = sceneStr.replace(prefix, "");
         if(sceneStr.startsWith(QrTools.USER_TYPE)) { //用户个人二维码
             userFollow(openid, sceneStr);
-        } else if(sceneStr.startsWith(QrTools.TICKET_TYPE)) { //10元优惠券
+        } else if(sceneStr.startsWith(QrTools.TICKET_TYPE)) { //扫二维码领券
             sceneStr = sceneStr.replace(QrTools.TICKET_TYPE, ""); //只获取值
             hlxTicketTools.receiveTicket(openid, sceneStr);
         }

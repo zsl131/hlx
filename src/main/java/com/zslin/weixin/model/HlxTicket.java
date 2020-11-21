@@ -22,6 +22,12 @@ public class HlxTicket {
      */
     private String type;
 
+    /** 所属店铺 */
+    private String storeSn;
+
+    /** 从哪里扫过来的 */
+    private String fromStoreSn;
+
     /**
      * 使用方式
      * 1-正常使用，价值多少，抵扣多少
@@ -32,7 +38,7 @@ public class HlxTicket {
 
     /** 满减才有值，即满多少钱才可以使用这张券 */
     @Column(name = "reach_money")
-    private Integer reachMoney;
+    private Float reachMoney;
 
     private String phone;
 
@@ -56,13 +62,13 @@ public class HlxTicket {
     private String ticketName;
 
     /** 卡券价值，即具体抵多少钱，单位元 */
-    private Integer ticketWorth;
+    private Float ticketWorth;
 
     /** 卡券编号 */
     @Column(name = "ticket_no")
     private String ticketNo;
 
-    /** 状态 0-领取；1-已使用 */
+    /** 状态 0-领取；1-已使用；2-过期 */
     private String status = "0";
 
     /** 使用日期 */
@@ -74,4 +80,19 @@ public class HlxTicket {
 
     @Column(name = "use_long")
     private Long useLong;
+
+    /** 有效期始 */
+    private String startTime;
+
+    /** 有效期始 */
+    private Long startLong=0l;
+
+    /** 有效期止 */
+    private String endTime;
+
+    /** 有效期止 */
+    private Long endLong;
+
+    /** 唯一编号 */
+    private String sn;
 }

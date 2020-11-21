@@ -20,4 +20,12 @@ public interface IMoneybagDao extends BaseRepository<Moneybag, Integer>, JpaSpec
     @Modifying
     @Transactional
     void plusMoneyByPhone(Float money, String phone);
+
+    /** 会员总金额 */
+    @Query("SELECT SUM(m.money) FROM Moneybag m ")
+    Float findAllMoney();
+
+    /** 余额不为0的会员人数 */
+    @Query("SELECT COUNT(m.id) FROM Moneybag m WHERE m.money>0")
+    Integer findAllBag();
 }

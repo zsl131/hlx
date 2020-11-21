@@ -15,7 +15,14 @@
     <div class="container main-div">
 
         <h3>会员消费</h3>
-        <h3>标记：<b th:text="${sn}"></b></h3>
+        <h3>标记：
+            <b  th:switch="${sn}">
+                <span th:case="hlx">汉丽轩</span>
+                <span th:case="qwzw">签王之王</span>
+                <span th:case="lms">兰木肆</span>
+            </b>【<b th:text="${sn}"></b>】
+            <!--<b th:text="${sn}"></b>-->
+        </h3>
         <input name="sn" type="hidden" th:value="${sn}"/>
         <input name="bagId" type="hidden"/>
         <input name="surplus" type="hidden"/>

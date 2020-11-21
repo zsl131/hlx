@@ -18,4 +18,8 @@ public interface IMoneybagDetailDao extends BaseRepository<MoneybagDetail, Integ
 
     @Query("FROM MoneybagDetail m WHERE m.createDate=?1 AND m.optStoreSn=?2")
     List<MoneybagDetail> listByDay(String day, String sn, Sort sort);
+
+    /** 获取冻结的数据详情 */
+    @Query("FROM MoneybagDetail m WHERE m.freezeFlag='1'")
+    List<MoneybagDetail> listAllFreezeDetail();
 }

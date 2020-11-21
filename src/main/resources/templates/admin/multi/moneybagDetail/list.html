@@ -12,7 +12,7 @@
 				$(".delete-obj-href").deleteFun();
 			});
 		</script>
-		<script type="text/javascript" src="/back-admin/bus/multi/moneybag-list.js"></script>
+		<script type="text/javascript" src="/back-admin/bus/multi/moneybag-detail-list.js"></script>
 	</head>
 <body>
 	<div th:fragment="content" th:remove="tag">
@@ -31,6 +31,7 @@
 						<th>顾客</th>
 						<th>消费/余额</th>
 						<th>日期</th>
+						<th>操作</th>
 					</tr>
 				</thead>
 
@@ -41,11 +42,15 @@
 						<td>
 							<p><span th:if="${obj.flag eq '1'}" class="red">充值</span>
 								<span th:if="${obj.flag eq '2'}" class="blue">消费</span>
-								：<b th:text="${obj.money}"></b></p>
+								：<b th:text="${obj.money}"></b><span class="red" th:if="${obj.freezeFlag eq '1'}">[冻结]</span></p>
 							<p>剩余：<b th:text="${obj.surplus}"></b></p>
 						<td>
 							<p>操作店铺：<span th:text="${obj.optStoreName}"></span></p>
 							<p>日期：<span th:text="${obj.createTime}"></span></p>
+						</td>
+						<td>
+							<button class="btn btn-danger" th:if="${obj.freezeFlag eq '1'}" th:attr="objId=${obj.id}" onclick="onUnfreeze(this)">手动解冻</button>
+							<span th:if="${obj.freezeFlag ne '1'}">-</span>
 						</td>
 					</tr>
 				</tbody>

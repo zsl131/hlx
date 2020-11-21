@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MoneyBagTools {
 
-    private static final String SEP = "\\n";
+    private static final String SEP = "\n";
 
     @Autowired
     private IMoneybagDetailDao moneybagDetailDao;
@@ -20,7 +20,7 @@ public class MoneyBagTools {
      */
     public String buildBagStr(String content) {
         String createDate = buildDate(content);
-        String sepLine = "----------------";
+        String sepLine = "--------------------------";
         StringBuffer sb = new StringBuffer();
         Float hlxIn = moneybagDetailDao.queryMoney("1", "hlx", createDate); //入账
         Float hlxOut = moneybagDetailDao.queryMoney("2", "hlx", createDate); //出账
@@ -38,15 +38,15 @@ public class MoneyBagTools {
         //sb.append("消费人次：").append(formatValue(sum, 0)).append(" 人").append(spe);
         //sb.append("平均每天：").append(formatValue(sum/days, 2)).append(" 人").append(spe);
         sb.append("会员充值查询").append(SEP)
-            .append("查询日期：").append(createDate).append(sepLine).append(SEP)
+            .append("查询日期：").append(createDate).append(SEP).append(sepLine).append(SEP)
             .append("汉丽轩充值：").append(NormalTools.formatValue(hlxIn*1.0, 2)).append(" 元").append(SEP)
-            .append("汉丽轩消费：").append(NormalTools.formatValue(hlxOut*1.0, 2)).append(" 天").append(SEP)
-            .append(sepLine)
+            .append("汉丽轩消费：").append(NormalTools.formatValue(hlxOut*1.0, 2)).append(" 元").append(SEP)
+            .append(sepLine).append(SEP)
             .append("兰木肆充值：").append(NormalTools.formatValue(lmsIn*1.0, 2)).append(" 元").append(SEP)
-            .append("兰木肆消费：").append(NormalTools.formatValue(lmsOut*1.0, 2)).append(" 天").append(SEP)
-            .append(sepLine)
+            .append("兰木肆消费：").append(NormalTools.formatValue(lmsOut*1.0, 2)).append(" 元").append(SEP)
+            .append(sepLine).append(SEP)
             .append("签王充值：").append(NormalTools.formatValue(qwzwIn*1.0, 2)).append(" 元").append(SEP)
-            .append("签王消费：").append(NormalTools.formatValue(qwzwOut*1.0, 2)).append(" 天").append(SEP)
+            .append("签王消费：").append(NormalTools.formatValue(qwzwOut*1.0, 2)).append(" 元").append(SEP)
             .append("请注意核对数据有效性");
         return sb.toString();
     }

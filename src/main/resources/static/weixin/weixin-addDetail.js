@@ -9,8 +9,10 @@ function checkBag() {
     else {
         $.post("/weixin/moneybag/queryBag", {phone: phone}, function(bag) {
             if(!bag.id) {alert(bag.name);}
+
             else {
-                var name = bag.name; var surplus = bag.money; $("#bagName").html("<p class='old'>顾客姓名： "+name+"，剩余：<b style='color:#F00'>"+surplus+"</b> 元。</p>");
+            console.log(bag)
+                var name = bag.name; var surplus = bag.money; $("#bagName").html("<p class='old'>顾客姓名： "+name+"，可用剩余：<b style='color:#F00'>"+surplus+"</b> 元，已冻结：<b style='color:#F00'>"+bag.freezeMoney+"</b>。</p>");
                 $("input[name='bagId']").val(bag.id);
                 $("input[name='surplus']").val(surplus);
                 //$(".submit-btn").removeAttr("disabled");

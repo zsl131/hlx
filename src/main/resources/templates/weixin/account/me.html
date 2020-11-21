@@ -10,6 +10,7 @@
     <script type="text/javascript" src="/weixin/weixin-bind-phone.js"></script>
     <script type="text/javascript" src="/weixin/weixin-key-set.js"></script>
     <script type="text/javascript" src="/weixin/weixin-card.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-idcard.js"></script>
     <script src="/weixin/weixin-account-me.js"></script>
     <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
 </head>
@@ -48,7 +49,7 @@
                     <a class="weui-cell weui-cell_access" href="/wx/account/money" >
                         <div class="weui-cell__hd"><i class="list-icon fa fa-rmb"></i></div>
                         <div class="weui-cell__bd">
-                            <span>账户余额</span>
+                            <span>可用余额</span>
                         </div>
                         <div class="weui-cell__ft">
                             <span th:if="${moneybag ne null}" th:text="${moneybag.money} + ' 元'"></span>
@@ -56,13 +57,26 @@
                             <!--<span th:text="${wallet.money*1.0/100} + ' 元'"></span>-->
                         </div>
                     </a>
-                    <a th:if="${moneybag ne null}" class="weui-cell weui-cell_access show-password-cls" href="javascript:void(0)" onclick="showPassword()">
+                    <!-- 不是会员也需要修改密码来消费积分 -->
+                    <a class="weui-cell weui-cell_access show-password-cls" href="javascript:void(0)" onclick="showPassword()">
                         <div class="weui-cell__hd"><i class="list-icon fa fa-key"></i></div>
                         <div class="weui-cell__bd">
                             <span>消费密码</span>
                         </div>
                         <div class="weui-cell__ft">
-                            <span th:text="${moneybag.password}">查看或修改</span>
+                            <span th:text="${moneybag.password}" th:if="${moneybag ne null}">查看或修改</span>
+                            <span th:text="${wallet.password}" th:if="${moneybag eq null}">查看或修改</span>
+                        </div>
+                    </a>
+                    <!-- 如果是会员 -->
+                    <a th:if="${moneybag ne null}" class="weui-cell weui-cell_access show-password-cls" href="javascript:void(0)" onclick="uploadIdPic()">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-birthday-cake"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>我的生日</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${moneybag.birthday}" th:if="${moneybag.birthday ne null}">查看或修改</span>
+                            <span th:if="${moneybag.birthday eq null}">设置生日可享更多优惠哦</span>
                         </div>
                     </a>
                     <a class="weui-cell weui-cell_access" href="/wx/account/score" >
@@ -74,7 +88,7 @@
                             <span th:text="${wallet.score} + ' 分'"></span>
                         </div>
                     </a>
-                    <a class="weui-cell weui-cell_access" href="/wx/member/chargeList" >
+                    <!--<a class="weui-cell weui-cell_access" href="/wx/member/chargeList" >
                         <div class="weui-cell__hd"><i class="list-icon fa fa-plug"></i></div>
                         <div class="weui-cell__bd">
                             <span>充值明细</span>
@@ -82,7 +96,7 @@
                         <div class="weui-cell__ft">
                             <span th:text="${chargeCount}"></span>
                         </div>
-                    </a>
+                    </a>-->
 
                     <a class="weui-cell weui-cell_access" th:href="${(account.phone eq null || account.phone eq '')?'javascript:bindPhone()':'javascript:showPhone()'}" >
                         <div class="weui-cell__hd"><i class="list-icon fa fa-phone"></i></div>
@@ -94,7 +108,17 @@
                         </div>
                     </a>
 
-                    <a class="weui-cell weui-cell_access" href="/wx/account/commentList" >
+                    <a class="weui-cell weui-cell_access" href="/wx/account/ticket" >
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-ticket"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>我的卡券</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span th:text="${ticketCount}"></span>
+                        </div>
+                    </a>
+
+                    <!--<a class="weui-cell weui-cell_access" href="/wx/account/commentList" >
                         <div class="weui-cell__hd"><i class="list-icon fa fa-comments-o"></i></div>
                         <div class="weui-cell__bd">
                             <span>我的评论</span>
@@ -132,7 +156,7 @@
                         <div class="weui-cell__ft">
                             <span th:text="${ownCount}"></span>
                         </div>
-                    </a>
+                    </a>-->
                     <a class="weui-cell weui-cell_access" href="/wx/income/add" th:if="${account.type eq '10'}">
                         <div class="weui-cell__hd"><i class="list-icon fa fa-plus"></i></div>
                         <div class="weui-cell__bd">

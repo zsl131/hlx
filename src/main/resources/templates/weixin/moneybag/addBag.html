@@ -14,7 +14,14 @@
 <div th:fragment="content" th:remove="tag">
     <div class="container main-div">
         <h3>会员充值</h3>
-        <h3>标记：<b th:text="${sn}"></b></h3>
+        <h3>标记：
+            <b  th:switch="${sn}">
+                <span th:case="hlx">汉丽轩</span>
+                <span th:case="qwzw">签王之王</span>
+                <span th:case="lms">兰木肆</span>
+            </b>【<b th:text="${sn}"></b>】
+            <!--<b th:text="${sn}"></b>-->
+        </h3>
         <input name="sn" type="hidden" th:value="${sn}"/>
         <div class="form-group form-group-lg">
             <div class="input-group">

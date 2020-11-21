@@ -15,7 +15,7 @@
             <div class="weui-flex">
                 <div class="weui-flex__item">
                     <h1 class="page__title" style="color:#F60;"><i class="fa fa-rmb"></i><b th:if="${bag ne null}" th:text="${#numbers.formatDecimal(bag.money, 0, 'COMMA', 2, 'POINT')}"></b></h1>
-                    <p class="page__desc">账户余额</p>
+                    <p class="page__desc">账户余额&nbsp;&nbsp;[冻结【<b th:text="${bag.freezeMoney}"></b>】元]</p>
                 </div>
                 <!--<div class="weui-flex__item" style="position:relative;">
                     <a href="/wx/member/level" style="position:absolute; bottom:10px;"><i class="fa fa-info"></i> 办理会员卡！</a>

@@ -1,0 +1,3 @@
+function uploadIdPic() {
+    console.log("------")
+}

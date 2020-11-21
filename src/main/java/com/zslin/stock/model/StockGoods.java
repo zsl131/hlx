@@ -62,6 +62,39 @@ public class StockGoods {
     /** 备注，如标明一件有几包 */
     private String remark;
 
+    /** 店铺ID */
+    private Integer storeId;
+
+    /** 店铺名称 */
+    private String storeName;
+
+    /** 店铺SN */
+    private String storeSn;
+
+    public Integer getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Integer storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getStoreSn() {
+        return storeSn;
+    }
+
+    public void setStoreSn(String storeSn) {
+        this.storeSn = storeSn;
+    }
+
     public String getHasWarn() {
         return hasWarn;
     }

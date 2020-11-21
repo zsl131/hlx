@@ -66,4 +66,7 @@ public class MoneybagDetail {
 
     @Lob
     private String reason;
+
+    /** 冻结标记 */
+    private String freezeFlag = "0";
 }

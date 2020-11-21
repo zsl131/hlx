@@ -21,6 +21,12 @@ public class QRTest {
     private QrTools qrTools;
 
     @Test
+    public void test03() {
+        String url = qrTools.genTicketQr("100_2020102710008", false);
+        System.out.println(url);
+    }
+
+    @Test
     public void test() {
         String icon = "http://wx.qlogo.cn/mmopen/72VK6XRwaSb6k1tjN84DqIciboPu0BvJypdia9TfFBUOmWeYYy4Q0MhxvGZdAVdoRr6Rr9oU6U3cpP4ZiaqV2heJnPvfW4y8Qgw/0";
         qrTools.genUserQr("111", icon);

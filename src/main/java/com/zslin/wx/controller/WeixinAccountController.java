@@ -19,6 +19,8 @@ import com.zslin.sms.tools.SmsConfig;
 import com.zslin.sms.tools.SmsTools;
 import com.zslin.web.model.*;
 import com.zslin.web.service.*;
+import com.zslin.weixin.model.HlxTicket;
+import com.zslin.weixin.service.IHlxTicketService;
 import com.zslin.wx.dbtools.ScoreAdditionalDto;
 import com.zslin.wx.dbtools.ScoreTools;
 import com.zslin.wx.tools.AccountTools;
@@ -36,6 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/3/1 17:13.
@@ -113,6 +116,9 @@ public class WeixinAccountController {
     @Autowired
     private IMoneybagDetailDao moneybagDetailDao;
 
+    @Autowired
+    private IHlxTicketService hlxTicketService;
+
     //修改密码
     @PostMapping(value = "setPassword")
     public @ResponseBody String setPassword(String password, HttpServletRequest request) {
@@ -177,9 +183,10 @@ public class WeixinAccountController {
             }
             model.addAttribute("wallet", walletService.findByOpenid(openid));
             model.addAttribute("pullCount", accountService.findPullCount(account.getId()));
-            model.addAttribute("ownCount", ownService.findCount(openid)); //礼物数量
-            model.addAttribute("commentCount", commentService.findCount(openid)); //评论数量
-            model.addAttribute("feedbackCount", feedbackService.findCount(openid)); //消息数量
+//            model.addAttribute("ownCount", ownService.findCount(openid)); //礼物数量
+//            model.addAttribute("commentCount", commentService.findCount(openid)); //评论数量
+//            model.addAttribute("feedbackCount", feedbackService.findCount(openid)); //消息数量
+            model.addAttribute("ticketCount", hlxTicketService.queryCount(openid, "0")); //可用卡券张数
             model.addAttribute("chargeCount", memberChargeService.findCount(openid)); //充值次数
 
             if (AccountTools.isPartner(account.getType())) {
@@ -189,6 +196,15 @@ public class WeixinAccountController {
             }
         }
         return "weixin/account/me";
+    }
+
+    /** 卡券 */
+    @GetMapping(value = "ticket")
+    public String ticket(Model model, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        List<HlxTicket> ticketList = hlxTicketService.findByOpenidAndStatus(openid, "0");
+        model.addAttribute("ticketList", ticketList);
+        return "weixin/account/ticket";
     }
 
     //礼品列表

@@ -32,24 +32,39 @@ public class QrTools {
     @Autowired
     private ConfigTools configTools;
 
+    /**
+     * 生成带参二维码
+     * @param value 值
+     * @param forever 是否永久
+     * @return
+     */
+    public String genTicketQr(String value, boolean forever) {
+        value = TICKET_TYPE+value;
+//        System.out.println("-----------QrTools-->value:: "+value);
+        String picPath = genQr(value, "ticket", forever);
+        PictureTools.markImageByUrl("http://img.zslin.com/wq.jpg", configTools.getFilePath()+picPath, configTools.getFilePath()+picPath);
+        return picPath;
+    }
+
     /** 生成券二维码 */
     public String genTicketQr(String value) {
-        value = TICKET_TYPE+value;
+        return genTicketQr(value, true);
+        /*value = TICKET_TYPE+value;
         String picPath = genQr(value, "ticket");
         PictureTools.markImageByUrl("http://img.zslin.com/hlx.jpg", configTools.getFilePath()+picPath, configTools.getFilePath()+picPath);
-        return picPath;
+        return picPath;*/
     }
 
     public String genUserQr(String value, String headimg) {
         value = USER_TYPE+value;
-        String picPath = genQr(value, "user");
+        String picPath = genQr(value, "user", true);
         PictureTools.markImageByUrl(headimg, configTools.getFilePath()+picPath, configTools.getFilePath()+picPath);
         return picPath;
     }
 
-    public String getQrTicket(String value) {
+    public String getQrTicket(String value, boolean forever) {
         String url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token="+accessTokenTools.getAccessToken();
-        JSONObject jsonObj = WeixinUtil.httpRequest(url, "POST", buildForOverParam(value));
+        JSONObject jsonObj = WeixinUtil.httpRequest(url, "POST", forever?buildForOverParam(value):buildTempParam(value));
 //        System.out.println(jsonObj.toString());
         String ticket = JsonTools.getJsonParam(jsonObj.toString(), "ticket");
         String qrUrl = JsonTools.getJsonParam(jsonObj.toString(), "url");
@@ -59,10 +74,10 @@ public class QrTools {
         return ticket;
     }
 
-    private String genQr(String value, String path) {
+    private String genQr(String value, String path, boolean forever) {
         String res = "/wxqr/"+path+"/"+value+".jpg";
         try {
-            String ticket = getQrTicket(value);
+            String ticket = getQrTicket(value, forever);
             String urlString = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket="+ticket;
             // 构造URL
             URL url = new URL(urlString);
@@ -98,6 +113,19 @@ public class QrTools {
         StringBuffer sb = new StringBuffer();
         sb.append("{\"action_name\": \"QR_LIMIT_STR_SCENE\", \"action_info\": {\"scene\": {\"scene_str\": \"").
                 append(value).append("\"}}}");
+        return sb.toString();
+    }
+
+    /** 临时二维码 */
+    private String buildTempParam(String value) {
+        //{"action_name": "QR_LIMIT_SCENE", "action_info": {"scene": {"scene_id": 123}}}
+        //{"action_name": "QR_LIMIT_STR_SCENE", "action_info": {"scene": {"scene_str": "123"}}}
+        //expire_seconds: 604800 ,七天
+        StringBuffer sb = new StringBuffer();
+        sb.append("{\"expire_seconds\": 604800, \"action_name\": \"QR_STR_SCENE\", \"action_info\": {\"scene\": {\"scene_str\": \"").
+                append(value).append("\"}}}");
+
+//        System.out.println("---QrTools--->params:: "+sb.toString());
         return sb.toString();
     }
 }

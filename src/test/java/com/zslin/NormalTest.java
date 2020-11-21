@@ -98,6 +98,13 @@ public class NormalTest {
     private MoneyBagTools moneyBagTools;
 
     @Test
+    public void test45() {
+        System.out.println("10".split("_")[0]);
+        System.out.println("10_".split("_")[0]);
+        System.out.println("10_hlx".split("_")[0]);
+    }
+
+    @Test
     public void test44() {
         String str = moneyBagTools.buildBagStr("w20201018");
         System.out.println(str);

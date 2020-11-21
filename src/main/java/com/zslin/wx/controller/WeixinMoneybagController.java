@@ -134,6 +134,7 @@ public class WeixinMoneybagController {
     }
 
     private MoneybagDetail addDetail(Moneybag bag, Store store, Float money, String reason) {
+        String flag = money>0?MoneybagDetail.FLAG_IN:MoneybagDetail.FLAG_OUT;
         Float surplus = bag.getMoney() + money; //当前剩余金额
         MoneybagDetail detail = new MoneybagDetail();
         detail.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
@@ -152,9 +153,16 @@ public class WeixinMoneybagController {
         detail.setOptStoreSn(store.getSn());
         detail.setMoney(money);
         detail.setReason(reason);
-        detail.setFlag(money>0?MoneybagDetail.FLAG_IN:MoneybagDetail.FLAG_OUT);
+        if(flag.equals(MoneybagDetail.FLAG_IN)) { //如果是入账都设置为冻结，第二才自动解冻
+            detail.setFreezeFlag("1");
+        } else {detail.setFreezeFlag("0");}
+        detail.setFlag(flag);
         moneybagDetailDao.save(detail);
-        bag.setMoney(surplus);
+        if(flag.equals(MoneybagDetail.FLAG_OUT)) { //如果是出账才变化金额，入账时金额不变，自动变化
+            bag.setMoney(surplus);
+        } else { //入账时先冻结
+            bag.setFreezeMoney(money);
+        }
 
         moneybagDao.save(bag);
 

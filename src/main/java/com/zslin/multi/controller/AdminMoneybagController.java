@@ -43,6 +43,8 @@ public class AdminMoneybagController {
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
         model.addAttribute("storeList", storeDao.findAll());
+        model.addAttribute("totalMoney", moneybagDao.findAllMoney());
+        model.addAttribute("totalCount", moneybagDao.findAllBag());
         return "admin/multi/moneybag/list";
     }
 

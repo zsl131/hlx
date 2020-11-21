@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>问渠餐饮</title>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-own.css"/>
+    <script>
+        $(function() {
+            <!--$(".money-show").each(function() {
+                var val = parseInt($(this).html());
+                $(this).html((val/100)+" 元");
+            });-->
+        });
+    </script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="page">
+        <div class="page__hd" style="padding-left:10px;padding-right:10px; background:#fafafa; border-bottom:1px #ececec solid;">
+            <div class="weui-flex">
+                <div class="weui-flex__item">
+                    <h1 class="page__title" style="color:#F60;"><i class="fa fa-ticket"></i><b th:text="${#lists.size(ticketList)}"></b></h1>
+                    <p class="page__desc">我的卡券</p>
+                </div>
+                <div class="weui-flex__item" style="position:relative;">
+                    <a href="javascript:;" style="position:absolute; bottom:10px;"><i class="fa fa-info"></i> 参与活动可获得卡券哦！</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="weui-cells" style="text-align:center;">
+        <div th:each="obj : ${ticketList}" th:remove="tag">
+            <div class="single-ticket-div">
+                <span class="dot-span"></span>
+                <div class="ticket-left">
+                    <span class="flag-span">
+                        券
+                    </span>
+                    <h4 class="money-show" th:text="|${obj.ticketWorth}元|"></h4>
+                    <div class="remark-div">
+                        <p class="remark" th:text="|${obj.ticketName}，满${obj.reachMoney}用|"></p>
+                        <p class="ticket-no" th:text="${obj.ticketNo}"></p>
+                    </div>
+                </div>
+                <div class="ticket-right" >
+                    电子券
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

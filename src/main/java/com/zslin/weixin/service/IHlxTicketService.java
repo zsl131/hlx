@@ -34,4 +34,11 @@ public interface IHlxTicketService  extends BaseRepository<HlxTicket, Integer>, 
     /** 核销数量 */
     @Query("SELECT COUNT(h.id) FROM HlxTicket h WHERE h.useDay=?1")
     Integer queryWriteOffCount(String useDay);
+
+    /** 获取卡券张数 */
+    @Query("SELECT COUNT(h.id) FROM HlxTicket h WHERE h.openid=?1 AND h.status=?2")
+    Integer queryCount(String openid, String status);
+
+    /** 获取类型的卡券 */
+    List<HlxTicket> findByOpenidAndStatus(String openid, String status);
 }
