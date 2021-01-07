@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/adminModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="/basic/admin/base-task-list.js"></script>
+    <title>定时器列表</title>
+    <script type="text/javascript">
+        $(function() {
+            $(".delete-obj-href").deleteFun();
+        });
+    </script>
+</head>
+<body>
+
+    <div th:fragment="content" th:remove="tag">
+        <div class="header lighter smaller blue">
+            <h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;定时器列表<small>（<b th:text="${datas.getTotalElements()}"></b>）</small></h3>
+            <div th:replace="admin/basic/baseTask/nav :: content" th:remove="tag"></div>
+        </div>
+
+        <!-- <div class="table-header">
+            Results for "Latest Registered Domains"
+        </div> -->
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>状态</th>
+                    <th>名称</th>
+                    <th>接口</th>
+                    <th>类型</th>
+                    <th>规则</th>
+                    <th>参数</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    <tr th:each="obj : ${datas}">
+                        <td>
+                            <div th:switch="${obj.status}" th:remove="tag">
+                                <p th:case="1"><span style="cursor:pointer" onclick="optTask(this, '0')" th:attr="objId=${obj.id}, objName=${obj.taskDesc},uuid=${obj.taskUuid}" class="green glyphicon glyphicon-ok-sign">运行</span></p>
+                                <p th:case="0"><span style="cursor:pointer" onclick="optTask(this, '1')" th:attr="objId=${obj.id}, objName=${obj.taskDesc},uuid=${obj.taskUuid}" class="red glyphicon glyphicon-remove-sign">停止</span></p>
+                            </div>
+                        </td>
+                        <td>
+                            <p th:text="${obj.taskDesc}"></p>
+                        </td>
+                        <td th:text="|${obj.beanName}.${obj.methodName}|"></td>
+                        <td>
+                            <div th:switch="${obj.type}" th:remove="tag">
+                                <p th:case="1">单次任务</p>
+                                <p th:case="2">循环任务</p>
+                                <p th:case="3">CRON任务</p>
+                            </div>
+                        </td>
+                        <td style="max-width: 160px">
+                            <div th:switch="${obj.type}" th:remove="tag">
+                                <p th:case="1">执行时间：<span th:text="${obj.startTime}"></span></p>
+                                <p th:case="2">执行时间：<span th:text="${obj.startTime}"></span>，<span th:text="${obj.isWait eq '0'?'上一任务执行后':'上一任务执行完成后'}"></span>，等待<b th:text="${obj.period}"></b>秒后，执行下一任务</p>
+                                <p th:case="3">CRON规则：<span th:text="${obj.cron}"></span></p>
+                            </div>
+                        </td>
+                        <td th:text="${obj.params}"></td>
+                        <td>
+                            <div class="action-buttons">
+                                <a class="green auth" sn="BaseTaskController.update" title="修改" th:href="'/admin/baseTask/update/'+${obj.id}">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+
+                                <a class="delete-obj-href red auth" sn="BaseTaskController.delete" th:title="'此操作不可逆，确定删除【'+${obj.taskDesc}+'】吗？'" th:href="'/admin/baseTask/delete/'+${obj.id}">
+                                    <i class="fa fa-remove"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div th:include="fragments/page :: pager" th:remove="tag"></div>
+        </div>
+    </div>
+</body>
+</html>

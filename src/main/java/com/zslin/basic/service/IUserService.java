@@ -16,4 +16,6 @@ public interface IUserService extends BaseRepository<User, Integer>, JpaSpecific
 
     @Query("SELECT ur.rid FROM UserRole ur WHERE ur.uid=?1")
     List<Integer> listUserRoleIds(Integer userId);
+
+    void updateBySql(String sql, Object... args);
 }

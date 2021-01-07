@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+		<script src="/jedate-new/jedate.min.js"></script>
+		<link type="text/css" rel="stylesheet" href="/jedate-new/skin/jedate.css"/>
+		<script type="text/javascript" src="/basic/admin/base-task.js"></script>
+		<title>添加定时器</title>
+		<style>
+			.need-hide {display: none;}
+		</style>
+	</head>
+	<body>
+		<div th:fragment="content" th:remove="tag">
+			<div class="header lighter smaller blue">
+				<h3><i class="fa fa-plus"></i>&nbsp;添加定时器 </h3>
+				<div th:replace="admin/basic/baseTask/nav :: content" th:remove="tag"></div>
+			</div>
+
+			<form method="POST" th:object="${baseTask}" id="dataForm">
+				<div class="form-group">
+					<div class="input-group">
+					<label class="input-group-addon" for="taskDesc">定时器描述</label>
+					<input type="text" name="taskDesc" th:value="${baseTask.taskDesc}" class="form-control" id="taskDesc" placeholder="请输入定时器描述"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="input-group">
+					<label class="input-group-addon" for="beanName">beanName</label>
+					<input type="text" name="beanName" th:value="${baseTask.beanName}" class="form-control" id="beanName" placeholder="请输入beanName"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="input-group">
+					<div class="input-group-addon" for="methodName">methodName</div>
+					<input type="text" name="methodName" th:value="${baseTask.methodName}" class="form-control" id="methodName" placeholder="请输入methodName"/>
+					</div>
+				</div>
+				<div class="form-group">
+				<div class="input-group">
+					<label class="input-group-addon" for="params">参数</label>
+					<input type="text" name="params" th:value="${baseTask.params}" class="form-control" id="params" placeholder="请输入定时器参数，JSON数据"/>
+				</div>
+				</div>
+				<div class="form-group">
+					<div class="input-group">
+						<div class="input-group-addon">任务类型</div>
+						<div class="form-control">
+							<input type="radio" name="type" value="1" id="type_1" th:checked="${baseTask.type == '1'}?'checked'"/><label for="type_1">单次任务</label>
+							<input type="radio" name="type" value="2" id="type_2" th:checked="${baseTask.type == '2'}?'checked'"/><label for="type_2">循环任务</label>
+							<input type="radio" name="type" value="3" id="type_3" th:checked="${baseTask.type == '3'}?'checked'"/><label for="type_3">Cron规则任务</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group need-hide type-1 type-2">
+					<div class="input-group">
+						<div class="input-group-addon" for="startTime">执行时间</div>
+						<input type="text" name="startTime" th:value="${baseTask.startTime}" class="form-control" placeholder="选择执行时间"/>
+					</div>
+					<p style="color:#888">指定开始执行时间，精确到秒</p>
+				</div>
+				<div class="form-group need-hide type-2">
+					<div class="input-group">
+						<label class="input-group-addon">执行规则</label>
+						<select class="form-control" name="isWait">
+							<option value=""></option>
+							<option value="0">上一任务执行后</option>
+							<option value="1">上一任务执行完成后</option>
+						</select>
+						<label class="input-group-addon">，等待</label>
+						<input type="number" name="period" th:value="${baseTask.period}" class="form-control"placeholder="选择执行时间"/>
+						<label class="input-group-addon" >秒，执行下一任务</label>
+					</div>
+				</div>
+				<div class="form-group need-hide type-3">
+					<div class="input-group">
+						<div class="input-group-addon" for="cron">CRON规则</div>
+						<input type="text" name="cron" th:value="${baseTask.cron}" class="form-control" placeholder="选择cron规则"/>
+					</div>
+					<p style="color:#888">格式如：0/10 * * * * ? 每10秒执行一次</p>
+				</div>
+				<input type="hidden" name="token" th:value="${session.token}"/>
+				<button type="submit" class="btn btn-primary">确定提交</button>
+			</form>
+		</div>
+	</body>
+</html>

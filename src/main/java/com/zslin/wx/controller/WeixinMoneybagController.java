@@ -147,7 +147,7 @@ public class WeixinMoneybagController {
         detail.setStoreId(bag.getStoreId());
         detail.setStoreName(bag.getStoreName());
         detail.setStoreSn(bag.getStoreSn());
-        detail.setSurplus(surplus);
+
         detail.setOptStoreId(store.getId());
         detail.setOptStoreName(store.getName());
         detail.setOptStoreSn(store.getSn());
@@ -157,11 +157,12 @@ public class WeixinMoneybagController {
             detail.setFreezeFlag("1");
         } else {detail.setFreezeFlag("0");}
         detail.setFlag(flag);
+        detail.setSurplus(surplus+bag.getFreezeMoney());
         moneybagDetailDao.save(detail);
         if(flag.equals(MoneybagDetail.FLAG_OUT)) { //如果是出账才变化金额，入账时金额不变，自动变化
             bag.setMoney(surplus);
         } else { //入账时先冻结
-            bag.setFreezeMoney(money);
+            bag.setFreezeMoney(bag.getFreezeMoney()+money); //充多笔时需要加起来
         }
 
         moneybagDao.save(bag);
@@ -171,8 +172,9 @@ public class WeixinMoneybagController {
             String sep = "\\n";
             StringBuffer sb = new StringBuffer();
             sb.append("变化类型：").append(buildFlagName(detail.getFlag())).append(sep)
-                    .append("变化金额：").append(money).append(sep)
-                    .append("当前余额：").append(surplus).append(sep)
+                    .append("变化金额：").append(money).append(" 元").append(sep)
+                    .append("可用余额：").append(surplus).append(money).append(" 元").append(sep)
+                    .append("冻结金额：").append(bag.getFreezeMoney()).append(money).append(" 元").append(sep)
                     .append("操作店铺：").append(store.getName()).append(sep)
                     .append("若非本人操作，请及联系我们！");
             eventTools.eventRemind(openid, "会员账户发生变化", buildFlagName(detail.getFlag()), DateTools.date2Str(new Date()), sb.toString(), "/wx/account/money");

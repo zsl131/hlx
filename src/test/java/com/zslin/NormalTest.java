@@ -1,6 +1,8 @@
 package com.zslin;
 
 import com.zslin.admin.dto.MyTicketDto;
+import com.zslin.basic.db.dto.DBConfig;
+import com.zslin.basic.db.tools.ExportDBTools;
 import com.zslin.basic.model.AppConfig;
 import com.zslin.basic.service.IAppConfigService;
 import com.zslin.basic.tools.NormalTools;
@@ -96,6 +98,22 @@ public class NormalTest {
 
     @Autowired
     private MoneyBagTools moneyBagTools;
+
+    @Autowired
+    private DBConfig config;
+
+    @Autowired
+    private ExportDBTools exportDBTools;
+
+    @Test
+    public void test47() {
+        exportDBTools.exportDbByJDBC();
+    }
+
+    @Test
+    public void test46() {
+        System.out.println(config);
+    }
 
     @Test
     public void test45() {
