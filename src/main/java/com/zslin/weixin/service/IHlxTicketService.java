@@ -16,24 +16,24 @@ public interface IHlxTicketService  extends BaseRepository<HlxTicket, Integer>, 
     HlxTicket findByTicketNo(String ticketNo);
 
     /** 总数量 */
-    @Query("SELECT COUNT(h.id) FROM HlxTicket h")
-    Integer queryAll();
+    @Query("SELECT COUNT(h.id) FROM HlxTicket h WHERE h.storeSn=?1")
+    Integer queryAll(String storeSn);
 
     /** 总数量 */
-    @Query("SELECT COUNT(h.id) FROM HlxTicket h WHERE h.status=?1 ")
-    Integer queryAll(String status);
+    @Query("SELECT COUNT(h.id) FROM HlxTicket h WHERE h.storeSn=?1 AND h.status=?2 ")
+    Integer queryAll(String storeSn, String status);
 
     /** 总数量 */
-    @Query("SELECT COUNT(h.id) FROM HlxTicket h WHERE h.createDay=?1 ")
-    Integer queryByDay(String createDay);
+    @Query("SELECT COUNT(h.id) FROM HlxTicket h WHERE h.storeSn=?1 AND h.createDay=?2 ")
+    Integer queryByDay(String storeSn, String createDay);
 
     /** 总数量 */
-    @Query("SELECT COUNT(h.id) FROM HlxTicket h WHERE h.createDay=?1 AND h.status=?1 ")
-    Integer queryByDay(String createDay, String status);
+    @Query("SELECT COUNT(h.id) FROM HlxTicket h WHERE h.storeSn=?1 AND h.createDay=?2 AND h.status=?3 ")
+    Integer queryByDay(String storeSn, String createDay, String status);
 
     /** 核销数量 */
-    @Query("SELECT COUNT(h.id) FROM HlxTicket h WHERE h.useDay=?1")
-    Integer queryWriteOffCount(String useDay);
+    @Query("SELECT COUNT(h.id) FROM HlxTicket h WHERE h.storeSn=?1 AND h.useDay=?2")
+    Integer queryWriteOffCount(String storeSn, String useDay);
 
     /** 获取卡券张数 */
     @Query("SELECT COUNT(h.id) FROM HlxTicket h WHERE h.openid=?1 AND h.status=?2")

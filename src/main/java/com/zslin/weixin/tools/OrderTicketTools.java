@@ -24,6 +24,22 @@ public class OrderTicketTools {
      * @return
      */
     public String buildTicketNo(String orderNo) {
-        return VALUE + SEP + orderNo;
+//        return VALUE + SEP + orderNo;
+        return buildTicketNo(null, VALUE, orderNo);
+    }
+
+    /**
+     * 生成领券码
+     * @param money 具体金额
+     * @param orderNo 订单编号
+     * @return
+     */
+    public String buildTicketNo(String sn, String money, String orderNo) {
+        if(sn==null || "".equalsIgnoreCase(sn.trim())) {
+            return money + SEP + orderNo;
+        } else {
+            //金额_SN_订单编号
+            return money + SEP + sn + SEP + orderNo;
+        }
     }
 }

@@ -23,6 +23,14 @@
 			<form method="POST" th:object="${price}" id="dataForm">
 				<div class="form-group form-group-lg">
 					<div class="input-group">
+						<div class="input-group-addon">店铺SN：</div>
+						<input name="storeSn" id="storeSn" type="text" class="form-control" th:value="${price.storeSn}" placeholder="输入店铺SN，保存是将发送到对应SN的客户端" />
+						<span class="input-group-addon">&nbsp;请注意SN的正确性&nbsp;</span>
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
 					  <div class="input-group-addon">早餐单价（正价）：</div>
 					  <input name="breakfastPrice" id="breakfastPrice" type="text" class="form-control" th:value="${price.breakfastPrice}" placeholder="请输入早餐单价，单位：元" />
 					</div>
@@ -68,7 +76,7 @@
 				</div>
 				<div class="form-group form-group-lg">
 					<div class="input-group">
-						<div class="input-group-addon">压金金额：</div>
+						<div class="input-group-addon">押金金额：</div>
 						<input name="bondMoney" id="bondMoney" type="text" class="form-control" th:value="${price.bondMoney}" placeholder="请输入压金金额，单位：元" />
 					</div>
 				</div>

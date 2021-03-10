@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>多店全局配置</title>
+		<script type="text/javascript">
+			$(function() {
+				$(".delete-obj-href").deleteFun();
+			});
+		</script>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;多店全局配置（<span th:text="${datas.getTotalElements()}"></span>）</h3>
+			<div th:replace="admin/rules/nav :: content" th:remove="tag"></div>
+		</div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>店铺</th>
+						<th>积分有效</th>
+						<th>积分兑换</th>
+						<th>积分扣比</th>
+						<th>午晚间隔</th>
+						<th>退票时长</th>
+						<th>特殊开关</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+
+				<tr th:each="obj : ${datas}">
+					<td th:text="|${obj.storeName}[${obj.storeSn}]|">
+					</td>
+					<td><span th:text="${obj.scoreOverdueDays}"></span>天</td>
+					<td><span th:text="${obj.scoreMoney}"></span>积分抵一元</td>
+					<td><span th:text="${obj.scoreDeductible}"></span>%</td>
+					<td><span th:text="${obj.spe}"></span></td>
+					<td><span th:text="${obj.refundMin}"></span>分钟</td>
+					<td>
+						<span th:if="${obj.switchFlag eq '1'}" class="red">开启</span>
+						<span th:if="${obj.switchFlag ne '1'}" class="">关闭</span>
+					</td>
+					<td>
+						<div class="action-buttons">
+							<a class="green auth" sn="AdminRulesController.update" title="修改" th:href="'/admin/rules/update/'+${obj.id}">
+								<i class="fa fa-pencil"></i>
+							</a>
+
+							<!--<a class="delete-obj-href red auth" sn="AdminPriceController.delete" th:title="'此操作不可逆，确定删除【'+${obj.name}+'】吗？'" th:href="'/admin/price/delete/'+${obj.id}">
+								<i class="fa fa-remove"></i>
+							</a>-->
+						</div>
+					</td>
+				</tr>
+			</table>
+
+			<div th:include="fragments/page :: pager" th:remove="tag"></div>
+		</div>
+	</div>
+</body>
+</html>

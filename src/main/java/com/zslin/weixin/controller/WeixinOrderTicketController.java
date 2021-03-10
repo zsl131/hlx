@@ -1,5 +1,6 @@
 package com.zslin.weixin.controller;
 
+import com.zslin.client.tools.ClientFileTools;
 import com.zslin.weixin.model.OrderTicket;
 import com.zslin.weixin.service.IOrderTicketService;
 import com.zslin.weixin.tools.OrderTicketTools;
@@ -28,18 +29,29 @@ public class WeixinOrderTicketController {
     @Autowired
     private QrTools qrTools;
 
+    /**
+     * 生成卡券
+     * @param orderNo
+     * @param request
+     * @return
+     */
     @GetMapping(value = "buildQr")
     public @ResponseBody
-    String buildQr(String orderNo, HttpServletRequest request) {
-        String value = orderTicketTools.buildTicketNo(orderNo);
+    String buildQr(String orderNo, String money, String sn, HttpServletRequest request) {
+        money = (money==null || "".equals(money.trim()))?OrderTicketTools.VALUE:money; //默认使用以前的100元
+        sn = (sn==null || "".equals(sn.trim()))? ClientFileTools.HLX_SN:sn;
+        sn = ("qwzw".equalsIgnoreCase(sn) || "qwzw_auto".equalsIgnoreCase(sn))?"qwzw":sn; //处理签王之王，不能有下划线
+        String value = orderTicketTools.buildTicketNo(sn, money, orderNo);
+
         OrderTicket ot = orderTicketService.findByOrderNo(orderNo);
         if(ot==null) {
             ot = new OrderTicket();
             ot.setOrderNo(orderNo);
             ot.setStatus("0");
+            ot.setStoreSn(sn.equals("qwzw")?ClientFileTools.QWZW_SN:sn);
             orderTicketService.save(ot);
         }
-        System.out.println("-------->WeixinOrderTicketController--value::"+value);
+        //System.out.println("-------->WeixinOrderTicketController--value::"+value);
         String path = qrTools.genTicketQr(value, false);
         path = buildUrl(request)+path;
         return path;

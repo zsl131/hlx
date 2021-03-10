@@ -19,7 +19,8 @@
                     <div class="weui-flex__item">
                         <h1 class="page__title" style="color:#F60;"><b class="fa fa-cny"></b><b th:text="|${#numbers.formatDecimal(totalMoney, 0, 2)} 元|"></b>
                         </h1>
-                        <span class="page__desc">平均：<b th:text="|${#numbers.formatDecimal(avg, 0, 2)} 元/天|"></b>，超过2万5：<b th:text="${moreThan}"></b>&nbsp;天</span>
+                        <!--<p>当前店铺：<span th:text="${storeName}"></span></p>-->
+                        <span class="page__desc">平均：<b th:text="|${#numbers.formatDecimal(avg, 0, 2)} 元/天|"></b>，超过2.5万：<b th:text="${moreThan}"></b>&nbsp;天</span>
                     </div>
                 </div>
             </div>
@@ -27,9 +28,14 @@
 
         <div class="row container align-center" style="padding-top:10px;margin-left:10px;">
             <div class="input-group">
-                <span class="input-group-addon">日期</span>
+                <span class="input-group-addon">年月</span>
                 <input type='text' style="width:140px;" th:value="${month}" class='filter_element form-control' placeholder="yyyyMM" opt="eq" maxlength="6" name='filter_comeMonth'/>
                 <span><button type="button" class="btn btn-primary btn-sm" id="beginFilter">查询</button></span>
+            </div>
+
+            <div style="margin-top: 12px;">
+                <a href="/wx/income/list?storeSn=hlx" th:class="'btn '+${storeSn eq 'hlx'?'btn-danger':''}">汉丽轩</a>
+                <a href="/wx/income/list?storeSn=qwzw-auto" th:class="'btn '+${storeSn eq 'qwzw-auto'?'btn-danger':''}">签王之王</a>
             </div>
         </div>
 

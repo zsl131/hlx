@@ -2,9 +2,11 @@ package com.zslin.wx.controller;
 
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
+import com.zslin.basic.repository.SpecificationOperator;
 import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.client.tools.ClientFileTools;
 import com.zslin.web.model.Account;
 import com.zslin.web.model.Income;
 import com.zslin.web.service.IAccountService;
@@ -42,22 +44,28 @@ public class WeixinIncomeController {
     private IncomeNoticeTools incomeNoticeTools;
 
     @GetMapping(value = "list")
-    public String list(Model model, Integer page, HttpServletRequest request) {
+    public String list(Model model, Integer page, String storeSn, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         Account a = accountService.findByOpenid(openid);
         if(a!=null && AccountTools.isPartner(a.getType())) { //只有股东才可以看
             String month = request.getParameter("filter_comeMonth");
-            Page<Income> datas = incomeService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
-                    SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("comeDay_d")));
+            storeSn = (storeSn ==null || "".equals(storeSn.trim()))? ClientFileTools.HLX_SN:storeSn;
+            Page<Income> datas = incomeService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+                    new SpecificationOperator("storeSn", "eq", storeSn)),
+                    SimplePageBuilder.generate(page, 33, SimpleSortBuilder.generateSort("comeDay_d")));
             month = (month==null||"".equalsIgnoreCase(month) || month.indexOf("-")<0)?NormalTools.curDate("yyyyMM"):month.substring(month.indexOf("-")+1, month.length());
-            Double avg = incomeService.average(month);
-            Integer moreThan = incomeService.moreThan(month, 25000d);
-            Double totalMoney = incomeService.totalMoney(month);
+
+            Double avg = incomeService.average(storeSn, month);
+            Integer moreThan = incomeService.moreThan(storeSn, month, 25000d);
+            Double totalMoney = incomeService.totalMoney(storeSn, month);
+
             model.addAttribute("avg", avg==null?0:avg);
             model.addAttribute("moreThan", moreThan==null?0:moreThan);
             model.addAttribute("totalMoney", totalMoney==null?0:totalMoney);
             model.addAttribute("datas", datas);
             model.addAttribute("month", month);
+            model.addAttribute("storeName", ClientFileTools.BUILD_STORE_NAME(storeSn)); //店铺名称
+            model.addAttribute("storeSn", storeSn);
         }
         return "weixin/income/list";
     }
@@ -70,9 +78,9 @@ public class WeixinIncomeController {
             Income income = incomeService.findOne(id);
             model.addAttribute("income", income);
             String month = income.getComeMonth();
-            Double avg = incomeService.average(month);
-            Integer moreThan = incomeService.moreThan(month, 20000d);
-            Double totalMoney = incomeService.totalMoney(month);
+            Double avg = incomeService.average(income.getStoreSn(), month);
+            Integer moreThan = incomeService.moreThan(income.getStoreSn(), month, 20000d);
+            Double totalMoney = incomeService.totalMoney(income.getStoreSn(), month);
             model.addAttribute("avg", avg==null?0:avg);
             model.addAttribute("moreThan", moreThan==null?0:moreThan);
             model.addAttribute("totalMoney", totalMoney==null?0:totalMoney);

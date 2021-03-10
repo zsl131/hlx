@@ -191,8 +191,11 @@ public class WeixinAccountController {
 
             if (AccountTools.isPartner(account.getType())) {
                 model.addAttribute("friendOrdersCount", buffetOrderService.findFriendCount(account.getPhone())); //友情折扣的次数
-                Double incomeMoney = incomeService.totalMoney(NormalTools.curDate("yyyyMM"));
+                Double incomeMoney = incomeService.totalMoney(ClientFileTools.HLX_SN, NormalTools.curDate("yyyyMM"));
                 model.addAttribute("incomeMoney", incomeMoney == null ? 0 : incomeMoney);
+
+                Double incomeMoney2 = incomeService.totalMoney(ClientFileTools.QWZW_SN, NormalTools.curDate("yyyyMM"));
+                model.addAttribute("incomeMoney_qwzw", incomeMoney2 == null ? 0 : incomeMoney2);
             }
         }
         return "weixin/account/me";
@@ -223,7 +226,7 @@ public class WeixinAccountController {
         String openid = SessionTools.getOpenid(request);
         SimpleSpecificationBuilder builder = new SimpleSpecificationBuilder("openid", "eq", openid);
         builder.add("type", "eq", "2");
-        Rules rules = rulesService.loadOne();
+        Rules rules = rulesService.findByStoreSn();
         Wallet w = walletService.findByOpenid(openid);
         model.addAttribute("wallet", w);
         model.addAttribute("canMoney", rules.getScoreMoney()==null|| rules.getScoreMoney()<=0?0:NormalTools.buildPoint(w.getScore()*1.0/rules.getScoreMoney()));

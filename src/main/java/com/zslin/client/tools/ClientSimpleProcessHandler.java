@@ -93,9 +93,13 @@ public class ClientSimpleProcessHandler {
     public void handlerBuffetOrder(JSONObject jsonObj) {
         BuffetOrder bo = JSON.toJavaObject(JSON.parseObject(jsonObj.toString()), BuffetOrder.class);
         String no = bo.getNo();
+//        System.out.println("------ClientSimpleProcessHandler-----"+jsonObj);
         BuffetOrder order = buffetOrderService.findByNo(no);
         if(order==null) {
             order = new BuffetOrder();
+        }
+        if(bo.getStoreSn()==null || "".equals(bo.getStoreSn().trim())) { //如果店铺编号为空
+            bo.setStoreSn(ClientFileTools.HLX_SN); bo.setStoreName(ClientFileTools.HLX_NAME);
         }
         MyBeanUtils.copyProperties(bo, order, true, "hasTakeOff","finishFlag");
         buffetOrderService.save(order);
@@ -280,7 +284,14 @@ public class ClientSimpleProcessHandler {
         Float extraMoney = 0f;
         try { extraMoney = Float.parseFloat(jsonObj.getString("extraMoney")); }catch (Exception e) { }
 
-        Income income = incomeService.findByComeDay(day);
+        String sn = "", storeName = ""; //店铺SN
+        try {sn = jsonObj.getString("storeSn"); } catch (Exception e) { }
+        if(sn==null || "".equals(sn.trim())) {sn = ClientFileTools.HLX_SN; }
+
+        try {storeName = jsonObj.getString("storeName"); } catch (Exception e) { }
+        if(storeName==null || "".equals(storeName.trim())) {storeName = ClientFileTools.HLX_NAME; }
+
+        Income income = incomeService.findByComeDay(sn, day);
         if(income==null) {
             income = new Income();
             income.setComeDay(day);
@@ -299,10 +310,9 @@ public class ClientSimpleProcessHandler {
             } catch (Exception e) {
                // e.printStackTrace();
             }
-            String sn = ""; //店铺SN
-            try {sn = jsonObj.getString("storeSn"); } catch (Exception e) { }
-            if(sn==null || "".equals(sn.trim())) {sn = "hlx";}
+
             income.setStoreSn(sn);
+            income.setStoreName(storeName);
             income.setFromClient("1");
         } else if(income!=null && "1".equalsIgnoreCase(income.getFromClient())) {
             income.setCash(money);

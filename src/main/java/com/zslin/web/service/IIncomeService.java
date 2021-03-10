@@ -12,21 +12,25 @@ import java.util.List;
  */
 public interface IIncomeService extends BaseRepository<Income, Integer>, JpaSpecificationExecutor<Income> {
 
-    @Query("SELECT AVG(totalMoney) FROM Income WHERE comeMonth=?1 AND type='1'")
-    Double average(String comeMonth);
+    @Query("SELECT AVG(totalMoney) FROM Income WHERE storeSn=?1 AND comeMonth=?2 AND type='1'")
+    Double average(String storeSn, String comeMonth);
 
     //营业额大于某值的天数
-    @Query("SELECT COUNT(id) FROM Income WHERE comeMonth=?1 AND totalMoney>=?2 AND type='1'")
-    Integer moreThan(String comeMonth, Double value);
+    @Query("SELECT COUNT(id) FROM Income WHERE storeSn=?1 AND comeMonth=?2 AND totalMoney>=?3 AND type='1'")
+    Integer moreThan(String storeSn, String comeMonth, Double value);
 
-    @Query("SELECT SUM(totalMoney) FROM Income WHERE comeMonth=?1")
-    Double totalMoney(String comeMonth);
+    @Query("SELECT SUM(totalMoney) FROM Income WHERE storeSn=?1 AND comeMonth=?2")
+    Double totalMoney(String storeSn, String comeMonth);
 
-    @Query("SELECT SUM(peopleCount) FROM Income WHERE comeMonth=?1")
-    Integer totalPeopleCount(String comeMonth);
+    @Query("SELECT SUM(peopleCount) FROM Income WHERE storeSn=?1 AND comeMonth=?2")
+    Integer totalPeopleCount(String storeSn, String comeMonth);
 
-    Income findByComeDay(String comeDay);
+    @Query("SELECT SUM(deskCount) FROM Income WHERE storeSn=?1 AND comeMonth=?2")
+    Integer totalDeskCount(String storeSn, String comeMonth);
 
-    @Query("FROM Income i WHERE i.comeMonth=?1")
-    List<Income> findByMonth(String comeMonth);
+    @Query("FROM Income WHERE storeSn=?1 AND comeDay=?2")
+    Income findByComeDay(String storeSn, String comeDay);
+
+    @Query("FROM Income i WHERE i.storeSn=?1 AND i.comeMonth=?2")
+    List<Income> findByMonth(String storeSn, String comeMonth);
 }

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+	<script src="/back-admin/bus/admin-food.js"></script>
+	<title>价格配置管理</title>
+	<script type="text/javascript">
+		$(function() {
+			//$("#addForm").platformvalidate();
+		});
+	</script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+	<div class="header lighter smaller blue">
+		<h3><span class="glyphicon glyphicon-th-list"></span><i class="icon-setting"></i>&nbsp;价格配置管理<small>&nbsp;</small></h3>
+	</div>
+
+	<form method="POST" th:object="${price}" id="dataForm">
+		<input name="storeName" type="hidden"/>
+		<input name="storeSn" type="hidden"/>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">所属店铺：</div>
+				<select name="storeId" class="form-control">
+					<option value="-1">选择所属店铺</option>
+					<option th:each="store:${storeList}" th:attr="sn=${store.sn}" th:value="${store.id}" th:text="${store.name}"></option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">早餐单价（正价）：</div>
+				<input name="breakfastPrice" id="breakfastPrice" type="text" class="form-control" th:value="${price.breakfastPrice}" placeholder="请输入早餐单价，单位：元" />
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">晚餐单价（正价）：</div>
+				<input name="dinnerPrice" id="dinnerPrice" type="text" class="form-control" th:value="${price.dinnerPrice}" placeholder="请输入晚餐单价，单位：元" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">简餐单价（无烤）：</div>
+				<input name="speMoney" id="speMoney" type="text" class="form-control" th:value="${price.speMoney}" placeholder="不开火用餐单价，单位：元" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">简餐单价（儿童）：</div>
+				<input name="speMoneyHalf" id="speMoneyHalf" type="text" class="form-control" th:value="${price.speMoneyHalf}" placeholder="不开火用餐单价，单位：元" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">早餐单价（亲情）：</div>
+				<input name="friendBreakfastPrice" id="friendBreakfastPrice" type="text" class="form-control" th:value="${price.friendBreakfastPrice}" placeholder="请输入亲情早餐单价，单位：元" />
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">晚餐单价（亲情）：</div>
+				<input name="friendDinnerPrice" id="friendDinnerPrice" type="text" class="form-control" th:value="${price.friendDinnerPrice}" placeholder="请输入亲情晚餐单价，单位：元" />
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">亲情折扣（小数）：</div>
+				<input name="friendRate" type="text" class="form-control" th:value="${price.friendRate}" placeholder="输入亲情折扣，如0.8，即打8折；此值为空时则使用上述亲情价" />
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">押金金额：</div>
+				<input name="bondMoney" id="bondMoney" type="text" class="form-control" th:value="${price.bondMoney}" placeholder="请输入压金金额，单位：元" />
+			</div>
+		</div>
+		<button type="submit" class="btn btn-primary submit-update-btn">保存设置</button>
+	</form>
+
+	<script type="text/javascript">
+				jQuery(function($) {
+					$('#dataForm').bootstrapValidator({
+		//		        live: 'disabled',
+						message: '验证不通过',
+						feedbackIcons: {
+							valid: 'glyphicon glyphicon-ok',
+							invalid: 'glyphicon glyphicon-remove',
+							validating: 'glyphicon glyphicon-refresh'
+						},
+						fields: {
+							breakfastPrice: {
+								validators: {
+									notEmpty: {
+										message: '请输入早餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							},
+							dinnerPrice: {
+								validators: {
+									notEmpty: {
+										message: '请输入晚餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							},
+							friendDinnerPrice: {
+								validators: {
+									notEmpty: {
+										message: '请输入亲情晚餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							},
+							friendBreakfastPrice: {
+								validators: {
+									notEmpty: {
+										message: '请输入亲情早餐单位，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							},
+							bondMoney: {
+								validators: {
+									notEmpty: {
+										message: '请输入压金金额，单位：元'
+									},
+									regexp: {
+										regexp: "^[0-9]+([.]{1}[0-9]{1,2})?$",
+            							message: '金额必须两个小数'
+									}
+								}
+							}
+						}
+					});
+				});
+			</script>
+</div>
+</body>
+</html>

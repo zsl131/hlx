@@ -8,6 +8,8 @@ import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.web.model.BuffetOrder;
 import com.zslin.web.model.Prize;
 import com.zslin.web.service.*;
@@ -48,6 +50,9 @@ public class AdminNewOrdersController {
     @Autowired
     private IMemberChargeService memberChargeService;
 
+    @Autowired
+    private IStoreDao storeDao;
+
     /** 订单列表 */
     @GetMapping(value = "list")
     @AdminAuth(name = "订单管理", orderNum = 1, type = "1", icon = "fa fa-list")
@@ -55,6 +60,9 @@ public class AdminNewOrdersController {
         Page<BuffetOrder> datas = buffetOrderService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("createLong_d")));
         model.addAttribute("datas", datas);
+
+        List<Store> storeList = storeDao.findAll();
+        model.addAttribute("storeList", storeList);
         return "admin/newOrders/list";
     }
 

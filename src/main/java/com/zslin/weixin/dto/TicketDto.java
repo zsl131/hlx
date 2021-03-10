@@ -12,5 +12,5 @@ public class TicketDto {
 
     private String sn;
 
-
+    private String orderNo;
 }

@@ -26,9 +26,10 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
+						<th>店铺</th>
 						<th>日期</th>
 						<th>类别</th>
-						<th>现金</th>
+						<!--<th>现金</th>
 						<th>微信</th>
 						<th>支付宝</th>
 						<th>美团</th>
@@ -38,7 +39,8 @@
 						<th>其他</th>
 						<th>午餐券</th>
 						<th>晚餐券</th>
-						<th>10元券</th>
+						<th>10元券</th>-->
+						<th>桌数</th>
 						<th>人数</th>
 						<th>小计</th>
 						<th>操作</th>
@@ -46,6 +48,9 @@
 				</thead>
 
 				<tr th:each="obj : ${datas}">
+					<td>
+						<p th:text="${(obj.storeSn eq NULL or obj.storeSn eq '') ? '汉丽轩':obj.storeName}"></p>
+					</td>
 					<td th:text="${obj.comeDay}"></td>
 					<td>
 						<span th:switch="${obj.type}" th:remove="tag">
@@ -53,7 +58,7 @@
 							<span th:case="*" style="color:#F00;">其他</span>
 						</span>
 					</td>
-					<td th:text="${obj.cash}"></td>
+					<!--<td th:text="${obj.cash}"></td>
 					<td th:text="${obj.weixin}"></td>
 					<td th:text="${obj.alipay}"></td>
 					<td th:text="${obj.meituan}"></td>
@@ -63,7 +68,8 @@
 					<td th:text="${obj.other}"></td>
 					<td th:text="${obj.noonTicket}"></td>
 					<td th:text="${obj.nightTicket}"></td>
-					<td th:text="${obj.tenTicket}"></td>
+					<td th:text="${obj.tenTicket}"></td>-->
+					<td th:text="${obj.deskCount}">桌数</td>
 					<td th:text="${obj.peopleCount}" style="color:#F00"></td>
 					<td th:text="|${#numbers.formatDecimal(obj.totalMoney, 0, 2)} 元|" style="color:#F00"></td>
 					<td>

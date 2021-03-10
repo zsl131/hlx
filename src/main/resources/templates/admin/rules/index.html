@@ -23,6 +23,14 @@
 			<form method="POST" th:object="${rules}" id="dataForm">
 				<div class="form-group form-group-lg">
 					<div class="input-group">
+						<div class="input-group-addon">店铺SN：</div>
+						<input name="storeSn" id="storeSn" type="text" class="form-control" th:value="${rules.storeSn}" placeholder="输入店铺SN，保存是将发送到对应SN的客户端" />
+						<span class="input-group-addon">&nbsp;请注意SN的正常性&nbsp;</span>
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
 					  <div class="input-group-addon">积分过期天数：</div>
 					  <input name="scoreOverdueDays" id="scoreOverdueDays" type="text" class="form-control" th:value="${rules.scoreOverdueDays}" placeholder="请输入积分过期天数，单位：天" />
 						<span class="input-group-addon">&nbsp;天&nbsp;</span>

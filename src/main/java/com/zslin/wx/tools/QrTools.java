@@ -67,7 +67,7 @@ public class QrTools {
         JSONObject jsonObj = WeixinUtil.httpRequest(url, "POST", forever?buildForOverParam(value):buildTempParam(value));
 //        System.out.println(jsonObj.toString());
         String ticket = JsonTools.getJsonParam(jsonObj.toString(), "ticket");
-        String qrUrl = JsonTools.getJsonParam(jsonObj.toString(), "url");
+//        String qrUrl = JsonTools.getJsonParam(jsonObj.toString(), "url");
 //        System.out.println(ticket);
 //        System.out.println(qrUrl);
 

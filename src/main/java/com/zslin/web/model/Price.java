@@ -15,6 +15,15 @@ public class Price implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "store_sn")
+    private String storeSn;
+
+    @Column(name = "store_name")
+    private String storeName;
+
+    @Column(name = "store_id")
+    private Integer storeId;
+
     /** 早餐价格，单位：元 */
     @Column(name = "breakfast_price")
     private Float breakfastPrice;
@@ -46,6 +55,30 @@ public class Price implements Serializable {
     /** 简餐半票 */
     @Column(name = "spe_money_half")
     private Float speMoneyHalf;
+
+    public String getStoreSn() {
+        return storeSn;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public Integer getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Integer storeId) {
+        this.storeId = storeId;
+    }
+
+    public void setStoreSn(String storeSn) {
+        this.storeSn = storeSn;
+    }
 
     public Float getFriendRate() {
         return friendRate;

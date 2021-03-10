@@ -1,9 +1,11 @@
 package com.zslin.wx.tools;
 
+import com.mysql.cj.xdevapi.Client;
 import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.card.dto.CardCheckDto;
 import com.zslin.card.service.ICardCheckService;
+import com.zslin.client.tools.ClientFileTools;
 import com.zslin.web.model.BuffetOrder;
 import com.zslin.web.model.Income;
 import com.zslin.web.service.IBuffetOrderService;
@@ -41,20 +43,20 @@ public class HlxTools {
      * 定时器自动查询的营业信息
      * @return
      */
-    public String queryFinanceByTimer() {
+    public String queryFinanceByTimer(String storeSn) {
         String spe = "\\n";
         String lastMonth = getLastMonth(-1); //上一个月
         String lastMonth2 = getLastMonth(-2); //上两个月
 
         Integer days1 = getDaysOfMonth(lastMonth);
-        Double sum1 = buffetOrderService.sumByMonth(formatMonthStr(lastMonth));
+        Double sum1 = buffetOrderService.sumByMonth(storeSn, formatMonthStr(lastMonth));
         sum1 = sum1==null?0:sum1;
 
         Integer days2 = getDaysOfMonth(lastMonth2);
-        Double sum2 = buffetOrderService.sumByMonth(formatMonthStr(lastMonth2));
+        Double sum2 = buffetOrderService.sumByMonth(storeSn, formatMonthStr(lastMonth2));
         sum2 = sum2==null?0:sum2;
 
-        String res = queryFinance(lastMonth, spe);
+        String res = queryFinance(storeSn, lastMonth, spe);
         StringBuffer sb = new StringBuffer(res);
         sb.append(spe).append("======与").append(lastMonth2).append("相比======").append(spe)
             .append("上月消费：").append(formatValue(sum2, 0)).append(" 人次，").append((sum1>sum2)?"上升":"下降").append(cal(sum1, sum2)).append(spe)
@@ -62,8 +64,8 @@ public class HlxTools {
         return sb.toString();
     }
 
-    public String calDay() {
-        return calDay(0);
+    public String calDay(String storeSn) {
+        return calDay(storeSn, 0);
     }
 
     /**
@@ -71,11 +73,11 @@ public class HlxTools {
      * @param days days天前的数据
      * @return
      */
-    public String calDay(int days) {
+    public String calDay(String storeSn, int days) {
         String spe = "\\n";
 
         Integer sum = 0;
-        Income income = incomeService.findByComeDay(NormalTools.curDate("yyyyMMdd"));
+        Income income = incomeService.findByComeDay(storeSn, NormalTools.curDate("yyyyMMdd"));
         if(income!=null) { //先获取是否登记
             sum = income.getPeopleCount();
         }
@@ -141,36 +143,54 @@ public class HlxTools {
 
     /**
      * 查询营业信息
+     * @param storeSn 店铺SN
      * @param day 月份，如：20200122
      * @param spe 分隔
      * @return
      */
-    public String queryFinanceByDay(String day, String spe) {
+    public String queryFinanceByDay(String storeSn, String day, String spe) {
         if(day!=null && day.length()==8) {
             StringBuffer sb = new StringBuffer();
             String curDay = day.substring(0,4)+"-"+day.substring(4,6)+"-"+day.substring(6,8);
-            Integer count3 = hlxTicketService.queryByDay(curDay);
-            Integer count4 = hlxTicketService.queryWriteOffCount(curDay);
+            Integer count3 = hlxTicketService.queryByDay(storeSn, curDay);
+            Integer count4 = hlxTicketService.queryWriteOffCount(storeSn, curDay);
 
-            Income income = incomeService.findByComeDay(day);
+            Income income = incomeService.findByComeDay(storeSn, day);
             if(income==null) {
-                sb.append("查询日期：").append(day).append(spe)
-                    .append("当天领券：").append(count3).append(" 张").append(spe)
-                    .append("当天核销：").append(count4).append(" 张").append(spe)
-                    .append("其他信息未登记");
+                sb.append("店铺名称：").append(buildStoreName(storeSn)).append(spe)
+                        .append("查询日期：").append(day).append(spe)
+                        .append("当天领券：").append(count3).append(" 张").append(spe)
+                        .append("当天核销：").append(count4).append(" 张").append(spe)
+                        .append("其他信息未登记");
                 return sb.toString();
             }
 
-            sb.append("查询日期：").append(day).append(spe)
-                .append("消费人次：").append(income.getPeopleCount()).append(" 人").append(spe)
-                .append("当天营收：").append(formatValue(income.getCash()*1.0, 2)).append(" 元").append(spe)
-                .append("其他收入：").append(formatValue(income.getOther()*1.0, 2)).append(" 元").append(spe)
-                .append("-------------").append(spe)
-                .append("当天领券：").append(count3).append(" 张").append(spe)
-                .append("当天核销：").append(count4).append(" 张").append(spe);
+            sb.append("店铺名称：").append(buildStoreName(storeSn)).append(spe)
+                    .append("查询日期：").append(day).append(spe)
+                    //.append("就餐桌数：").append(income.getDeskCount()).append(spe)
+                    .append("消费人次：").append(income.getPeopleCount()).append(" 人").append(spe)
+                    .append("当天营收：").append(formatValue(income.getCash()*1.0, 2)).append(" 元").append(spe)
+                    .append("其他收入：").append(formatValue(income.getOther()*1.0, 2)).append(" 元").append(spe)
+                    .append("-------------").append(spe)
+                    .append("当天领券：").append(count3).append(" 张").append(spe)
+                    .append("当天核销：").append(count4).append(" 张").append(spe);
             return sb.toString();
         }
         return "查询失败，数据格式出错【yyyyMMdd】";
+    }
+
+    /** 通过storeSn获取storeName */
+    private String buildStoreName(String storeSn) {
+        return ClientFileTools.BUILD_STORE_NAME(storeSn);
+    }
+
+    public String queryFinance(String month) {
+        String spe = "\n";
+        StringBuffer sb = new StringBuffer();
+        sb.append(queryFinance(ClientFileTools.HLX_SN, month, spe)).append(spe)
+                .append("===============================").append(spe)
+                .append(queryFinance(ClientFileTools.QWZW_NAME, month, spe));
+        return sb.toString();
     }
 
     /**
@@ -179,13 +199,13 @@ public class HlxTools {
      * @param spe 分隔
      * @return
      */
-    public String queryFinance(String month, String spe) {
+    public String queryFinance(String storeSn, String month, String spe) {
         if(month!=null && month.length()==6) {
             StringBuffer sb = new StringBuffer();
             Integer days = getDaysOfMonth(month);
-            Double sum = buffetOrderService.sumByMonth(formatMonthStr(month));
+            Double sum = buffetOrderService.sumByMonth(storeSn, formatMonthStr(month));
             sum = sum==null?0:sum;
-            Double sumMoney = incomeService.totalMoney(month);
+            Double sumMoney = incomeService.totalMoney(storeSn, month);
             sumMoney = sumMoney==null?0:sumMoney;
 
             Double ticketDiscountMoney = buffetOrderService.sumDiscountMoney("3", formatMonthStr(month)); //卡券抵扣
@@ -193,13 +213,14 @@ public class HlxTools {
             Double scoreDiscountMoney = buffetOrderService.sumDiscountMoney("1", formatMonthStr(month)); //积分抵扣
             scoreDiscountMoney = scoreDiscountMoney==null?0:scoreDiscountMoney;
 
+            sb.append("店铺名称：").append(buildStoreName(storeSn)).append(spe);
             sb.append("查询月份：").append(month).append(spe);
             sb.append("当月天数：").append(days).append(" 天").append(spe);
             sb.append("消费人次：").append(formatValue(sum, 0)).append(" 人").append(spe);
             sb.append("平均每天：").append(formatValue(sum/days, 2)).append(" 人").append(spe);
             sb.append("当月营收：").append(formatValue(sumMoney, 2)).append(" 元").append(spe)
-                    .append("平均每日：").append(formatValue(incomeService.average(month), 2)).append(" 元").append(spe)
-                    .append("超过两万伍：").append(incomeService.moreThan(month, 25000d)).append(" 天").append(spe)
+                    .append("平均每日：").append(formatValue(incomeService.average(storeSn, month), 2)).append(" 元").append(spe)
+                    .append("超过两万伍：").append(incomeService.moreThan(storeSn, month, 25000d)).append(" 天").append(spe)
                     .append("卡券抵扣：").append(ticketDiscountMoney).append(" 元").append(spe)
                     .append("积分抵扣：").append(scoreDiscountMoney).append(" 元");
             return sb.toString();
@@ -210,19 +231,20 @@ public class HlxTools {
     /**
      * 新版查询营业情况
      * 20200421
+     * @param storeSn 店铺SN
      * @param month 月份，格式：yyyyMM
      * @param spe 分隔符，如：\n
      * @return
      */
-    public String queryFinanceNew(String month, String spe) {
-        List<Income> incomeList = incomeService.findByMonth(month);
+    public String queryFinanceNew(String storeSn, String month, String spe) {
+        List<Income> incomeList = incomeService.findByMonth(storeSn, month);
 
         if(month!=null && month.length()==6) {
             StringBuffer sb = new StringBuffer();
             Integer days = getDaysOfMonth(month);
-            Double sum = buffetOrderService.sumByMonth(formatMonthStr(month));
+            Double sum = buffetOrderService.sumByMonth(storeSn, formatMonthStr(month));
             sum = sum==null?0:sum;
-            Double sumMoney = incomeService.totalMoney(month);
+            Double sumMoney = incomeService.totalMoney(storeSn, month);
             sumMoney = sumMoney==null?0:sumMoney;
 
             Double ticketDiscountMoney = buffetOrderService.sumDiscountMoney("3", formatMonthStr(month)); //卡券抵扣
@@ -236,6 +258,7 @@ public class HlxTools {
             Integer goodDays = genGoodDays(incomeList); //超2万天数
             Double extraMoney = genExtraMoney(incomeList); //其他收入
 
+            sb.append("店铺名称：").append(buildStoreName(storeSn)).append(spe);
             sb.append("查询月份：").append(month).append(spe);
             sb.append("当月天数：").append(totalDays).append(" 天").append(spe);
             sb.append("消费人次：").append(totalPeople).append(" 人").append(spe);
@@ -299,12 +322,17 @@ public class HlxTools {
         return res;
     }
 
-    public String queryFinance(String content) {
-        return queryFinance(content, "\n");
+    public String queryFinance(String storeSn, String content) {
+        return queryFinance(storeSn, content, "\n");
     }
 
     public String queryFinanceByDay(String content) {
-        return queryFinanceByDay(content, "\n");
+        String spe = "\n";
+        StringBuffer sb = new StringBuffer();
+        sb.append(queryFinanceByDay(ClientFileTools.HLX_SN, content, spe)).append(spe)
+                .append("=========================").append(spe)
+                .append(queryFinanceByDay(ClientFileTools.QWZW_SN, content, spe));
+        return sb.toString();
     }
 
     public String queryCardCheck(String content) {

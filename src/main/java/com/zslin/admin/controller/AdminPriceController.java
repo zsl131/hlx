@@ -1,21 +1,31 @@
 package com.zslin.admin.controller;
 
 import com.zslin.basic.annotations.AdminAuth;
+import com.zslin.basic.annotations.Token;
+import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.NormalTools;
+import com.zslin.basic.tools.TokenTools;
+import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.ClientJsonTools;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.web.model.Commodity;
 import com.zslin.web.model.Price;
 import com.zslin.web.service.ICommodityService;
 import com.zslin.web.service.IPriceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/1/25 23:46.
@@ -34,7 +44,19 @@ public class AdminPriceController {
     @Autowired
     private ICommodityService commodityService;
 
-    @AdminAuth(name="价格配置管理", orderNum=1, icon="fa fa-rmb", type="1")
+    @Autowired
+    private IStoreDao storeDao;
+
+    @GetMapping(value = "list")
+    @AdminAuth(name = "价格配置列表", type = "1", orderNum = 1, icon = "fa fa-list")
+    public String list(Model model, Integer page, HttpServletRequest request) {
+        Page<Price> datas = priceService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
+                SimplePageBuilder.generate(page));
+        model.addAttribute("datas", datas);
+        return "admin/price/list";
+    }
+
+    /*@AdminAuth(name="价格配置管理", orderNum=1, icon="fa fa-rmb", type="1")
     @RequestMapping(value="index", method= RequestMethod.GET)
     public String index(Model model, HttpServletRequest request) {
         Price price = priceService.loadOne();
@@ -58,11 +80,61 @@ public class AdminPriceController {
 
         request.getSession().setAttribute("price", price); //修改后需要修改一次Session中的值
         return "redirect:/admin/price/index";
+    }*/
+
+
+    @RequestMapping(value="index", method= RequestMethod.GET)
+    public String index(Model model, HttpServletRequest request) {
+        return "redirect:/admin/price/list";
+    }
+
+    @Token(flag= Token.READY)
+    @AdminAuth(name = "添加价格配置", orderNum = 2, icon="fa fa-plus")
+    @RequestMapping(value="add", method= RequestMethod.GET)
+    public String add(Model model, HttpServletRequest request) {
+        model.addAttribute("price", new Price());
+
+        List<Store> storeList = storeDao.findAll();
+        model.addAttribute("storeList", storeList);
+        return "admin/price/add";
+    }
+
+    @Token(flag= Token.CHECK)
+    @RequestMapping(value="add", method=RequestMethod.POST)
+    public String add(Model model, Price price, HttpServletRequest request) {
+        if(TokenTools.isNoRepeat(request)) { //不是重复提交
+            priceService.save(price);
+
+            send2Client(price);
+        }
+        return "redirect:/admin/price/list";
+    }
+
+    @Token(flag= Token.READY)
+    @AdminAuth(name="修改价格配置", orderNum=3, icon = "fa fa-pencil")
+    @RequestMapping(value="update/{id}", method=RequestMethod.GET)
+    public String update(Model model, @PathVariable Integer id, HttpServletRequest request) {
+        Price p = priceService.findOne(id);
+        model.addAttribute("price", p);
+        return "admin/price/update";
+    }
+
+    @Token(flag= Token.CHECK)
+    @RequestMapping(value="update/{id}", method=RequestMethod.POST)
+    public String update(Model model, @PathVariable Integer id, Price price, HttpServletRequest request) {
+        if(TokenTools.isNoRepeat(request)) {
+            Price p = priceService.findOne(id);
+            MyBeanUtils.copyProperties(price, p, "storeSn", "storeName", "storeId");
+            priceService.save(p);
+
+            send2Client(p);
+        }
+        return "redirect:/admin/price/list";
     }
 
     private void send2Client(Price p) {
         String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildPrice(p));
-        clientFileTools.setChangeContext(content, true);
+        clientFileTools.setChangeContext(p.getStoreSn(), content, true);
         buildCommodity(p);
     }
 
@@ -148,6 +220,6 @@ public class AdminPriceController {
 
     public void send2Client(Commodity commodity, String action) {
         String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildCommodity(commodity, action));
-        clientFileTools.setChangeContext(content, true);
+        clientFileTools.setChangeContext(commodity.getStoreSn(), content, true);
     }
 }

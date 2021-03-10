@@ -15,8 +15,19 @@ public class ClientFileTools {
     //汉丽轩的sn
     public static final String HLX_SN = "hlx";
 
+    public static final String HLX_NAME = "汉丽轩";
+
+    public static final String QWZW_SN = "qwzw-auto";
+
+    public static final String QWZW_NAME = "签王之王";
+
     private static final String GET_FILE = "client-get.txt";
     private static final String CONF_FILE = "client-config.txt";
+
+    /** 通过StoreSN来获取storeName */
+    public static String BUILD_STORE_NAME(String storeSn) {
+        return QWZW_SN.equals(storeSn)?QWZW_NAME:HLX_NAME;
+    }
 
     @Autowired
     private ConfigTools configTools;
@@ -44,12 +55,12 @@ public class ClientFileTools {
     }
 
     public void setConfigContext(String storeSn, String content) {
-        if(storeSn==null || "".equals(storeSn)) {storeSn = "hlx";} //默认为hlx
+        if(storeSn==null || "".equals(storeSn)) {storeSn = HLX_SN;} //默认为hlx
         setFileContext(getConfigFile(storeSn), content);
     }
 
     public void setChangeContext(String storeSn, String content, boolean isAppend) {
-        if(storeSn==null || "".equals(storeSn)) {storeSn = "hlx";}
+        if(storeSn==null || "".equals(storeSn)) {storeSn = HLX_SN;}
         if(isAppend) { //如果是追加则需要修改里面的内容
             String con = getChangeContext(storeSn);
             if(con!=null && !"".equals(con.trim())) {

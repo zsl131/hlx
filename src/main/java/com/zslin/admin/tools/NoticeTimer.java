@@ -1,6 +1,7 @@
 package com.zslin.admin.tools;
 
 import com.zslin.basic.tools.DateTools;
+import com.zslin.client.tools.ClientFileTools;
 import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.EventTools;
 import com.zslin.wx.tools.HlxTools;
@@ -32,8 +33,12 @@ public class NoticeTimer {
     public void timerCron() {
         //通知对象：管理员与股东
         List<String> openids = accountTools.getOpenid(AccountTools.ADMIN, AccountTools.PARTNER);
-        String content = hlxTools.queryFinanceByTimer();
-        eventTools.eventRemind(openids, "营业通知", "自动", DateTools.date2Str(new Date(), "yyyyMMdd"), content, "");
+        String content = hlxTools.queryFinanceByTimer(ClientFileTools.HLX_SN);
+        eventTools.eventRemind(openids, "汉丽轩-营业通知", "自动", DateTools.date2Str(new Date(), "yyyyMMdd"), content, "");
+
+        String contentQwzw = hlxTools.queryFinanceByTimer(ClientFileTools.QWZW_SN);
+        //只发部分人员
+        eventTools.eventRemind(AccountTools.defaultAdmins(), "签王之王-营业通知", "自动", DateTools.date2Str(new Date(), "yyyyMMdd"), contentQwzw, "");
 //        System.out.println("current time : "+ sdf.format(new Date()));
 //        System.out.println(content);
     }
@@ -43,8 +48,12 @@ public class NoticeTimer {
     public void dataByDay() {
         //通知对象：管理员与股东
         List<String> openids = accountTools.getOpenid(AccountTools.ADMIN, AccountTools.PARTNER);
-        String content = hlxTools.calDay();
-        eventTools.eventRemind(openids, "当天营业通知", "自动统计", DateTools.date2Str(new Date(), "yyyyMMdd"), content, "");
+        String content = hlxTools.calDay(ClientFileTools.HLX_SN);
+        eventTools.eventRemind(openids, "汉丽轩-当天营业通知", "自动统计", DateTools.date2Str(new Date(), "yyyyMMdd"), content, "");
+
+        String contentQwzw = hlxTools.calDay(ClientFileTools.QWZW_SN);
+        //只发部分人员
+        eventTools.eventRemind(AccountTools.defaultAdmins(), "签王之王-当天营业通知", "自动统计", DateTools.date2Str(new Date(), "yyyyMMdd"), contentQwzw, "");
 //        System.out.println("current time : "+ sdf.format(new Date()));
 //        System.out.println(content);
     }

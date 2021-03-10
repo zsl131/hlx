@@ -20,4 +20,6 @@ public class OrderTicket {
 
     //生成二维码时为0，领券后为1
     private String status = "0";
+
+    private String storeSn;
 }

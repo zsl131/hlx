@@ -15,6 +15,15 @@ public class Rules implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "store_sn")
+    private String storeSn;
+
+    @Column(name = "store_name")
+    private String storeName;
+
+    @Column(name = "store_id")
+    private Integer storeId;
+
     /** 积分过期天数 */
     @Column(name = "score_overdue_days")
     private Integer scoreOverdueDays;
@@ -47,6 +56,42 @@ public class Rules implements Serializable {
     /** 积分抵扣比率，存整数，使用时除以100 */
     @Column(name = "score_deductible")
     private Integer scoreDeductible;
+
+    /** 特殊开关 */
+    @Column(name = "switch_flag")
+    private String switchFlag = "0";
+
+    public String getSwitchFlag() {
+        return switchFlag;
+    }
+
+    public void setSwitchFlag(String switchFlag) {
+        this.switchFlag = switchFlag;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public Integer getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Integer storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getStoreSn() {
+        return storeSn;
+    }
+
+    public void setStoreSn(String storeSn) {
+        this.storeSn = storeSn;
+    }
 
     public Integer getScoreDeductible() {
         return scoreDeductible;

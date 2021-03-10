@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+	<title>修改全局配置</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+	<div class="header lighter smaller blue">
+		<h3><i class="fa fa-plus"></i>&nbsp;修改全局配置（<b th:text="${rules.storeName}"></b>-<span th:text="${rules.storeSn}" th:remove="tag"></span>）</h3>
+		<div th:replace="admin/rules/nav :: content" th:remove="tag"></div>
+	</div>
+
+	<form method="POST" th:object="${rules}" id="dataForm" enctype="multipart/form-data">
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">积分过期天数：</div>
+				<input name="scoreOverdueDays" id="scoreOverdueDays" type="text" class="form-control" th:value="${rules.scoreOverdueDays}" placeholder="请输入积分过期天数，单位：天" />
+				<span class="input-group-addon">&nbsp;天&nbsp;</span>
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">积分兑换：</div>
+				<input name="scoreMoney" id="scoreMoney" type="text" class="form-control" th:value="${rules.scoreMoney}" placeholder="多少积分可换一元" />
+				<span class="input-group-addon">分抵一元</span>
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">积分抵扣比例：</div>
+				<input name="scoreDeductible" id="scoreDeductible" type="text" class="form-control" th:value="${rules.scoreDeductible}" placeholder="积分最多抵扣订单总额的百分比，输入正整数" />
+				<span class="input-group-addon">%</span>
+			</div>
+		</div>
+
+		<!--<div class="form-group form-group-lg">
+            <div class="input-group">
+                <div class="input-group-addon">充值赠送比例：</div>
+                <input name="chargePercent" id="chargePercent" type="text" class="form-control" th:value="${rules.chargePercent}" placeholder="请输入充值赠送积分比例，未除100的整数" />
+                <span class="input-group-addon">&nbsp;%&nbsp;</span>
+            </div>
+        </div>-->
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">早晚餐时间间隔：</div>
+				<input name="spe" id="spe" type="text" class="form-control" th:value="${rules.spe}" placeholder="午餐和晚餐的时间分隔点，如：15:00" />
+				<span class="input-group-addon">HH:mm</span>
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">退票时长（分钟）：</div>
+				<input name="refundMin" id="refundMin" type="text" class="form-control" th:value="${rules.refundMin}" placeholder="入场后多少分钟内可退票" />
+				<span class="input-group-addon">分钟</span>
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">特殊开关</div>
+				<div class="form-control">
+					<input type="radio" name="switchFlag" value="1" id="flag_1" th:checked="${rules.switchFlag eq '1'}?'checked'"/><label for="flag_1">开启</label>
+					<input type="radio" name="switchFlag" value="0" id="flag_0" th:checked="${rules.switchFlag ne '1'}?'checked'"/><label for="flag_0">关闭</label>
+				</div>
+			</div>
+		</div>
+
+		<input name="storeName" type="hidden" th:value="${rules.storeName}"/>
+		<input name="storeSn" type="hidden" th:value="${rules.storeSn}"/>
+		<input name="storeId" type="hidden" th:value="${rules.storeId}"/>
+		<input name="id" type="hidden" th:value="${rules.id}"/>
+		<input type="hidden" name="token" th:value="${session.token}"/>
+		<button type="submit" class="btn btn-primary">确定提交</button>
+	</form>
+</div>
+</body>
+</html>

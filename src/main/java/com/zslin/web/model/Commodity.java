@@ -33,6 +33,9 @@ public class Commodity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "store_sn")
+    private String storeSn;
+
     /** 商品名称 */
     private String name;
 
@@ -54,6 +57,14 @@ public class Commodity {
     private Float price;
 
     private String status;
+
+    public String getStoreSn() {
+        return storeSn;
+    }
+
+    public void setStoreSn(String storeSn) {
+        this.storeSn = storeSn;
+    }
 
     public String getStatus() {
         return status;

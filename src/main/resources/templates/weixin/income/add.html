@@ -11,6 +11,17 @@
     <link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
     <script src="/back-admin/bus/my-date.js"></script>
     <script src="/back-admin/bus/admin-income.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $("input[name='storeSn']").click(function() {
+                //console.log($(this).val());
+                var sn = $(this).val();
+                var name = sn=="hlx"?"汉丽轩":"签王之王";
+                $("input[name='storeName']").val(name);
+            });
+        });
+    </script>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
@@ -20,12 +31,24 @@
         </div>
 
         <form method="POST" th:object="${income}" id="dataForm" enctype="multipart/form-data">
+            <input name="storeName" value="汉丽轩" type="hidden"/>
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon">收入日期：</div>
                     <input type='text' th:value="${income.comeDay}" class='form-control income-day' name="comeDay"/>
                 </div>
             </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">店铺</div>
+                    <div class="form-control">
+                        <input type="radio" name="storeSn" value="hlx" id="sn_1" checked="checked"/><label for="sn_1">汉丽轩</label>
+                        <input type="radio" name="storeSn" value="qwzw-auto" id="sn_2"/><label for="sn_2">签王之王</label>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon">类别</div>
@@ -37,6 +60,16 @@
             </div>
 
             <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">现金：</div>
+                    <input name="cash" type="text" class="form-control money-input" th:value="${income.cash}" placeholder="单位元" />
+
+                    <div class="input-group-addon">小计：</div>
+                    <input name="totalMoney" type="text" disabled="disabled" style="font-weight:bold; color:#F00" class="form-control" th:value="${income.totalMoney}" placeholder="单位元" />
+                </div>
+            </div>
+
+            <!--<div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon">现金：</div>
                     <input name="cash" type="text" class="form-control money-input" th:value="${income.cash}" placeholder="单位元" />
@@ -93,7 +126,7 @@
                     <div class="input-group-addon">小计：</div>
                     <input name="totalMoney" type="text" disabled="disabled" style="font-weight:bold; color:#F00" class="form-control" th:value="${income.totalMoney}" placeholder="单位元" />
                 </div>
-            </div>
+            </div>-->
 
             <input type="hidden" name="token" value="${session.token}"/>
             <button type="submit" class="btn btn-primary">确定提交</button>

@@ -5,6 +5,7 @@ import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.repository.SimpleSpecificationBuilder;
 import com.zslin.basic.tools.DateTools;
 import com.zslin.client.service.IOrdersService;
+import com.zslin.client.tools.ClientFileTools;
 import com.zslin.web.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,13 +52,18 @@ public class WeixinIndexController {
         model.addAttribute("categoryList", categoryService.findByOrder(storeSn)); //分类
         model.addAttribute("galleryList", galleryService.findShow()); //微信画廊
         model.addAttribute("ordersList", buffetOrderService.findAll(SimplePageBuilder.generate(0, 6, SimpleSortBuilder.generateSort("id_d")))); //最新订单
-        model.addAttribute("ordersCount", buffetOrderService.queryCount());
-        model.addAttribute("ordersCountYestoday", buffetOrderDetailService.queryCount(DateTools.plusDay(-1, "yyyy-MM-dd")));
-        model.addAttribute("ordersCountToday", buffetOrderDetailService.queryCount(DateTools.plusDay(0, "yyyy-MM-dd")));
+        model.addAttribute("ordersCount", buffetOrderService.queryCount(ClientFileTools.HLX_SN));
+        model.addAttribute("ordersCountYestoday", buffetOrderService.queryCount(ClientFileTools.HLX_SN, DateTools.plusDay(-1, "yyyy-MM-dd")));
+        model.addAttribute("ordersCountToday", buffetOrderService.queryCount(ClientFileTools.HLX_SN, DateTools.plusDay(0, "yyyy-MM-dd")));
+
+        model.addAttribute("ordersCount_qwzw", buffetOrderService.queryCount(ClientFileTools.QWZW_SN));
+        model.addAttribute("ordersCountYestoday_qwzw", buffetOrderService.queryCount(ClientFileTools.QWZW_SN, DateTools.plusDay(-1, "yyyy-MM-dd")));
+        model.addAttribute("ordersCountToday_qwzw", buffetOrderService.queryCount(ClientFileTools.QWZW_SN, DateTools.plusDay(0, "yyyy-MM-dd")));
+
         SimpleSpecificationBuilder builder = new SimpleSpecificationBuilder("status", "eq", "1");
 //        model.addAttribute("feedbackList", feedbackService.findAll(builder.generate(), SimplePageBuilder.generate(0, 6, SimpleSortBuilder.generateSort("id_d")))); //最新反馈
         model.addAttribute("commentList", commentService.findAll(builder.generate(), SimplePageBuilder.generate(0, 6, SimpleSortBuilder.generateSort("id_d")))); //最新点评
-        model.addAttribute("price", priceService.loadOne());
+        model.addAttribute("price", priceService.findByStoreSn());
         return "weixin/index/index";
     }
 }

@@ -37,7 +37,10 @@
                     </thead>
 
                     <tr th:each="obj : ${datas}">
-                        <td th:text="${obj.no}"></td>
+                        <td>
+                            <p th:text="${(obj.storeSn eq NULL or obj.storeSn eq '') ? '汉丽轩':obj.storeName}"></p>
+                            <p th:text="${obj.no}"></p>
+                        </td>
                         <td>
                             <span th:text="${obj.isSelf eq '1'?'自助':'外卖'}"></span> /
                             <span  th:switch="${obj.type}" th:if="${obj.isSelf eq '1'}">

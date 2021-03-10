@@ -78,13 +78,13 @@ public class EventTest {
 
     @Test
     public void test03() {
-        String res = hlxTools.calDay(1);
+        String res = hlxTools.calDay("qwzw-auto", 1);
         System.out.println(res);
     }
 
     @Test
     public void test02() {
-        String res = hlxTools.queryFinanceByTimer();
+        String res = hlxTools.queryFinanceByTimer("hlx");
         System.out.println(res);
     }
 

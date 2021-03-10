@@ -88,4 +88,18 @@ public class AccountTools {
         String openid = accountService.findOpenidByPhone(phone);
         return openid;
     }
+
+    /**
+     * 朱霞和钟述林的OPENID
+     * @return
+     */
+    public static List<String> defaultAdmins() {
+        List<String> res = new ArrayList<>();
+        res.add("o_TZkwbH119ZLSM0wGbEA7vvJ1bU");
+        res.add("o_TZkwbz0pzuCTmrWqMGNHriMHTo");
+        return res;
+    }
+
+    /** 钟述林的OPENID */
+    public static String defaultOwnAdmin() {return "o_TZkwbz0pzuCTmrWqMGNHriMHTo";}
 }

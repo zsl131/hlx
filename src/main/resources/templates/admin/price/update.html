@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+	<title>修改价格配置</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+	<div class="header lighter smaller blue">
+		<h3><i class="fa fa-plus"></i>&nbsp;修改价格配置（<b th:text="${price.storeName}"></b>-<span th:text="${price.storeSn}" th:remove="tag"></span>）</h3>
+		<div th:replace="admin/price/nav :: content" th:remove="tag"></div>
+	</div>
+
+	<form method="POST" th:object="${price}" id="dataForm" enctype="multipart/form-data">
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">早餐单价（正价）：</div>
+				<input name="breakfastPrice" id="breakfastPrice" type="text" class="form-control" th:value="${price.breakfastPrice}" placeholder="请输入早餐单价，单位：元" />
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">晚餐单价（正价）：</div>
+				<input name="dinnerPrice" id="dinnerPrice" type="text" class="form-control" th:value="${price.dinnerPrice}" placeholder="请输入晚餐单价，单位：元" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">简餐单价（无烤）：</div>
+				<input name="speMoney" id="speMoney" type="text" class="form-control" th:value="${price.speMoney}" placeholder="不开火用餐单价，单位：元" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">简餐单价（儿童）：</div>
+				<input name="speMoneyHalf" id="speMoneyHalf" type="text" class="form-control" th:value="${price.speMoneyHalf}" placeholder="不开火用餐单价，单位：元" />
+			</div>
+		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">早餐单价（亲情）：</div>
+				<input name="friendBreakfastPrice" id="friendBreakfastPrice" type="text" class="form-control" th:value="${price.friendBreakfastPrice}" placeholder="请输入亲情早餐单价，单位：元" />
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">晚餐单价（亲情）：</div>
+				<input name="friendDinnerPrice" id="friendDinnerPrice" type="text" class="form-control" th:value="${price.friendDinnerPrice}" placeholder="请输入亲情晚餐单价，单位：元" />
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">亲情折扣（小数）：</div>
+				<input name="friendRate" type="text" class="form-control" th:value="${price.friendRate}" placeholder="输入亲情折扣，如0.8，即打8折；此值为空时则使用上述亲情价" />
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">押金金额：</div>
+				<input name="bondMoney" id="bondMoney" type="text" class="form-control" th:value="${price.bondMoney}" placeholder="请输入压金金额，单位：元" />
+			</div>
+		</div>
+
+		<input name="storeName" type="hidden" th:value="${price.storeName}"/>
+		<input name="storeSn" type="hidden" th:value="${price.storeSn}"/>
+		<input name="storeId" type="hidden" th:value="${price.storeId}"/>
+		<input name="id" type="hidden" th:value="${price.id}"/>
+		<input type="hidden" name="token" th:value="${session.token}"/>
+		<button type="submit" class="btn btn-primary">确定提交</button>
+	</form>
+</div>
+</body>
+</html>

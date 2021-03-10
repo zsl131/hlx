@@ -36,7 +36,7 @@ public class ScoreTimerTools {
     //每天23点27分50秒时执行
     @Scheduled(cron = "50 27 23 * * ?")
     public void processScore() {
-        Rules rules = rulesService.loadOne();
+        Rules rules = rulesService.findByStoreSn();
         Integer overdueDays = rules.getScoreOverdueDays(); //积分过期天数
         if(overdueDays!=null && overdueDays>0) { //有积分过期天数表示积分会过期
             List<WalletDetail> datas = walletDetailService.findOverdue(buildOverdueLong(overdueDays));

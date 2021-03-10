@@ -14,6 +14,16 @@ public class BuffetOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    /** 店铺SN */
+    @Column(name = "store_sn")
+    private String storeSn;
+
+    @Column(name = "store_id")
+    private Integer storeId;
+
+    @Column(name = "store_name")
+    private String storeName;
+
     /** 订单编号 */
     private String no;
 
@@ -152,6 +162,30 @@ public class BuffetOrder {
     /** 如果是会员订单是否已经扣款 */
     @Column(name = "has_take_off")
     private String hasTakeOff = "0";
+
+    public String getStoreSn() {
+        return storeSn;
+    }
+
+    public void setStoreSn(String storeSn) {
+        this.storeSn = storeSn;
+    }
+
+    public Integer getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Integer storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
 
     public String getHasTakeOff() {
         return hasTakeOff;

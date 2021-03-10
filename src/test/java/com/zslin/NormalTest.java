@@ -10,6 +10,7 @@ import com.zslin.basic.tools.SecurityUtil;
 import com.zslin.card.dto.CardCheckDto;
 import com.zslin.card.service.ICardCheckService;
 import com.zslin.card.tools.CardNoTools;
+import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.RestdayTools;
 import com.zslin.kaoqin.dto.DayDto;
 import com.zslin.kaoqin.dto.MonthDto;
@@ -147,11 +148,12 @@ public class NormalTest {
 
     @Test
     public void test41() {
-        Integer count1 = hlxTicketService.queryAll();
-        Integer count2 = hlxTicketService.queryAll("1");
+        String storeSn = ClientFileTools.HLX_SN;
+        Integer count1 = hlxTicketService.queryAll(storeSn);
+        Integer count2 = hlxTicketService.queryAll(storeSn, "1");
 
-        Integer count3 = hlxTicketService.queryByDay("2020-06-04");
-        Integer count4 = hlxTicketService.queryWriteOffCount("2020-06-04");
+        Integer count3 = hlxTicketService.queryByDay(storeSn, "2020-06-04");
+        Integer count4 = hlxTicketService.queryWriteOffCount(storeSn, "2020-06-04");
 
         System.out.println("count1::"+count1);
         System.out.println("count2::"+count2);
@@ -203,7 +205,7 @@ public class NormalTest {
 
     @Test
     public void test37() {
-        String str = hlxTools.calDay();
+        String str = hlxTools.calDay("hlx");
         System.out.println(str);
     }
 
@@ -336,7 +338,7 @@ public class NormalTest {
         totalMoney = bg.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
         System.out.println("============"+totalMoney);
 
-        Double avg = incomeService.average("201708");
+        Double avg = incomeService.average("hlx", "201708");
         System.out.println("===avg==="+avg);
     }
 

@@ -16,8 +16,11 @@ public interface IBuffetOrderService extends BaseRepository<BuffetOrder, Integer
 
     BuffetOrder findByNo(String no);
 
-    @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE status in ('2', '4', '5')")
-    Integer queryCount();
+    @Query("SELECT SUM(commodityCount) FROM BuffetOrder o WHERE o.storeSn=?1 AND o.status in ('2', '4', '5')")
+    Integer queryCount(String storeSn);
+
+    @Query("SELECT SUM(commodityCount) FROM BuffetOrder o WHERE o.storeSn=?1 AND o.createDay=?2 AND o.status in ('2', '4', '5')")
+    Integer queryCount(String storeSn, String day);
 
     //查询折扣次数
     @Query("SELECT COUNT(id) FROM BuffetOrder b WHERE b.discountReason=?1 AND b.discountType='2' AND b.type='4'")
@@ -98,8 +101,8 @@ public interface IBuffetOrderService extends BaseRepository<BuffetOrder, Integer
     @Query("SELECT SUM(surplusBond) FROM BuffetOrder WHERE status=?3 AND createTime BETWEEN ?1 AND ?2")
     Float queryBondByStatus(String startTime, String endTime, String status);
 
-    @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE createDay LIKE ?1 AND status NOT IN ('-1', '-2')")
-    Double sumByMonth(String month);
+    @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE storeSn=?1 AND createDay LIKE ?2 AND status NOT IN ('-1', '-2')")
+    Double sumByMonth(String storeSn, String month);
 
     @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE createDay = ?1 AND type=?2 AND status NOT IN ('-1', '-2')")
     Integer sumByDay(String day, String type);

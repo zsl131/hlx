@@ -61,8 +61,8 @@ public class WeixinOrdersController {
         }
         model.addAttribute("account", a);
         model.addAttribute("isDinner", isDinner);
-        model.addAttribute("rules", rulesService.loadOne());
-        model.addAttribute("price", priceService.loadOne());
+        model.addAttribute("rules", rulesService.findByStoreSn());
+        model.addAttribute("price", priceService.findByStoreSn());
         model.addAttribute("wallet", walletService.findByOpenid(openid));
         return "weixin/orders/buy";
     }

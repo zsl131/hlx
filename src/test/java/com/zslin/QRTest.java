@@ -2,6 +2,7 @@ package com.zslin;
 
 import com.zslin.wx.tools.PictureTools;
 import com.zslin.wx.tools.QrTools;
+import com.zslin.wx.tools.QrsceneTools;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,19 @@ public class QRTest {
     @Autowired
     private QrTools qrTools;
 
+    @Autowired
+    private QrsceneTools qrsceneTools;
+
+    @Test
+    public void test04() {
+        String openid = "o_TZkwbz0pzuCTmrWqMGNHriMHTo";
+        String value = "ticket_69_qwzw_202103108003";
+        qrsceneTools.processQrscene(openid, value);
+    }
+
     @Test
     public void test03() {
-        String url = qrTools.genTicketQr("100_2020102710008", false);
+        String url = qrTools.genTicketQr("69_qwzw_202103108002", false);
         System.out.println(url);
     }
 

@@ -8,6 +8,8 @@ import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.web.model.Income;
 import com.zslin.web.service.IIncomeService;
 import com.zslin.wx.tools.IncomeNoticeTools;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/8/30 9:15.
@@ -37,12 +40,18 @@ public class AdminIncomeController {
     @Autowired
     private IncomeNoticeTools incomeNoticeTools;
 
+    @Autowired
+    private IStoreDao storeDao;
+
     @GetMapping(value = "list")
     @AdminAuth(name = "收入管理", orderNum = 1, type = "1", icon = "fa fa-cny")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<Income> datas = incomeService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("comeDay_d")));
         model.addAttribute("datas", datas);
+
+        List<Store> storeList = storeDao.findAll();
+        model.addAttribute("storeList", storeList);
         return "admin/income/list";
     }
 
