@@ -1,0 +1,9 @@
+.category-div {
+    position: relative;
+}
+.show-category {
+    position: absolute; z-index:9999; background:#FFF; width:100%; height:100px; top: 34px; padding:5px; border:1px #e0e0e0 solid; display: none;
+}
+.all-category {
+    display: none;
+}

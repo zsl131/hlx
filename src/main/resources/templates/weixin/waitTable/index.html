@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/errorModel">
+<head>
+    <title>用户登陆</title>
+    <meta charset="utf-8"/>
+    <script src="/weixin/weixin-login.js"></script>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="title">
+        <b><i class="fa fa-user"></i> ----</b>
+    </div>
+    <div class="row login-box">
+        <div class="col-md-6">
+            <div class="form-group form-group-lg text-left">
+                <input name="token" type="hidden" value="${token}"/>
+                <p class="text-left" style="margin-top:30px;">
+                    <button type="button" onclick="submitLogin()" class="btn btn-lg btn-danger"><i class="fa fa-unlock"></i> 提交登陆</button>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

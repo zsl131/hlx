@@ -106,7 +106,7 @@ public class HlxTicketTools {
                     //"您已领取"+name+"，编码【"+ticket.getTicketNo()+"】，状态【"+status+"】"
                     DateTools.date2Str(new Date(), "yyyy-MM-dd"), "此领券码已失效或已被领取", "/wx/account/ticket");
         } else {
-            String sn = ot.getStoreSn()+"-order"; //TODO 此券SN
+            String sn = ot.getStoreSn()+"-order-"+dto.getOrderNo(); //TODO 此券SN
             orderTicketService.updateStatus("1", dto.getOrderNo());
             Account a = accountService.findByOpenid(openid);
             if(a!=null) {

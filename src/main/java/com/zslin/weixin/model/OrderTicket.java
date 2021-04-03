@@ -22,4 +22,8 @@ public class OrderTicket {
     private String status = "0";
 
     private String storeSn;
+
+    private String createDay;
+
+    private String createTime;
 }

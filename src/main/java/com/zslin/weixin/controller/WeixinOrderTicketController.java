@@ -1,5 +1,6 @@
 package com.zslin.weixin.controller;
 
+import com.zslin.basic.tools.NormalTools;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.weixin.model.OrderTicket;
 import com.zslin.weixin.service.IOrderTicketService;
@@ -48,6 +49,8 @@ public class WeixinOrderTicketController {
             ot = new OrderTicket();
             ot.setOrderNo(orderNo);
             ot.setStatus("0");
+            ot.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
+            ot.setCreateTime(NormalTools.curDatetime());
             ot.setStoreSn(sn.equals("qwzw")?ClientFileTools.QWZW_SN:sn);
             orderTicketService.save(ot);
         }

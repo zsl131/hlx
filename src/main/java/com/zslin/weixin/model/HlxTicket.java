@@ -68,7 +68,7 @@ public class HlxTicket {
     @Column(name = "ticket_no")
     private String ticketNo;
 
-    /** 状态 0-领取；1-已使用；2-过期 */
+    /** 状态 0-领取；1-已使用；2-过期；3-作废 */
     private String status = "0";
 
     /** 使用日期 */

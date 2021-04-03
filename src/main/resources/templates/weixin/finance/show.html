@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>报账申请</title>
+    <script type="text/javascript" src="/weixin/weixin-finance-show.js"></script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="container">
+        <div class="header lighter smaller blue">
+            <h3><i class="fa fa-plus"></i>&nbsp;报账申请-凭证上传</h3>
+        </div>
+        <input th:value="${detail.id}" type="hidden" name="detailId"/>
+
+        <div>
+            <div th:if="${detail.stepFlag eq '0'}" class="alert alert-danger">请认真上传凭证信息，照片需要【竖直拍摄】！</div>
+
+            <div class="weui-form-preview">
+                <div class="weui-form-preview__hd">
+                    <label class="weui-form-preview__label">账单总额</label>
+                    <em class="weui-form-preview__value">¥<span th:remove="tag" th:text="${detail.totalMoney}"></span></em>
+                </div>
+                <div class="weui-form-preview__bd">
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">所属店铺</label>
+                        <span class="weui-form-preview__value" th:text="${detail.storeName}">名字名字名字</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">账目类别</label>
+                        <span class="weui-form-preview__value" th:text="${detail.cateName}">名字名字名字</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">账目名称</label>
+                        <span class="weui-form-preview__value" th:text="${detail.title}" style="color:#F60"></span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">单价</label>
+                        <span class="weui-form-preview__value" th:text="${detail.price} + ' 元'"></span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">数量</label>
+                        <span class="weui-form-preview__value" th:text="${detail.amount}"></span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">当前状态</label>
+                        <span class="weui-form-preview__value">
+                            <span th:switch="${detail.stepFlag}">
+                                <b th:case="0" class="red" style="color:#F00">凭证待上传</b>
+                                <b th:case="1" class="blue" style="color:#00F">凭证已上传</b>
+                            </span>，
+                            <span th:switch="${detail.status}">
+                                <b th:case="0" class="">待提交审核</b>
+                                <b th:case="-1" class="" style="color:#F00">已取消</b>
+                                <b th:case="1" class="" style="color:#820">审核中...</b>
+                                <b th:case="2" class="blue" style="color:#00F">审核通过</b>
+                                <b th:case="3" class="red" style="color:#F00">驳回【<span th:text="${detail.verifyReason}"></span>】</b>
+                            </span>
+                        </span>
+                    </div>
+
+                    <!--<div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">上传凭证</label>
+                        <span class="weui-form-preview__value">
+                        <span class="weui-uploader__input-box">
+                            <input class="weui-uploader__input uploader-btn" type="file" accept="image/*"/>
+                        </span>
+                        </span>
+                    </div>-->
+                </div>
+                <!-- 只有0或3才能上传凭证；即申请或驳回状态 -->
+                <div >
+                    <div class="weui-uploader__bd">
+                        <ul class="weui-uploader__files">
+                            <li class="weui-uploader__file single-voucher" th:attr="status=${detail.status}, path=${voucher.picPath}, voucherId=${voucher.id}" th:each="voucher: ${voucherList}" th:style="'background-image: url('+${voucher.picPath}+');'"></li>
+                        </ul>
+                        <div class="weui-uploader__input-box" th:if="${detail.status eq '0' or detail.status eq '3'}">
+                            <input class="weui-uploader__input uploader-btn" type="file" accept="image/*"/>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="weui-form-preview__ft" th:if="${detail.status eq '0' or detail.status eq '3' and detail.userOpenid eq openid}">
+                    <a class="weui-form-preview__btn weui-form-preview__btn_default cancel-btn" href="javascript:;">取消报账</a>
+                    <a href="javascript:;" class="weui-form-preview__btn weui-form-preview__btn_primary submit-apply-btn">提交审核</a>
+                </div>
+
+                <div class="weui-form-preview__ft" th:if="${personal.type eq '2' and detail.userOpenid ne openid and detail.status eq '1'}">
+                    <a class="weui-form-preview__btn weui-form-preview__btn_default reject-btn" href="javascript:;">驳回申请</a>
+                    <a href="javascript:;" class="weui-form-preview__btn weui-form-preview__btn_primary pass-verify-btn">通过审核</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -84,21 +84,21 @@ public class HlxTools {
 
         String lastDay = getLastDay(0-days);
         if(sum==null || sum<=0) {
-            sum = buffetOrderService.sumByDay(lastDay); //消费总人数
+            sum = buffetOrderService.sumByDayAndSn(storeSn, lastDay); //消费总人数
             sum = sum == null ? 0 : sum;
         }
-        List<BuffetOrder> list = buffetOrderService.findMeiTuanByDay(lastDay);
+        List<BuffetOrder> list = buffetOrderService.findMeiTuanByDay(storeSn, lastDay);
 //        Integer sumMt = buffetOrderService.sumByDay(lastDay, "3"); //美团人数
         Integer sumMt = buildMeituanAmount(list); //美团人数
         sumMt = sumMt==null?0:sumMt;
 
         String lastDay2 = getLastDay(0-days-1);
-        Integer sum2 = buffetOrderService.sumByDay(lastDay2);
+        Integer sum2 = buffetOrderService.sumByDayAndSn(storeSn, lastDay2);
         sum2 = sum2==null?0:sum2;
 
-        Double ticketDiscountMoney = buffetOrderService.sumDiscountMoney("3", lastDay); //卡券抵扣
+        Double ticketDiscountMoney = buffetOrderService.sumDiscountMoney(storeSn, "3", lastDay); //卡券抵扣
         ticketDiscountMoney = ticketDiscountMoney==null?0:ticketDiscountMoney;
-        Double scoreDiscountMoney = buffetOrderService.sumDiscountMoney("1", lastDay); //积分抵扣
+        Double scoreDiscountMoney = buffetOrderService.sumDiscountMoney(storeSn, "1", lastDay); //积分抵扣
         scoreDiscountMoney = scoreDiscountMoney==null?0:scoreDiscountMoney;
 
         StringBuffer sb = new StringBuffer();
@@ -188,7 +188,7 @@ public class HlxTools {
         String spe = "\n";
         StringBuffer sb = new StringBuffer();
         sb.append(queryFinance(ClientFileTools.HLX_SN, month, spe)).append(spe)
-                .append("===============================").append(spe)
+                .append("=========================").append(spe)
                 .append(queryFinance(ClientFileTools.QWZW_NAME, month, spe));
         return sb.toString();
     }
@@ -208,9 +208,9 @@ public class HlxTools {
             Double sumMoney = incomeService.totalMoney(storeSn, month);
             sumMoney = sumMoney==null?0:sumMoney;
 
-            Double ticketDiscountMoney = buffetOrderService.sumDiscountMoney("3", formatMonthStr(month)); //卡券抵扣
+            Double ticketDiscountMoney = buffetOrderService.sumDiscountMoney(storeSn, "3", formatMonthStr(month)); //卡券抵扣
             ticketDiscountMoney = ticketDiscountMoney==null?0:ticketDiscountMoney;
-            Double scoreDiscountMoney = buffetOrderService.sumDiscountMoney("1", formatMonthStr(month)); //积分抵扣
+            Double scoreDiscountMoney = buffetOrderService.sumDiscountMoney(storeSn, "1", formatMonthStr(month)); //积分抵扣
             scoreDiscountMoney = scoreDiscountMoney==null?0:scoreDiscountMoney;
 
             sb.append("店铺名称：").append(buildStoreName(storeSn)).append(spe);
@@ -247,9 +247,9 @@ public class HlxTools {
             Double sumMoney = incomeService.totalMoney(storeSn, month);
             sumMoney = sumMoney==null?0:sumMoney;
 
-            Double ticketDiscountMoney = buffetOrderService.sumDiscountMoney("3", formatMonthStr(month)); //卡券抵扣
+            Double ticketDiscountMoney = buffetOrderService.sumDiscountMoney(storeSn, "3", formatMonthStr(month)); //卡券抵扣
             ticketDiscountMoney = ticketDiscountMoney==null?0:ticketDiscountMoney;
-            Double scoreDiscountMoney = buffetOrderService.sumDiscountMoney("1", formatMonthStr(month)); //积分抵扣
+            Double scoreDiscountMoney = buffetOrderService.sumDiscountMoney(storeSn, "1", formatMonthStr(month)); //积分抵扣
             scoreDiscountMoney = scoreDiscountMoney==null?0:scoreDiscountMoney;
 
             Integer totalPeople = genPeopleCount(incomeList); //总人数

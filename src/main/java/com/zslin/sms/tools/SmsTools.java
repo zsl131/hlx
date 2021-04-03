@@ -105,7 +105,7 @@ public class SmsTools {
 
     /**
      * 发送短信
-     * @param iid 短信模板Id
+     * @param iid 短信模板Id，Sms接口方的ID
      * @param phone 接口者手机号码
      * @param params 替换值，格式如：key,value,key,value
      */
@@ -120,7 +120,7 @@ public class SmsTools {
         String par = buildMsgParmas(params);
         String res = InternetTools.doGet(buildUrl(smsConfig.getSendMsgCode(), "mid", iid, "phone", phone, "con", par), null);
 //        String res = "{'err':'0', 'res':'1', 'msg':'测试发送，未真正发送'}";
-        //System.out.println("==sendCode=="+res);
+        System.out.println("=SmsTools=sendMsg=="+res);
         String err = JsonTools.getJsonParam(res, "err");
         if("0".equals(err)) {
             String resCode = JsonTools.getJsonParam(res, "res");

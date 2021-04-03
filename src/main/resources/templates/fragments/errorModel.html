@@ -23,9 +23,10 @@
 
     <link rel="stylesheet" href="/basic/login-new/login.css"/>
     <script type="text/javascript" src="/basic/login-new/login.js"></script>
+    <script type="text/javascript" src="/basic/admin/myself/public.js"></script>
 </head>
 <body>
-    <div class="container-fluild head-part">
+    <div class="container-fluild head-part  hidden-sm hidden-xs">
         <div class="container" title="用户登陆">
             <i class="fa fa-key login-icon"></i>
             <span th:text="${session.appConfig ne null ? session.appConfig.appName : '用户登陆'}" class="login-title">登陆</span>
@@ -43,7 +44,7 @@
         </div>
     </div>
 
-    <div class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+    <div class="navbar navbar-default navbar-fixed-bottom hidden-sm hidden-xs" role="navigation">
         <div class="container text-center login-bottom">
             &copy;<span class="show-year">2020</span><span th:text="${session.appConfig ne null ? session.appConfig.contant:'系统管理员'}"></span>
             ，备案编号：<a href="https://beian.miit.gov.cn" target="_blank">滇ICP备16003657号-1</a>

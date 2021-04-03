@@ -104,17 +104,17 @@ public interface IBuffetOrderService extends BaseRepository<BuffetOrder, Integer
     @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE storeSn=?1 AND createDay LIKE ?2 AND status NOT IN ('-1', '-2')")
     Double sumByMonth(String storeSn, String month);
 
-    @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE createDay = ?1 AND type=?2 AND status NOT IN ('-1', '-2')")
-    Integer sumByDay(String day, String type);
+    @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE storeSn=?1 AND createDay = ?2 AND type=?3 AND status NOT IN ('-1', '-2')")
+    Integer sumByDayAndSn(String storeSn, String day, String type);
 
-    @Query("FROM BuffetOrder WHERE type='3' AND STATUS IN ('2', '3', '4', '5') AND createDay=?1")
-    List<BuffetOrder> findMeiTuanByDay(String day);
+    @Query("FROM BuffetOrder WHERE type='3' AND STATUS IN ('2', '3', '4', '5') AND storeSn=?1 AND createDay=?2")
+    List<BuffetOrder> findMeiTuanByDay(String storeSn, String day);
 
-    @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE createDay = ?1 AND status NOT IN ('-1', '-2')")
-    Integer sumByDay(String day);
+    @Query("SELECT SUM(commodityCount) FROM BuffetOrder WHERE storeSn=?1 AND createDay = ?2 AND status NOT IN ('-1', '-2')")
+    Integer sumByDayAndSn(String storeSn, String day);
 
-    @Query("SELECT SUM(discountMoney) FROM BuffetOrder WHERE discountType=?1 AND createDay LIKE ?2 AND status NOT IN ('-1', '-2')")
-    Double sumDiscountMoney(String discountType, String month);
+    @Query("SELECT SUM(discountMoney) FROM BuffetOrder WHERE storeSn=?1 AND discountType=?2 AND createDay LIKE ?3 AND status NOT IN ('-1', '-2')")
+    Double sumDiscountMoney(String storeSn, String discountType, String month);
 
     @Query("UPDATE BuffetOrder SET hasTakeOff=?1 WHERE no=?2")
     @Modifying

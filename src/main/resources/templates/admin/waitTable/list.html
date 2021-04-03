@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>排队列表</title>
+		<script type="text/javascript">
+			$(function() {
+				$(".delete-obj-href").deleteFun();
+			});
+		</script>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;排队列表（<span th:text="${datas.getTotalElements()}"></span>）</h3>
+			<div th:replace="admin/waitTable/nav :: content" th:remove="tag"></div>
+		</div>
+
+		<div th:replace="admin/waitTable/filter :: content" th:remove="tag"></div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>店铺</th>
+						<th>餐桌</th>
+						<th>信息</th>
+						<th>客户</th>
+						<th>状态</th>
+						<th>时间</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+
+				<tr th:each="obj : ${datas}">
+					<td><span th:text="${obj.storeName}"></span>[<span th:text="${obj.storeSn}"></span>]</td>
+					<td th:text="|${obj.cateName}【${obj.cateFlag}】|"></td>
+					<td th:text="|${obj.peopleCount}人-${obj.phone}|"></td>
+					<td th:text="${obj.nickname}"></td>
+					<td>
+						<p th:switch="${obj.status}">
+							<span th:case="0" class="red">排队中</span>
+							<span th:case="1">已就餐</span>
+							<span th:case="2">作废</span>
+							<span th:case="3" class="blue">顾客取消</span>
+						</p>
+					</td>
+					<td>
+						<p>排队时间：<span th:text="${obj.createTime}"></span></p>
+						<p>处理时间：<span th:text="${obj.processTime}"></span></p>
+					</td>
+					<td>
+						<div class="action-buttons">
+							-
+						</div>
+					</td>
+				</tr>
+			</table>
+
+			<div th:include="fragments/page :: pager" th:remove="tag"></div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>报账申请</title>
+    <script src="/js/jedate/jquery.jedate.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-finance.css"/>
+    <script src="/back-admin/bus/my-date.js"></script>
+    <script src="/weixin/weixin-finance.js"></script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="container">
+        <div class="header lighter smaller blue">
+            <h3><i class="fa fa-plus"></i>&nbsp;报账申请</h3>
+        </div>
+
+        <form method="POST" th:object="${detail}" id="dataForm" onsubmit="return checkForm()" enctype="multipart/form-data">
+            <input name="storeName" type="hidden"/>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">店铺</div>
+                    <div class="form-control">
+                        <span th:each="store: ${storeList}"><input type="radio" name="storeSn" th:value="${store.sn}" th:id="'sn_'+${store.id}"/><label th:for="'sn_'+${store.id}" th:text="${store.name}">汉丽轩</label>&nbsp;&nbsp;&nbsp;</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">类别</div>
+                    <div class="category-div">
+                        <input name="cateName" class="form-control" placeholder="输入名称或拼音筛选，必须点击选择"/>
+                        <input name="cateId" type="hidden"/>
+                        <div class="show-category"></div>
+                        <div class="all-category">
+                            <span th:each="cate:${categoryList}" th:attr="cateId=${cate.id}, firstSpell=${cate.firstSpell}, longSpell=${cate.longSpell}" th:text="${cate.name}" class="single-cate"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">名称</div>
+                    <div class="category-div">
+                        <input name="title" class="form-control" placeholder="账目名称，如：大米"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">单价</div>
+                    <div class="category-div">
+                        <input name="price" onkeyup="buildMoney()" type="number" step="0.01" class="form-control" placeholder="单价"/>
+                    </div>
+
+                    <div class="input-group-addon">数量</div>
+                    <div class="category-div">
+                        <input name="amount" onkeyup="buildMoney()" step="0.01" type="number" class="form-control" placeholder="数量"/>
+                    </div>
+                </div>
+            </div>
+
+            <input name="userId" type="hidden" th:value="${personal.id}"/>
+            <input name="username" type="hidden" th:value="${personal.name}"/>
+            <input name="userOpenid" type="hidden" th:value="${personal.openid}"/>
+            <input name="userSignPath" type="hidden" th:value="${personal.signPath}"/>
+            <input name="userPhone" type="hidden" th:value="${personal.phone}"/>
+
+            <input type="hidden" name="token" value="${session.token}"/>
+            <button type="submit" class="btn btn-primary submit-btn">确定提交</button>
+            <span style="padding-left: 10px;">单笔合计：<b class="total-money" style="color:#F00">0</b>&nbsp;元</span>
+        </form>
+
+        <input type="hidden" name="checkSign" value="1"/>
+        <input th:value="${personal.signPath}" name="signPath" type="hidden"/>
+
+        <div style="padding: 10px;">
+            <img th:src="${personal.signPath}"/>
+            <a href="/wx/finance/sign" class="btn btn-link">重设签名</a>
+            <a href="/wx/finance/listOwn" class="btn btn-link">我的申请记录</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

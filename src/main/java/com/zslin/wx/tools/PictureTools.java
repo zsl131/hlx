@@ -173,4 +173,11 @@ public class PictureTools {
 //        out.close();
         return tag;
     }
+
+    public static BufferedImage resize(String imgUrl, Integer width, Integer height) throws Exception {
+        Image _img = ImageIO.read(new File(imgUrl));
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        image.getGraphics().drawImage(_img, width, height, null);
+        return image;
+    }
 }

@@ -281,7 +281,7 @@ public class DatasTools {
     }
 
     /** 当用户关注时 */
-    public void onSubscribe(String openid) {
+    public synchronized void onSubscribe(String openid) {
         Integer id = (Integer) accountService.queryByHql("SELECT a.id FROM Account a WHERE a.openid='"+openid+"'");
         Account a ;
         if(id==null || id<=0) { //说明初次关注

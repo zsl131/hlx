@@ -5,6 +5,7 @@ import com.zslin.admin.dto.MyTimeDto;
 import com.zslin.admin.tools.MyTicketTools;
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.tools.NormalTools;
+import com.zslin.client.tools.ClientFileTools;
 import com.zslin.web.model.Account;
 import com.zslin.web.model.BuffetOrder;
 import com.zslin.web.model.Prize;
@@ -44,7 +45,8 @@ public class WeixinCashCalController {
     private IMemberChargeService memberChargeService;
 
     @GetMapping(value = "index")
-    public String index(Model model, String day, HttpServletRequest request) {
+    public String index(Model model, String storeSn, String day, HttpServletRequest request) {
+        storeSn = (storeSn==null || "".equals(storeSn))? ClientFileTools.HLX_SN:storeSn;
         String openid = SessionTools.getOpenid(request);
         Account a = accountService.findByOpenid(openid);
 

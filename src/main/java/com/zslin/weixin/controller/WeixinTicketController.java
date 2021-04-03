@@ -38,6 +38,12 @@ public class WeixinTicketController {
         if("1".equals(ticket.getStatus())) {
             return JsonResult.error("1002", "【"+ticketNo+"】已经于["+ticket.getUseTime()+"]核销");
         }
+        if("2".equals(ticket.getStatus())) {
+            return JsonResult.error("1004", "【"+ticketNo+"】已过期");
+        }
+        if("3".equals(ticket.getStatus())) {
+            return JsonResult.error("1005", "【"+ticketNo+"】已作废");
+        }
         if(storeSn!=null && !ticket.getStoreSn().equals(storeSn)) {
             return JsonResult.error("1003", "【"+ticketNo+"】不可在该店铺使用");
         }

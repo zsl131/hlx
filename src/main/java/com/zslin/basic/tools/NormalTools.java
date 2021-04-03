@@ -88,6 +88,18 @@ public class NormalTools {
         return bd.toString();
     }
 
+    /**
+     * 保留几位有效数
+     * @param value 数值
+     * @param len 保留几们数据
+     * @return
+     */
+    public static Float numberPoint(float value, int len) {
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(len<0?2:len, RoundingMode.HALF_UP);
+        return bd.floatValue();
+    }
+
     public static boolean isNull(String val) {
         return val==null || "".equals(val);
     }

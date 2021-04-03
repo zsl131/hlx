@@ -101,6 +101,7 @@ public class BuffetOrder {
 
     /** 美团编号 */
     @Column(name = "meituan_num")
+    @Lob
     private String meituanNum;
 
     /** 只针对微信下单订单 */
@@ -113,6 +114,7 @@ public class BuffetOrder {
 
     /** 优惠原因，如果是友情价，则是股东电话号码 */
     @Column(name = "discount_reason")
+    @Lob
     private String discountReason;
 
     /** 优惠类型；0-无优惠；1-积分抵价；2-友情价；3-抵价券；4-微信扣款订单；5-会员扣款订单；6-美团扣款订单；9-飞凡扣款订单；10-时段折扣,12-折扣日 */

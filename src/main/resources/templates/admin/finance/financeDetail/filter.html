@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content" th:remove="tag">
+            <div id="sys_filter" class="form-inline" style="padding-bottom:10px;">
+
+                <div class="input-group">
+                    <span class="input-group-addon">店铺</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_storeSn'>
+                        <option value="">=全部=</option>
+                        <option th:each="store : ${storeList}" th:value="${store.sn}" th:text="${store.name}"></option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">类别</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_cateId'>
+                        <option value="">=全部=</option>
+                        <option th:each="cate : ${categoryList}" th:value="${cate.id}" th:text="${cate.name}"></option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">状态</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_status'>
+                        <option value="">=全部=</option>
+                        <option value="-1">取消</option>
+                        <option value="1">审核中</option>
+                        <option value="2">审核通过</option>
+                        <option value="3">审核驳回</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">项目</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_title'/>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">报账人</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_username'/>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">审核人</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_verifyName'/>
+                </div>
+
+                <span><button type="button" class="btn btn-primary btn-sm" id="beginFilter">查询</button></span>
+            </div>
+        </div>
+    </body>
+</html>

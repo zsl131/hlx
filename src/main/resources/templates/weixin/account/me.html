@@ -227,7 +227,7 @@
                     </a>
 
                     <a class="weui-cell weui-cell_access card-shop-href" href="javascript:void(0)" th:if="${account.type eq '5' || account.type eq '10'}">
-                        <div class="weui-cell__hd"><i class="list-icon fa fa-cube"></i></div>
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-id-card"></i></div>
                         <div class="weui-cell__bd">
                             <span>送卡到店</span>
                         </div>
@@ -247,12 +247,22 @@
                     </a>
 
                     <a class="weui-cell weui-cell_access" href="/weixin/index" th:if="${account.type eq '2' || account.type eq '5' || account.type eq '10'}">
-                        <div class="weui-cell__hd"><i class="list-icon fa fa-cube"></i></div>
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-home"></i></div>
                         <div class="weui-cell__bd">
                             <span>汉丽轩首页</span>
                         </div>
                         <div class="weui-cell__ft">
                             <span>点击查看</span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" href="/wx/finance/add" th:if="${personal ne null}">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-cny"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>报账申请</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span>点击报账</span>
                         </div>
                     </a>
                 </div>

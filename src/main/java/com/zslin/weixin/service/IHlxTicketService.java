@@ -3,7 +3,9 @@ package com.zslin.weixin.service;
 import com.zslin.basic.repository.BaseRepository;
 import com.zslin.weixin.model.HlxTicket;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +16,11 @@ public interface IHlxTicketService  extends BaseRepository<HlxTicket, Integer>, 
     List<HlxTicket> findByOpenid(String openid);
 
     HlxTicket findByTicketNo(String ticketNo);
+
+    @Query("UPDATE HlxTicket h SET h.status=?1 WHERE h.id=?2")
+    @Transactional
+    @Modifying
+    void updateStatus(String status, Integer id);
 
     /** 总数量 */
     @Query("SELECT COUNT(h.id) FROM HlxTicket h WHERE h.storeSn=?1")

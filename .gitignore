@@ -28,4 +28,6 @@ hs_err_pid*
 # 里面有不能公开的关键信息 
 wx.properties
 sms.properties
+sms*.properties
 kaoqin.properties
+jdbc.properties

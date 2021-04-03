@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.print.PrintService;
+import java.awt.print.PrinterJob;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -32,6 +34,16 @@ public class AdminTestSmsController {
 
     @Autowired
     private IMoneybagDao moneybagDao;
+
+    @GetMapping(value = "listPrint")
+    public @ResponseBody String listPrint() {
+        PrintService[] printServices = PrinterJob.lookupPrintServices();
+        StringBuilder sb = new StringBuilder();
+        for(PrintService ps : printServices) {
+            sb.append(ps.getName()).append("\n");
+        }
+        return sb.toString();
+    }
 
     /** 批量发送 */
     @GetMapping(value = "sendBatch")

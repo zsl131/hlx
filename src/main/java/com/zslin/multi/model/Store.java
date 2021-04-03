@@ -36,4 +36,7 @@ public class Store {
 
     /** 外卖开启标识，0-未开启；1-开启 */
     private String outFoodFlag="0";
+
+    /** 状态 */
+    private String status;
 }

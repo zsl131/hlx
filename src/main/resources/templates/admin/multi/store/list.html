@@ -31,6 +31,7 @@
 						<th>名称</th>
 						<th>地址</th>
 						<th>电话</th>
+						<th>状态</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -42,6 +43,11 @@
 						<td th:text="${obj.name}">${obj.name}</td>
 						<td th:text="${obj.address}">${obj.name}</td>
 						<td th:text="${obj.phone}">${obj.sn}</td>
+						<td>
+							<b th:if="${obj.status eq '1'}" class="blue">启用</b>
+							<b th:if="${obj.status eq '0'}" class="red">停用</b>
+							<span th:if="${obj.status eq null}" >未设置</span>
+						</td>
 						<td>
 							<div class="action-buttons">
 								<a class="green auth" sn="AdminStoreController.update" title="修改" th:href="'/admin/store/update/'+${obj.id}">

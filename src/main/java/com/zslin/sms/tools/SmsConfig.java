@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
  * Created by 钟述林 393156105@qq.com on 2017/2/14 10:37.
  */
 @Component
-//@ConfigurationProperties(locations = "classpath:sms.properties")
-@PropertySource(value = "classpath:sms.properties")
+//@ConfigurationProperties(locations = "classpath:sms-dev.properties")
+@PropertySource(value = "classpath:sms-${spring.profiles.active}.properties")
 @ConfigurationProperties
 @Data
 public class SmsConfig {

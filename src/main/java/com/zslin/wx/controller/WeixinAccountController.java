@@ -8,6 +8,8 @@ import com.zslin.basic.tools.NormalTools;
 import com.zslin.client.service.IMemberService;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.ClientJsonTools;
+import com.zslin.finance.dao.IFinancePersonalDao;
+import com.zslin.finance.model.FinancePersonal;
 import com.zslin.kaoqin.model.Worker;
 import com.zslin.kaoqin.service.IWorkerService;
 import com.zslin.multi.dao.IMoneybagDao;
@@ -119,6 +121,9 @@ public class WeixinAccountController {
     @Autowired
     private IHlxTicketService hlxTicketService;
 
+    @Autowired
+    private IFinancePersonalDao financePersonalDao;
+
     //修改密码
     @PostMapping(value = "setPassword")
     public @ResponseBody String setPassword(String password, HttpServletRequest request) {
@@ -176,6 +181,8 @@ public class WeixinAccountController {
             model.addAttribute("hasError", true);
             model.addAttribute("message", "请取消关注后再重新关注");
         } else {
+            FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+            model.addAttribute("personal", personal); //获取财务人员
             model.addAttribute("hadError", false);
             model.addAttribute("account", account);
             if(account.getPhone()!=null && !"".equals(account.getPhone())) { //如果已经绑定手机

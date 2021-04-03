@@ -130,7 +130,7 @@ public class AdminWorkerController {
 
             bind(worker);
 
-            System.out.println(worker);
+            //System.out.println(worker);
 
             workerService.save(worker);
             buildWorkday(worker);

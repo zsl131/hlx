@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+		<script type="text/javascript" src="/back-admin/bus/finance-personal.js"></script>
+
+		<title>添加财务人员</title>
+	</head>
+	<body>
+		<div th:fragment="content" th:remove="tag">
+			<div class="header lighter smaller blue">
+				<h3><i class="fa fa-plus"></i>&nbsp;添加财务人员 </h3>
+				<div th:replace="admin/finance/financePersonal/nav :: content" th:remove="tag"></div>
+			</div>
+
+			<form method="POST" th:object="${financePersonal}" onsubmit="return checkData()" id="dataForm" >
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">姓名：</div>
+						<input name="name" type="text" class="form-control" th:value="${financePersonal.name}" placeholder="请输入姓名" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">电话：</div>
+						<input name="phone" type="text" class="form-control" th:value="${financePersonal.phone}" placeholder="请输入电话" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">类别：</div>
+						<div class="form-control">
+							<input type="radio" name="type" value="1" id="type_1" th:checked="${financePersonal.type == '1'}?'checked'"/><label for="type_1">报账人员</label>
+							<input type="radio" name="type" value="2" id="type_2" th:checked="${financePersonal.type == '2'}?'checked'"/><label for="type_2">审核人员</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">用户：</div>
+						<input name="keyword" type="text" class="form-control" placeholder="输入昵称或电话后点查询按钮" />
+						<span class="input-group-addon search-btn" style="cursor:pointer;">查询用户</span>
+					</div>
+					<div class="show-account"></div>
+				</div>
+
+
+				<input type="hidden" name="accountId"/>
+				<input type="hidden" name="nickname"/>
+				<input type="hidden" name="openid"/>
+
+				<input type="hidden" name="token" th:value="${session.token}"/>
+				<button type="submit" class="btn btn-primary">确定提交</button>
+			</form>
+		</div>
+	</body>
+</html>

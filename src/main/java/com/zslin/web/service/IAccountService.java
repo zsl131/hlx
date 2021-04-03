@@ -69,4 +69,7 @@ public interface IAccountService extends BaseRepository<Account, Integer>, JpaSp
 
     @Query("SELECT a.phone FROM Account a WHERE a.openid=?1")
     String findPhoneByOpenid(String openid);
+
+    @Query("FROM Account a WHERE a.phone like %?1% OR a.nickname like %?1%")
+    List<Account> query(String str);
 }

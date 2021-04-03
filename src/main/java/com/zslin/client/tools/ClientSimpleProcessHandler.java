@@ -119,7 +119,7 @@ public class ClientSimpleProcessHandler {
 
     private void sendOrderResult2Client(BuffetOrder order) {
         String content = ClientJsonTools.buildDataJson(ClientJsonTools.buildOrderResult(order));
-        clientFileTools.setChangeContext(content, true);
+        clientFileTools.setChangeContext(order.getStoreSn(), content, true);
     }
 
     @Autowired

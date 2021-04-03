@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
+		<script type="text/javascript" src="/back-admin/bus/admin-select-store.js"></script>
+		<title>添加财务类别</title>
+	</head>
+	<body>
+		<div th:fragment="content" th:remove="tag">
+			<div class="header lighter smaller blue">
+				<h3><i class="fa fa-plus"></i>&nbsp;添加财务类别 </h3>
+				<div th:replace="admin/finance/financeCategory/nav :: content" th:remove="tag"></div>
+			</div>
+
+			<form method="POST" th:object="${financeCategory}" id="dataForm" >
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">名称：</div>
+						<input name="name" type="text" class="form-control" th:value="${financeCategory.name}" placeholder="请输入名称" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">说明：</div>
+						<input name="remark" type="text" class="form-control" th:value="${financeCategory.remark}" placeholder="请输入说明" />
+					</div>
+				</div>
+
+				<input type="hidden" name="token" th:value="${session.token}"/>
+				<button type="submit" class="btn btn-primary">确定提交</button>
+			</form>
+		</div>
+	</body>
+</html>

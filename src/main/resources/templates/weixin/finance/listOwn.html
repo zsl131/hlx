@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>报账申请记录</title>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div  th:if="${datas ne null}">
+        <div class="header lighter smaller blue">
+            <h3> &nbsp;&nbsp;<i class="fa fa-list"></i>&nbsp;我的报账申请记录</h3>
+        </div>
+
+        <div class="weui-cells">
+            <div th:each="obj : ${datas}" th:remove="tag">
+                <a class="weui-cell weui-cell_access" th:href="'/wx/finance/show?id='+${obj.id}">
+                    <div class="weui-cell__hd"><span th:text="${obj.storeName}"></span></div>
+                    <div class="weui-cell__bd" style="color:#888; font-size:14px;">
+                        &nbsp;<span th:text="${obj.title}"></span>&nbsp;￥<b th:text="${obj.totalMoney}"></b>
+                        &nbsp;
+                        <span th:switch="${obj.status}" th:remove="tag">
+                            <b th:case="0">待提交</b>
+                            <b th:case="-1" style="color:#820">已取消</b>
+                            <b th:case="1" style="color:#ed7800">待审核</b>
+                            <b th:case="2" style="color:#00F">通过</b>
+                            <b th:case="3" style="color:#F00">被驳回</b>
+                        </span>
+                    </div>
+                    <div class="weui-cell__ft">
+                        <span th:text="${obj.createDay}" style="font-size:12px;"></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
+    </div>
+    <div th:if="${datas eq null}">
+        <h4 class="align-center">无权限访问！</h4>
+    </div>
+    <div th:each="arg : ${args}" class="search-filter-div">
+        <input th:value="${arg.value}" type="hidden" th:attr="targetId=${arg.key}"/>
+    </div>
+</div>
+</body>
+</html>

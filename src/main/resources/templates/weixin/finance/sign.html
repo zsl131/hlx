@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>电子签名</title>
+    <script type="text/javascript" src="/js-lib/sign/modernizr.js"></script>
+    <script type="text/javascript" src="/js-lib/sign/jSignature.min.noconflict.js"></script>
+    <script type="text/javascript" src="/js-lib/sign/sign-init.js"></script>
+    <style>
+        #signatureparent {
+            color:darkblue;
+            background-color:darkgrey;
+            /*max-width:600px;*/
+            padding:20px 20px 40px 20px;
+        }
+        #signature {
+            border: 2px dotted black;
+            background-color:lightgrey;
+        }
+    </style>
+
+    <script>
+        $(function() {
+            // This is the part where jSignature is initialized.
+            var $sigdiv = $("#signature").jSignature({'UndoButton':true})
+
+            // All the code below is just code driving the demo.
+            , $tools = $('#tools')
+            , $extraarea = $('#displayarea')
+            , pubsubprefix = 'jSignature.demo.'
+
+
+
+
+            //$('<div><textarea style="width:100%;height:7em;"></textarea></div>').appendTo($tools)
+
+            $(".reset-btn").click(function() {
+                $sigdiv.jSignature('reset')
+            });
+
+            $(".submit-btn").click(function() {
+                var data = $sigdiv.jSignature('getData', "default");
+                //console.log(data);
+                confirmDialog("请确定已经书写好，再保存哦", "系统提示", function() {
+                    //
+                    var personalId = $("input[name='personalId']").val();
+                    $.post("/wx/finance/sign", {personalId:personalId, base: data}, function(res) {
+                        if(res=="1") {alert("保存成功"); window.location.reload();}
+                    }, "json");
+                }, "static");
+            })
+        })
+    </script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="container">
+        <div class="header lighter smaller blue">
+            <h3><i class="fa fa-plus"></i>&nbsp;电子签名</h3>
+        </div>
+
+        <div>
+            <div id="signatureparent">
+                <div>请在下方框中签名，此签名用于所有报账签名</div>
+                <div id="signature"></div></div>
+            <div id="tools"></div>
+            <div id="displayarea"></div>
+            <!--<div id="scrollgrabber"></div>-->
+            <h3>请先书写后再点“保存”</h3>
+            <input th:value="${personal.id}" name="personalId" type="hidden"/>
+            <span th:if="${personal ne null}">
+                <button class="btn btn-primary submit-btn">保存签名</button>
+                <button class="btn btn-danger reset-btn">重写签名</button>
+
+                <div th:if="${personal.signPath ne null && personal.signPath ne ''}">
+                    <p>现有签名：</p>
+                    <img th:src="${personal.signPath}"/>
+                </div>
+            </span>
+            <span th:if="${personal eq null}">
+                <h3 class="red">非财务人员，不可设置签名</h3>
+            </span>
+        </div>
+    </div>
+</div>
+</body>
+</html>
