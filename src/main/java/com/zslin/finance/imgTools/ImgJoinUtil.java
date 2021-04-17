@@ -1,7 +1,5 @@
 package com.zslin.finance.imgTools;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import net.coobird.thumbnailator.Thumbnails;
 
 import javax.imageio.ImageIO;
@@ -180,8 +178,9 @@ public class ImgJoinUtil {
 
 
             //将绘制的图像生成至输出流
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-            encoder.encode(bufferedImage);
+            /*JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+            encoder.encode(bufferedImage);*/
+            ImageIO.write(bufferedImage, ImageTextTools.buildImageType(outPath), out);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

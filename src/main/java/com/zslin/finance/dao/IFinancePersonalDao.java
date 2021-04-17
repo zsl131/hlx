@@ -17,8 +17,20 @@ public interface IFinancePersonalDao extends BaseRepository<FinancePersonal, Int
     @Query("SELECT f.openid FROM FinancePersonal f WHERE f.openid!=?1 AND f.type='2'")
     List<String> findVerifyOpenid(String openid);
 
+    @Query("SELECT f.openid FROM FinancePersonal f WHERE f.type=?1")
+    List<String> findByType(String type);
+
     @Query("UPDATE FinancePersonal f SET f.signPath=?1 WHERE f.id=?2")
     @Modifying
     @Transactional
     void updateSignPath(String path, Integer id);
+
+    @Query("UPDATE FinancePersonal f SET f.markFlag=?1 WHERE f.id=?2")
+    @Modifying
+    @Transactional
+    void updateMarkFlag(String markFlag, Integer id);
+
+    List<FinancePersonal> findByMarkFlag(String markFlag);
+
+    List<FinancePersonal> findByMarkFlagAndStoreSn(String markFlag, String storeSn);
 }

@@ -7,6 +7,7 @@ import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.finance.dao.IFinancePersonalDao;
 import com.zslin.finance.model.FinancePersonal;
+import com.zslin.multi.dao.IStoreDao;
 import com.zslin.web.model.Account;
 import com.zslin.web.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,16 @@ public class AdminFinancePersonalController {
     @Autowired
     private IAccountService accountService;
 
+    @Autowired
+    private IStoreDao storeDao;
+
     @GetMapping(value = "list")
     @AdminAuth(name = "财务人员管理", orderNum = 1, type = "1", icon = "fa fa-user-circle-o")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<FinancePersonal> datas = financePersonalDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
                 SimplePageBuilder.generate(page));
         model.addAttribute("datas", datas);
+        model.addAttribute("storeList", storeDao.findByStatus("1"));
         return "admin/finance/financePersonal/list";
     }
 
@@ -51,7 +56,7 @@ public class AdminFinancePersonalController {
     @RequestMapping(value="add", method= RequestMethod.GET)
     public String add(Model model, HttpServletRequest request) {
         model.addAttribute("financePersonal", new FinancePersonal());
-
+        model.addAttribute("storeList", storeDao.findByStatus("1"));
         return "admin/finance/financePersonal/add";
     }
 
@@ -60,6 +65,9 @@ public class AdminFinancePersonalController {
     public String add(Model model, FinancePersonal financePersonal, HttpServletRequest request) {
         if(TokenTools.isNoRepeat(request)) { //不是重复提交
             if(financePersonalDao.findByOpenid(financePersonal.getOpenid())==null) { //同一用户不能被添加两次
+                if("0".equals(financePersonal.getType())) { //如果指定是签收人员，则需要设置收货标记
+                    financePersonal.setMarkFlag("1");
+                }
                 financePersonalDao.save(financePersonal);
             }
         }
@@ -72,7 +80,7 @@ public class AdminFinancePersonalController {
     public String update(Model model, @PathVariable Integer id, HttpServletRequest request) {
         FinancePersonal p = financePersonalDao.findOne(id);
         model.addAttribute("personal", p);
-
+        model.addAttribute("storeList", storeDao.findByStatus("1"));
         return "admin/finance/financePersonal/update";
     }
 
@@ -84,6 +92,9 @@ public class AdminFinancePersonalController {
             c.setName(personal.getName());
             c.setPhone(personal.getPhone());
             c.setType(personal.getType());
+            c.setMarkFlag(personal.getMarkFlag());
+            c.setStoreName(personal.getStoreName());
+            c.setStoreSn(personal.getStoreSn());
             financePersonalDao.save(c);
         }
         return "redirect:/admin/financePersonal/list";

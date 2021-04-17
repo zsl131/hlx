@@ -12,6 +12,7 @@ import com.zslin.card.service.ICardCheckService;
 import com.zslin.card.tools.CardNoTools;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.RestdayTools;
+import com.zslin.finance.imgTools.ImageTextTools;
 import com.zslin.kaoqin.dto.DayDto;
 import com.zslin.kaoqin.dto.MonthDto;
 import com.zslin.kaoqin.model.Clockin;
@@ -113,6 +114,13 @@ public class NormalTest {
 
     @Autowired
     private WaitTableNoTools waitTableNoTools;
+
+    @Test
+    public void test51() {
+        String str = "abc/sdfag\\agsdf.jpg";
+        System.out.println(str.substring(str.lastIndexOf(".")));
+        System.out.println(ImageTextTools.buildImageType(str));
+    }
 
     @Test
     public void test50() throws Exception {

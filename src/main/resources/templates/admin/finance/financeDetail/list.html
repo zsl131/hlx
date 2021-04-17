@@ -13,6 +13,7 @@
 				$('[data-toggle="tooltip"]').tooltip();
 			});
 		</script>
+		<script type="text/javascript" src="/back-admin/bus/finance-print.js"></script>
 	</head>
 <body>
 	<div th:fragment="content" th:remove="tag">
@@ -31,9 +32,13 @@
 						<th>总额</th>
 						<th>项目</th>
 						<th>报账人</th>
-						<th>审核人</th>
-						<th>状态</th>
-						<th>操作</th>
+						<th>审核</th>
+						<th>收货</th>
+						<th>财务</th>
+						<th>标记</th>
+						<th>
+							<button class="btn btn-default print-btn" disabled="disabled">不可打印</button>
+						</th>
 					</tr>
 				</thead>
 
@@ -51,23 +56,56 @@
 						<p th:text="${obj.username}"></p>
 						<p th:text="${obj.createTime}"></p>
 					</td>
-					<td>
+					<!--<td>
 						<p th:if="${obj.verifyName ne null}" th:text="${obj.verifyName}"></p>
 						<p th:if="${obj.verifyTime ne null}" th:text="${obj.verifyTime}"></p>
 						<p th:if="${obj.verifyReason ne null}" th:text="${obj.verifyReason}"></p>
-						&nbsp;
-					</td>
-					<td th:switch="${obj.status}">
-						<span th:case="-1" class="red">取消</span>
-						<span th:case="0">未提交审核</span>
-						<span th:case="1" style="color:#ff8100">审核中</span>
-						<b th:case="2" style="color:#00F">审核通过</b>
-						<b th:case="3" style="color:#F00">驳回</b>
+					</td>-->
+					<td>
+						<p th:switch="${obj.status}">
+							<span th:case="-1" class="red">取消</span>
+							<span th:case="0">未提交审核</span>
+							<span th:case="1" style="color:#ff8100">审核中</span>
+							<b th:case="2" style="color:#00F">[<i th:text="${obj.verifyName}"></i>]审核通过</b>
+							<b th:case="3" style="color:#F00">[<i th:text="${obj.verifyName}"></i>]驳回<i th:text="${obj.verifyReason}"></i></b>
+						</p>
+						<p th:if="${obj.verifyTime ne null}" th:text="${obj.verifyTime}"></p>
 					</td>
 					<td>
-						-
+						<p th:switch="${obj.confirmStatus}">
+							<span th:case="0">-</span>
+							<span th:case="1" style="color:#ff8100">等待【<b th:text="${obj.confirmName}"></b>】收货</span>
+							<b th:case="2" style="color:#00F">[<i th:text="${obj.confirmName}"></i>]已收货</b>
+							<b th:case="3" style="color:#F00">[<i th:text="${obj.confirmName}"></i>]确认未收货</b>
+						</p>
+						<p th:if="${obj.confirmTime ne null}" th:text="${obj.confirmTime}"></p>
+					</td>
+					<td>
+						<p th:switch="${obj.voucherStatus}">
+							<span th:case="0">-</span>
+							<span th:case="1" style="color:#ff8100">财务检查中</span>
+							<b th:case="2" style="color:#00F">[<i th:text="${obj.voucherName}"></i>]凭证齐全</b>
+							<b th:case="3" style="color:#F00">[<i th:text="${obj.voucherName}"></i>]驳回<i th:text="${obj.voucherReason}"></i></b>
+						</p>
+						<p th:if="${obj.voucherTime ne null}" th:text="${obj.voucherTime}"></p>
+					</td>
+					<td th:switch="${obj.printFlag}">
+						<b th:case="0" style="color:#F00">待打印</b>
+						<b th:case="1" style="color:#00F">已打印</b>
+					</td>
+					<td>
+						<input type="checkbox" class="single-box"
+							   th:attr="storeSn=${obj.storeSn},detailId=${obj.id}"
+						/>
 					</td>
 				</tr>
+				<tfoot>
+					<tr>
+						<td style="text-align:right;" colspan="9">
+							<button class="btn btn-default print-btn" disabled="disabled">不可打印</button>
+						</td>
+					</tr>
+				</tfoot>
 			</table>
 
 			<div th:include="fragments/page :: pager" th:remove="tag"></div>

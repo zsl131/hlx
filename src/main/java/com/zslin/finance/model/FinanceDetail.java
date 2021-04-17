@@ -4,7 +4,28 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-/** 财务明细 */
+/** 财务明细
+ * 操作流程
+ * 1、报账人员填报账申请
+ *      status:
+ *          0-填写了报账信息，还未提交审核
+ *          1-提交待审核（等待老板审核）
+ *          2-审核通过
+ *          3-申请被驳回（verifyReason填驳回原因）
+ *
+ * 2、当status为2时，进入确认收货阶段
+ *      confirmStatus:
+ *          0-未指定人员确认
+ *          1-已指定人员，待确认
+ *          2-确认收货
+ *          3-确认未收货（confirmReason填原因，可不填）
+ * 3、当confirmStatus为2时，进入财务检查阶段（status和confirmStatus均为2时，才进入此阶段）
+ *      voucherStatus:
+ *          0-初始状态
+ *          1-可以开始审核
+ *          2-审核通过
+ *          3-驳回（voucherReason填原因）
+ */
 @Entity
 @Table(name = "fin_finance_detail")
 @Data
@@ -51,10 +72,16 @@ public class FinanceDetail {
     private String verifySignPath;
 
     /**
-     * 状态，-1-取消；0-未提交审核；1-审核中；2-审核通过；3-驳回
+     * 状态，-1-取消；0-未提交审核；1-审核中；2-审核通过；3-驳回；
+     * 流程：
+     * 0-添加报账，还未上传凭证，也未提交审核
+     * 1-已经提交审核，此时由老板审核
+     * 2-审核通过；
+     * 3-审核被驳回；1和4状态都可直接到3
      */
     private String status = "0";
 
+    /** 以下属于老板审核 */
     @Lob
     private String verifyReason;
 
@@ -63,6 +90,55 @@ public class FinanceDetail {
     private String verifyTime;
 
     private Long verifyLong;
+    /** 以上属于老板审核 */
+
+    /**
+     * 收货确认状态，0-未指定确认；1-已指定，待确认；2-已确认收货；3-确认未收货
+     */
+    private String confirmStatus = "0";
+
+    /** 以下是属于收货确认所需信息 */
+    @Lob
+    private String confirmReason;
+
+    private String confirmDay;
+
+    private String confirmTime;
+
+    private Long confirmLong;
+
+    private String confirmOpenid;
+
+    private String confirmName;
+
+    private String confirmSign;
+    /** 以上是属于收货确认所需信息 */
+
+    /**
+     * 财务审核状态
+     * 0-初始状态，还不需要审核
+     * 1-待审核
+     * 2-通过
+     * 3-驳回
+     */
+    private String voucherStatus = "0";
+
+    /** 以下属于财务审核信息 */
+    private String voucherDay;
+
+    @Lob
+    private String voucherReason;
+
+    private String voucherTime;
+
+    private Long voucherLong;
+
+    private String voucherOpenid;
+
+    private String voucherName;
+
+    private String voucherSign;
+    /** 以上属于财务审核信息 */
 
     /** 标记，1-进账；-1-报账 */
     private String flag="-1";

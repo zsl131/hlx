@@ -13,12 +13,12 @@
 <div th:fragment="content" th:remove="tag">
     <div class="container">
         <div class="header lighter smaller blue">
-            <h3><i class="fa fa-plus"></i>&nbsp;报账申请-凭证上传</h3>
+            <h3><i class="fa fa-plus"></i>&nbsp;报账申请-详情</h3>
         </div>
         <input th:value="${detail.id}" type="hidden" name="detailId"/>
 
         <div>
-            <div th:if="${detail.stepFlag eq '0'}" class="alert alert-danger">请认真上传凭证信息，照片需要【竖直拍摄】！</div>
+            <div th:if="${(detail.status eq '0' or detail.status eq '3') and detail.userOpenid eq openid}" class="alert alert-danger">请认真上传凭证信息，照片需要【竖直拍摄】！</div>
 
             <div class="weui-form-preview">
                 <div class="weui-form-preview__hd">
@@ -26,6 +26,10 @@
                     <em class="weui-form-preview__value">¥<span th:remove="tag" th:text="${detail.totalMoney}"></span></em>
                 </div>
                 <div class="weui-form-preview__bd">
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">申报人员</label>
+                        <span class="weui-form-preview__value" th:text="${detail.username}">名字名字名字</span>
+                    </div>
                     <div class="weui-form-preview__item">
                         <label class="weui-form-preview__label">所属店铺</label>
                         <span class="weui-form-preview__value" th:text="${detail.storeName}">名字名字名字</span>
@@ -47,12 +51,12 @@
                         <span class="weui-form-preview__value" th:text="${detail.amount}"></span>
                     </div>
                     <div class="weui-form-preview__item">
-                        <label class="weui-form-preview__label">当前状态</label>
+                        <label class="weui-form-preview__label">申报时间</label>
+                        <span class="weui-form-preview__value" th:text="${detail.createTime}"></span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">审核状态</label>
                         <span class="weui-form-preview__value">
-                            <span th:switch="${detail.stepFlag}">
-                                <b th:case="0" class="red" style="color:#F00">凭证待上传</b>
-                                <b th:case="1" class="blue" style="color:#00F">凭证已上传</b>
-                            </span>，
                             <span th:switch="${detail.status}">
                                 <b th:case="0" class="">待提交审核</b>
                                 <b th:case="-1" class="" style="color:#F00">已取消</b>
@@ -62,6 +66,43 @@
                             </span>
                         </span>
                     </div>
+
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">收货情况</label>
+                        <span class="weui-form-preview__value">
+                            <span th:switch="${detail.confirmStatus}">
+                                <b th:case="0" class="">未指定</b>
+                                <b th:case="1" class="" style="color:#820">指定[<b th:text="${detail.confirmName}"></b>]</b>
+                                <b th:case="2" class="blue" style="color:#00F">[<i th:text="${detail.confirmName}"></i>]已收货<i th:text="${detail.confirmDay}"></i></b>
+                                <b th:case="3" class="red" style="color:#F00">[<i th:text="${detail.confirmName}"></i>]确认未收货【<span th:text="${detail.confirmReason}"></span>】</b>
+                            </span>
+                        </span>
+                    </div>
+
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">财务情况</label>
+                        <span class="weui-form-preview__value">
+                            <span th:switch="${detail.voucherStatus}">
+                                <b th:case="0" class="">未到财务检查阶段</b>
+                                <b th:case="1" class="" style="color:#820">待审核</b>
+                                <b th:case="2" class="blue" style="color:#00F">检查完毕，已存档</b>
+                                <b th:case="3" class="red" style="color:#F00">驳回【<span th:text="${detail.voucherReason}"></span>】</b>
+                            </span>
+                        </span>
+                    </div>
+
+                    <!--<div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">申报时间</label>
+                        <span class="weui-form-preview__value" th:text="${detail.createTime}"></span>
+                    </div>
+                    <div class="weui-form-preview__item" th:if="${detail.status eq '2'}">
+                        <label class="weui-form-preview__label">审核结果</label>
+                        <span class="weui-form-preview__value" style="color:#00F">审核通过</span>
+                    </div>
+                    <div class="weui-form-preview__item" th:if="${detail.status eq '3'}">
+                        <label class="weui-form-preview__label">审核结果</label>
+                        <span class="weui-form-preview__value" style="color:#F00">[驳回]<span th:text="${detail.verifyReason}"></span></span>
+                    </div>-->
 
                     <!--<div class="weui-form-preview__item">
                         <label class="weui-form-preview__label">上传凭证</label>
@@ -82,19 +123,43 @@
                             <input class="weui-uploader__input uploader-btn" type="file" accept="image/*"/>
                         </div>
                     </div>
+                    <div class="alert alert-warning upload-remind-div" style="display: none;">正在上传，请耐心等待...</div>
                 </div>
 
-
-                <div class="weui-form-preview__ft" th:if="${detail.status eq '0' or detail.status eq '3' and detail.userOpenid eq openid}">
+                <!-- 报账人自己操作 -->
+                <div class="weui-form-preview__ft" th:if="${(detail.status eq '0' or detail.status eq '3' or detail.confirmStatus eq '3' or detail.voucherStatus eq '3') and detail.userOpenid eq openid}">
                     <a class="weui-form-preview__btn weui-form-preview__btn_default cancel-btn" href="javascript:;">取消报账</a>
                     <a href="javascript:;" class="weui-form-preview__btn weui-form-preview__btn_primary submit-apply-btn">提交审核</a>
                 </div>
 
-                <div class="weui-form-preview__ft" th:if="${personal.type eq '2' and detail.userOpenid ne openid and detail.status eq '1'}">
+                <!-- 老板审核，报账人员完成信息登记后，提交给老板审核 -->
+                <div class="weui-form-preview__ft" th:if="${personal.type eq '2' and detail.status eq '1'}">
                     <a class="weui-form-preview__btn weui-form-preview__btn_default reject-btn" href="javascript:;">驳回申请</a>
                     <a href="javascript:;" class="weui-form-preview__btn weui-form-preview__btn_primary pass-verify-btn">通过审核</a>
                 </div>
 
+                <!-- 指定收货人员，老板审核通过 -->
+                <div class="weui-form-preview__ft" th:if="${detail.status eq '2' and (detail.confirmStatus eq '0' or detail.confirmStatus eq '1') and detail.userOpenid eq openid}">
+                    <a href="javascript:;" class="weui-form-preview__btn weui-form-preview__btn_primary choice-personal-btn">
+                        <span th:text="${(detail.confirmName eq '' or detail.confirmName eq null)?'指定收货人员':'重新指定收货人员'}"></span>
+                    </a>
+                </div>
+
+                <!-- 收货确认，老板审核通过后，即到确认收货阶段，status为2表示老板审核通过 -->
+                <div class="weui-form-preview__ft" th:if="${personal.markFlag eq '1' and detail.status eq '2' and detail.confirmOpenid eq openid and detail.confirmStatus ne '2'}">
+                    <a class="weui-form-preview__btn weui-form-preview__btn_default no-confirm-btn" href="javascript:;">未收到货</a>
+                    <a href="javascript:;" class="weui-form-preview__btn weui-form-preview__btn_primary confirm-btn">确认收货</a>
+                </div>
+
+                <!-- 财务审核，确认收货后，才到财务审核，confirmStatus为2表示已确认收货 -->
+                <div class="weui-form-preview__ft" th:if="${personal.type eq '3' and detail.confirmStatus eq '2' and(detail.voucherStatus eq '1' or detail.voucherStatus eq '3')}">
+                    <a class="weui-form-preview__btn weui-form-preview__btn_default voucher-btn" href="javascript:;">凭证不全</a>
+                    <a href="javascript:;" class="weui-form-preview__btn weui-form-preview__btn_primary voucher-ok-btn">报账存档</a>
+                </div>
+
+                <!--<div class="weui-form-preview__ft" th:if="${personal.type eq '2' and detail.userOpenid eq openid and detail.status eq '1'}">
+                    <span class="weui-form-preview__btn weui-form-preview__btn_default" style="color:#F00">不能审核自己的申请，请联系他人审核</span>
+                </div>-->
             </div>
         </div>
     </div>

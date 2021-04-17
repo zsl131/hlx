@@ -28,10 +28,14 @@ public class WxTestController {
     }
 
     @GetMapping(value = "openid")
-    public @ResponseBody String openid(String from, HttpServletRequest request) {
-        //如果from为1，则表示是服务器上的正式Openid，否则则是朱霞的Openid
-        String o = "1".equals(from)?"o_TZkwbz0pzuCTmrWqMGNHriMHTo":"o_TZkwbH119ZLSM0wGbEA7vvJ1bU";
-        SessionTools.setOpenid(request, o);
+    public @ResponseBody String openid(String from, String openid, HttpServletRequest request) {
+        if(openid!=null && !"".equals(openid)) {
+            SessionTools.setOpenid(request, openid);
+        } else {
+            //如果from为1，则表示是服务器上的正式Openid，否则则是朱霞的Openid
+            String o = "1".equals(from) ? "o_TZkwbz0pzuCTmrWqMGNHriMHTo" : "o_TZkwbH119ZLSM0wGbEA7vvJ1bU";
+            SessionTools.setOpenid(request, o);
+        }
         return "ok";
     }
 

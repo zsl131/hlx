@@ -11,6 +11,13 @@ $(function() {
             }, "json")
         }
     })
+
+//console.log("--------------")
+    $("input[name='storeSn']").change(function() {
+        console.log($(this).val());
+        var name = $(this).parent("span").find("label").html();
+        $("input[name='storeName']").val(name);
+    })
 })
 
 function checkData() {

@@ -22,13 +22,39 @@
                 </div>
 
                 <div class="input-group">
-                    <span class="input-group-addon">状态</span>
+                    <span class="input-group-addon">审核</span>
                     <select class='filter_element form-control' opt="eq" name='filter_status'>
                         <option value="">=全部=</option>
                         <option value="-1">取消</option>
                         <option value="1">审核中</option>
                         <option value="2">审核通过</option>
                         <option value="3">审核驳回</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">收货</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_confirmStatus'>
+                        <option value="">=全部=</option>
+                        <option value="1">已指定</option>
+                        <option value="2">确认收货</option>
+                        <option value="3">确认未收货</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">财务</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_voucherStatus'>
+                        <option value="">=全部=</option>
+                        <option value="1">待检查</option>
+                        <option value="2">凭证齐全</option>
+                        <option value="3">凭证异常</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">打印</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_printFlag'>
+                        <option value="">=全部=</option>
+                        <option value="0">未打印</option>
+                        <option value="1">已打印</option>
                     </select>
                 </div>
 
@@ -45,6 +71,15 @@
                 <div class="input-group">
                     <span class="input-group-addon">审核人</span>
                     <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_verifyName'/>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">收货人</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_confirmName'/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">财务人</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_voucherName'/>
                 </div>
 
                 <span><button type="button" class="btn btn-primary btn-sm" id="beginFilter">查询</button></span>

@@ -26,24 +26,36 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th>ID</th>
+						<th>店铺</th>
 						<th>姓名</th>
 						<th>电话</th>
 						<th>昵称</th>
 						<th>类别</th>
+						<th>收货员</th>
 						<th>操作</th>
 					</tr>
 				</thead>
 
 				<tr th:each="obj : ${datas}">
-					<td th:text="${obj.id}"></td>
+					<td>
+						<span th:if="${obj.storeSn eq null or obj.storeSn eq ''}" class="red">未设置</span>
+						<span th:if="${obj.storeSn ne null and obj.storeSn ne ''}" th:text="${obj.storeName}"></span>
+					</td>
 					<td th:text="${obj.name}"></td>
 					<td th:text="${obj.phone}"></td>
 					<td th:text="${obj.nickname}"></td>
 					<td>
 						<span th:switch="${obj.type}">
+							<span th:case="0">签收人员</span>
 							<span th:case="1">报账人员</span>
 							<b th:case="2" class="red">审核人员</b>
+							<b th:case="3" class="blue">财务人员</b>
+						</span>
+					</td>
+					<td>
+						<span th:switch="${obj.markFlag}">
+							<b th:case="0" class="red">否</b>
+							<b th:case="1" class="blue">是</b>
 						</span>
 					</td>
 					<td>

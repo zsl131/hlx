@@ -8,6 +8,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<script type="text/javascript" src="/basic/validate/bootstrapValidator.js"></script>
 	<script type="text/javascript" src="/back-admin/bus/admin-select-store.js"></script>
+	<script type="text/javascript" src="/back-admin/bus/finance-personal.js"></script>
 	<title>修改财务类别</title>
 </head>
 <body>
@@ -18,6 +19,16 @@
 	</div>
 
 	<form method="POST" th:object="${personal}" id="dataForm" >
+		<input type="hidden" name="storeName" th:value="${personal.storeName}"/>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">店铺：</div>
+				<div class="form-control">
+					<span><input type="radio" name="storeSn" value="" id="sn_0" th:checked="${personal.storeSn == '' || personal.storeSn == null}?'checked'"/><label for="sn_0">不指定</label></span>
+					<span th:each="store:${storeList}"><input type="radio" name="storeSn" th:value="${store.sn}" th:id="|sn_${store.sn}|" th:checked="${personal.storeSn == store.sn}?'checked'"/><label th:for="|sn_${store.sn}|" th:text="${store.name}">报账人员</label></span>
+				</div>
+			</div>
+		</div>
 		<div class="form-group form-group-lg">
 			<div class="input-group">
 				<div class="input-group-addon">姓名：</div>
@@ -34,8 +45,19 @@
 			<div class="input-group">
 				<div class="input-group-addon">类别：</div>
 				<div class="form-control">
+					<input type="radio" name="type" value="0" id="type_0" th:checked="${personal.type == '0'}?'checked'"/><label for="type_0">签收人员</label>
 					<input type="radio" name="type" value="1" id="type_1" th:checked="${personal.type == '1'}?'checked'"/><label for="type_1">报账人员</label>
 					<input type="radio" name="type" value="2" id="type_2" th:checked="${personal.type == '2'}?'checked'"/><label for="type_2">审核人员</label>
+					<input type="radio" name="type" value="3" id="type_3" th:checked="${personal.type == '3'}?'checked'"/><label for="type_3">财务人员</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">收货：</div>
+				<div class="form-control">
+					<input type="radio" name="markFlag" value="0" id="markFlag_0" th:checked="${personal.markFlag == '0'}?'checked'"/><label for="markFlag_0">非签收人员</label>
+					<input type="radio" name="markFlag" value="1" id="markFlag_1" th:checked="${personal.markFlag == '1'}?'checked'"/><label for="markFlag_1">签收人员</label>
 				</div>
 			</div>
 		</div>

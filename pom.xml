@@ -166,7 +166,7 @@
             </plugin>
 
             <!-- 此plugin用于解决 JPEGImageEncoder 找不到的问题 -->
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -178,7 +178,7 @@
                         <bootclasspath>${java.home}/lib/rt.jar;${java.home}/lib/jce.jar</bootclasspath>
                     </compilerArguments>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 

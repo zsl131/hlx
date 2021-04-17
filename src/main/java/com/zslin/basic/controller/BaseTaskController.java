@@ -63,7 +63,7 @@ public class BaseTaskController {
 //		Boolean isRepeat = (Boolean) request.getAttribute("isRepeat");
         if(TokenTools.isNoRepeat(request)) { //不是重复提交
             if(beanCheckTools.checkMethod(baseTask.getBeanName(), baseTask.getMethodName(), baseTask.getParams())) {
-                log.info("{}.{} 任务可以使用", baseTask.getBeanName(), baseTask.getMethodName());
+                //log.info("{}.{} 任务可以使用", baseTask.getBeanName(), baseTask.getMethodName());
             }
 
             baseTask.setTaskUuid(UUID.randomUUID().toString());

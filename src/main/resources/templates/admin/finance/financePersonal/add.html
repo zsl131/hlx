@@ -19,6 +19,17 @@
 			</div>
 
 			<form method="POST" th:object="${financePersonal}" onsubmit="return checkData()" id="dataForm" >
+				<input type="hidden" name="storeName"/>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">店铺：</div>
+						<div class="form-control">
+							<span><input type="radio" name="storeSn" value="" id="sn_0" th:checked="${financePersonal.storeSn == '' || financePersonal.storeSn == null}?'checked'"/><label for="sn_0">不指定</label></span>
+							<span th:each="store:${storeList}"><input type="radio" name="storeSn" th:value="${store.sn}" th:id="|sn_${store.sn}|" th:checked="${financePersonal.storeSn == store.sn}?'checked'"/><label th:for="|sn_${store.sn}|" th:text="${store.name}">报账人员</label></span>
+						</div>
+					</div>
+				</div>
+
 				<div class="form-group form-group-lg">
 					<div class="input-group">
 						<div class="input-group-addon">姓名：</div>
@@ -35,8 +46,19 @@
 					<div class="input-group">
 						<div class="input-group-addon">类别：</div>
 						<div class="form-control">
+							<input type="radio" name="type" value="0" id="type_0" th:checked="${financePersonal.type == '0'}?'checked'"/><label for="type_0">签收人员</label>
 							<input type="radio" name="type" value="1" id="type_1" th:checked="${financePersonal.type == '1'}?'checked'"/><label for="type_1">报账人员</label>
 							<input type="radio" name="type" value="2" id="type_2" th:checked="${financePersonal.type == '2'}?'checked'"/><label for="type_2">审核人员</label>
+							<input type="radio" name="type" value="3" id="type_3" th:checked="${financePersonal.type == '3'}?'checked'"/><label for="type_3">财务人员</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">收货：</div>
+						<div class="form-control">
+							<input type="radio" name="markFlag" value="0" id="markFlag_0" th:checked="${financePersonal.markFlag == '0'}?'checked'"/><label for="markFlag_0">非签收人员</label>
+							<input type="radio" name="markFlag" value="1" id="markFlag_1" th:checked="${financePersonal.markFlag == '1'}?'checked'"/><label for="markFlag_1">签收人员</label>
 						</div>
 					</div>
 				</div>

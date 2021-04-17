@@ -26,7 +26,7 @@
                 <div class="input-group">
                     <div class="input-group-addon">店铺</div>
                     <div class="form-control">
-                        <span th:each="store: ${storeList}"><input type="radio" name="storeSn" th:value="${store.sn}" th:id="'sn_'+${store.id}"/><label th:for="'sn_'+${store.id}" th:text="${store.name}">汉丽轩</label>&nbsp;&nbsp;&nbsp;</span>
+                        <span th:each="store: ${storeList}"><input type="radio" name="storeSn" th:checked="${store.sn eq personal.storeSn?true:false}" th:value="${store.sn}" th:id="'sn_'+${store.id}"/><label th:for="'sn_'+${store.id}" th:text="${store.name}">汉丽轩</label>&nbsp;&nbsp;&nbsp;</span>
                     </div>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                 <div class="input-group">
                     <div class="input-group-addon">类别</div>
                     <div class="category-div">
-                        <input name="cateName" class="form-control" placeholder="输入名称或拼音筛选，必须点击选择"/>
+                        <input name="cateName" autocomplete="off" class="form-control" placeholder="输入名称或拼音筛选，必须点击选择"/>
                         <input name="cateId" type="hidden"/>
                         <div class="show-category"></div>
                         <div class="all-category">
@@ -80,12 +80,13 @@
         </form>
 
         <input type="hidden" name="checkSign" value="1"/>
-        <input th:value="${personal.signPath}" name="signPath" type="hidden"/>
+        <input th:value="|${personal.signPath}?r=${#numbers.formatDecimal(T(java.lang.Math).random()*10000,1,0)}|" name="signPath" type="hidden"/>
 
         <div style="padding: 10px;">
             <img th:src="${personal.signPath}"/>
             <a href="/wx/finance/sign" class="btn btn-link">重设签名</a>
             <a href="/wx/finance/listOwn" class="btn btn-link">我的申请记录</a>
+            <a href="/wx/finance/listVerify" th:if="${personal.type eq '2' or personal.type eq '3'}" class="btn btn-link">待审列表</a>
         </div>
     </div>
 </div>

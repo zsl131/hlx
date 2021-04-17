@@ -1,8 +1,5 @@
 package com.zslin.finance.imgTools;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
@@ -10,7 +7,6 @@ import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 
 /**
  * 图片文字处理
@@ -47,7 +43,17 @@ public class ImageTextTools {
         // 释放此图形的上下文以及它使用的所有系统资源。
         graphics2D.dispose();
         //将绘制的图像生成至输出流
-        JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(new FileOutputStream(file));
-        encoder.encode(image);
+        /*JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(new FileOutputStream(file));
+        encoder.encode(image);*/
+        ImageIO.write(image, buildImageType(path), file);
+    }
+
+    /** 获取图片类型 */
+    public static String buildImageType(String path) {
+        try {
+            return path.substring(path.lastIndexOf(".")+1);
+        } catch (Exception e) {
+            return "";
+        }
     }
 }
