@@ -145,7 +145,7 @@ public class WeixinFinanceController {
                     fv.setDetailId(Integer.parseInt(objId));
                     fv.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), "/").replaceAll("\\\\", "/"));
                     FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
-                    Thumbnails.of(outFile).size(1000, 1000).toFile(outFile); //修改尺寸
+                    Thumbnails.of(outFile).size(1200, 1200).toFile(outFile); //修改尺寸
                     try { ImageTextTools.writeText(outFile.getAbsolutePath(), "ID:"+objId); } catch (Exception e) { }
 
                     financeVoucherDao.save(fv);

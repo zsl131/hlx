@@ -7,7 +7,17 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface IFinanceDetailDao extends BaseRepository<FinanceDetail, Integer>, JpaSpecificationExecutor<FinanceDetail> {
+
+    @Query("FROM FinanceDetail f WHERE f.id IN (?1)")
+    List<FinanceDetail> findByIds(Integer[] ids);
+
+    @Query("UPDATE FinanceDetail f SET f.printFlag=?1 WHERE f.id IN (?2)")
+    @Modifying
+    @Transactional
+    void updatePrintFlag(String flag, Integer [] ids);
 
     /** 只有status为0或3时才能取消，即状态为申请或驳回状态 */
     @Query("UPDATE FinanceDetail f SET f.status='-1' WHERE f.status IN ('0', '3') AND f.id=?1")

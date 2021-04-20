@@ -6,6 +6,7 @@ import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.finance.dao.IFinanceCategoryDao;
 import com.zslin.finance.dao.IFinanceDetailDao;
 import com.zslin.finance.model.FinanceDetail;
+import com.zslin.finance.tools.PDFTools;
 import com.zslin.multi.dao.IStoreDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
 
 @Controller
 @RequestMapping(value="admin/financeDetail")
@@ -29,6 +34,32 @@ public class AdminFinanceDetailController {
 
     @Autowired
     private IStoreDao storeDao;
+
+    @Autowired
+    private PDFTools pdfTools;
+
+    /** 生成PDF文件 */
+    @GetMapping(value = "printDetail")
+    public void printDetail(String ids, HttpServletResponse response) {
+        try {
+            response.setContentType("application/pdf"); // 设置返回内容格式
+            OutputStream os = response.getOutputStream();
+            List<FinanceDetail> detailList = financeDetailDao.findByIds(buildIds(ids));
+            financeDetailDao.updatePrintFlag("1", buildIds(ids));
+            pdfTools.buildPDF(os, detailList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Integer [] buildIds(String ids) {
+        String [] array = ids.split(",");
+        Integer [] res = new Integer[array.length];
+        for(int i=0;i<array.length;i++) {
+            res[i] = Integer.parseInt(array[i]);
+        }
+        return res;
+    }
 
     @GetMapping(value = "list")
     @AdminAuth(name = "财务报账管理", orderNum = 1, type = "1", icon = "fa fa-cny")

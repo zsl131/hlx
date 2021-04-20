@@ -119,7 +119,8 @@
                         <ul class="weui-uploader__files">
                             <li class="weui-uploader__file single-voucher" th:attr="status=${detail.status}, path=${voucher.picPath}, voucherId=${voucher.id}" th:each="voucher: ${voucherList}" th:style="'background-image: url('+${voucher.picPath}+');'"></li>
                         </ul>
-                        <div class="weui-uploader__input-box" th:if="${detail.status eq '0' or detail.status eq '3'}">
+                        <!-- 如果财务没有审核通过，都可以上传凭证 -->
+                        <div class="weui-uploader__input-box" th:if="${detail.status eq '0' or detail.status eq '3' or detail.voucherStatus ne '2'}">
                             <input class="weui-uploader__input uploader-btn" type="file" accept="image/*"/>
                         </div>
                     </div>

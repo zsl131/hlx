@@ -7,3 +7,32 @@
 .all-category {
     display: none;
 }
+
+
+
+
+.fin-main-box {
+    padding: 6px;
+}
+.fin-list {
+    width: 100%; border:1px #eee solid; border-left: 5px #ce4844 solid; padding: 6px; border-radius: 4px; margin:6px 0px;
+}
+.fin-title {
+    border-bottom: 1px #eee solid;
+}
+.fin-dark {
+    color:#888;
+}
+
+.fin-body {
+    padding: 8px 4px; font-size:14px; border-bottom: 1px #eee solid;
+}
+.fin-footer {
+     display:flex; width:100%; padding: 8px 4px; flex-direction: row;flex-wrap:nowrap;justify-content:space-between; font-size: 14px;
+}
+.fin-footer-left {
+    flex: 1;
+}
+.fin-footer-right {
+    width:60px; text-align:right;
+}
