@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import sun.misc.BASE64Decoder;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,7 +33,13 @@ public class SignImageTools {
      */
     public void saveSign(Integer personalId, String baseStr) {
         try {
-            String str = baseStr.substring(baseStr.indexOf(",")+1);
+            //System.out.println(baseStr);
+            String str = null;
+            try {
+                str = baseStr.substring(baseStr.indexOf(",")+1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             //System.out.println(baseStr);
             //System.out.println(str);
             BASE64Decoder decoder = new BASE64Decoder();

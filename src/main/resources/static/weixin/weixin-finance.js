@@ -14,10 +14,11 @@ $(function() {
     })
 
     var checkSign = $("input[name='checkSign']").val();
-//    console.log(checkSign)
+    //console.log(checkSign)
     if(checkSign=='1') {
         var signPath = $("input[name='signPath']").val();
-        if(!signPath) {alert("请先设置电子签名"); window.location.href = "/wx/finance/sign";}
+        //console.log(signPath)
+        if(!signPath || signPath.indexOf("null")>=0 || signPath.indexOf("?")==0) {alert("请先设置电子签名"); window.location.href = "/wx/finance/sign";}
     }
 })
 

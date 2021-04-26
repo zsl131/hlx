@@ -8,9 +8,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>报账申请</title>
     <script type="text/javascript" src="/weixin/weixin-finance-show.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-finance.js"></script>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
+    <input type="hidden" name="checkSign" value="1"/>
+    <input th:value="|${personal.signPath}?r=${#numbers.formatDecimal(T(java.lang.Math).random()*10000,1,0)}|" name="signPath" type="hidden"/>
     <div class="container">
         <div class="header lighter smaller blue">
             <h3><i class="fa fa-plus"></i>&nbsp;报账申请-详情</h3>
@@ -61,8 +64,8 @@
                                 <b th:case="0" class="">待提交审核</b>
                                 <b th:case="-1" class="" style="color:#F00">已取消</b>
                                 <b th:case="1" class="" style="color:#820">审核中...</b>
-                                <b th:case="2" class="blue" style="color:#00F">审核通过</b>
-                                <b th:case="3" class="red" style="color:#F00">驳回【<span th:text="${detail.verifyReason}"></span>】</b>
+                                <b th:case="2" class="blue" style="color:#00F">【<span th:text="${detail.verifyName}"></span>】审核通过</b>
+                                <b th:case="3" class="red" style="color:#F00">[<span th:text="${detail.verifyName}"></span>]驳回【<span th:text="${detail.verifyReason}"></span>】</b>
                             </span>
                         </span>
                     </div>
@@ -85,7 +88,7 @@
                             <span th:switch="${detail.voucherStatus}">
                                 <b th:case="0" class="">未到财务检查阶段</b>
                                 <b th:case="1" class="" style="color:#820">待审核</b>
-                                <b th:case="2" class="blue" style="color:#00F">检查完毕，已存档</b>
+                                <b th:case="2" class="blue" style="color:#00F">【<span th:text="${detail.voucherReason}"></span>】检查完毕，已存档</b>
                                 <b th:case="3" class="red" style="color:#F00">驳回【<span th:text="${detail.voucherReason}"></span>】</b>
                             </span>
                         </span>

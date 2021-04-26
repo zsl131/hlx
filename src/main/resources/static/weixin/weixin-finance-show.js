@@ -130,7 +130,7 @@ $(function() {
             var html = '<p class="personal-list">';
             for(var i=0;i<res.length;i++) {
                 var per = res[i];
-                html += '  <button class="btn btn-default" objId="'+per.id+'" onclick="setPersonal(this)">'+per.name+'</button>';
+                html += '  <button class="btn btn-default" style="margin:5px;" objId="'+per.id+'" onclick="setPersonal(this)">'+per.name+'</button>';
             }
             html += '</p>';
             html += '<p><button class="btn btn-info" onclick="addPersonal()">新增收货人员</button></p>';

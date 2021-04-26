@@ -78,6 +78,120 @@ public class WeixinFinanceController {
 
     private static final String PATH_PRE = "finance";
 
+    @GetMapping(value = "index")
+    public String index(Model model, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+
+        Account account = accountService.findByOpenid(openid);
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+
+        model.addAttribute("account", account);
+        model.addAttribute("personal", personal);
+        if(personal!=null) {
+            if(personal.getSignPath()==null || "".equals(personal.getSignPath())) {
+                //没有签名，则跳转到签名页面
+                return "redirect:/wx/finance/sign";
+            }
+            String type = personal.getType();
+            if (FinancePersonal.TYPE_BOSS.equals(type)) { //如果是老板，显示待审核条数
+                model.addAttribute("isBoss", "1");
+                model.addAttribute("needCount", financeDetailDao.findVerifyCount());
+            } else if(FinancePersonal.TYPE_VOUCHER.equals(type)) { //如果是财务人员，则显示待财务审核条数
+                model.addAttribute("isVoucher", "1");
+                model.addAttribute("needCount", financeDetailDao.findVoucherCount());
+            }
+            if("1".equals(personal.getMarkFlag())) { //如果是收货人员，则显示待确认收货条数
+                model.addAttribute("isMark", "1");
+                model.addAttribute("confirmCount", financeDetailDao.findConfirmCount(openid));
+            }
+        }
+
+        return "weixin/finance/index";
+    }
+
+    /** 获取待审核列表 */
+    @GetMapping(value = "listVerify")
+    public String listVerify(Model model, Integer page, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        if(personal==null || !FinancePersonal.TYPE_BOSS.equals(personal.getType())) { //如果不是财务管理人员或不是BOSS
+            return "redirect:/wx/finance/index";
+        }
+
+        SpecificationOperator so = new SpecificationOperator("status", "eq", "1");
+
+        Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+                so),
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
+        model.addAttribute("datas", datas);
+
+//        model.addAttribute("detailList", financeDetailDao.findVerify());
+        return "weixin/finance/listVerify";
+    }
+
+    /** 获取未完成的列表 */
+    @GetMapping(value = "listNoEnd")
+    public String listNoEnd(Model model, Integer page, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        if(personal==null) { //如果不是财务管理人员
+            return "redirect:/wx/finance/index";
+        }
+
+        Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+                new SpecificationOperator("status", "ne", "2", "and"),
+                new SpecificationOperator("confirmStatus", "ne", "2", "or"),
+                new SpecificationOperator("voucherStatus", "ne", "2", "or"),
+                new SpecificationOperator("status", "ne", "-1", "and"),
+                new SpecificationOperator("userOpenid", "eq", openid, "and")),
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
+        model.addAttribute("datas", datas);
+
+//        model.addAttribute("detailList", financeDetailDao.findVerify());
+        return "weixin/finance/listNoEnd";
+    }
+
+    /** 获取待财务审核列表 */
+    @GetMapping(value = "listVoucher")
+    public String listVoucher(Model model, Integer page, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        if(personal==null || !FinancePersonal.TYPE_VOUCHER.equals(personal.getType())) { //如果不是财务管理人员或不是财务
+            return "redirect:/wx/finance/index";
+        }
+        SpecificationOperator so = new SpecificationOperator("voucherStatus", "eq", "1");
+
+        Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+                so),
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
+        model.addAttribute("datas", datas);
+        return "weixin/finance/listVoucher";
+    }
+
+    /** 获取待确认收货列表 */
+    @GetMapping(value = "listConfirm")
+    public String listConfirm(Model model, Integer page, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        if(personal==null || !"1".equals(personal.getMarkFlag())) { //如果收货人员
+            return "redirect:/wx/finance/index";
+        }
+
+//        SpecificationOperator so = new SpecificationOperator("confirmStatus", "eq", "1");
+
+        Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+                new SpecificationOperator("confirmStatus", "eq", "1", "and"),
+                new SpecificationOperator("confirmOpenid", "eq", openid, "and")),
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
+        model.addAttribute("datas", datas);
+//        model.addAttribute("detailList", financeDetailDao.findConfirm(openid));
+        return "weixin/finance/listConfirm";
+    }
+
     @GetMapping(value = "add")
     public String add(Model model, HttpServletRequest request) {
         List<Store> storeList = storeDao.findByStatus("1");
@@ -198,7 +312,7 @@ public class WeixinFinanceController {
         return "weixin/finance/listOwn";
     }
 
-    @GetMapping(value = "listConfirm")
+    /*@GetMapping(value = "listConfirm")
     public String listConfirm(Model model, Integer page, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
@@ -208,9 +322,9 @@ public class WeixinFinanceController {
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
         return "weixin/finance/listConfirm";
-    }
+    }*/
 
-    @GetMapping(value = "listVerify")
+    /*@GetMapping(value = "listVerify")
     public String listVerify(Model model, Integer page, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         FinancePersonal personal = financePersonalDao.findByOpenid(openid);
@@ -226,7 +340,7 @@ public class WeixinFinanceController {
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
         return "weixin/finance/listVerify";
-    }
+    }*/
 
     /** 修改状态status */
     @PostMapping(value = "updateStatus")
@@ -261,7 +375,8 @@ public class WeixinFinanceController {
                             .append("报账项目：").append(fd.getTitle()).append(sep)
                             .append("单价：").append(fd.getPrice()).append(sep)
                             .append("数量：").append(fd.getAmount()).append(sep)
-                            .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep);
+                            .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep)
+                            .append("审核人：").append(personal.getName()).append(sep);
                     eventTools.eventRemind(fd.getConfirmOpenid(), "物品需要重新收货确认", "收货确认提醒", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id=" + id);
                 } else if(!"2".equals(fd.getVoucherStatus())) { //如果财务人员没有审核通过，则提交到财务审核
                     List<String> voucherOpenids = financePersonalDao.findByType(FinancePersonal.TYPE_VOUCHER);
@@ -272,7 +387,8 @@ public class WeixinFinanceController {
                             .append("报账项目：").append(fd.getTitle()).append(sep)
                             .append("单价：").append(fd.getPrice()).append(sep)
                             .append("数量：").append(fd.getAmount()).append(sep)
-                            .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep);
+                            .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep)
+                            .append("审核人：").append(personal.getName()).append(sep);
                     eventTools.eventRemind(voucherOpenids, "报账需要重新财务审核", "财务审核提醒", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id=" + id);
                 }
             }
@@ -286,6 +402,7 @@ public class WeixinFinanceController {
                     .append("单价：").append(fd.getPrice()).append(sep)
                     .append("数量：").append(fd.getAmount()).append(sep)
                     .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep)
+                    .append("审核人：").append(personal.getName()).append(sep)
                     .append("结果：").append("审核通过，请指定收货人收货");
             eventTools.eventRemind(fd.getUserOpenid(), "报账审核通知", "财务报账被驳回", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id="+id);
         } else if("3".equals(status)) { //如果是驳回
@@ -299,6 +416,7 @@ public class WeixinFinanceController {
                     .append("单价：").append(fd.getPrice()).append(sep)
                     .append("数量：").append(fd.getAmount()).append(sep)
                     .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep)
+                    .append("审核人：").append(personal.getName()).append(sep)
                     .append("驳回原因：").append(reason);
             eventTools.eventRemind(fd.getUserOpenid(), "报账审核通知", "财务报账被驳回", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id="+id);
         }

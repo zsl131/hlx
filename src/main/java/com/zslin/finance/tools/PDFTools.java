@@ -62,6 +62,7 @@ public class PDFTools {
             chap.add(buildBlankP()); //空行
             chap.add(buildTable(detailList, voucherList)); //数据表格
             chap.add(buildBlankP()); //空行
+            chap.add(buildBlankP()); //空行
             chap.add(drawLine()); //水平线
             chap.add(buildBlankP()); //空行
 
@@ -160,46 +161,6 @@ public class PDFTools {
         }
         return null;
     }
-
-    /*private Chapter buildImageChap(FinanceVoucher voucher) {
-        try {
-            Chapter chap = new Chapter(1);
-
-            Image image = Image.getInstance(configTools.getFilePath()+voucher.getPicPath());
-            //float w = image.getWidth(), h = image.getHeight();
-            //float scalePercentage = (chapHeight / w) * 90.0f;
-            //image.scalePercent(scalePercentage, scalePercentage);
-//            System.out.println("width::"+w+", Height::"+h+", CW:"+chapWidth+", CH:"+chapHeight+", scale:"+scalePercentage);
-            float realWidth = image.getWidth(); float realHeight = image.getHeight();
-            if(realWidth>realHeight) {
-                image.scaleAbsolute(chapHeight / 4f, chapWidth / 4f);
-            } else {
-                image.scaleAbsolute(chapWidth / 4f, chapHeight / 4f);
-            }
-//            image.setAlignment(Image.MIDDLE);
-            //image.setPaddingTop(-100);
-            chap.add(image);
-            return chap;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        *//*try {
-            Chapter chap = new Chapter(1);
-
-            Image image = Image.getInstance(configTools.getFilePath()+voucher.getPicPath());
-            float w = image.getWidth(), h = image.getHeight();
-            float scalePercentage = (chapHeight / w) * 90.0f;
-            image.scalePercent(scalePercentage, scalePercentage);
-//            System.out.println("width::"+w+", Height::"+h+", CW:"+chapWidth+", CH:"+chapHeight+", scale:"+scalePercentage);
-            image.setAlignment(Image.MIDDLE);
-            image.setPaddingTop(-100);
-            chap.add(image);
-            return chap;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*//*
-        return null;
-    }*/
 
     //获取凭证条数
     private int buildVoucherLen(List<FinanceVoucher> voucherList, int detailId) {

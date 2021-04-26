@@ -2,6 +2,7 @@ package com.zslin.finance.controller;
 
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.repository.SimplePageBuilder;
+import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.finance.dao.IFinanceCategoryDao;
 import com.zslin.finance.dao.IFinanceDetailDao;
@@ -40,6 +41,7 @@ public class AdminFinanceDetailController {
 
     /** 生成PDF文件 */
     @GetMapping(value = "printDetail")
+    @AdminAuth(name = "打印财务信息", orderNum = 2, icon = "fa fa-print")
     public void printDetail(String ids, HttpServletResponse response) {
         try {
             response.setContentType("application/pdf"); // 设置返回内容格式
@@ -65,7 +67,7 @@ public class AdminFinanceDetailController {
     @AdminAuth(name = "财务报账管理", orderNum = 1, type = "1", icon = "fa fa-cny")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
-                SimplePageBuilder.generate(page));
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
         model.addAttribute("categoryList", financeCategoryDao.findAll());
         model.addAttribute("storeList", storeDao.findByStatus("1"));

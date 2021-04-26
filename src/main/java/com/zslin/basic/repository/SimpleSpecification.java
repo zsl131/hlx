@@ -29,6 +29,7 @@ public class SimpleSpecification<T> implements Specification<T> {
     public static final String NOT_EQUAL = "ne"; // not equal   !=
     public static final String IS_NULL = "isnull"; //is null
     public static final String NOT_NULL = "notnull";
+    public static final String IN = "in"; //如果是IN，对应的Value应该是'1','3'，多个值用逗号隔开
 
     /**
      * 查询的条件列表，是一组列表
@@ -91,6 +92,16 @@ public class SimpleSpecification<T> implements Specification<T> {
             return criteriaBuilder.notLike(root.get(op.getKey()), op.getValue()+"%");
         } else if(NOT_LIKE_END.equalsIgnoreCase(op.getOper())) {
             return criteriaBuilder.notLike(root.get(op.getKey()), "%"+op.getValue());
+        } else if(IN.equalsIgnoreCase(op.getOper())) {
+//            System.out.println("--------------");
+            //如果是IN，则遍历value
+            CriteriaBuilder.In in = criteriaBuilder.in(root.get(op.getKey()));
+            String [] array = op.getValue().toString().split(",");
+            for(String str:array) {
+                in = in.value(str.trim());
+            }
+            return in;
+//            return criteriaBuilder.in(root.get(op.getKey())).value(op.getValue());
         }
         return null;
     }

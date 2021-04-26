@@ -94,6 +94,8 @@ public class HlxTicketTools {
             receiveTicket10(openid);
         } else if(isOrderTicket(dto)) { //如果是汉丽轩订单领券
             buildOrderTicket(dto, openid);
+        } else if(isOrderTicketHlx3in1(dto)) { //如果是汉丽轩买三赠一
+            buildOrderTicket(dto, openid);
         } else if(isOrderTicketQwzw(dto)) {
             buildOrderTicket(dto, openid); //如果是签王之王订单领券-买一赠一
         }
@@ -110,10 +112,58 @@ public class HlxTicketTools {
             orderTicketService.updateStatus("1", dto.getOrderNo());
             Account a = accountService.findByOpenid(openid);
             if(a!=null) {
-                if(ClientFileTools.HLX_SN.equals(dto.getSn())) {buildHlxTicket(a, sn, openid);} //如果是汉丽轩
+                if(ClientFileTools.HLX_SN.equals(dto.getSn())) {
+//                    buildHlxTicket(a, sn, openid); //以前是满减活动
+                    buildHlxTicket3in1(a, dto, sn, openid); //现在是买3赠1活动
+                } //如果是汉丽轩
                 else if(ClientFileTools.QWZW_SN.equals(dto.getSn()) || ClientFileTools.QWZW_SN.startsWith(dto.getSn())) {
                     buildQwzwTicket(a, dto, sn, openid);
                 }
+            }
+        }
+    }
+
+    /** 汉丽轩买三赠一 */
+    private void buildHlxTicket3in1(Account a, TicketDto dto, String sn, String openid) {
+        String orderNo = dto.getOrderNo();
+        Float worth = dto.getWorth();
+        BuffetOrder order = buffetOrderService.findByNo(orderNo);
+        if("1".equals(order.getType())) { //如果是正常订单
+            List<BuffetOrderDetail> detailList = buffetOrderDetailService.listByOrderNo(orderNo);
+            int length = 0;
+            for(BuffetOrderDetail detail : detailList) {
+                //是全票才可以
+                if("99999".equals(detail.getCommodityNo()) || "88888".equals(detail.getCommodityNo())) {
+                    length ++; //只要是全票就增加1
+                }
+            }
+            for(int i=0;i<length/3;i++) {
+                String name = "渔喜渔川-买三赠一";
+                Float reach = worth; //
+                HlxTicket t = new HlxTicket();
+                t.setAccountId(a.getId());
+                t.setCreateDay(NormalTools.curDate());
+                t.setCreateLong(System.currentTimeMillis());
+                t.setCreateTime(NormalTools.curDatetime());
+                t.setNickname(a.getNickname());
+                t.setOpenid(a.getOpenid());
+                t.setStatus("0");
+                t.setTicketName(name);
+                t.setTicketWorth(worth);
+                t.setStoreSn(ClientFileTools.HLX_SN);
+                t.setFromStoreSn(ClientFileTools.HLX_SN);
+                t.setSn(sn);
+
+                t.setTicketNo(buildCode()); //设置编号
+                t.setType("10"); //电子券
+                t.setUseType("2"); //满减
+                t.setReachMoney(reach); //满reach元可使用
+                //TODO 需要设置有效期
+
+                hlxTicketService.save(t);
+
+                eventTools.eventRemind(openid, "领券提醒", "领券提醒",
+                        DateTools.date2Str(new Date(), "yyyy-MM-dd"), buildTicketCon(name, t.getTicketNo(), "待使用", reach, worth), "/wx/account/ticket");
             }
         }
     }
@@ -190,6 +240,11 @@ public class HlxTicketTools {
 
     private boolean isOrderTicket(TicketDto dto) {
         return (dto.getWorth()==100 && dto.getSn().length()==13); //后面是订单号
+    }
+
+    /** 如果是买3赠1 */
+    private boolean isOrderTicketHlx3in1(TicketDto dto) {
+        return (ClientFileTools.HLX_SN.equalsIgnoreCase(dto.getSn()) && dto.getOrderNo().length()==13); //后面是订单号
     }
 
     //如果是签王之王的电子券

@@ -27,13 +27,13 @@ public class QRTest {
     @Test
     public void test04() {
         String openid = "o_TZkwbz0pzuCTmrWqMGNHriMHTo";
-        String value = "ticket_69_qwzw_202103108003";
+        String value = "ticket_69_hlx_2021042610005";
         qrsceneTools.processQrscene(openid, value);
     }
 
     @Test
     public void test03() {
-        String url = qrTools.genTicketQr("69_qwzw_202103108002", false);
+        String url = qrTools.genTicketQr("69_hlx_2021042610002", false);
         System.out.println(url);
     }
 

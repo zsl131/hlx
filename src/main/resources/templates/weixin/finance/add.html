@@ -10,8 +10,8 @@
     <script src="/js/jedate/jquery.jedate.min.js"></script>
     <link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-finance.css"/>
-    <script src="/back-admin/bus/my-date.js"></script>
-    <script src="/weixin/weixin-finance.js"></script>
+    <script type="text/javascript" src="/back-admin/bus/my-date.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-finance.js"></script>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
@@ -83,10 +83,10 @@
         <input th:value="|${personal.signPath}?r=${#numbers.formatDecimal(T(java.lang.Math).random()*10000,1,0)}|" name="signPath" type="hidden"/>
 
         <div style="padding: 10px;">
-            <img th:src="${personal.signPath}"/>
+            <p><img th:src="${personal.signPath}"/></p>
             <a href="/wx/finance/sign" class="btn btn-link">重设签名</a>
             <a href="/wx/finance/listOwn" class="btn btn-link">我的申请记录</a>
-            <a href="/wx/finance/listVerify" th:if="${personal.type eq '2' or personal.type eq '3'}" class="btn btn-link">待审列表</a>
+            <!--<a href="/wx/finance/listVerify" th:if="${personal.type eq '2' or personal.type eq '3'}" class="btn btn-link">待审列表</a>-->
         </div>
     </div>
 </div>

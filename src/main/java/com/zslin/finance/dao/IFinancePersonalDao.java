@@ -32,5 +32,6 @@ public interface IFinancePersonalDao extends BaseRepository<FinancePersonal, Int
 
     List<FinancePersonal> findByMarkFlag(String markFlag);
 
+    @Query("FROM FinancePersonal f WHERE f.markFlag=?1 AND (f.storeSn=?2 OR f.storeSn IS NULL OR f.storeSn='')")
     List<FinancePersonal> findByMarkFlagAndStoreSn(String markFlag, String storeSn);
 }

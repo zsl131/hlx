@@ -33,4 +33,28 @@ public interface IFinanceDetailDao extends BaseRepository<FinanceDetail, Integer
     @Modifying
     @Transactional
     void updateStatus(String status, Integer id);
+
+    /** 获取待审核条数 */
+    @Query("SELECT COUNT(f.id) FROM FinanceDetail f WHERE f.status = '1'")
+    Integer findVerifyCount();
+
+    /** 获取待财务审核条数 */
+    @Query("SELECT COUNT(f.id) FROM FinanceDetail f WHERE f.voucherStatus = '1'")
+    Integer findVoucherCount();
+
+    /** 获取待确认收货条数 */
+    @Query("SELECT COUNT(f.id) FROM FinanceDetail f WHERE f.confirmStatus = '1' AND f.confirmOpenid=?1")
+    Integer findConfirmCount(String openid);
+
+    /** 获取待审核 */
+    @Query("FROM FinanceDetail f WHERE f.status = '1'")
+    List<FinanceDetail> findVerify();
+
+    /** 获取待财务审核 */
+    @Query("FROM FinanceDetail f WHERE f.voucherStatus = '1'")
+    List<FinanceDetail> findVoucher();
+
+    /** 获取待确认收货 */
+    @Query("FROM FinanceDetail f WHERE f.confirmStatus = '1' AND f.confirmOpenid=?1")
+    List<FinanceDetail> findConfirm(String openid);
 }

@@ -45,15 +45,58 @@
             $(".submit-btn").click(function() {
                 var data = $sigdiv.jSignature('getData', "default");
                 //console.log(data);
+
                 confirmDialog("请确定已经书写好，再保存哦", "系统提示", function() {
                     //
-                    var personalId = $("input[name='personalId']").val();
-                    $.post("/wx/finance/sign", {personalId:personalId, base: data}, function(res) {
-                        if(res=="1") {alert("保存成功"); window.location.reload();}
-                    }, "json");
+                    rebuildImg(data); //去除空白的签名
                 }, "static");
             })
         })
+
+        function save(data) {
+            var personalId = $("input[name='personalId']").val();
+            //console.log(data)
+            $.post("/wx/finance/sign", {personalId:personalId, base: data}, function(res) {
+                if(res=="1") {alert("保存成功"); window.location.reload();}
+            }, "json");
+        }
+
+        function rebuildImg(base64) {
+            var img = new Image();//创建图片对象
+            img.src=base64;
+            img.onload = function(){
+                var c = document.createElement('canvas');//创建处理画布对象
+                var ctx = c.getContext('2d');
+                c.width = img.width;
+                c.height = img.height;
+                ctx.drawImage(img,0,0);//绘制
+                var imgData = ctx.getImageData(0, 0, c.width, c.height).data;//读取图片数据
+                var lOffset = c.width, rOffset = 0,tOffset = c.height, bOffset = 0;
+                for (var i = 0; i < c.width; i++) {
+                    for (var j = 0; j < c.height; j++) {
+                        var pos = (i + c.width * j) * 4
+                        if (imgData[pos] == 255 || imgData[pos + 1] == 255 || imgData[pos + 2] == 255 || imgData[pos + 3] == 255) {
+                            bOffset = Math.max(j, bOffset); // 找到有色彩的最下端
+                            rOffset = Math.max(i, rOffset); // 找到有色彩的最右端
+                            tOffset = Math.min(j, tOffset); // 找到有色彩的最上端
+                            lOffset = Math.min(i, lOffset); // 找到有色彩的最左端
+                        }
+                    }
+                }
+                lOffset++;
+                rOffset++;
+                tOffset++;
+                bOffset++;
+                var x = document.createElement("canvas");//创建处理后画布对象
+                x.width = rOffset-lOffset;
+                x.height = bOffset-tOffset;
+                var xx = x.getContext("2d");
+                xx.drawImage(img, lOffset, tOffset, x.width, x.height, 0, 0, x.width, x.height);//绘制
+                //console.log(x.toDataURL());//得到最终裁剪出来的base64
+                save(x.toDataURL());
+            }
+
+        }
     </script>
 </head>
 <body>

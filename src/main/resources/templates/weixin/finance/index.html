@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="/weixin/stock/stock-index.js"></script>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+    <style>
+        .fa {
+            color:#7a4171;
+        }
+        .weui-grid__label {
+            color:#7a4171;
+        }
+    </style>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="container">
+        <div class="page">
+            <div class="page__hd">
+                <h1 class="page__title">财务管理系统</h1>
+                <p class="page__desc" th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">加载更多</p>
+            </div>
+            <div class="page__bd">
+                <div class="" th:if="${personal eq null or personal.name eq null or personal.name eq ''}">
+                    <div>
+                        抱歉的告诉您，此功能我们只对店铺管理人员开放。即将自动跳转到<a href="/weixin/index" class="auto-redirect" time="3">首页</a>。
+                    </div>
+                </div>
+                <div th:unless="${personal eq null or personal.name eq null or personal.name eq ''}">
+                    <div class="page">
+                        <div class="weui-grids">
+                            <a href="/wx/finance/add" class="weui-grid">
+                                <div class="weui-grid__icon">
+                                    <b class="fa fa-plus" style="font-size:2em;"></b>
+                                </div>
+                                <p class="weui-grid__label">报账登记</p>
+                            </a>
+                            <a href="/wx/finance/listOwn" class="weui-grid">
+                                <div class="weui-grid__icon">
+                                    <b class="fa fa-list" style="font-size:2em;"></b>
+                                </div>
+                                <p class="weui-grid__label">报账记录</p>
+                            </a>
+                            <a href="/wx/finance/listNoEnd" class="weui-grid">
+                                <div class="weui-grid__icon">
+                                    <b class="fa fa-list-ol" style="font-size:2em;"></b>
+                                </div>
+                                <p class="weui-grid__label">未完成记录</p>
+                            </a>
+
+                            <a href="/wx/finance/listVerify" class="weui-grid" th:if="${isBoss eq '1'}">
+                                <div class="weui-grid__icon">
+                                    <b class="fa fa-eye" style="font-size:2em;"></b>
+                                </div>
+                                <p class="weui-grid__label">待审条数<span class="weui-badge" th:text="${needCount}"></span></p>
+                            </a>
+                            <a href="/wx/finance/listVoucher" class="weui-grid" th:if="${isVoucher eq '1'}">
+                                <div class="weui-grid__icon">
+                                    <b class="fa fa-camera" style="font-size:2em;"></b>
+                                </div>
+                                <p class="weui-grid__label">待查数据<span class="weui-badge" th:text="${needCount}"></span></p>
+                            </a>
+
+                            <a href="/wx/finance/listConfirm" class="weui-grid" th:if="${isMark eq '1'}">
+                                <div class="weui-grid__icon">
+                                    <b class="fa fa-hand-lizard-o" style="font-size:2em;"></b>
+                                </div>
+                                <p class="weui-grid__label">待收物品<span class="weui-badge" th:text="${confirmCount}"></span></p>
+                            </a>
+
+
+
+                            <a href="/wx/finance/sign" class="weui-grid">
+                                <div class="weui-grid__icon">
+                                    <b class="fa fa-key" style="font-size:2em;"></b>
+                                </div>
+                                <p class="weui-grid__label">我的签名</p>
+                            </a>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
+</div>
+</body>
+</html>

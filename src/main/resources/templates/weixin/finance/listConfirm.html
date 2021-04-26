@@ -6,17 +6,20 @@
       layout:decorator="fragments/weixinModel">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>报账申请记录</title>
+    <title>报账-等待确认收货列表</title>
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-finance.css"/>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
     <div  th:if="${datas ne null}">
         <div class="header lighter smaller blue">
-            <h3> &nbsp;&nbsp;<i class="fa fa-list"></i>&nbsp;我的报账申请记录（<b th:text="${datas.totalElements}"></b>）</h3>
+            <h3> &nbsp;&nbsp;<i class="fa fa-list"></i>&nbsp;报账-待收列表（<b th:text="${datas.totalElements}"></b>）</h3>
         </div>
 
         <div class="weui-cells fin-main-box">
+            <div th:if="${datas.totalElements le 0}">
+                <h2 style="width:100%; text-align:center; color:#F00;">暂无数据</h2>
+            </div>
             <div th:each="obj : ${datas}" th:remove="tag">
                 <div class="fin-list">
                     <div class="fin-title">
@@ -57,24 +60,6 @@
                         <div class="fin-footer-right"><a class="btn btn-link" th:href="'/wx/finance/show?id='+${obj.id}">详情</a></div>
                     </div>
                 </div>
-
-                <!--<a class="weui-cell weui-cell_access" th:href="'/wx/finance/show?id='+${obj.id}">
-                    <div class="weui-cell__hd"><span th:text="${obj.storeName}"></span></div>
-                    <div class="weui-cell__bd" style="color:#888; font-size:14px;">
-                        &nbsp;<span th:text="${obj.title}"></span>&nbsp;￥<b th:text="${obj.totalMoney}"></b>
-                        &nbsp;
-                        <span th:switch="${obj.status}" th:remove="tag">
-                            <b th:case="0">待提交</b>
-                            <b th:case="-1" style="color:#820">已取消</b>
-                            <b th:case="1" style="color:#ed7800">待审核</b>
-                            <b th:case="2" style="color:#00F">通过</b>
-                            <b th:case="3" style="color:#F00">被驳回</b>
-                        </span>
-                    </div>
-                    <div class="weui-cell__ft">
-                        <span th:text="${obj.createDay}" style="font-size:12px;"></span>
-                    </div>
-                </a>-->
             </div>
         </div>
 
