@@ -298,6 +298,7 @@ public class ClientSimpleProcessHandler {
             income.setComeMonth(day.substring(0, 6));
             income.setComeYear(day.substring(0, 4));
             income.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
+            income.setCreateTime(NormalTools.curDatetime());
             income.setCash(money);
             try {
                 income.setPeopleCount(jsonObj.getInt("peopleCount"));

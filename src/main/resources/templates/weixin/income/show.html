@@ -70,20 +70,6 @@
                 </div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__hd">飞凡</div>
-                <div class="weui-cell__bd">&nbsp;</div>
-                <div class="weui-cell__ft">
-                    <span th:text="|${income.ffan} 元|"></span>
-                </div>
-            </div>
-            <div class="weui-cell">
-                <div class="weui-cell__hd">会员</div>
-                <div class="weui-cell__bd">&nbsp;</div>
-                <div class="weui-cell__ft">
-                    <span th:text="|${income.member} 元|"></span>
-                </div>
-            </div>
-            <div class="weui-cell">
                 <div class="weui-cell__hd">其他</div>
                 <div class="weui-cell__bd">&nbsp;</div>
                 <div class="weui-cell__ft">
@@ -91,24 +77,31 @@
                 </div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__hd">午餐券</div>
+                <div class="weui-cell__hd">登记员</div>
                 <div class="weui-cell__bd">&nbsp;</div>
                 <div class="weui-cell__ft">
-                    <span th:text="|${income.noonTicket} 张|"></span>
+                    <span th:text="${income.nickname}"></span>&nbsp;
                 </div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__hd">晚餐券</div>
+                <div class="weui-cell__hd">登记时间</div>
                 <div class="weui-cell__bd">&nbsp;</div>
                 <div class="weui-cell__ft">
-                    <span th:text="|${income.nightTicket} 张|"></span>
+                    <span th:text="${income.createTime}"></span>
                 </div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__hd">10元券</div>
+                <div class="weui-cell__hd">桌数</div>
                 <div class="weui-cell__bd">&nbsp;</div>
                 <div class="weui-cell__ft">
-                    <span th:text="|${income.tenTicket} 张|"></span>
+                    <span th:text="|${income.deskCount} 桌|"></span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">人数</div>
+                <div class="weui-cell__bd">&nbsp;</div>
+                <div class="weui-cell__ft">
+                    <span th:text="|${income.peopleCount} 人|"></span>
                 </div>
             </div>
         </div>

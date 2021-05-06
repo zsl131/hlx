@@ -58,7 +58,7 @@ public class PDFTools {
             Chapter chap = new Chapter(1);
             chap.add(buildHeadParagraph("0", ticketNo)); //标题，默认都为费用报销单
             chap.add(buildBlankP()); //空行
-            chap.add(buildNameDateP(NormalTools.curDate("yyyyMMdd"), storeName)); //名称日期
+            chap.add(buildNameDateP(getMaxDate(detailList), storeName)); //名称日期
             chap.add(buildBlankP()); //空行
             chap.add(buildTable(detailList, voucherList)); //数据表格
             chap.add(buildBlankP()); //空行
@@ -197,6 +197,26 @@ public class PDFTools {
                 table.addCell(pdfCell);
             }
             chap.add(table);
+        }
+    }
+
+    private String getMaxDate(List<FinanceDetail> detailList) {
+        String createDay = "";
+        for(FinanceDetail detail : detailList) {
+            String day = detail.getCreateDay().replace("-", "");
+            if("".equals(createDay)) {createDay = day;}
+            if(isMax(day, createDay)) {createDay = day;}
+        }
+        return createDay;
+    }
+
+    private boolean isMax(String str1, String str2) {
+        try {
+            Integer num1 = Integer.parseInt(str1);
+            Integer num2 = Integer.parseInt(str2);
+            return num1>num2;
+        } catch (Exception e) {
+            return false;
         }
     }
 
@@ -504,6 +524,10 @@ public class PDFTools {
         p.add(cd);
         return p;
     }
+
+    /*private String buildDate() {
+        return "              年             月              日";
+    }*/
 
     private String buildDate(String recordDate) {
         StringBuffer sb = new StringBuffer();

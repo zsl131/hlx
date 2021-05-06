@@ -35,7 +35,7 @@
                 <div class="input-group">
                     <div class="input-group-addon">类别</div>
                     <div class="category-div">
-                        <input name="cateName" autocomplete="off" class="form-control" placeholder="输入名称或拼音筛选，必须点击选择"/>
+                        <input name="cateName" autocomplete="off" class="form-control" placeholder="选择类别"/>
                         <input name="cateId" type="hidden"/>
                         <div class="show-category"></div>
                         <div class="all-category">
@@ -80,6 +80,7 @@
         </form>
 
         <input type="hidden" name="checkSign" value="1"/>
+        <input name="personalType" type="hidden" th:value="${personal.type}"/>
         <input th:value="|${personal.signPath}?r=${#numbers.formatDecimal(T(java.lang.Math).random()*10000,1,0)}|" name="signPath" type="hidden"/>
 
         <div style="padding: 10px;">

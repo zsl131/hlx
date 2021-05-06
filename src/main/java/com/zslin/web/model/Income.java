@@ -27,6 +27,8 @@ public class Income {
     @Column(name = "create_day")
     private String createDay;
 
+    private String createTime;
+
     //现金
     private Float cash=0f;
 
@@ -88,6 +90,34 @@ public class Income {
 
     @Column(name = "store_sn")
     private String storeSn;
+
+    private String openid;
+
+    private String nickname;
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     public Integer getStoreId() {
         return storeId;

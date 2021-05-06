@@ -7,6 +7,10 @@ import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.client.tools.ClientFileTools;
+import com.zslin.finance.dao.IFinancePersonalDao;
+import com.zslin.finance.model.FinancePersonal;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.web.model.Account;
 import com.zslin.web.model.Income;
 import com.zslin.web.service.IAccountService;
@@ -26,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/8/30 10:58.
@@ -42,6 +48,12 @@ public class WeixinIncomeController {
 
     @Autowired
     private IncomeNoticeTools incomeNoticeTools;
+
+    @Autowired
+    private IFinancePersonalDao financePersonalDao;
+
+    @Autowired
+    private IStoreDao storeDao;
 
     @GetMapping(value = "list")
     public String list(Model model, Integer page, String storeSn, HttpServletRequest request) {
@@ -66,6 +78,7 @@ public class WeixinIncomeController {
             model.addAttribute("month", month);
             model.addAttribute("storeName", ClientFileTools.BUILD_STORE_NAME(storeSn)); //店铺名称
             model.addAttribute("storeSn", storeSn);
+            model.addAttribute("storeList", storeDao.findByStatus("1"));
         }
         return "weixin/income/list";
     }
@@ -90,7 +103,22 @@ public class WeixinIncomeController {
 
     @GetMapping(value = "add")
     public String add(Model model, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
         model.addAttribute("income", new Income());
+        List<Store> storeList = null;
+        if(personal==null || personal.getStoreSn()==null || "".equals(personal.getStoreSn())) {
+            storeList = storeDao.findByStatus("1");
+        } else {
+            storeList = new ArrayList<>();
+            Store s = new Store();
+            s.setName(personal.getStoreName());
+            s.setSn(personal.getStoreSn());
+            storeList.add(s);
+        }
+        model.addAttribute("storeList", storeList);
+        model.addAttribute("personal", personal);
+
         return "weixin/income/add";
     }
 
@@ -107,9 +135,20 @@ public class WeixinIncomeController {
         income.setComeMonth(comeMonth);
         income.setComeYear(comeYear);
         income.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
+        income.setCreateTime(NormalTools.curDatetime());
+
+        try {
+            String openid = SessionTools.getOpenid(request);
+            Account account = accountService.findByOpenid(openid);
+            income.setOpenid(openid);
+            income.setNickname(account.getNickname());
+        } catch (Exception e) {
+//            e.printStackTrace();
+        }
+
         incomeService.save(income);
 
-        incomeNoticeTools.notice(income); //通知
+//        incomeNoticeTools.notice(income); //通知
         return "redirect:/wx/income/list";
     }
 

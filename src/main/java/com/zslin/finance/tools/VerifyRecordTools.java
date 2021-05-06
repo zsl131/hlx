@@ -17,7 +17,7 @@ public class VerifyRecordTools {
     @Autowired
     private IFinanceVerifyRecordDao financeVerifyRecordDao;
 
-    public void save(String type, String reason, FinanceDetail detail, FinancePersonal personal) {
+    public void save(String type, String typeName, String reason, FinanceDetail detail, FinancePersonal personal) {
         FinanceVerifyRecord vfr = new FinanceVerifyRecord();
         vfr.setCreateDay(NormalTools.curDate());
         vfr.setCreateLong(System.currentTimeMillis());
@@ -30,6 +30,7 @@ public class VerifyRecordTools {
         vfr.setStoreName(detail.getStoreName());
         vfr.setStoreSn(detail.getStoreSn());
         vfr.setType(type);
+        vfr.setTypeName(typeName);
         financeVerifyRecordDao.save(vfr);
     }
 }

@@ -50,7 +50,7 @@
                                 <div class="weui-grid__icon">
                                     <b class="fa fa-list-ol" style="font-size:2em;"></b>
                                 </div>
-                                <p class="weui-grid__label">未完成记录</p>
+                                <p class="weui-grid__label">未完成记录<span class="weui-badge" th:text="${noEndCount}"></span></p>
                             </a>
 
                             <a href="/wx/finance/listVerify" class="weui-grid" th:if="${isBoss eq '1'}">
@@ -73,7 +73,12 @@
                                 <p class="weui-grid__label">待收物品<span class="weui-badge" th:text="${confirmCount}"></span></p>
                             </a>
 
-
+                            <a href="/wx/finance/summary" class="weui-grid">
+                                <div class="weui-grid__icon">
+                                    <b class="fa fa-bar-chart" style="font-size:2em;"></b>
+                                </div>
+                                <p class="weui-grid__label">报账汇总</p>
+                            </a>
 
                             <a href="/wx/finance/sign" class="weui-grid">
                                 <div class="weui-grid__icon">
@@ -81,10 +86,17 @@
                                 </div>
                                 <p class="weui-grid__label">我的签名</p>
                             </a>
-
-
-
                         </div>
+
+                        <div class="weui-grids">
+                            <a href="/wx/income/add" class="weui-grid">
+                                <div class="weui-grid__icon">
+                                    <b class="fa fa-cny" style="font-size:2em;"></b>
+                                </div>
+                                <p class="weui-grid__label">收入登记</p>
+                            </a>
+                        </div>
+
                     </div>
                 </div>
             </div>

@@ -17,10 +17,23 @@
             $("input[name='storeSn']").click(function() {
                 //console.log($(this).val());
                 var sn = $(this).val();
-                var name = sn=="hlx"?"汉丽轩":"签王之王";
+
+                var name = $(this).parents("span").find("label").html();
+                //var name = sn=="hlx"?"汉丽轩":"签王之王";
                 $("input[name='storeName']").val(name);
             });
         });
+
+        function checkForm() {
+            var storeSn = $("input[name='storeSn']:checked").val();
+            if(!storeSn) {showDialog("请选择店铺", "操作提示"); return false;}
+            console.log(storeSn);
+            var cash = $("input[name='cash']").val();
+            if(cash<=0) {
+                showDialog("请输入金额", "系统提示");
+                return false;
+            }
+        }
     </script>
 </head>
 <body>
@@ -30,7 +43,7 @@
             <h3><i class="fa fa-plus"></i>&nbsp;添加收入</h3>
         </div>
 
-        <form method="POST" th:object="${income}" id="dataForm" enctype="multipart/form-data">
+        <form method="POST" th:object="${income}" onsubmit="return checkForm();" id="dataForm" enctype="multipart/form-data">
             <input name="storeName" value="汉丽轩" type="hidden"/>
             <div class="form-group">
                 <div class="input-group">
@@ -43,8 +56,9 @@
                 <div class="input-group">
                     <div class="input-group-addon">店铺</div>
                     <div class="form-control">
-                        <input type="radio" name="storeSn" value="hlx" id="sn_1" checked="checked"/><label for="sn_1">汉丽轩</label>
-                        <input type="radio" name="storeSn" value="qwzw-auto" id="sn_2"/><label for="sn_2">签王之王</label>
+                        <span th:each="store: ${storeList}"><input type="radio" name="storeSn" th:value="${store.sn}" th:id="'sn_'+${store.id}"/><label th:for="'sn_'+${store.id}" th:text="${store.name}">汉丽轩</label>&nbsp;&nbsp;&nbsp;</span>
+                        <!--<input type="radio" name="storeSn" value="hlx" id="sn_1" checked="checked"/><label for="sn_1">汉丽轩</label>
+                        <input type="radio" name="storeSn" value="qwzw-auto" id="sn_2"/><label for="sn_2">签王之王</label>-->
                     </div>
                 </div>
             </div>
@@ -61,7 +75,17 @@
 
             <div class="form-group">
                 <div class="input-group">
-                    <div class="input-group-addon">现金：</div>
+                    <div class="input-group-addon">人数：</div>
+                    <input name="peopleCount" type="number" class="form-control" th:value="${income.peopleCount}" placeholder="人数" />
+
+                    <div class="input-group-addon">桌数：</div>
+                    <input name="deskCount" type="number" class="form-control" th:value="${income.deskCount}" placeholder="桌数" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">金额：</div>
                     <input name="cash" type="text" class="form-control money-input" th:value="${income.cash}" placeholder="单位元" />
 
                     <div class="input-group-addon">小计：</div>

@@ -7,6 +7,32 @@ $(function() {
         $("input[name='storeName']").val(name);
     })
 
+    $("input[name='cateName']").focus(function() {
+        var personalType = $("input[name='personalType']").val(); //人员类型
+        var html = '<div class="category-list-div">';
+        $(".all-category").find("span").each(function() {
+            html += '<button class="btn btn-default" style="margin:5px 3px;" onclick="clickCategory(this)" cateId="'+$(this).attr("cateId")+'">'+$(this).html()+'</button>';
+        });
+        html += '</div>';
+
+        if(personalType=='2') {
+            html += '<p><button class="btn btn-danger" onclick="addCategory()">添加新类别</button></p>';
+        }
+
+
+        var dialog = confirmDialog(html, "选择类别", function() {
+            var choiceObj = $(dialog).find(".category-list-div").find("button.btn-primary")[0];
+            //console.log(choiceObj);
+            if(!choiceObj) {
+                showDialog("请选择类别后再点确定");
+            } else {
+                choiceCate($(choiceObj));
+                $(dialog).remove();
+            }
+        }, "static");
+        //showDialog("-------");
+    });
+
     $("input[name='cateName']").keyup(function() {
         var value = $(this).val();
         //console.log(value)
@@ -21,6 +47,39 @@ $(function() {
         if(!signPath || signPath.indexOf("null")>=0 || signPath.indexOf("?")==0) {alert("请先设置电子签名"); window.location.href = "/wx/finance/sign";}
     }
 })
+
+function addCategory() {
+    var html = '';
+    html += '<div class="form-group">'+
+                  '<div class="input-group">'+
+                      '<div class="input-group-addon">类别名称</div>'+
+                      '<input name="name" class="form-control" placeholder="输入类别名称"/>'+
+                  '</div>'+
+              '</div>';
+    var dialog = confirmDialog(html, "添加新类别", function() {
+        var name = $(dialog).find("input[name='name']").val();
+        //console.log(choiceObj);
+        if(!name) {
+            showDialog("请输入类别名称");
+        } else {
+            $.post("/wx/finance/addCategory", {name: name}, function(res) {
+                //console.log(res)
+                if(!res.id || res.id == null) {showDialog("已经存在相似的名称，请更换后重新添加", "系统提示");}
+                else {
+                    //console.log(res);
+                    var btnHtml = '<button class="btn btn-default" style="margin:5px 3px;" onclick="clickCategory(this)" cateId="'+res.id+'">'+res.name+'</button>';
+                    $(".category-list-div").append(btnHtml);
+                }
+            }, "json");
+            $(dialog).remove();
+        }
+    }, "static");
+}
+
+function clickCategory(obj) {
+    $(obj).parents(".category-list-div").find("button.btn-primary").removeClass("btn-primary");
+    $(obj).addClass("btn-primary");
+}
 
 function findCate(key) {
     var html = '';

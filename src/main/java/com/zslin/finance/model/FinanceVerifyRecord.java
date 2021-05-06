@@ -39,6 +39,9 @@ public class FinanceVerifyRecord {
      */
     private String type;
 
+    /** 类型名称 */
+    private String typeName;
+
     @Lob
     private String reason;
 

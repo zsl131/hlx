@@ -79,6 +79,7 @@ public class AdminIncomeController {
             income.setComeMonth(comeMonth);
             income.setComeYear(comeYear);
             income.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
+            income.setCreateTime(NormalTools.curDatetime());
             incomeService.save(income);
 
             incomeNoticeTools.notice(income); //通知

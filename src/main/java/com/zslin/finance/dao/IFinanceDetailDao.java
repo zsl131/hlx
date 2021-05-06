@@ -1,6 +1,7 @@
 package com.zslin.finance.dao;
 
 import com.zslin.basic.repository.BaseRepository;
+import com.zslin.finance.dto.FinanceDetailDto;
 import com.zslin.finance.model.FinanceDetail;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -57,4 +58,12 @@ public interface IFinanceDetailDao extends BaseRepository<FinanceDetail, Integer
     /** 获取待确认收货 */
     @Query("FROM FinanceDetail f WHERE f.confirmStatus = '1' AND f.confirmOpenid=?1")
     List<FinanceDetail> findConfirm(String openid);
+
+    /** 只汇总流程完成的数据 */
+    @Query("SELECT new com.zslin.finance.dto.FinanceDetailDto(f.username, f.userOpenid, SUM(f.totalMoney)) FROM FinanceDetail f WHERE f.voucherDay=?2 AND f.storeSn=?1 AND f.voucherStatus='2' GROUP BY f.userOpenid")
+    List<FinanceDetailDto> findDto(String storeSn, String voucherDay);
+
+    /** 只获取流程完成的数据 */
+    @Query("FROM FinanceDetail f WHERE f.storeSn=?1 AND f.voucherDay=?2 AND f.userOpenid=?3 AND f.voucherStatus='2'")
+    List<FinanceDetail> findDetail(String storeSn, String voucherDay, String openid);
 }

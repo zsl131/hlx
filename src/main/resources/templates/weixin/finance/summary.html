@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>报账汇总</title>
+    <script src="/js/jedate/jquery.jedate.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
+    <script src="/back-admin/bus/my-date.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-finance-summary.js"></script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div>
+        <input name="storeSn" th:value="${storeSn}" type="hidden"/>
+        <div class="weui-tab">
+            <div class="weui-navbar">
+                <a th:each="store:${storeList}" th:href="|/wx/finance/summary?storeSn=${store.sn}|" th:attr="storeSn=${store.sn}" th:text="${store.name}" class="store-head weui-navbar__item">
+                    选项一
+                </a>
+            </div>
+            <div class="weui-tab__panel">
+                <div class="container" style="padding-top:10px;">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">日期：</div>
+                            <input type='text' th:value="${day}" class='form-control finance-day' name="financeDay"/>
+                            <span class="input-group-addon search-btn">查询</span>
+                        </div>
+                    </div>
+                    <div>
+                        <a th:href="|/wx/finance/summary?storeSn=${storeSn}&day=${yesterday}|" th:class="'btn '+${day eq yesterday?'btn-primary':'btn-default'}">昨天</a>
+                        <a th:href="|/wx/finance/summary?storeSn=${storeSn}&day=${today}|" th:class="'btn '+${day eq today?'btn-primary':'btn-default'}">今天</a>
+                    </div>
+                </div>
+                <div class="weui-grids" style="margin-top:10px;">
+                    <a th:each="dto:${dtoList}" href="javascript:void(0)" onclick="showDetail(this)" th:attr="openid=${dto.openid}" class="weui-grid">
+                        <div class="weui-grid__icon" style="padding:0px;margin:0px;width:100%;text-align:center;">
+                            <b style="font-size:20px;margin-left:0px;width:100%: text-align:center;" th:text="${dto.money}"></b>
+                        </div>
+                        <p class="weui-grid__label" th:text="${dto.name}">收入登记</p>
+                    </a>
+                </div>
+
+                <div style="width:100%; line-height: 25px; text-align:center; padding: 18px 10px; color:#888;"><b>注意：</b>只汇总报账流程完成的数据<br/>且日期是财务审核的日期</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
