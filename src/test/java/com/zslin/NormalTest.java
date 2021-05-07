@@ -171,11 +171,6 @@ public class NormalTest {
     }
 
     @Test
-    public void test47() {
-        exportDBTools.exportDbByJDBC();
-    }
-
-    @Test
     public void test46() {
         System.out.println(config);
     }

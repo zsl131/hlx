@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<title>七牛配置管理</title>
+	<script type="text/javascript">
+		$(function() {
+			//$("#addForm").platformvalidate();
+		});
+	</script>
+	</head>
+	<body>
+		<div th:fragment="content" th:remove="tag">
+			<div class="header lighter smaller blue">
+				<h3><span class="glyphicon glyphicon-th-list"></span><i class="icon-setting"></i>&nbsp;七牛配置管理<small>&nbsp;</small></h3>
+			</div>
+
+			<form method="POST" th:object="${qiniuConfig}">
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+					  <div class="input-group-addon">accessKey：</div>
+					  <input name="accessKey" type="text" class="form-control" th:value="${qiniuConfig.accessKey}" placeholder="请输入accessKey" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">secretKey：</div>
+						<input name="secretKey" type="text" class="form-control" th:value="${qiniuConfig.secretKey}" placeholder="请输入secretKey" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">url：</div>
+						<input name="url" type="text" class="form-control" th:value="${qiniuConfig.url}" placeholder="请输入url" />
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">仓库名称：</div>
+						<input name="bucketName" type="text" class="form-control" th:value="${qiniuConfig.bucketName}" placeholder="请输入bucketName" />
+					</div>
+				</div>
+				<button type="submit" class="btn btn-primary submit-update-btn">保存设置</button>
+			</form>
+		</div>
+	</body>
+</html>

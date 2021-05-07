@@ -20,6 +20,13 @@ $(function() {
         console.log(day)
         window.location.href = "/wx/finance/summary?storeSn="+curSn+"&day="+day;
     })
+
+    var totalMoneyAll = 0;
+    $(".single-money").each(function() {
+        var money = parseFloat($(this).html());
+        totalMoneyAll += money;
+    })
+    $(".total-money").html(totalMoneyAll);
 })
 
 function showDetail(obj) {
