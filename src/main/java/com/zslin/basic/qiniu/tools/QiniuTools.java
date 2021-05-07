@@ -57,7 +57,8 @@ public class QiniuTools {
         //华南	Zone.zone2()
         //北美	Zone.zoneNa0()
         //东南亚	Zone.zoneAs0()
-        Configuration cfg = new Configuration(Region.huanan());
+//        Configuration cfg = new Configuration(Region.huanan());
+        Configuration cfg = new Configuration(Region.region0());
         //...其他参数参考类注释
         UploadManager uploadManager = new UploadManager(cfg);
         QiniuConfig config = qiniuConfigTools.getQiniuConfig();
