@@ -1,13 +1,15 @@
 var curPersonalId = 0;
 $(function() {
     var detailId = $("input[name='detailId']").val();
+    var detailTitle = $("input[name='detailTitle']").val();
+    var storeName = $("input[name='storeName']").val();
 
     $(".uploader-btn").change(function(e) {
         //console.log(e);
         var files = e.target.files;
         //console.log(files)
         for(var i=0;i<files.length; i++) {
-            uploadImage(files[i], detailId);
+            uploadImage(files[i], detailId, storeName+"："+detailTitle);
         }
     })
 
@@ -252,11 +254,12 @@ function submitApply(detailId) {
     }, "json");
 }
 
-function uploadImage(file, detailId) {
+function uploadImage(file, detailId, title) {
 //console.log(file)
     var formData = new FormData();
     formData.append("file", file);
     formData.append("objId", detailId);
+    formData.append("title", title);
     //选择文件后，需要显示提示信息
     $(".upload-remind-div").css("display", "block");
     $.ajax({
@@ -270,6 +273,8 @@ function uploadImage(file, detailId) {
         success: function(res) {
             if(res=='1') {
                 alert("上传成功"); window.location.reload();
+            } else if(res=='-5') {
+                alert("此凭证已经上传过，你太坏了，居然想重复上传"); window.location.reload();
             }
             //console.log("suc", res);
         },

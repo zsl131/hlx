@@ -30,4 +30,7 @@ public class FinanceVoucher {
     private String createTime;
 
     private Long createLong;
+
+    /** 文件md5 */
+    private String fileMd5;
 }

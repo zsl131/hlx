@@ -2,6 +2,7 @@ package com.zslin.finance.tools;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import com.zslin.basic.qiniu.tools.MyFileTools;
 import com.zslin.basic.tools.ConfigTools;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.finance.dao.IFinanceVoucherDao;
@@ -145,7 +146,13 @@ public class PDFTools {
     private Image buildImageChap(FinanceVoucher voucher) {
         try {
             float margin = 80;
-            Image image = Image.getInstance(configTools.getFilePath()+voucher.getPicPath());
+            String url = "";
+            if(MyFileTools.isRemoteFile(voucher.getPicPath())) {
+                url = voucher.getPicPath();
+            } else {
+                url = configTools.getFilePath()+voucher.getPicPath();
+            }
+            Image image = Image.getInstance(url);
             float realWidth = image.getWidth(); float realHeight = image.getHeight();
             if(realWidth>realHeight) { //横图，需要旋转
                 image.scaleToFit((chapHeight-margin) / 2f, (chapWidth-margin) / 2f);

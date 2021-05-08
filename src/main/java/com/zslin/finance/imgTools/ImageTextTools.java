@@ -20,7 +20,7 @@ public class ImageTextTools {
 
 //        graphics2D.setFont(font);
 
-        Font font = new Font("微软雅黑",Font.BOLD,18);
+        Font font = new Font("微软雅黑",Font.BOLD,30);
         FontRenderContext frc = graphics2D.getFontRenderContext();
 
 
@@ -30,11 +30,11 @@ public class ImageTextTools {
 
         graphics2D.setColor(new Color(255, 255, 255));
         graphics2D.setFont(font);
-        graphics2D.drawString(text, 10, 30);
+        graphics2D.drawString(text, 20, 60);
 
         //FontMetrics fm = sun.font.FontDesignMetrics.getMetrics(font);
 
-        Shape sha = tl.getOutline(AffineTransform.getTranslateInstance(10,30));
+        Shape sha = tl.getOutline(AffineTransform.getTranslateInstance(20,60));
 
         //graphics2D.drawString(text, 10, 100);
 

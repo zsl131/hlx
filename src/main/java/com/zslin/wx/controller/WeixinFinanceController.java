@@ -1,5 +1,9 @@
 package com.zslin.wx.controller;
 
+import com.zslin.basic.qiniu.model.QiniuConfig;
+import com.zslin.basic.qiniu.tools.MyFileTools;
+import com.zslin.basic.qiniu.tools.QiniuConfigTools;
+import com.zslin.basic.qiniu.tools.QiniuTools;
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.repository.SpecificationOperator;
@@ -35,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +81,12 @@ public class WeixinFinanceController {
 
     @Autowired
     private VerifyRecordTools verifyRecordTools;
+
+    @Autowired
+    private QiniuTools qiniuTools;
+
+    @Autowired
+    private QiniuConfigTools qiniuConfigTools;
 
     private static final String PATH_PRE = "finance";
 
@@ -310,7 +321,7 @@ public class WeixinFinanceController {
     }
 
     @PostMapping(value = "upload")
-    public @ResponseBody String upload(HttpServletRequest request, String objId, @RequestParam("file") MultipartFile[] files) {
+    public @ResponseBody String upload(HttpServletRequest request, String objId, String title, @RequestParam("file") MultipartFile[] files) {
         if(files!=null && files.length>=1) {
             BufferedOutputStream bw = null;
             try {
@@ -324,10 +335,29 @@ public class WeixinFinanceController {
                     fv.setCreateTime(NormalTools.curDatetime());
                     fv.setCreateLong(System.currentTimeMillis());
                     fv.setDetailId(Integer.parseInt(objId));
-                    fv.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), "/").replaceAll("\\\\", "/"));
+                    //fv.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), "/").replaceAll("\\\\", "/"));
                     FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
-                    Thumbnails.of(outFile).size(1200, 1200).toFile(outFile); //修改尺寸
-                    try { ImageTextTools.writeText(outFile.getAbsolutePath(), "ID:"+objId); } catch (Exception e) { }
+                    Thumbnails.of(outFile).size(1300, 1300).toFile(outFile); //修改尺寸
+
+                    String md5 = MyFileTools.getFileMd5(outFile); //文件MD5值
+                    if(financeVoucherDao.findByMd5(md5)!=null) {
+                        outFile.deleteOnExit();
+                        outFile.delete();
+                        return "-5"; //表示md5已经存在
+                    }
+                    fv.setFileMd5(md5);
+
+                    try { ImageTextTools.writeText(outFile.getAbsolutePath(), "ID:"+objId+"（"+title+"）"); } catch (Exception e) { }
+
+                    QiniuConfig qiniuConfig = qiniuConfigTools.getQiniuConfig();
+                    String key = "voucher_"+objId+"_"+System.currentTimeMillis()+ MyFileTools.getFileType(outFile.getName());
+                    String url = qiniuConfig.getUrl() + "/" + key;
+                    FileInputStream fis = new FileInputStream(outFile);
+                    qiniuTools.upload(fis, key);
+                    fv.setPicPath(url);
+
+                    outFile.deleteOnExit();
+                    outFile.delete();
 
                     financeVoucherDao.save(fv);
                 }
@@ -605,9 +635,14 @@ public class WeixinFinanceController {
         FinanceVoucher fv = financeVoucherDao.findOne(id);
 //        System.out.println(fv.getPicPath());
 //        System.out.println(configTools.getFilePath());
-        File f = new File(configTools.getFilePath() + fv.getPicPath());
+        String url = fv.getPicPath();
+        if(MyFileTools.isRemoteFile(url)) {
+            qiniuTools.deleteFile(MyFileTools.getFileName(url));
+        } else {
+            File f = new File(configTools.getFilePath() + url);
 //        System.out.println(f.exists());
-        f.delete();
+            f.delete();
+        }
         financeVoucherDao.delete(fv);
         return "1";
     }

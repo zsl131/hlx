@@ -19,6 +19,8 @@
             <h3><i class="fa fa-plus"></i>&nbsp;报账申请-详情</h3>
         </div>
         <input th:value="${detail.id}" type="hidden" name="detailId"/>
+        <input th:value="${detail.title}" type="hidden" name="detailTitle"/>
+        <input th:value="${detail.storeName}" type="hidden" name="storeName"/>
 
         <div>
             <div th:if="${(detail.status eq '0' or detail.status eq '3') and detail.userOpenid eq openid}" class="alert alert-danger">请认真上传凭证信息，照片需要【竖直拍摄】！</div>

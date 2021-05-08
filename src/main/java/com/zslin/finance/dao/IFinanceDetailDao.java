@@ -12,6 +12,10 @@ import java.util.List;
 
 public interface IFinanceDetailDao extends BaseRepository<FinanceDetail, Integer>, JpaSpecificationExecutor<FinanceDetail> {
 
+    /** 获取title用于加在凭证上 */
+    @Query("SELECT f.title FROM FinanceDetail f WHERE f.id=?1")
+    String findTitle(Integer objId);
+
     @Query("FROM FinanceDetail f WHERE f.id IN (?1)")
     List<FinanceDetail> findByIds(Integer[] ids);
 

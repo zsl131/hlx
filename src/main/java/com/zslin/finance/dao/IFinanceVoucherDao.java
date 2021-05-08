@@ -13,4 +13,8 @@ public interface IFinanceVoucherDao extends BaseRepository<FinanceVoucher, Integ
 
     @Query("FROM FinanceVoucher f WHERE f.detailId IN (?1)")
     List<FinanceVoucher> findByIds(Integer [] ids);
+
+    /** 通过MD5获取对象 */
+    @Query("FROM FinanceVoucher f WHERE f.fileMd5=?1")
+    FinanceVoucher findByMd5(String md5);
 }

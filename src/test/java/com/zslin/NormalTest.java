@@ -4,6 +4,8 @@ import com.zslin.admin.dto.MyTicketDto;
 import com.zslin.basic.db.dto.DBConfig;
 import com.zslin.basic.db.tools.ExportDBTools;
 import com.zslin.basic.model.AppConfig;
+import com.zslin.basic.qiniu.tools.MyFileTools;
+import com.zslin.basic.qiniu.tools.QiniuTools;
 import com.zslin.basic.service.IAppConfigService;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.tools.SecurityUtil;
@@ -116,6 +118,30 @@ public class NormalTest {
 
     @Autowired
     private WaitTableNoTools waitTableNoTools;
+
+    @Autowired
+    private QiniuTools qiniuTools;
+
+    @Test
+    public void test53() {
+        String str = "D:\\temp\\upload\\hlx\\finance\\fc8ceec6-a965-4d17-8d2d-2cdc4c675f07.jpg";
+        File f = new File(str);
+        String md5 = MyFileTools.getFileMd5(f); //文件MD5值
+        System.out.println(md5);
+        f.deleteOnExit();
+        boolean deRes = f.delete();
+        System.out.println("-------------->"+deRes);
+    }
+
+    @Test
+    public void test52() {
+        String url = "http://img.zslin.com/voucher_21.jpg";
+        System.out.println(url.substring(url.lastIndexOf("/")));
+        System.out.println(MyFileTools.getFileName(url));
+
+        boolean res = qiniuTools.deleteFile(MyFileTools.getFileName(url));
+        System.out.println(res+"===================");
+    }
 
     @Test
     public void test51() {

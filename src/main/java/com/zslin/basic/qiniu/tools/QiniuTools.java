@@ -29,7 +29,7 @@ public class QiniuTools {
     private QiniuConfigTools qiniuConfigTools;
 
     public boolean deleteFile(String key) {
-        Configuration cfg = new Configuration(Region.huanan());
+        Configuration cfg = new Configuration(Region.region0());
         QiniuConfig config = qiniuConfigTools.getQiniuConfig();
         Auth auth = Auth.create(config.getAccessKey(), config.getSecretKey());
         BucketManager bucketManager = new BucketManager(auth, cfg);
@@ -37,6 +37,7 @@ public class QiniuTools {
             bucketManager.delete(config.getBucketName(), key);
             return true;
         } catch (Exception ex) {
+            ex.printStackTrace();
             /*//如果遇到异常，说明删除失败
             System.err.println(ex.code());
             System.err.println(ex.response.toString());*/
