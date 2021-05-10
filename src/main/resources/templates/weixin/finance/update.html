@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>报账申请</title>
+    <script src="/js/jedate/jquery.jedate.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-finance.css"/>
+    <script type="text/javascript" src="/back-admin/bus/my-date.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-finance.js"></script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="container">
+        <div class="header lighter smaller blue">
+            <h3><i class="fa fa-plus"></i>&nbsp;报账申请-修改</h3>
+        </div>
+
+        <form method="POST" th:object="${detail}" id="dataForm" onsubmit="return checkForm()" enctype="multipart/form-data">
+            <input name="id" th:value="${detail.id}" type="hidden"/>
+            <input name="storeName" th:value="${detail.storeName}" type="hidden"/>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">类别</div>
+                    <div class="category-div">
+                        <input name="cateName" th:value="${detail.cateName}" autocomplete="off" class="form-control" placeholder="选择类别"/>
+                        <input name="cateId" th:value="${detail.cateId}" type="hidden"/>
+                        <div class="show-category"></div>
+                        <div class="all-category">
+                            <span th:each="cate:${categoryList}" th:attr="cateId=${cate.id}, firstSpell=${cate.firstSpell}, longSpell=${cate.longSpell}" th:text="${cate.name}" class="single-cate"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">名称</div>
+                    <div class="category-div">
+                        <input name="title" th:value="${detail.title}" class="form-control" placeholder="账目名称，如：大米"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">单价</div>
+                    <div class="category-div">
+                        <input name="price" th:value="${detail.price}" onkeyup="buildMoney()" type="number" step="0.01" class="form-control" placeholder="单价"/>
+                    </div>
+
+                    <div class="input-group-addon">数量</div>
+                    <div class="category-div">
+                        <input name="amount" th:value="${detail.amount}" onkeyup="buildMoney()" step="0.01" type="number" class="form-control" placeholder="数量"/>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="token" value="${session.token}"/>
+            <button type="submit" class="btn btn-primary submit-btn">确定提交</button>
+            <span style="padding-left: 10px;">单笔合计：<b class="total-money" style="color:#F00" th:text="${detail.totalMoney}">0</b>&nbsp;元</span>
+        </form>
+
+        <input type="hidden" name="checkSign" value="0"/>
+
+    </div>
+</div>
+</body>
+</html>

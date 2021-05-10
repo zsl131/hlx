@@ -135,6 +135,7 @@
                 <!-- 报账人自己操作 -->
                 <div class="weui-form-preview__ft" th:if="${(detail.status eq '0' or detail.status eq '3' or detail.confirmStatus eq '3' or detail.voucherStatus eq '3') and detail.userOpenid eq openid}">
                     <a class="weui-form-preview__btn weui-form-preview__btn_default cancel-btn" href="javascript:;">取消报账</a>
+                    <a class="weui-form-preview__btn weui-form-preview__btn_default" th:href="|/wx/finance/update?id=${detail.id}|">修改</a>
                     <a href="javascript:;" class="weui-form-preview__btn weui-form-preview__btn_primary submit-apply-btn">提交审核</a>
                 </div>
 

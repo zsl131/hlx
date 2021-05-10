@@ -43,14 +43,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.ResourceUtils;
 import sun.misc.BASE64Decoder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -123,6 +122,19 @@ public class NormalTest {
     private QiniuTools qiniuTools;
 
     @Test
+    public void test55() throws Exception {
+        File tempFile =  ResourceUtils.getFile("classpath:temp/temp.jpg");
+        InputStream is =new FileInputStream(tempFile);
+    }
+
+    @Test
+     public void test54() throws Exception {
+         String url = "https://img.zslin.com/123456.jpg";
+         String str = "这里是水印";
+         ImageTextTools.writeText(url, str);
+     }
+
+   @Test
     public void test53() {
         String str = "D:\\temp\\upload\\hlx\\finance\\fc8ceec6-a965-4d17-8d2d-2cdc4c675f07.jpg";
         File f = new File(str);

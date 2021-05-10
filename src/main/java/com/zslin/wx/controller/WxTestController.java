@@ -1,5 +1,7 @@
 package com.zslin.wx.controller;
 
+import com.zslin.basic.qiniu.tools.QiniuTools;
+import com.zslin.basic.tools.ConfigTools;
 import com.zslin.wx.tools.QrTools;
 import com.zslin.wx.tools.SessionTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,57 @@ public class WxTestController {
 
     @Autowired
     private QrTools qrTools;
+
+    @Autowired
+    private QiniuTools qiniuTools;
+
+    @Autowired
+    private ConfigTools configTools;
+
+    /*@GetMapping(value = "image")
+    public @ResponseBody String image(String text, Integer x, Integer y, String font) {
+        try {
+            x = x==null?10:x;
+            y = y==null?10:y;
+            font = font==null?"微软雅黑":font;
+            text = text==null?"测试水印":text;
+//            ClassPathResource classPathResource = new ClassPathResource("classpath:temp.jpg");
+            File tempFile =  ResourceUtils.getFile("classpath:temp/temp.jpg");
+            InputStream is =new FileInputStream(tempFile);
+            String path = configTools.getFilePath("temp") + "temp.jpg";
+            FileOutputStream fos = new FileOutputStream(new File(path));
+            byte[] buffer = new byte[1024];
+            int len;
+
+            while ((len = is.read(buffer)) > 0) {
+                fos.write(buffer, 0, len);
+            }
+            fos.flush();
+            is.close();
+            fos.close();
+            ImageTextTools.writeText(path, text, font);
+            FileInputStream fis = new FileInputStream(new File(path));
+            qiniuTools.upload(fis, "temp-"+System.currentTimeMillis()+ MyFileTools.getFileType(path));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "finished";
+    }*/
+
+    /** 查看系统字体，用于给图片加水印，防止中文乱码 */
+    //@GetMapping(value = "showFont")
+    /*public @ResponseBody String showFont() {
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
+        String[] fontFamilies = ge.getAvailableFontFamilyNames();
+
+        StringBuffer sb = new StringBuffer();
+        for (String s : fontFamilies) {
+            //System.out.println(s);
+            sb.append(s).append("\n\n");
+        }
+        return sb.toString();
+    }*/
 
     @GetMapping(value = "index")
     public String index(HttpServletRequest request) {

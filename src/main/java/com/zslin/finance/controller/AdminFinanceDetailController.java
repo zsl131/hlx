@@ -7,14 +7,14 @@ import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.finance.dao.IFinanceCategoryDao;
 import com.zslin.finance.dao.IFinanceDetailDao;
 import com.zslin.finance.model.FinanceDetail;
+import com.zslin.finance.tools.FinanceCancelTools;
 import com.zslin.finance.tools.PDFTools;
 import com.zslin.multi.dao.IStoreDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +38,9 @@ public class AdminFinanceDetailController {
 
     @Autowired
     private PDFTools pdfTools;
+
+    @Autowired
+    private FinanceCancelTools financeCancelTools;
 
     /** 生成PDF文件 */
     @GetMapping(value = "printDetail")
@@ -72,5 +75,19 @@ public class AdminFinanceDetailController {
         model.addAttribute("categoryList", financeCategoryDao.findAll());
         model.addAttribute("storeList", storeDao.findByStatus("1"));
         return "admin/finance/financeDetail/list";
+    }
+
+    @AdminAuth(name="删除食品", orderNum=4, icon = "fa fa-remove")
+    @RequestMapping(value="delete/{id}", method= RequestMethod.POST)
+    public @ResponseBody
+    String delete(@PathVariable Integer id) {
+        try {
+            FinanceDetail f = financeDetailDao.findOne(id);
+            financeCancelTools.cancel(id); //处理凭证
+            financeDetailDao.delete(f);
+            return "1";
+        } catch (Exception e) {
+            return "0";
+        }
     }
 }

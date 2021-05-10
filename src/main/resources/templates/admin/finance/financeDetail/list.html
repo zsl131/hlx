@@ -99,6 +99,9 @@
                                th:if="${obj.voucherStatus eq '2'}"
 						/>
                         <span th:unless="${obj.voucherStatus eq '2'}" title="当前状态不可打印">-</span>
+						<a th:if="${obj.status eq '-1'}" class="delete-obj-href red auth" sn="AdminFinanceDetailController.delete" th:title="'此操作不可逆，确定删除【'+${obj.title}+'】吗？'" th:href="'/admin/financeDetail/delete/'+${obj.id}">
+							<i class="fa fa-remove"></i>
+						</a>
 					</td>
 				</tr>
 				<tfoot>

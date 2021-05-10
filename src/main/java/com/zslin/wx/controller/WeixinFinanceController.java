@@ -19,6 +19,7 @@ import com.zslin.finance.dao.IFinanceVoucherDao;
 import com.zslin.finance.dto.FinanceDetailDto;
 import com.zslin.finance.imgTools.ImageTextTools;
 import com.zslin.finance.model.*;
+import com.zslin.finance.tools.FinanceCancelTools;
 import com.zslin.finance.tools.SignImageTools;
 import com.zslin.finance.tools.VerifyRecordTools;
 import com.zslin.multi.dao.IStoreDao;
@@ -87,6 +88,9 @@ public class WeixinFinanceController {
 
     @Autowired
     private QiniuConfigTools qiniuConfigTools;
+
+    @Autowired
+    private FinanceCancelTools financeCancelTools;
 
     private static final String PATH_PRE = "finance";
 
@@ -392,10 +396,47 @@ public class WeixinFinanceController {
         return "1";
     }
 
+    /** 修改 */
+    @GetMapping(value = "update")
+    public String update(Model model, Integer id, HttpServletRequest request) {
+        FinanceDetail detail = financeDetailDao.findOne(id);
+        String openid = SessionTools.getOpenid(request);
+        if(!openid.equals(detail.getUserOpenid())) {return "redirect:/wx/finance/show?id="+id;}
+
+        model.addAttribute("categoryList", financeCategoryDao.findAll());
+        model.addAttribute("detail", detail);
+        return "weixin/finance/update";
+    }
+
+    @PostMapping(value = "update")
+    public String update(FinanceDetail detail, HttpServletRequest request) {
+        FinanceDetail oldD = financeDetailDao.findOne(detail.getId());
+        String status = oldD.getStatus();
+        String openid = SessionTools.getOpenid(request);
+        //System.out.println("------->"+openid);
+        //System.out.println("======>"+oldD.getUserOpenid());
+
+        if(!openid.equals(oldD.getUserOpenid())) {return "redirect:/wx/finance/show?id="+detail.getId();}
+        if("0".equals(status) || "1".equals(status) || "3".equals(status)) {
+            //可以修改
+            oldD.setPrice(detail.getPrice());
+            oldD.setAmount(detail.getAmount());
+            oldD.setTotalMoney(NormalTools.numberPoint(detail.getPrice()*detail.getAmount(), 2));
+            oldD.setTitle(detail.getTitle());
+            oldD.setCateId(detail.getCateId());
+            oldD.setCateName(detail.getCateName());
+            financeDetailDao.save(oldD);
+        } else {
+
+        }
+        return "redirect:/wx/finance/show?id="+detail.getId();
+    }
+
     /** 取消申请 */
     @PostMapping(value = "cancel")
     public @ResponseBody String cancel(Integer id) {
         financeDetailDao.cancel(id);
+        financeCancelTools.cancel(id); //处理凭证
         return "1";
     }
 

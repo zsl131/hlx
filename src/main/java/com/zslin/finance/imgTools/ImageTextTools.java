@@ -13,14 +13,14 @@ import java.io.File;
  */
 public class ImageTextTools {
 
-    public static void writeText(String path, String text) throws Exception {
+    public static void writeText(String path, String text, String fontName) throws Exception {
         File file = new File(path);
         BufferedImage image = ImageIO.read(file);
         Graphics2D graphics2D = image.createGraphics();
 
 //        graphics2D.setFont(font);
 
-        Font font = new Font("微软雅黑",Font.BOLD,30);
+        Font font = new Font(fontName,Font.BOLD,30); //防止中文乱码
         FontRenderContext frc = graphics2D.getFontRenderContext();
 
 
@@ -46,6 +46,10 @@ public class ImageTextTools {
         /*JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(new FileOutputStream(file));
         encoder.encode(image);*/
         ImageIO.write(image, buildImageType(path), file);
+    }
+
+    public static void writeText(String path, String text) throws Exception {
+        writeText(path, text, "微软雅黑");
     }
 
     /** 获取图片类型 */
