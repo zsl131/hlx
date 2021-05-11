@@ -8,6 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>报账-未完成列表</title>
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-finance.css"/>
+    <script type="text/javascript" src="/weixin/weixin-finance-end.js"></script>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
@@ -57,6 +58,7 @@
                         <div class="fin-footer-left">
                             <b th:text="${obj.username}"></b>申请于<span th:text="${obj.createDay}"></span>
                         </div>
+                        <div class="fin-footer-right" th:if="${obj.status eq '1' or obj.confirmStatus eq '1' or obj.voucherStatus eq '1'}"><a class="btn btn-link notice-btn" th:attr="objId=${obj.id}">再次提醒</a></div>
                         <div class="fin-footer-right"><a class="btn btn-link" th:href="'/wx/finance/show?id='+${obj.id}">详情</a></div>
                     </div>
                 </div>

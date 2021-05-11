@@ -4,12 +4,12 @@
     <body>
         <div th:fragment="content">
             <div class="area-title" style="height: auto;"><i class="fa fa-gavel"></i> 最新订单
-                <p style="line-height: 22px;">汉丽轩（今：<b th:text="${ordersCountToday}"></b>，昨：<b th:text="${ordersCountYestoday}"></b>，共：<b th:text="${ordersCount}"></b> 人次）</p>
-                <p style="line-height: 22px;">签王（今：<b th:text="${ordersCountToday_qwzw}"></b>，昨：<b th:text="${ordersCountYestoday_qwzw}"></b>，共：<b th:text="${ordersCount_qwzw}"></b> 人次）</p>
+                <p style="line-height: 22px;">渔喜渔川（今：<b th:text="${ordersCountToday}"></b>，昨：<b th:text="${ordersCountYestoday}"></b>，共：<b th:text="${ordersCount}"></b> 人次）</p>
+                <p style="line-height: 22px;">签王之王（今：<b th:text="${ordersCountToday_qwzw}"></b>，昨：<b th:text="${ordersCountYestoday_qwzw}"></b>，共：<b th:text="${ordersCount_qwzw}"></b> 人次）</p>
             </div>
             <div class="orders-area">
             <div class="single-order" th:each="orders : ${ordersList}">
-                【<span th:text="${(orders.storeSn eq null or orders.storeSn eq '')?'汉丽轩':orders.storeName}"></span>】
+                【<span th:text="${(orders.storeSn eq null or orders.storeSn eq '')?'渔喜渔川':orders.storeName}"></span>】
                 <span th:remove="tag" th:switch="${orders.type}">
                     <span th:case="1">店内</span>
                     <span th:case="4">店内</span>

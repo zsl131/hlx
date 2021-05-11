@@ -86,71 +86,12 @@
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon">金额：</div>
-                    <input name="cash" type="text" class="form-control money-input" th:value="${income.cash}" placeholder="单位元" />
+                    <input name="cash" type="number" step="0.01" class="form-control money-input" th:value="${income.cash}" placeholder="单位元" />
 
                     <div class="input-group-addon">小计：</div>
                     <input name="totalMoney" type="text" disabled="disabled" style="font-weight:bold; color:#F00" class="form-control" th:value="${income.totalMoney}" placeholder="单位元" />
                 </div>
             </div>
-
-            <!--<div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-addon">现金：</div>
-                    <input name="cash" type="text" class="form-control money-input" th:value="${income.cash}" placeholder="单位元" />
-
-                    <div class="input-group-addon">微信：</div>
-                    <input name="weixin" type="text" class="form-control money-input" th:value="${income.weixin}" placeholder="单位元" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-addon">支付宝：</div>
-                    <input name="alipay" type="text" class="form-control money-input" th:value="${income.alipay}" placeholder="单位元" />
-
-                    <div class="input-group-addon">美团：</div>
-                    <input name="meituan" type="text" class="form-control money-input" th:value="${income.meituan}" placeholder="单位元" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-addon">商场：</div>
-                    <input name="market" type="text" class="form-control money-input" th:value="${income.market}" placeholder="单位元" />
-
-                    <div class="input-group-addon">飞凡：</div>
-                    <input name="ffan" type="text" class="form-control money-input" th:value="${income.ffan}" placeholder="单位元" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-addon">会员：</div>
-                    <input name="member" type="text" class="form-control money-input" th:value="${income.member}" placeholder="单位元" />
-
-                    <div class="input-group-addon">其他：</div>
-                    <input name="other" type="text" class="form-control money-input" th:value="${income.other}" placeholder="单位元" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-addon">午餐券：</div>
-                    <input name="noonTicket" type="text" class="form-control" th:value="${income.noonTicket}" placeholder="单位张" />
-
-                    <div class="input-group-addon">晚餐券：</div>
-                    <input name="nightTicket" type="text" class="form-control" th:value="${income.nightTicket}" placeholder="单位张" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-addon">10元券：</div>
-                    <input name="tenTicket" type="text" class="form-control" th:value="${income.tenTicket}" placeholder="单位元" />
-
-                    <div class="input-group-addon">小计：</div>
-                    <input name="totalMoney" type="text" disabled="disabled" style="font-weight:bold; color:#F00" class="form-control" th:value="${income.totalMoney}" placeholder="单位元" />
-                </div>
-            </div>-->
 
             <input type="hidden" name="token" value="${session.token}"/>
             <button type="submit" class="btn btn-primary">确定提交</button>

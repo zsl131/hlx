@@ -59,7 +59,8 @@ public class WeixinIncomeController {
     public String list(Model model, Integer page, String storeSn, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         Account a = accountService.findByOpenid(openid);
-        if(a!=null && AccountTools.isPartner(a.getType())) { //只有股东才可以看
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        if((a!=null && AccountTools.isPartner(a.getType())) || personal!=null) { //只有股东或财务人员才可以看
             String month = request.getParameter("filter_comeMonth");
             storeSn = (storeSn ==null || "".equals(storeSn.trim()))? ClientFileTools.HLX_SN:storeSn;
             Page<Income> datas = incomeService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
@@ -87,7 +88,8 @@ public class WeixinIncomeController {
     public String show(Model model, Integer id, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         Account a = accountService.findByOpenid(openid);
-        if(a!=null && AccountTools.isPartner(a.getType())) { //只有股东才可以看
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        if((a!=null && AccountTools.isPartner(a.getType())) || personal!=null) { //只有股东才可以看
             Income income = incomeService.findOne(id);
             model.addAttribute("income", income);
             String month = income.getComeMonth();
@@ -145,8 +147,21 @@ public class WeixinIncomeController {
         } catch (Exception e) {
 //            e.printStackTrace();
         }
-
-        incomeService.save(income);
+        if("1".equals(income.getType())) { //如果是营业收入，需要判断是否已经添加
+            Income oldIn = incomeService.findByComeDay(income.getStoreSn(), comeDay, income.getType());
+            if(oldIn!=null) {
+                oldIn.setDeskCount(income.getDeskCount());
+                oldIn.setPeopleCount(income.getPeopleCount());
+                oldIn.setTotalMoney(income.getTotalMoney());
+                oldIn.setCash(income.getCash());
+                oldIn.setOther(income.getOther());
+                incomeService.save(oldIn);
+            } else {
+                incomeService.save(income);
+            }
+        } else {
+            incomeService.save(income);
+        }
 
 //        incomeNoticeTools.notice(income); //通知
         return "redirect:/wx/income/list";

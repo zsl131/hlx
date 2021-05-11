@@ -291,7 +291,7 @@ public class ClientSimpleProcessHandler {
         try {storeName = jsonObj.getString("storeName"); } catch (Exception e) { }
         if(storeName==null || "".equals(storeName.trim())) {storeName = ClientFileTools.HLX_NAME; }
 
-        Income income = incomeService.findByComeDay(sn, day);
+        Income income = incomeService.findByComeDay(sn, day, "1");
         if(income==null) {
             income = new Income();
             income.setComeDay(day);
@@ -318,6 +318,17 @@ public class ClientSimpleProcessHandler {
         } else if(income!=null && "1".equalsIgnoreCase(income.getFromClient())) {
             income.setCash(money);
             income.setTotalMoney((double) money);
+
+            try {
+                income.setPeopleCount(jsonObj.getInt("peopleCount"));
+            } catch (Exception e) {
+            }
+            income.setOther(extraMoney);
+            try {
+                income.setDeskCount(jsonObj.getInt("deskCount"));
+            } catch (Exception e) {
+                // e.printStackTrace();
+            }
         }
         incomeService.save(income);
     }

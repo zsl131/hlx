@@ -77,7 +77,7 @@ public class HlxTools {
         String spe = "\\n";
 
         Integer sum = 0;
-        Income income = incomeService.findByComeDay(storeSn, NormalTools.curDate("yyyyMMdd"));
+        Income income = incomeService.findByComeDay(storeSn, NormalTools.curDate("yyyyMMdd"), "1");
         if(income!=null) { //先获取是否登记
             sum = income.getPeopleCount();
         }
@@ -155,7 +155,7 @@ public class HlxTools {
             Integer count3 = hlxTicketService.queryByDay(storeSn, curDay);
             Integer count4 = hlxTicketService.queryWriteOffCount(storeSn, curDay);
 
-            Income income = incomeService.findByComeDay(storeSn, day);
+            Income income = incomeService.findByComeDay(storeSn, day, "1");
             if(income==null) {
                 sb.append("店铺名称：").append(buildStoreName(storeSn)).append(spe)
                         .append("查询日期：").append(day).append(spe)
