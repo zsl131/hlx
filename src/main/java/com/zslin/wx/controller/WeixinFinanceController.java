@@ -169,10 +169,53 @@ public class WeixinFinanceController {
         return "weixin/finance/summary";
     }
 
+    /** 汇总-按月份 */
+    @GetMapping(value = "summaryByMonth")
+    public String summaryByMonth(Model model, String month, String storeSn, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        if(personal==null) {
+            return "redirect:/wx/account/me";
+        }
+
+        List<Store> storeList = null;
+        if(personal==null || personal.getStoreSn()==null || "".equals(personal.getStoreSn())) {
+            storeList = storeDao.findByStatus("1");
+        } else {
+            storeList = new ArrayList<>();
+            Store s = new Store();
+            s.setName(personal.getStoreName());
+            s.setSn(personal.getStoreSn());
+            storeList.add(s);
+        }
+        storeSn = (storeSn==null || "".equals(storeSn.trim()))?storeList.get(0).getSn():storeSn;
+        month = (month==null || "".equals(month.trim()))?NormalTools.curDate("yyyy-MM"):month;
+
+        model.addAttribute("storeList", storeList);
+        List<FinanceDetailDto> dtoList = financeDetailDao.findDtoByMonth(storeSn, month);
+        //System.out.println("=================================="+dtoList);
+        model.addAttribute("dtoList", dtoList);
+        model.addAttribute("storeSn", storeSn);
+        model.addAttribute("month", month);
+        model.addAttribute("thisMonth", NormalTools.curDate("yyyy-MM"));
+        model.addAttribute("preMonth", DateTools.plusMonth(-1, "yyyy-MM"));
+
+        return "weixin/finance/summaryByMonth";
+    }
+
     /** 获取对应人员流程已完成的数据 */
     @PostMapping(value = "queryDetail")
     public @ResponseBody List<FinanceDetail> queryDetail(String day, String storeSn, String openid, HttpServletRequest request) {
         List<FinanceDetail> detailList = financeDetailDao.findDetail(storeSn, day, openid);
+        return detailList;
+    }
+
+    /** 获取对应人员流程已完成的数据 */
+    @PostMapping(value = "queryDetailByMonth")
+    public @ResponseBody List<FinanceDetail> queryDetailByMonth(String month, String storeSn, String cateId, HttpServletRequest request) {
+        //System.out.println("month->"+month+", storeSn-->"+storeSn+",--->cateId---->"+cateId);
+        List<FinanceDetail> detailList = financeDetailDao.findDetailByMonth(storeSn, month, cateId);
         return detailList;
     }
 

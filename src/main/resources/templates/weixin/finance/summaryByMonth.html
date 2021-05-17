@@ -6,7 +6,7 @@
       layout:decorator="fragments/weixinModel">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>报账汇总</title>
+    <title>报账汇总-月份</title>
     <script src="/js/jedate/jquery.jedate.min.js"></script>
     <link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
     <script src="/back-admin/bus/my-date.js"></script>
@@ -19,7 +19,7 @@
         <input name="storeSn" th:value="${storeSn}" type="hidden"/>
         <div class="weui-tab">
             <div class="weui-navbar">
-                <a th:each="store:${storeList}" th:href="|/wx/finance/summary?storeSn=${store.sn}|" th:attr="storeSn=${store.sn}" th:text="${store.name}" class="store-head weui-navbar__item">
+                <a th:each="store:${storeList}" th:href="|/wx/finance/summaryByMonth?storeSn=${store.sn}|" th:attr="storeSn=${store.sn}" th:text="${store.name}" class="store-head weui-navbar__item">
                     选项一
                 </a>
             </div>
@@ -27,20 +27,20 @@
                 <div class="container" style="padding-top:10px;">
                     <div class="form-group">
                         <div class="input-group">
-                            <input name="byMonth" value="0" type="hidden"/>
+                            <input name="byMonth" value="1" type="hidden"/>
                             <div class="input-group-addon">日期：</div>
-                            <input type='text' th:value="${day}" class='form-control finance-day' name="financeDay"/>
+                            <input type='text' th:value="${month}" class='form-control finance-day' name="financeDay"/>
                             <span class="input-group-addon search-btn">查询</span>
                         </div>
                     </div>
                     <div>
-                        <a th:href="|/wx/finance/summary?storeSn=${storeSn}&day=${yesterday}|" th:class="'btn '+${day eq yesterday?'btn-primary':'btn-default'}">昨天</a>
-                        <a th:href="|/wx/finance/summary?storeSn=${storeSn}&day=${today}|" th:class="'btn '+${day eq today?'btn-primary':'btn-default'}">今天</a>
+                        <a th:href="|/wx/finance/summaryByMonth?storeSn=${storeSn}&month=${preMonth}|" th:class="'btn '+${month eq preMonth?'btn-primary':'btn-default'}">上月</a>
+                        <a th:href="|/wx/finance/summaryByMonth?storeSn=${storeSn}&month=${thisMonth}|" th:class="'btn '+${month eq thisMonth?'btn-primary':'btn-default'}">本月</a>
                         <span>合计：<b class="total-money" style="color:#F00;">0</b> 元</span>
                     </div>
                 </div>
                 <div class="weui-grids" style="margin-top:10px;">
-                    <a th:each="dto:${dtoList}" href="javascript:void(0)" onclick="showDetail(this)" th:attr="openid=${dto.openid}" class="weui-grid">
+                    <a th:each="dto:${dtoList}" href="javascript:void(0)" onclick="showDetailByMonth(this)" th:attr="cateId=${dto.openid}" class="weui-grid">
                         <div class="weui-grid__icon" style="padding:0px;margin:0px;width:100%;text-align:center;">
                             <b style="font-size:20px;margin-left:0px;width:100%: text-align:center;" class="single-money" th:text="${#numbers.formatDecimal(dto.money, 0, 2)}"></b>
                         </div>

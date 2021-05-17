@@ -8,6 +8,7 @@ $(function() {
                 if("1" == res) {showDialog("已经成功提醒，不要重复提醒哦！", "操作提示");}
                 else if("0" == res) {showDialog("当前状态，不适合提醒哦！", "操作提示");}
             }, "json");
+            $(dialog).remove();
         });
     });
 });

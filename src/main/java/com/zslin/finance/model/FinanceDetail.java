@@ -58,6 +58,9 @@ public class FinanceDetail {
     /** 账目名称 */
     private String title;
 
+    /** 指定财务日期 */
+    private String targetDay;
+
     private String createDay;
 
     private String createTime;

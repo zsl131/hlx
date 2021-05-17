@@ -67,7 +67,14 @@ public interface IFinanceDetailDao extends BaseRepository<FinanceDetail, Integer
     @Query("SELECT new com.zslin.finance.dto.FinanceDetailDto(f.username, f.userOpenid, SUM(f.totalMoney)) FROM FinanceDetail f WHERE f.voucherDay=?2 AND f.storeSn=?1 AND f.voucherStatus='2' GROUP BY f.userOpenid")
     List<FinanceDetailDto> findDto(String storeSn, String voucherDay);
 
+    /** 只汇总流程完成的数据 */
+    @Query("SELECT new com.zslin.finance.dto.FinanceDetailDto(f.cateName, f.cateId, SUM(f.totalMoney)) FROM FinanceDetail f WHERE f.voucherDay LIKE ?2% AND f.storeSn=?1 AND f.voucherStatus='2' GROUP BY f.cateId")
+    List<FinanceDetailDto> findDtoByMonth(String storeSn, String voucherMonth);
+
     /** 只获取流程完成的数据 */
     @Query("FROM FinanceDetail f WHERE f.storeSn=?1 AND f.voucherDay=?2 AND f.userOpenid=?3 AND f.voucherStatus='2'")
     List<FinanceDetail> findDetail(String storeSn, String voucherDay, String openid);
+
+    @Query("FROM FinanceDetail f WHERE f.storeSn=?1 AND f.voucherDay LIKE ?2% AND f.cateId=?3 AND f.voucherStatus='2'")
+    List<FinanceDetail> findDetailByMonth(String storeSn, String voucherMonth, String cateId);
 }

@@ -16,6 +16,12 @@ public class DateTools {
         return cal.getTime();
     }
 
+    public static Date plusMonth(Integer month) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, month);
+        return cal.getTime();
+    }
+
     /**
      *
      * @param days
@@ -25,6 +31,13 @@ public class DateTools {
     public static String plusDay(Integer days, String pattern) {
         Date date = plusDay(days);
         if(pattern==null || "".equalsIgnoreCase(pattern)) {pattern = "yyyy-MM-dd";}
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        return sdf.format(date);
+    }
+
+    public static String plusMonth(Integer month, String pattern) {
+        Date date = plusMonth(month);
+        if(pattern==null || "".equalsIgnoreCase(pattern)) {pattern = "yyyy-MM";}
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         return sdf.format(date);
     }
