@@ -102,4 +102,9 @@ public class AccountTools {
 
     /** 钟述林的OPENID */
     public static String defaultOwnAdmin() {return "o_TZkwbz0pzuCTmrWqMGNHriMHTo";}
+
+    /** 判断是否是我的OPENID */
+    public static boolean isOwnAdmin(String openid) {
+        return openid.equals(defaultOwnAdmin());
+    }
 }

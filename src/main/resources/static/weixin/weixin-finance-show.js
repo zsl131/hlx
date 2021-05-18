@@ -36,10 +36,14 @@ $(function() {
     $(".single-voucher").click(function() {
         var url = $(this).attr("path");
         var status = $(this).attr("status");
+        var voucherStatus = $(this).attr("voucherStatus");
+        var isOwn = $(this).attr("isOwn");
+        console.log(isOwn=='true')
+        //console.log(voucherStatus)
         var voucherId = $(this).attr("voucherId");
         //console.log(url, status)
         var html = "<img src='"+url+"' style='width:100%'/>";
-        if(status=='0' || status=='3') {
+        if((voucherStatus=='0' || voucherStatus == '1' || voucherStatus=='3') && isOwn=='true') {
             //如果状态是等提交或驳回，可删除凭证
             html += '<p style="margin: 9px;"><button onClick="deleteVoucher('+voucherId+')" class="btn btn-danger">删除凭证</button></p>';
         }
@@ -271,15 +275,16 @@ function uploadImage(file, detailId, title) {
         processData: false,
         contentType: false,
         success: function(res) {
-            if(res=='1') {
+            var code = res.code;
+            if(code=='1') {
                 alert("上传成功"); window.location.reload();
-            } else if(res=='-5') {
-                alert("此凭证已经上传过，你太坏了，居然想重复上传"); window.location.reload();
+            } else if(code=='-5') {
+                alert(res.msg+"。你太坏了，居然想重复上传"); window.location.reload();
             }
             //console.log("suc", res);
         },
         complete: function(res) {
-            console.log("complete", res);
+            //console.log("complete", res);
         }
     })
 }

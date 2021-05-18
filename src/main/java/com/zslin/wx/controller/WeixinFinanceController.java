@@ -26,6 +26,8 @@ import com.zslin.multi.dao.IStoreDao;
 import com.zslin.multi.model.Store;
 import com.zslin.web.model.Account;
 import com.zslin.web.service.IAccountService;
+import com.zslin.wx.dto.UploadResult;
+import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.EventTools;
 import com.zslin.wx.tools.SessionTools;
 import net.coobird.thumbnailator.Thumbnails;
@@ -120,6 +122,7 @@ public class WeixinFinanceController {
                 model.addAttribute("isMark", "1");
                 model.addAttribute("confirmCount", financeDetailDao.findConfirmCount(openid));
             }
+            model.addAttribute("isOwn", AccountTools.isOwnAdmin(openid));  //判断是否是我自己
         }
 
         Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
@@ -217,6 +220,25 @@ public class WeixinFinanceController {
         //System.out.println("month->"+month+", storeSn-->"+storeSn+",--->cateId---->"+cateId);
         List<FinanceDetail> detailList = financeDetailDao.findDetailByMonth(storeSn, month, cateId);
         return detailList;
+    }
+
+    /** 获取所有数据列表 */
+    @GetMapping(value = "listAll")
+    public String listAll(Model model, Integer page, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        if(personal!=null && (FinancePersonal.TYPE_BOSS.equals(personal.getType()) || FinancePersonal.TYPE_VOUCHER.equals(personal.getType()) || AccountTools.isOwnAdmin(openid))) {
+
+            Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
+                    SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
+            model.addAttribute("datas", datas);
+
+//        model.addAttribute("detailList", financeDetailDao.findVerify());
+            return "weixin/finance/listAll";
+        } else {
+            return "redirect:/wx/finance/index";
+        }
     }
 
     /** 获取待审核列表 */
@@ -368,7 +390,8 @@ public class WeixinFinanceController {
     }
 
     @PostMapping(value = "upload")
-    public @ResponseBody String upload(HttpServletRequest request, String objId, String title, @RequestParam("file") MultipartFile[] files) {
+    public @ResponseBody
+    UploadResult upload(HttpServletRequest request, String objId, String title, @RequestParam("file") MultipartFile[] files) {
         if(files!=null && files.length>=1) {
             BufferedOutputStream bw = null;
             try {
@@ -387,10 +410,13 @@ public class WeixinFinanceController {
                     Thumbnails.of(outFile).size(1300, 1300).toFile(outFile); //修改尺寸
 
                     String md5 = MyFileTools.getFileMd5(outFile); //文件MD5值
-                    if(financeVoucherDao.findByMd5(md5)!=null) {
+                    FinanceVoucher oldVoucher = financeVoucherDao.findByMd5(md5); //通过MD5获取对象
+                    if(oldVoucher!=null) {
                         outFile.deleteOnExit();
                         outFile.delete();
-                        return "-5"; //表示md5已经存在
+                        String detailTitle = financeDetailDao.findTitle(oldVoucher.getDetailId()); //获取报账名称
+                        return new UploadResult("-5", "在【"+detailTitle+"】报账中于["+oldVoucher.getCreateTime()+"]已经上传过此凭证");
+//                        return "-5"; //表示md5已经存在
                     }
                     fv.setFileMd5(md5);
 
@@ -419,7 +445,7 @@ public class WeixinFinanceController {
             }
         }
 
-        return "1";
+        return new UploadResult("1", "上传成功");
     }
 
     /** 签名 */
