@@ -4,6 +4,7 @@ import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.annotations.Token;
 import com.zslin.basic.model.BaseTask;
 import com.zslin.basic.repository.SimplePageBuilder;
+import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.service.IBaseTaskService;
 import com.zslin.basic.tasker.BeanCheckTools;
 import com.zslin.basic.tasker.CronTaskRegistrar;
@@ -41,7 +42,7 @@ public class BaseTaskController {
     @AdminAuth(name = "定时器管理", orderNum = 1, icon="fa fa-list", type="1")
     @RequestMapping(value="list", method= RequestMethod.GET)
     public String list(Model model, Integer page, HttpServletRequest request) {
-        Page<BaseTask> datas = baseTaskService.findAll(new ParamFilterUtil<BaseTask>().buildSearch(model, request), SimplePageBuilder.generate(page));
+        Page<BaseTask> datas = baseTaskService.findAll(new ParamFilterUtil<BaseTask>().buildSearch(model, request), SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
         return "admin/basic/baseTask/list";
     }
@@ -85,7 +86,7 @@ public class BaseTaskController {
     public String update(Model model, @PathVariable Integer id, HttpServletRequest request) {
         BaseTask b = baseTaskService.findOne(id);
         model.addAttribute("baseTask", b);
-        return "admin/basic/BaseTask/update";
+        return "admin/basic/baseTask/update";
     }
 
     @Token(flag= Token.CHECK)

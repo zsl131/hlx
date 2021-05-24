@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.MethodMetadata;
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
@@ -79,7 +80,8 @@ public class AuthTools {
 	private void addMenu(AnnotationMetadata am, String pck) {
 //		Menu menu = new Menu();
 		Map<String, Object> classRes = am.getAnnotationAttributes(AdminAuth.class.getName());
-		Map<String, Object> mapp = am.getAnnotationAttributes(RequestMapping.class.getName());
+//		Map<String, Object> mapp = am.getAnnotationAttributes(RequestMapping.class.getName());
+		Map<String, Object> mapp = getMap(am);
 //		String pack = pck.substring(0, pck.lastIndexOf("."));
 		String cName = pck.substring(pck.lastIndexOf(".")+1, pck.length());
 		
@@ -92,17 +94,6 @@ public class AuthTools {
 
 		String psn = (String) classRes.get("psn");
 
-		/*menu.setDisplay((Integer)classRes.get("display"));
-		menu.setIcon((String)classRes.get("icon"));
-		menu.setName((String)classRes.get("name"));
-		menu.setOrderNum((Integer) classRes.get("orderNum"));
-		menu.setPsn(psn);
-		menu.setType((String) classRes.get("type"));
-		menu.setHref(resUrl);
-		menu.setSn(cName);
-		
-		menuServiceImpl.addOrUpdate(menu);*/
-		
 		Set<MethodMetadata> set = am.getAnnotatedMethods(AdminAuth.class.getName());
 		for(MethodMetadata mm : set) {
 			Menu resMethod = new Menu();
@@ -120,14 +111,15 @@ public class AuthTools {
 			String url = (String) classRes.get("url");
 			if(url==null || "".equals(url.trim()) || "#".equals(url.trim())) {
 				url = pUrl;
-				Map<String, Object> meMapp = mm.getAnnotationAttributes(RequestMapping.class.getName());
-				if(((String[])meMapp.get("value")).length<=0) {
+//				Map<String, Object> meMapp = mm.getAnnotationAttributes(RequestMapping.class.getName());
+				Map<String, Object> meMapp = getMap(mm);
+				if(meMapp==null || ((String[])meMapp.get("value")).length<=0) {
 					meMapp = mm.getAnnotationAttributes(GetMapping.class.getName());
 				}
-				if(((String[])meMapp.get("value")).length<=0) {
+				if(meMapp==null || ((String[])meMapp.get("value")).length<=0) {
 					meMapp = mm.getAnnotationAttributes(PostMapping.class.getName());
 				}
-				if(((String[])meMapp.get("value")).length<=0) {
+				if(meMapp==null || ((String[])meMapp.get("value")).length<=0) {
 					meMapp = mm.getAnnotationAttributes(DeleteMapping.class.getName());
 				}
 				String temp = ((String[]) meMapp.get("value"))[0];
@@ -141,6 +133,20 @@ public class AuthTools {
 //			menuServiceImpl.addOrUpdate(resMethod);
 			addOrUpdate(resMethod);
 		}
+	}
+
+	private Map<String, Object> getMap(AnnotatedTypeMetadata mm) {
+		Map<String, Object> res = mm.getAnnotationAttributes(RequestMapping.class.getName());
+		if(res==null) {
+			res = mm.getAnnotationAttributes(PostMapping.class.getName());
+		}
+		if(res==null) {
+			res = mm.getAnnotationAttributes(GetMapping.class.getName());
+		}
+		if(res==null) {
+			res = mm.getAnnotationAttributes(DeleteMapping.class.getName());
+		}
+		return res;
 	}
 
 	public void addOrUpdate(Menu menu) {

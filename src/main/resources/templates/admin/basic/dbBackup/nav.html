@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content">
+            <div class="ace-settings-container" id="ace-settings-container">
+                <ul class="pagination">
+                    <li><a class="auth" sn="AdminDBBackupController.list" href="/admin/dbBackup/list"><span class="glyphicon glyphicon-th-list"></span> 数据库列表</a></li>
+                    <li><a class="backup-btn auth" sn="AdminDBBackupController.backup" href="/admin/dbBackup/backup"><span class="fa fa-reload"></span> 手动备份数据库</a></li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>

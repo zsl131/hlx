@@ -1,8 +1,11 @@
 package com.zslin.basic.db.tools;
 
+import com.zslin.basic.db.dao.IDBBackupDao;
 import com.zslin.basic.db.dto.DBConfig;
 import com.zslin.basic.db.dto.MySqlInfo;
+import com.zslin.basic.db.model.DBBackup;
 import com.zslin.basic.qiniu.tools.QiniuTools;
+import com.zslin.basic.tools.NormalTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +24,9 @@ public class ExportDBTools {
     @Autowired
     private QiniuTools qiniuTools;
 
+    @Autowired
+    private IDBBackupDao dbBackupDao;
+
     /**
      * 导出数据库并上传到七牛
      * @throws Exception
@@ -33,6 +39,7 @@ public class ExportDBTools {
             File f = new File(path);
             FileInputStream fis = new FileInputStream(f);
             qiniuTools.upload(fis, f.getName());
+            save(f.getName()); //保存到数据库
             f.delete(); //上传完成后，删除文件
             f.deleteOnExit();
         } catch (IOException e) {
@@ -42,5 +49,13 @@ public class ExportDBTools {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private void save(String name) {
+        DBBackup backup = new DBBackup();
+        backup.setCreateDay(NormalTools.curDate());
+        backup.setCreateTime(NormalTools.curDatetime());
+        backup.setName(name);
+        dbBackupDao.save(backup);
     }
 }
