@@ -26,6 +26,10 @@ import com.zslin.multi.dao.IStoreDao;
 import com.zslin.multi.model.Store;
 import com.zslin.web.model.Account;
 import com.zslin.web.service.IAccountService;
+import com.zslin.weixin.annotation.HasTemplateMessage;
+import com.zslin.weixin.annotation.TemplateMessageAnnotation;
+import com.zslin.weixin.tools.SendTemplateMessageTools;
+import com.zslin.weixin.tools.TemplateMessageTools;
 import com.zslin.wx.dto.UploadResult;
 import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.EventTools;
@@ -53,6 +57,7 @@ import java.util.UUID;
  */
 @Controller
 @RequestMapping(value = "wx/finance")
+@HasTemplateMessage
 public class WeixinFinanceController {
 
     @Autowired
@@ -93,6 +98,9 @@ public class WeixinFinanceController {
 
     @Autowired
     private FinanceCancelTools financeCancelTools;
+
+    @Autowired
+    private SendTemplateMessageTools sendTemplateMessageTools;
 
     private static final String PATH_PRE = "finance";
 
@@ -375,6 +383,7 @@ public class WeixinFinanceController {
         detail.setStepFlag("0"); //刚刚添加，需要提交到上传附件的页面
         financeDetailDao.save(detail);
         verifyRecordTools.save(FinanceVerifyRecord.TYPE_NOTHING, "报账申请", "报账申请", detail, financePersonalDao.findByOpenid(detail.getUserOpenid()));
+
         return "redirect:/wx/finance/show?id="+detail.getId();
     }
 
@@ -511,20 +520,21 @@ public class WeixinFinanceController {
 
     /** 长时间未操作，可再次通过 */
     @PostMapping(value = "notice")
+    @TemplateMessageAnnotation(name = "催促审批提醒", keys = "申请人-申请类型-日期-申请事由-备注")
     public @ResponseBody String notice(Integer id) {
         FinanceDetail fd = financeDetailDao.findOne(id);
         List<String> openidList = null;
         StringBuffer remark = new StringBuffer();
         boolean needNotice = false;
-        String sep = "\\n";
+       // String sep = "\\n";
         String title = "";
-        String eventType = "财务报账";
-        remark.append("报账人：").append(fd.getUsername()).append(sep)
-                .append("对应店铺：").append(fd.getStoreName()).append(sep)
-                .append("报账项目：").append(fd.getTitle()).append(sep)
-                .append("单价：").append(fd.getPrice()).append(sep)
-                .append("数量：").append(fd.getAmount()).append(sep)
-                .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep);
+        //String eventType = "财务报账";
+//        remark.append("报账人：").append(fd.getUsername()).append(sep)
+//                .append("对应店铺：").append(fd.getStoreName()).append(sep)
+//                .append("报账项目：").append(fd.getTitle()).append(sep)
+//                .append("单价：").append(fd.getPrice()).append(sep)
+//                .append("数量：").append(fd.getAmount()).append(sep)
+//                .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep);
 
         if("1".equals(fd.getStatus())) { //可通知审核
             openidList = financePersonalDao.findByType(FinancePersonal.TYPE_BOSS);
@@ -541,7 +551,15 @@ public class WeixinFinanceController {
             title = "请尽快检查凭证哦！";
         }
         if(needNotice) {
-            eventTools.eventRemind(openidList, title, eventType, NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id=" + id);
+            //TODO 通知管理人员
+            //申请人-申请类型-日期-申请事由-备注
+            sendTemplateMessageTools.send2Wx(openidList, "催促审批提醒", "/wx/finance/show?id=" + id, title,
+                    TemplateMessageTools.field("申请人", fd.getUsername()),
+                    TemplateMessageTools.field("申请类型", fd.getStoreName()),
+                    TemplateMessageTools.field("日期", fd.getCreateTime()),
+                    TemplateMessageTools.field("申请事由", fd.getTitle()),
+                    TemplateMessageTools.field("备注", fd.getPrice()+"元*"+fd.getAmount()+"＝"+fd.getTotalMoney()+"元"));
+            //eventTools.eventRemind(openidList, title, eventType, NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id=" + id);
             return "1";
         } else {return "0";}
     }
@@ -558,6 +576,7 @@ public class WeixinFinanceController {
 
     /** 修改状态status */
     @PostMapping(value = "updateStatus")
+    @TemplateMessageAnnotation(name = "报销提醒", keys = "报销科目-报销金额")
     public @ResponseBody String updateStatus(Integer id, String status, String reason, HttpServletRequest request) {
         reason = (reason==null)?"":reason;
         String typeName = "";
@@ -570,22 +589,28 @@ public class WeixinFinanceController {
             //System.out.println("WeixinFinanceController.updateStatus"+verifyOpenids);
             reason = "提交审核"; typeName = "提交审核";
             if(!"2".equals(fd.getStatus())) { //如果老板没有审核通过，则表示需要提交到老板审核
-                StringBuilder remark = new StringBuilder();
-                remark.append("报账人：").append(fd.getUsername()).append(sep)
-                        .append("对应店铺：").append(fd.getStoreName()).append(sep)
-                        .append("报账项目：").append(fd.getTitle()).append(sep)
-                        .append("单价：").append(fd.getPrice()).append(sep)
-                        .append("数量：").append(fd.getAmount()).append(sep)
-                        .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep);
+//                StringBuilder remark = new StringBuilder();
+//                remark.append("报账人：").append(fd.getUsername()).append(sep)
+//                        .append("对应店铺：").append(fd.getStoreName()).append(sep)
+//                        .append("报账项目：").append(fd.getTitle()).append(sep)
+//                        .append("单价：").append(fd.getPrice()).append(sep)
+//                        .append("数量：").append(fd.getAmount()).append(sep)
+//                        .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep);
                 List<String> verifyOpenids = financePersonalDao.findByType(FinancePersonal.TYPE_BOSS);
-                eventTools.eventRemind(verifyOpenids, "新报账申请", "财务报账", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id=" + id);
+
+                sendTemplateMessageTools.send2Wx(verifyOpenids, "报销提醒", "/wx/finance/show?id=" + id, "新报账来了...",
+                        TemplateMessageTools.field("报销科目", "【"+fd.getStoreName()+"】"+fd.getTitle()),
+                        TemplateMessageTools.field("报销金额", fd.getPrice()+"元*"+fd.getAmount()+"＝"+fd.getTotalMoney()+"元"),
+                        TemplateMessageTools.field("报账人："+fd.getUsername()+sep+"报账日期："+fd.getCreateTime()));
+
+                //eventTools.eventRemind(verifyOpenids, "新报账申请", "财务报账", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id=" + id);
 //                financeDetailDao.updateStatus(status, id);
                 fd.setStatus(status);
             } else if("2".equals(fd.getStatus())) {
                 if(!"2".equals(fd.getConfirmStatus())) {
                     fd.setConfirmStatus("1");
                     //TODO 通知收货人员
-                    StringBuilder remark = new StringBuilder();
+                    /*StringBuilder remark = new StringBuilder();
                     remark.append("报账人：").append(fd.getUsername()).append(sep)
                             .append("对应店铺：").append(fd.getStoreName()).append(sep)
                             .append("报账项目：").append(fd.getTitle()).append(sep)
@@ -593,11 +618,16 @@ public class WeixinFinanceController {
                             .append("数量：").append(fd.getAmount()).append(sep)
                             .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep)
                             .append("审核人：").append(personal.getName()).append(sep);
-                    eventTools.eventRemind(fd.getConfirmOpenid(), "物品需要重新收货确认", "收货确认提醒", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id=" + id);
+                    eventTools.eventRemind(fd.getConfirmOpenid(), "物品需要重新收货确认", "收货确认提醒", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id=" + id);*/
+
+                    sendTemplateMessageTools.send2Wx(fd.getConfirmOpenid(), "报销提醒", "/wx/finance/show?id=" + id, "物品需要重新收货确认",
+                            TemplateMessageTools.field("报销科目", "【"+fd.getStoreName()+"】"+fd.getTitle()),
+                            TemplateMessageTools.field("报销金额", fd.getPrice()+"元*"+fd.getAmount()+"＝"+fd.getTotalMoney()+"元"),
+                            TemplateMessageTools.field("报账人："+fd.getUsername()+sep+"报账日期："+fd.getCreateTime()+sep+"审核人："+personal.getName()));
                 } else if(!"2".equals(fd.getVoucherStatus())) { //如果财务人员没有审核通过，则提交到财务审核
                     List<String> voucherOpenids = financePersonalDao.findByType(FinancePersonal.TYPE_VOUCHER);
                     fd.setVoucherStatus("1");
-                    StringBuilder remark = new StringBuilder();
+                    /*StringBuilder remark = new StringBuilder();
                     remark.append("报账人：").append(fd.getUsername()).append(sep)
                             .append("对应店铺：").append(fd.getStoreName()).append(sep)
                             .append("报账项目：").append(fd.getTitle()).append(sep)
@@ -605,14 +635,19 @@ public class WeixinFinanceController {
                             .append("数量：").append(fd.getAmount()).append(sep)
                             .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep)
                             .append("审核人：").append(personal.getName()).append(sep);
-                    eventTools.eventRemind(voucherOpenids, "报账需要重新财务审核", "财务审核提醒", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id=" + id);
+                    eventTools.eventRemind(voucherOpenids, "报账需要重新财务审核", "财务审核提醒", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id=" + id);*/
+
+                    sendTemplateMessageTools.send2Wx(voucherOpenids, "报销提醒", "/wx/finance/show?id=" + id, "报账需要重新财务审核",
+                            TemplateMessageTools.field("报销科目", "【"+fd.getStoreName()+"】"+fd.getTitle()),
+                            TemplateMessageTools.field("报销金额", fd.getPrice()+"元*"+fd.getAmount()+"＝"+fd.getTotalMoney()+"元"),
+                            TemplateMessageTools.field("报账人："+fd.getUsername()+sep+"报账日期："+fd.getCreateTime()+sep+"审核人："+personal.getName()));
                 }
             }
 
         } else if("2".equals(status)) { //通过，审核人员操作，审核通过
             reason = "审核通过"; typeName = "财务审核";
             fd.setStatus(status);
-            StringBuilder remark = new StringBuilder();
+            /*StringBuilder remark = new StringBuilder();
             remark.append("报账人：").append(fd.getUsername()).append(sep)
                     .append("对应店铺：").append(fd.getStoreName()).append(sep)
                     .append("报账项目：").append(fd.getTitle()).append(sep)
@@ -621,12 +656,17 @@ public class WeixinFinanceController {
                     .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep)
                     .append("审核人：").append(personal.getName()).append(sep)
                     .append("结果：").append("审核通过，请指定收货人收货");
-            eventTools.eventRemind(fd.getUserOpenid(), "报账审核通知", "财务报账审核通过", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id="+id);
+            eventTools.eventRemind(fd.getUserOpenid(), "报账审核通知", "财务报账审核通过", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id="+id);*/
+
+            sendTemplateMessageTools.send2Wx(fd.getUserOpenid(), "报销提醒", "/wx/finance/show?id=" + id, "财务报账审核通过",
+                    TemplateMessageTools.field("报销科目", "【"+fd.getStoreName()+"】"+fd.getTitle()),
+                    TemplateMessageTools.field("报销金额", fd.getPrice()+"元*"+fd.getAmount()+"＝"+fd.getTotalMoney()+"元"),
+                    TemplateMessageTools.field("报账人："+fd.getUsername()+sep+"报账日期："+fd.getCreateTime()+sep+"审核人："+personal.getName()+sep+"结果：审核通过，请指定收货人收货"));
         } else if("3".equals(status)) { //如果是驳回
             typeName = "财务审核";
             fd.setStatus(status);
 
-            StringBuilder remark = new StringBuilder();
+            /*StringBuilder remark = new StringBuilder();
             remark.append("报账人：").append(fd.getUsername()).append(sep)
                     .append("对应店铺：").append(fd.getStoreName()).append(sep)
                     .append("报账项目：").append(fd.getTitle()).append(sep)
@@ -635,7 +675,12 @@ public class WeixinFinanceController {
                     .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep)
                     .append("审核人：").append(personal.getName()).append(sep)
                     .append("驳回原因：").append(reason);
-            eventTools.eventRemind(fd.getUserOpenid(), "报账审核通知", "财务报账审核被驳回", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id="+id);
+            eventTools.eventRemind(fd.getUserOpenid(), "报账审核通知", "财务报账审核被驳回", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id="+id);*/
+
+            sendTemplateMessageTools.send2Wx(fd.getUserOpenid(), "报销提醒", "/wx/finance/show?id=" + id, "财务报账审核被驳回",
+                    TemplateMessageTools.field("报销科目", "【"+fd.getStoreName()+"】"+fd.getTitle()),
+                    TemplateMessageTools.field("报销金额", fd.getPrice()+"元*"+fd.getAmount()+"＝"+fd.getTotalMoney()+"元"),
+                    TemplateMessageTools.field("报账人："+fd.getUsername()+sep+"报账日期："+fd.getCreateTime()+sep+"审核人："+personal.getName()+sep+"驳回原因："+reason));
         }
         fd.setVerifyDay(NormalTools.curDate());
         fd.setVerifyLong(System.currentTimeMillis());

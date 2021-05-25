@@ -9,6 +9,10 @@ import com.zslin.multi.dao.IStoreDao;
 import com.zslin.multi.model.Moneybag;
 import com.zslin.multi.model.MoneybagDetail;
 import com.zslin.multi.model.Store;
+import com.zslin.weixin.annotation.HasTemplateMessage;
+import com.zslin.weixin.annotation.TemplateMessageAnnotation;
+import com.zslin.weixin.tools.SendTemplateMessageTools;
+import com.zslin.weixin.tools.TemplateMessageTools;
 import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.EventTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "weixin/moneybag")
+@HasTemplateMessage
 public class WeixinMoneybagController {
 
     @Autowired
@@ -43,22 +48,8 @@ public class WeixinMoneybagController {
     @Autowired
     private AccountTools accountTools;
 
-    /*@PostMapping(value = "queryBag")
-    public @ResponseBody Moneybag queryBag(String phone, String password) {
-        Moneybag bag = moneybagDao.findByPhone(phone);
-//System.out.println(bag);
-        if(bag==null) {
-            bag = new Moneybag();
-            bag.setName("未检索到会员信息，请检查手机号码是否正确");
-            return bag;
-        } //未检索到会员信息
-        else if(!password.equals(bag.getPassword())) {
-            bag = new Moneybag();
-            bag.setName("密码不正确");
-            return bag;
-        } //密码不正确
-        else {return bag;}
-    }*/
+    @Autowired
+    private SendTemplateMessageTools sendTemplateMessageTools;
 
     @PostMapping(value = "queryBag")
     public @ResponseBody Moneybag queryBag(String phone) {
@@ -99,10 +90,11 @@ public class WeixinMoneybagController {
         return "1";
     }
 
+    @TemplateMessageAnnotation(name = "会员充值提醒", keys = "店铺名称-会员类型-充值金额-当前余额-充值时间")
     private void noticeAdmin(Moneybag bag, Store store, Float money) {
         List<String> openids = buildOpenids();
         String sep = "\\n";
-        StringBuffer sb = new StringBuffer();
+        /*StringBuffer sb = new StringBuffer();
         sb.append("变化类型：").append("会员充值").append(sep)
                 .append("会员姓名：").append(bag.getName()).append(sep)
                 .append("手机号码：").append(bag.getPhone()).append(sep)
@@ -110,7 +102,14 @@ public class WeixinMoneybagController {
                 .append("当前余额：").append(bag.getMoney()).append(sep)
                 .append("操作店铺：").append(store.getName()).append(sep)
                 .append("如有疑问，请与店长联系。");
-        eventTools.eventRemind(openids, "有会员充值", buildFlagName("1"), DateTools.date2Str(new Date()), sb.toString(), "/wx/account/me");
+        eventTools.eventRemind(openids, "有会员充值", buildFlagName("1"), DateTools.date2Str(new Date()), sb.toString(), "/wx/account/me");*/
+
+        sendTemplateMessageTools.send2Wx(openids, "会员充值提醒", "#", "有会员充值啦~",
+                TemplateMessageTools.field("店铺名称", store.getName()),
+                TemplateMessageTools.field("会员类型", bag.getName()+"-"+bag.getPhone()),
+                TemplateMessageTools.field("充值金额", money+" 元"),
+                TemplateMessageTools.field("充值时间", NormalTools.curDatetime()),
+                TemplateMessageTools.field("当前余额："+bag.getMoney()+" 元"+sep+"如果有疑问，请与店长联系。"));
     }
 
     private List<String> buildOpenids() {
@@ -133,6 +132,7 @@ public class WeixinMoneybagController {
         return "1";
     }
 
+    @TemplateMessageAnnotation(name = "会员消费提醒", keys = "会员卡号-店铺名称-消费金额")
     private MoneybagDetail addDetail(Moneybag bag, Store store, Float money, String reason) {
         String flag = money>0?MoneybagDetail.FLAG_IN:MoneybagDetail.FLAG_OUT;
         Float surplus = bag.getMoney() + money; //当前剩余金额
@@ -170,14 +170,22 @@ public class WeixinMoneybagController {
         String openid = accountTools.queryOpenid(bag.getPhone());
         if(openid!=null && !"".equals(openid)) {
             String sep = "\\n";
-            StringBuffer sb = new StringBuffer();
+            /*StringBuffer sb = new StringBuffer();
             sb.append("变化类型：").append(buildFlagName(detail.getFlag())).append(sep)
                     .append("变化金额：").append(money).append(" 元").append(sep)
                     .append("可用余额：").append(surplus).append(money).append(" 元").append(sep)
                     .append("冻结金额：").append(bag.getFreezeMoney()).append(money).append(" 元").append(sep)
                     .append("操作店铺：").append(store.getName()).append(sep)
                     .append("若非本人操作，请及联系我们！");
-            eventTools.eventRemind(openid, "会员账户发生变化", buildFlagName(detail.getFlag()), DateTools.date2Str(new Date()), sb.toString(), "/wx/account/money");
+            eventTools.eventRemind(openid, "会员账户发生变化", buildFlagName(detail.getFlag()), DateTools.date2Str(new Date()), sb.toString(), "/wx/account/money");*/
+
+            //会员卡号-店铺名称-消费金额
+            sendTemplateMessageTools.send2Wx(openid, "会员消费提醒", "/wx/account/money", "您的会员账户发生变化啦~",
+                    TemplateMessageTools.field("会员卡号", bag.getName()+"-"+bag.getPhone()),
+                    TemplateMessageTools.field("店铺名称", store.getName()),
+                    TemplateMessageTools.field("消费金额", money+" 元"),
+
+                    TemplateMessageTools.field("可用余额："+surplus+" 元"+sep+"冻结金额："+bag.getFreezeMoney()+" 元"+sep+"若非本人操作，请及联系我们！"));
         }
         return detail;
     }

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>微信模板消息关联列表</title>
+		<script type="text/javascript" src="/back-admin/bus/admin-templateMessage.js"></script>
+		<style>
+			.badge {background:#F00;}
+		</style>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;微信模板消息关联列表</h3>
+			<div th:replace="admin/templateMessageRelation/nav :: content" th:remove="tag"></div>
+		</div>
+
+		<div class="table-responsive">
+			<ul class="nav nav-tabs template-ul">
+				<li role="presentation" th:class="|${type eq '1'?'active':''}|"><a href="/admin/templateMessageRelation/list?type=1">未配置的模板&nbsp;<span class="badge" th:text="${#lists.size(noConfig)}">3</span></a></li>
+				<li role="presentation" th:class="|${type eq '2'?'active':''}|"><a href="/admin/templateMessageRelation/list?type=2">已配置的模板&nbsp;<span class="badge" th:text="${#lists.size(configed)}">3</span></a></li>
+			</ul>
+
+			<table class="table table-hover" th:if="${type eq '1'}">
+				<thead>
+				<tr>
+					<th>名称</th>
+					<th>规则</th>
+					<th>操作</th>
+				</tr>
+				</thead>
+
+				<tr th:each="obj : ${noConfig}">
+					<td th:text="${obj.name}"></td>
+					<td th:text="${obj.rules}"></td>
+					<td><button class="btn btn-primary config-btn" th:attr="objName=${obj.name}, rules=${obj.rules}"><span class="fa fa-cog"></span> 配置模板</button></td>
+				</tr>
+			</table>
+
+			<table class="table table-hover" th:if="${type eq '2'}">
+				<thead>
+				<tr>
+					<th>名称</th>
+					<th>模板ID</th>
+					<th>键值对</th>
+					<th>操作</th>
+				</tr>
+				</thead>
+
+				<tr th:each="obj : ${configed}">
+					<td th:text="${obj.templateName}"></td>
+					<td th:text="${obj.templateId}"></td>
+					<td th:text="${obj.keyValues}"></td>
+					<td><button class="btn btn-danger delete-btn" th:attr="objId=${obj.id}, objName=${obj.templateName}"><span class="fa fa-close"></span> 删除模板</button></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

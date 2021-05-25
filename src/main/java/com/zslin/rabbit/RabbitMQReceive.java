@@ -1,9 +1,12 @@
 package com.zslin.rabbit;
 
+import com.zslin.weixin.dto.SendMessageDto;
+import com.zslin.weixin.tools.TemplateMessageTools;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -19,6 +22,9 @@ public class RabbitMQReceive implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
+    @Autowired
+    private TemplateMessageTools templateMessageTools;
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext=applicationContext;
@@ -30,6 +36,14 @@ public class RabbitMQReceive implements ApplicationContextAware {
 
     /*@Autowired
     private IUserDao userDao;*/
+
+    /** 处理模板消息 */
+    @RabbitHandler
+    public void handlerSendMessage(SendMessageDto dto) {
+//        System.out.println("==============================");
+//        System.out.println(dto);
+        templateMessageTools.sendMessageByDto(dto);
+    }
 
     @RabbitHandler
     public void process(Map testMessage) {

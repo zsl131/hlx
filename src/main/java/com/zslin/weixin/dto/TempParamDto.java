@@ -1,4 +1,4 @@
-package com.zslin.wx.dto;
+package com.zslin.weixin.dto;
 
 /**
  * 消息模板参数DTO对象

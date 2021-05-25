@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String DIRECT_EXCHANGE = "RestaurantDirectExchange";
+    public static final String DIRECT_EXCHANGE = "WenquDirectExchange";
 
-    public static final String DIRECT_ROUTING = "RestaurantDirectRouting";
+    public static final String DIRECT_ROUTING = "WenquDirectRouting";
 
-    public static final String DIRECT_QUEUE = "RestaurantDirectQueue";
+    public static final String DIRECT_QUEUE = "WenquDirectQueue";
 
     //队列 起名：TestDirectQueue
     @Bean
