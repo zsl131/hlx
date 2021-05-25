@@ -21,8 +21,12 @@ import com.zslin.sms.tools.SmsConfig;
 import com.zslin.sms.tools.SmsTools;
 import com.zslin.web.model.*;
 import com.zslin.web.service.*;
+import com.zslin.weixin.annotation.HasTemplateMessage;
+import com.zslin.weixin.annotation.TemplateMessageAnnotation;
 import com.zslin.weixin.model.HlxTicket;
 import com.zslin.weixin.service.IHlxTicketService;
+import com.zslin.weixin.tools.SendTemplateMessageTools;
+import com.zslin.weixin.tools.TemplateMessageTools;
 import com.zslin.wx.dbtools.ScoreAdditionalDto;
 import com.zslin.wx.dbtools.ScoreTools;
 import com.zslin.wx.tools.AccountTools;
@@ -47,6 +51,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "wx/account")
+@HasTemplateMessage
 public class WeixinAccountController {
 
     @Autowired
@@ -123,6 +128,9 @@ public class WeixinAccountController {
 
     @Autowired
     private IFinancePersonalDao financePersonalDao;
+
+    @Autowired
+    private SendTemplateMessageTools sendTemplateMessageTools;
 
     //修改密码
     @PostMapping(value = "setPassword")
@@ -347,6 +355,7 @@ public class WeixinAccountController {
     }
 
     @PostMapping(value = "modifyPhone")
+    @TemplateMessageAnnotation(name = "手机绑定成功通知", keys = "手机号码-绑定时间")
     public @ResponseBody String modifyPhone(String phone, String code, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         String sessionCode = (String) request.getSession().getAttribute("sms_code");
@@ -356,6 +365,11 @@ public class WeixinAccountController {
             updateWallet(phone, openid);
             //处理积分
             scoreTools.processScore(openid, ScoreRule.BIND_PHONE, new ScoreAdditionalDto("手机号码", phone));
+
+            sendTemplateMessageTools.send2Wx(openid, "手机绑定成功通知", "#", "操作提示",
+                    TemplateMessageTools.field("手机号码", phone),
+                    TemplateMessageTools.field("绑定时间", NormalTools.curDatetime()));
+
             return "1";
         } else {
             return "0";

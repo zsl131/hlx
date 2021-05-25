@@ -11,7 +11,11 @@ import com.zslin.web.model.*;
 import com.zslin.web.service.*;
 import com.zslin.web.tools.DiscountDayTools;
 import com.zslin.web.tools.GamePrizeTools;
+import com.zslin.weixin.annotation.HasTemplateMessage;
+import com.zslin.weixin.annotation.TemplateMessageAnnotation;
 import com.zslin.weixin.tools.HlxTicketTools;
+import com.zslin.weixin.tools.SendTemplateMessageTools;
+import com.zslin.weixin.tools.TemplateMessageTools;
 import com.zslin.wx.dbtools.ScoreTools;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,7 @@ import java.util.UUID;
  * Created by 钟述林 393156105@qq.com on 2017/1/24 22:26.
  */
 @Component
+@HasTemplateMessage
 public class DatasTools {
 
     @Autowired
@@ -93,6 +98,9 @@ public class DatasTools {
     @Autowired
     private MoneyBagTools moneyBagTools;
 
+    @Autowired
+    private SendTemplateMessageTools sendTemplateMessageTools;
+
     /** 当用户取消关注时 */
     public void onUnsubscribe(String openid) {
         accountService.updateStatus(openid, "0");
@@ -105,6 +113,7 @@ public class DatasTools {
      * @param content 具体内容
      * @return
      */
+    @TemplateMessageAnnotation(name = "客户留言通知", keys = "客户名称-留言内容-留言时间")
     public String onEventText(String openid, String builderName, String content) {
         WeixinConfig config = wxConfig.getConfig();
         if(content==null || "".equals(content.trim()) || "?".equals(content.trim())
@@ -169,10 +178,16 @@ public class DatasTools {
 
 //            List<String> adminOpenids = accountService.findOpenid(AccountTools.ADMIN);
             List<String> adminOpenids = accountTools.getOpenid(AccountTools.ADMIN);
-            StringBuffer sb = new StringBuffer();
+            /*StringBuffer sb = new StringBuffer();
             sb.append("反馈用户：").append(f.getNickname()).append(" \\n")
                     .append("反馈内容：").append(content);
-            eventTools.eventRemind(adminOpenids, "在线反馈", "收到在线反馈信息", NormalTools.curDate("yyyy-MM-dd HH:mm"), sb.toString(), "/wx/feedback/list");
+            eventTools.eventRemind(adminOpenids, "在线反馈", "收到在线反馈信息", NormalTools.curDate("yyyy-MM-dd HH:mm"), sb.toString(), "/wx/feedback/list");*/
+
+            sendTemplateMessageTools.send2Wx(adminOpenids, "客户留言通知", "/wx/feedback/list", "收到新留言",
+                    TemplateMessageTools.field("客户名称", f.getNickname()),
+                    TemplateMessageTools.field("留言内容", content),
+                    TemplateMessageTools.field("留言时间", NormalTools.curDatetime()));
+
             return "";
         }
     }

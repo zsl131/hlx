@@ -104,7 +104,7 @@ public class WeixinMoneybagController {
                 .append("如有疑问，请与店长联系。");
         eventTools.eventRemind(openids, "有会员充值", buildFlagName("1"), DateTools.date2Str(new Date()), sb.toString(), "/wx/account/me");*/
 
-        sendTemplateMessageTools.send2Wx(openids, "会员充值提醒", "#", "有会员充值啦~",
+        sendTemplateMessageTools.send2Wx(openids, "会员充值提醒", "", "有会员充值啦~",
                 TemplateMessageTools.field("店铺名称", store.getName()),
                 TemplateMessageTools.field("会员类型", bag.getName()+"-"+bag.getPhone()),
                 TemplateMessageTools.field("充值金额", money+" 元"),
