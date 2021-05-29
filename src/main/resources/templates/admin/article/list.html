@@ -34,6 +34,7 @@
 						<th>导读</th>
 						<th>推送</th>
 						<th>状态</th>
+						<th>外链</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -47,6 +48,13 @@
 					<td th:text="${obj.guide}"></td>
 					<td th:text="${obj.isFirst eq 1 ? '是':'否'}"></td>
 					<td th:text="${obj.status eq '1' ? '显示':'隐藏'}"></td>
+					<td>
+						<p th:if="${obj.isOutside eq '1'}">
+							<b>外部链接</b>
+							<p th:text="${obj.outsideUrl}"></p>
+						</p>
+						<p th:if="${obj.isOutside ne '1'}">非外链</p>
+					</td>
 					<td>
 						<div class="action-buttons">
 							<a class="sendHref set-type-div" href="javascript:void(0)" th:attr="objId=${obj.id}">推送给

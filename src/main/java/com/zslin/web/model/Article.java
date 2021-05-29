@@ -44,6 +44,28 @@ public class Article extends BaseEntity {
     /** 是否显示 */
     private String status;
 
+    /** 是否外部链接 */
+    private String isOutside = "0";
+
+    /** 外部链接 */
+    private String outsideUrl;
+
+    public String getOutsideUrl() {
+        return outsideUrl;
+    }
+
+    public void setOutsideUrl(String outsideUrl) {
+        this.outsideUrl = outsideUrl;
+    }
+
+    public String getIsOutside() {
+        return isOutside;
+    }
+
+    public void setIsOutside(String isOutside) {
+        this.isOutside = isOutside;
+    }
+
     public String getStatus() {
         return status;
     }

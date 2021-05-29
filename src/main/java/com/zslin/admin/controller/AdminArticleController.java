@@ -10,6 +10,7 @@ import com.zslin.web.model.Article;
 import com.zslin.web.service.IArticleService;
 import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.EventTools;
+import com.zslin.wx.tools.WeixinXmlTools;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -57,8 +58,11 @@ public class AdminArticleController {
         } else {
             openids = accountTools.getOpenid(type);
         }
+
+        String url = WeixinXmlTools.buildUrl("", art);
         //http://zthlx.zslin.com/weixin/article/detail?id=1
-        eventTools.eventRemind(openids, art.getTitle(), "新公告推送", DateTools.date2Str(new Date()), art.getGuide(), "/weixin/article/detail?id="+id);
+        //"/weixin/article/detail?id="+id
+        eventTools.eventRemind(openids, art.getTitle(), "新公告推送", DateTools.date2Str(new Date()), art.getGuide(), url);
         return "1";
     }
 

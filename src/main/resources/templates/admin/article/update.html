@@ -53,6 +53,23 @@
 				<input name="guide" type="text" class="form-control" th:value="${article.guide}" placeholder="请输入导读，简短几个字就行" />
 			</div>
 		</div>
+
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">外链：</div>
+				<div class="form-control">
+					<input type="radio" name="isOutside" value="1" id="outside_1" th:checked="${article.isOutside == '1'}?'checked'"/><label for="outside_1">外部链接</label>
+					<input type="radio" name="isOutside" value="0" id="outside_0" th:checked="${article.isOutside == '0'}?'checked'"/><label for="outside_0">非外部链接</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group form-group-lg">
+			<div class="input-group">
+				<div class="input-group-addon">URL：</div>
+				<input name="outsideUrl" type="text" class="form-control" th:value="${article.outsideUrl}" placeholder="请输入外部链接URL，可以不输入" />
+			</div>
+		</div>
+
 		<div class="form-group form-group-lg">
 			<div class="input-group">
 				<div class="input-group-addon">内容：</div>

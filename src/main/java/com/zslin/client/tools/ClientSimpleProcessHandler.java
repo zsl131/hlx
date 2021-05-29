@@ -171,7 +171,7 @@ public class ClientSimpleProcessHandler {
 //            Integer fullPm = buffetOrderDetailService.queryCount(day, "99999"); //晚餐全票人数
 
             //当有友情价是discountReason必须存老板手机号码
-            boolean res = eventTools.eventRemind(openids,"伙时抵价通知", "有顾客使用伙时购票", NormalTools.curDate("yyyy-MM-dd HH:mm"),
+            boolean res = eventTools.eventRemind(openids,"伙时抵价通知【"+o.getStoreSn()+"】", "有顾客使用伙时购票", NormalTools.curDate("yyyy-MM-dd HH:mm"),
                     "/wx/buffetOrders/show?no="+o.getNo(),
                     new EventRemarkDto("订单编号", o.getNo()),
                     new EventRemarkDto("用餐人数", o.getCommodityCount()+""),

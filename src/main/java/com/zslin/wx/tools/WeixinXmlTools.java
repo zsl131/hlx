@@ -87,11 +87,20 @@ public class WeixinXmlTools {
                     append("<Title><![CDATA[").append(dto.getTitle()).append("]]></Title>").
                     append("<Description><![CDATA[").append(dto.getGuide()).append("]]></Description>").
                     append("<PicUrl><![CDATA[").append(baseUrl+dto.getPicPath()).append("]]></PicUrl>").
-                    append("<Url><![CDATA[").append(baseUrl+"/weixin/article/detail?id="+dto.getId()).append("]]></Url>").
+                    append("<Url><![CDATA[").append(buildUrl(baseUrl, dto)).append("]]></Url>").
                     append("</item>");
         }
         sb.append("</Articles>");
         sb.append("</xml>");
         return sb.toString();
+    }
+
+    public static String buildUrl(String baseUrl, Article art) {
+        if("1".equals(art.getIsOutside()) && art.getOutsideUrl()!=null && !"".equals(art.getOutsideUrl())) {
+            return art.getOutsideUrl();
+        } else {
+            //             "/weixin/article/detail?id="+id
+            return baseUrl+"/weixin/article/detail?id="+art.getId();
+        }
     }
 }
