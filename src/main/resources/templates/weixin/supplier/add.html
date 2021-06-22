@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>添加供货商</title>
+    <script src="/js/jedate/jquery.jedate.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-finance.css"/>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="container">
+        <div class="header lighter smaller blue">
+            <h3><i class="fa fa-plus"></i>&nbsp;添加供货商</h3>
+        </div>
+
+        <form method="POST" th:object="${supplier}" id="dataForm" onsubmit="return checkForm()" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">联系人：</div>
+                    <input name="contactName" type="text" class="form-control" th:value="${supplier.contactName}" placeholder="请输入供货商姓名" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">店铺名称：</div>
+                    <input name="shopName" type="text" class="form-control" th:value="${supplier.shopName}" placeholder="请输入店铺名称" />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">供货物品：</div>
+                    <input name="supplyNames" type="text" class="form-control" th:value="${supplier.supplyNames}" placeholder="请输入供货物品名称" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">电话1：</div>
+                    <input name="phone1" type="text" class="form-control" th:value="${supplier.phone1}" placeholder="请输入联系电话" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">电话2：</div>
+                    <input name="phone2" type="text" class="form-control" th:value="${supplier.phone2}" placeholder="请输入联系电话" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">地址：</div>
+                    <input name="address" type="text" class="form-control" th:value="${supplier.address}" placeholder="请输入联系地址" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">合作状态：</div>
+                    <div class="form-control">
+                        <input type="radio" name="status" value="0" id="status_0" th:checked="${supplier.status == '0'}?'checked'"/><label for="status_0">未合作</label>
+                        <input type="radio" name="status" value="1" id="status_1" th:checked="${supplier.status == '1'}?'checked'"/><label for="status_1">在合作</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">是否配送：</div>
+                    <div class="form-control">
+                        <input type="radio" name="isDelivery" value="0" id="isDelivery_0" th:checked="${supplier.isDelivery == '0'}?'checked'"/><label for="isDelivery_0">不配置</label>
+                        <input type="radio" name="isDelivery" value="1" id="isDelivery_1" th:checked="${supplier.isDelivery == '1'}?'checked'"/><label for="isDelivery_1">配送</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">备注：</div>
+                    <input name="remark" type="text" class="form-control" th:value="${supplier.remark}" placeholder="请输入说明" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">价格备注：</div>
+                    <input name="priceRemark" type="text" class="form-control" th:value="${supplier.priceRemark}" placeholder="请输入价格说明" />
+                </div>
+            </div>
+
+            <input type="hidden" name="token" value="${session.token}"/>
+            <button type="submit" class="btn btn-primary submit-btn">确定提交</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

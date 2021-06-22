@@ -15,6 +15,7 @@ import com.zslin.card.tools.CardNoTools;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.RestdayTools;
 import com.zslin.finance.imgTools.ImageTextTools;
+import com.zslin.finance.model.Supplier;
 import com.zslin.kaoqin.dto.DayDto;
 import com.zslin.kaoqin.dto.MonthDto;
 import com.zslin.kaoqin.model.Clockin;
@@ -50,6 +51,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -120,6 +122,16 @@ public class NormalTest {
 
     @Autowired
     private QiniuTools qiniuTools;
+
+    @Test
+    public void test56() {
+        Supplier supplier = new Supplier();
+        Field[] fields = supplier.getClass().getDeclaredFields();
+        for(Field field : fields) {
+//                list.add(new SpecificationOperator());
+            System.out.println(field.getName());
+        }
+    }
 
     @Test
     public void test55() throws Exception {

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>供货商列表</title>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-finance.css"/>
+    <script type="text/javascript" src="/basic/admin/myself/cms.admin.js"></script>
+    <script type="text/javascript" src="/basic/admin/myself/my_filter.js"></script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div  th:if="${datas ne null}">
+        <div class="header lighter smaller blue">
+            <h3> &nbsp;&nbsp;<i class="fa fa-list"></i>&nbsp;供货商列表（<b th:text="${datas.totalElements}"></b>）</h3>
+        </div>
+
+        <div class="weui-cells fin-main-box">
+            <div class="input-group">
+                <span class="input-group-addon">筛选</span>
+                <input type='text' style="width:140px;" th:value="${condition}" class='filter_element form-control' opt="eq" name='condition'/>
+                <span><button type="button" class="btn btn-primary btn-sm" id="beginFilter">查询</button></span>
+            </div>
+            <div th:if="${datas.totalElements le 0}">
+                <h2 style="width:100%; text-align:center; color:#F00;">暂无数据</h2>
+            </div>
+            <div th:each="obj : ${datas}" th:remove="tag">
+                <div class="fin-list">
+                    <div class="fin-title">
+                        <span th:text="${obj.supplyNames}"></span>[<span class="fin-dark" th:text="${obj.shopName}"></span>]<span class="fin-dark" th:text="${obj.contactName}"></span>
+                    </div>
+                    <div class="fin-body">
+                        <p>电话1：<a th:href="|tel:${obj.phone1}|"><b th:text="${obj.phone1}"></b></a></p>
+                        <p>电话2：<a th:href="|tel:${obj.phone2}|"><b th:text="${obj.phone2}"></b></a></p>
+                        <p>地址：<span th:text="${obj.address}"></span></p>
+                        <p>状态：
+                            <span th:switch="${obj.status}" th:remove="tag">
+                                <b th:case="0" style="color:#ed7800">未合作</b>
+                                <b th:case="1" style="color:#00">在合作</b>
+                            </span>
+                        </p>
+                        <p>配送：
+                            <span th:switch="${obj.isDelivery}" th:remove="tag">
+                                <b th:case="0" style="color:#ed7800">不配送</b>
+                                <b th:case="1" style="color:#00">支持配送</b>
+                            </span>
+                        </p>
+                        <p>备注：<span th:text="${obj.remark}"></span>
+                        <p>价格备注：<span th:text="${obj.priceRemark}"></span>
+                        </p>
+                    </div>
+                    <div class="fin-footer">
+                        <div class="fin-footer-left">
+                            <span th:if="${obj.optOpenid ne null}" th:text="|[${obj.optName}]|"></span>登记于<span th:text="${obj.createTime}"></span>
+                        </div>
+                        <!--<div class="fin-footer-right"><a class="btn btn-link" th:href="'/wx/finance/show?id='+${obj.id}">详情</a></div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
+    </div>
+    <div th:if="${datas eq null}">
+        <h4 class="align-center">无权限访问！</h4>
+    </div>
+    <div th:each="arg : ${args}" class="search-filter-div">
+        <input th:value="${arg.value}" type="hidden" th:attr="targetId=${arg.key}"/>
+    </div>
+</div>
+</body>
+</html>

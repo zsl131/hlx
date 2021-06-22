@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="content" th:remove="tag">
+            <div id="sys_filter" class="form-inline" style="padding-bottom:10px;">
+
+                <div class="input-group">
+                    <span class="input-group-addon">店铺名称</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_shopName'/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">联系人</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_contactName'/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">供货名称</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_supplyNames'/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">备注</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_remark'/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">价格备注</span>
+                    <input type='text' style="width:140px;" class='filter_element form-control' opt="like" name='filter_priceRemark'/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">合作状态</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_status'>
+                        <option value="">=全部=</option>
+                        <option value="0">未合作</option>
+                        <option value="1">在合作</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">配送情况</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_isDelivery'>
+                        <option value="">=全部=</option>
+                        <option value="0">不配送</option>
+                        <option value="1">配送</option>
+                    </select>
+                </div>
+
+                <span><button type="button" class="btn btn-primary btn-sm" id="beginFilter">查询</button></span>
+            </div>
+        </div>
+    </body>
+</html>

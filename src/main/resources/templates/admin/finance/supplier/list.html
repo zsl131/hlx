@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>供货商列表</title>
+		<script type="text/javascript">
+			$(function() {
+				$(".delete-obj-href").deleteFun();
+			});
+		</script>
+	</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;供货商列表（<span th:text="${datas.getTotalElements()}"></span>）</h3>
+			<div th:replace="admin/finance/supplier/nav :: content" th:remove="tag"></div>
+		</div>
+
+		<div th:replace="admin/finance/supplier/filter :: content" th:remove="tag"></div>
+
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>店铺名称</th>
+						<th>联系人</th>
+						<th>供货名称</th>
+						<th>联系电话</th>
+						<th>地址</th>
+						<th>状态</th>
+						<th>配送</th>
+						<th>备注</th>
+						<th>价格备注</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+
+				<tr th:each="obj : ${datas}">
+					<td th:text="${obj.shopName}"></td>
+					<td th:text="${obj.contactName}"></td>
+					<td th:text="${obj.supplyNames}"></td>
+					<td th:text="|${obj.phone1}/${obj.phone2}|"></td>
+					<td th:text="${obj.address}"></td>
+					<td th:switch="${obj.status}">
+						<span th:case="0" style="color:#F00">未合作</span>
+						<span th:case="1" style="color:#00F">在合作</span>
+					</td>
+					<td th:switch="${obj.isDelivery}">
+						<span th:case="0" style="color:#F00">不配送</span>
+						<span th:case="1" style="color:#00F">配送</span>
+					</td>
+					<td th:text="${obj.remark}"></td>
+					<td th:text="${obj.priceRemark}"></td>
+					<td>
+						<div class="action-buttons">
+							<a class="green auth" sn="AdminSupplierController.update" title="修改" th:href="'/admin/supplier/update/'+${obj.id}">
+								<i class="fa fa-pencil"></i>
+							</a>
+
+							<a class="delete-obj-href red auth" sn="AdminSupplierController.delete" th:title="'此操作不可逆，确定删除【'+${obj.contactName}+'】吗？'" th:href="'/admin/supplier/delete/'+${obj.id}">
+								<i class="fa fa-remove"></i>
+							</a>
+						</div>
+					</td>
+				</tr>
+			</table>
+
+			<div th:include="fragments/page :: pager" th:remove="tag"></div>
+		</div>
+	</div>
+</body>
+</html>
