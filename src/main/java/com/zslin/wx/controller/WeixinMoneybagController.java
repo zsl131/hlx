@@ -1,7 +1,6 @@
 package com.zslin.wx.controller;
 
 import com.zslin.basic.repository.SimpleSortBuilder;
-import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.multi.dao.IMoneybagDao;
 import com.zslin.multi.dao.IMoneybagDetailDao;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -85,7 +83,7 @@ public class WeixinMoneybagController {
             bag = addBag(store, name, phone);
         }
         if(bag==null) {return "-1"; } //无法创建会员信息，可能店铺信息出错
-        addDetail(bag, store, money, "会员充值");
+        addDetail(bag, store, money, "会员充值", 0f);
         noticeAdmin(bag, store, money);
         return "1";
     }
@@ -112,6 +110,13 @@ public class WeixinMoneybagController {
                 TemplateMessageTools.field("当前余额："+bag.getMoney()+" 元"+sep+"如果有疑问，请与店长联系。"));
     }
 
+    /** 查看会员明细 */
+    @PostMapping(value = "showDetail")
+    public @ResponseBody List<MoneybagDetail> showDetail(String phone) {
+        List<MoneybagDetail> detailList = moneybagDetailDao.findByPhone(phone, SimpleSortBuilder.generateSort("id_d"));
+        return detailList;
+    }
+
     private List<String> buildOpenids() {
         List<String> list = new ArrayList<>();
         list.add("o_TZkwbz0pzuCTmrWqMGNHriMHTo");
@@ -120,7 +125,7 @@ public class WeixinMoneybagController {
 
     /** 消费 */
     @PostMapping(value = "addDetail")
-    public @ResponseBody String addDetail(Integer bagId, String sn, Float money, String password) {
+    public @ResponseBody String addDetail(Integer bagId, String sn, Float money, String password, Float dealMoney) {
         Moneybag bag = moneybagDao.findOne(bagId);
         Store store = storeDao.findBySn(sn);
         if(bag==null) {return "-1";} //没有找到会员信息
@@ -128,12 +133,12 @@ public class WeixinMoneybagController {
         if(!password.equals(bag.getPassword())) {return "-10";} //密码不正确
         if(money>bag.getMoney()) {return "-3";} //账户余额不足
 
-        addDetail(bag, store, 0-money, store.getName()+"-消费");
+        addDetail(bag, store, 0-money, store.getName()+"-消费", dealMoney);
         return "1";
     }
 
     @TemplateMessageAnnotation(name = "会员消费提醒", keys = "会员卡号-店铺名称-消费金额")
-    private MoneybagDetail addDetail(Moneybag bag, Store store, Float money, String reason) {
+    private MoneybagDetail addDetail(Moneybag bag, Store store, Float money, String reason, Float dealMoney) {
         String flag = money>0?MoneybagDetail.FLAG_IN:MoneybagDetail.FLAG_OUT;
         Float surplus = bag.getMoney() + money; //当前剩余金额
         MoneybagDetail detail = new MoneybagDetail();
@@ -153,6 +158,7 @@ public class WeixinMoneybagController {
         detail.setOptStoreSn(store.getSn());
         detail.setMoney(money);
         detail.setReason(reason);
+        detail.setDealMoney(dealMoney);
         if(flag.equals(MoneybagDetail.FLAG_IN)) { //如果是入账都设置为冻结，第二才自动解冻
             detail.setFreezeFlag("1");
         } else {detail.setFreezeFlag("0");}

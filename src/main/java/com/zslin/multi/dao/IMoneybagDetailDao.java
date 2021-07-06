@@ -22,4 +22,7 @@ public interface IMoneybagDetailDao extends BaseRepository<MoneybagDetail, Integ
     /** 获取冻结的数据详情 */
     @Query("FROM MoneybagDetail m WHERE m.freezeFlag='1'")
     List<MoneybagDetail> listAllFreezeDetail();
+
+    @Query("FROM MoneybagDetail m WHERE m.phone=?1 ")
+    List<MoneybagDetail> findByPhone(String phone, Sort sort);
 }

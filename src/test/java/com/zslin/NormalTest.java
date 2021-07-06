@@ -6,6 +6,7 @@ import com.zslin.basic.db.tools.ExportDBTools;
 import com.zslin.basic.model.AppConfig;
 import com.zslin.basic.qiniu.tools.MyFileTools;
 import com.zslin.basic.qiniu.tools.QiniuTools;
+import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.service.IAppConfigService;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.tools.SecurityUtil;
@@ -21,6 +22,8 @@ import com.zslin.kaoqin.dto.MonthDto;
 import com.zslin.kaoqin.model.Clockin;
 import com.zslin.kaoqin.service.IClockinService;
 import com.zslin.kaoqin.tools.*;
+import com.zslin.multi.dao.IMoneybagDetailDao;
+import com.zslin.multi.model.MoneybagDetail;
 import com.zslin.multi.tools.MoneyBagTools;
 import com.zslin.multi.tools.WaitTableNoTools;
 import com.zslin.sms.tools.RandomTools;
@@ -122,6 +125,17 @@ public class NormalTest {
 
     @Autowired
     private QiniuTools qiniuTools;
+
+    @Autowired
+    private IMoneybagDetailDao moneybagDetailDao;
+
+    @Test
+    public void test57() {
+        List<MoneybagDetail> detailList = moneybagDetailDao.findByPhone("15925061256", SimpleSortBuilder.generateSort("id_d"));
+        for(MoneybagDetail detail : detailList) {
+            System.out.println(detail.getId()+"--->"+detail);
+        }
+    }
 
     @Test
     public void test56() {

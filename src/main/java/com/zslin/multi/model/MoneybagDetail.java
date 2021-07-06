@@ -69,4 +69,7 @@ public class MoneybagDetail {
 
     /** 冻结标记 */
     private String freezeFlag = "0";
+
+    /** 消费应付金额 */
+    private Float dealMoney = 0f;
 }
