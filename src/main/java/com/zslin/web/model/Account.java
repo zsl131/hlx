@@ -26,6 +26,16 @@ public class Account extends BaseEntity {
 
     private String identity;
 
+    private String birthday;
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
     @Column(name = "bind_phone")
     private String bindPhone="0";
 
@@ -61,6 +71,16 @@ public class Account extends BaseEntity {
     /** 关注日期 */
     @Column(name = "follow_date")
     private Date followDate;
+
+    private String unionid;
+
+    public String getUnionid() {
+        return unionid;
+    }
+
+    public void setUnionid(String unionid) {
+        this.unionid = unionid;
+    }
 
     public String getBindPhone() {
         return bindPhone;

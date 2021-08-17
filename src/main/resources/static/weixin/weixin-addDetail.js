@@ -24,7 +24,7 @@ function checkBag() {
 }
 
 function showDetail(phone) {
-    console.log("phone:::"+phone);
+    //console.log("phone:::"+phone);
     var msgDialog = showDialog("正在查询，请稍候...", "操作提示");
     $.post("/weixin/moneybag/showDetail", {phone: phone}, function(res) {
         $(msgDialog).remove();

@@ -28,4 +28,9 @@ public interface IMoneybagDao extends BaseRepository<Moneybag, Integer>, JpaSpec
     /** 余额不为0的会员人数 */
     @Query("SELECT COUNT(m.id) FROM Moneybag m WHERE m.money>0")
     Integer findAllBag();
+
+    @Query("UPDATE Moneybag m SET m.birthday=?1 WHERE m.phone=?2")
+    @Modifying
+    @Transactional
+    void updateBirthday(String birthday, String phone);
 }

@@ -180,6 +180,15 @@ public class WeixinAccountController {
         }
     }
 
+    /** 设置生日 */
+    @PostMapping(value = "setBirthday")
+    public @ResponseBody String setBirthday(String birthday, String phone, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        moneybagDao.updateBirthday(birthday, phone);
+        accountService.updateBirthday(birthday, openid);
+        return "1";
+    }
+
     //微信用户个人中心
     @GetMapping(value = "me")
     public String me(Model model, HttpServletRequest request) {

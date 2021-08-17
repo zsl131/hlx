@@ -72,4 +72,17 @@ public interface IAccountService extends BaseRepository<Account, Integer>, JpaSp
 
     @Query("FROM Account a WHERE a.phone like %?1% OR a.nickname like %?1%")
     List<Account> query(String str);
+
+    @Query("SELECT a.openid FROM Account a WHERE a.status='1'")
+    List<String> findNoUnionid();
+
+    @Query("UPDATE Account a SET a.unionid=?1 WHERE a.openid=?2 AND a.unionid IS NULL")
+    @Modifying
+    @Transactional
+    void updateUnionid(String unionid, String openid);
+
+    @Query("UPDATE Account a SET a.birthday=?1 WHERE a.openid=?2")
+    @Modifying
+    @Transactional
+    void updateBirthday(String birthday, String openid);
 }

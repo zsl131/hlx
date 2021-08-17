@@ -17,6 +17,7 @@ import com.zslin.weixin.tools.HlxTicketTools;
 import com.zslin.weixin.tools.SendTemplateMessageTools;
 import com.zslin.weixin.tools.TemplateMessageTools;
 import com.zslin.wx.dbtools.ScoreTools;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -323,6 +324,10 @@ public class DatasTools {
                     nickname = jsonObj.getString("nickname");
                     nickname = nickname.replaceAll("[^\\u0000-\\uFFFF]", ""); //替换utf8mb4字条
                 } catch (Exception e) {
+                }
+                try {
+                    a.setUnionid(jsonObj.getString("unionid"));
+                } catch (JSONException e) {
                 }
                 a.setHeadimgurl(jsonObj.getString("headimgurl"));
                 a.setNickname(nickname);

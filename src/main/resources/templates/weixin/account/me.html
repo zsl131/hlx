@@ -7,6 +7,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-account-me.css"/>
+    <script src="/js/jedate/jquery.jedate.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
+    <script src="/back-admin/bus/my-date.js"></script>
+
     <script type="text/javascript" src="/weixin/weixin-bind-phone.js"></script>
     <script type="text/javascript" src="/weixin/weixin-key-set.js"></script>
     <script type="text/javascript" src="/weixin/weixin-card.js"></script>
@@ -69,14 +73,14 @@
                         </div>
                     </a>
                     <!-- 如果是会员 -->
-                    <a th:if="${moneybag ne null}" class="weui-cell weui-cell_access show-password-cls" href="javascript:void(0)" onclick="uploadIdPic()">
+                    <a th:if="${moneybag ne null}" th:attr="phone=${moneybag.phone}, birthday=${moneybag.birthday}" class="weui-cell weui-cell_access show-password-cls" href="javascript:void(0)" onclick="uploadIdPic(this)">
                         <div class="weui-cell__hd"><i class="list-icon fa fa-birthday-cake"></i></div>
                         <div class="weui-cell__bd">
                             <span>我的生日</span>
                         </div>
                         <div class="weui-cell__ft">
                             <span th:text="${moneybag.birthday}" th:if="${moneybag.birthday ne null}">查看或修改</span>
-                            <span th:if="${moneybag.birthday eq null}">设置生日可享更多优惠哦</span>
+                            <span th:if="${moneybag.birthday eq null || moneybag.birthday eq ''}">设置生日可享更多优惠哦</span>
                         </div>
                     </a>
                     <a class="weui-cell weui-cell_access" href="/wx/account/score" >
