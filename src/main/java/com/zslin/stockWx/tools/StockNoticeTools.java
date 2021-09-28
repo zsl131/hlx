@@ -72,7 +72,7 @@ public class StockNoticeTools {
                     }
                 }
 
-                eventTools.eventRemind(openids, "收货入库通知", NOTICE_NAME, DateTools.date2Str(new Date(), "yyyy-MM-dd"), sb.toString(), "/wx/stock/goodsApply/show?batchNo="+batchNo);
+                eventTools.eventRemind(openids, "收货入库通知", NOTICE_NAME, DateTools.date2Str(new Date(), "yyyy-MM-dd"), sb.toString(), "/wx/stock/goodsApply/show?batchNo="+batchNo+"&storeSn="+ga.getStoreSn());
             }
         }).start();
     }
