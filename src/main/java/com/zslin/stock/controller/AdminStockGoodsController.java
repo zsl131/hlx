@@ -8,6 +8,8 @@ import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.PinyinToolkit;
 import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.stock.model.StockCategory;
 import com.zslin.stock.model.StockGoods;
 import com.zslin.stock.service.IStockCategoryService;
@@ -39,6 +41,9 @@ public class AdminStockGoodsController {
     @Autowired
     private GoodsNoTools goodsNoTools;
 
+    @Autowired
+    private IStoreDao storeDao;
+
     @GetMapping(value = "list")
     @AdminAuth(name = "库存物品管理", orderNum = 1, type = "1", icon = "fa fa-gift")
     public String list(Model model, Integer page, HttpServletRequest request) {
@@ -46,6 +51,7 @@ public class AdminStockGoodsController {
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id")));
         model.addAttribute("datas", datas);
         model.addAttribute("cateList", stockCategoryService.findAll()); //获取所有分类数据
+        model.addAttribute("storeList", storeDao.findByStatus("1"));
         return "admin/stock/stockGoods/list";
     }
 
@@ -55,6 +61,7 @@ public class AdminStockGoodsController {
     public String add(Model model, HttpServletRequest request) {
         model.addAttribute("stockGoods", new StockGoods());
         model.addAttribute("cateList", stockCategoryService.findAll()); //获取所有分类数据
+        model.addAttribute("storeList", storeDao.findByStatus("1"));
         return "admin/stock/stockGoods/add";
     }
 
@@ -64,9 +71,15 @@ public class AdminStockGoodsController {
         if(TokenTools.isNoRepeat(request)) { //不是重复提交
             stockGoods.setNameFull(PinyinToolkit.cn2Spell(stockGoods.getName(), ""));
             stockGoods.setNameShort(PinyinToolkit.cn2FirstSpell(stockGoods.getName()));
-            Integer orderNo = goodsNoTools.generateOrderNo();
+            Integer orderNo = goodsNoTools.generateOrderNo(stockGoods.getStoreSn());
             stockGoods.setOrderNo(orderNo);
             stockGoods.setHasWarn("1");
+            try {
+                Store store = storeDao.findBySn(stockGoods.getStoreSn());
+                stockGoods.setStoreId(store.getId());
+                stockGoods.setStoreName(store.getName());
+            } catch (Exception e) {
+            }
             stockGoods.setNo(goodsNoTools.buildNo(stockGoods.getLocationType(), orderNo));
             stockGoods.setAmount(0); //初次添加数量都为0 ，如有数量应从入库添加
             stockGoodsService.save(stockGoods);

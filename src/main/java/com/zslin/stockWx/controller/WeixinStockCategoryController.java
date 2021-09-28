@@ -1,6 +1,8 @@
 package com.zslin.stockWx.controller;
 
 import com.zslin.basic.tools.PinyinToolkit;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.stock.model.StockCategory;
 import com.zslin.stock.service.IStockCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,14 @@ public class WeixinStockCategoryController {
     @Autowired
     private IStockCategoryService stockCategoryService;
 
+    @Autowired
+    private IStoreDao storeDao;
+
     @GetMapping(value = "list")
-    public String list(Model model, HttpServletRequest request) {
-        List<StockCategory> list1 = stockCategoryService.listByLocationType("1");
-        List<StockCategory> list2 = stockCategoryService.listByLocationType("2");
-        List<StockCategory> list3 = stockCategoryService.listByLocationType("3");
+    public String list(Model model, String storeSn, HttpServletRequest request) {
+        List<StockCategory> list1 = stockCategoryService.listByLocationTypeAndStoreSn("1", storeSn);
+        List<StockCategory> list2 = stockCategoryService.listByLocationTypeAndStoreSn("2", storeSn);
+        List<StockCategory> list3 = stockCategoryService.listByLocationTypeAndStoreSn("3", storeSn);
         model.addAttribute("list1", list1);
         model.addAttribute("list2", list2);
         model.addAttribute("list3", list3);
@@ -36,12 +41,16 @@ public class WeixinStockCategoryController {
     }
 
     @RequestMapping(value="add", method=RequestMethod.POST)
-    public @ResponseBody String add(String locationType, String categoryName) {
+    public @ResponseBody String add(String locationType, String storeSn, String categoryName) {
         StockCategory stockCategory = new StockCategory();
         stockCategory.setLocationType(locationType);
         stockCategory.setName(categoryName);
         stockCategory.setNameFull(PinyinToolkit.cn2Spell(categoryName, ""));
         stockCategory.setNameShort(PinyinToolkit.cn2FirstSpell(categoryName));
+        Store store = storeDao.findBySn(storeSn);
+        stockCategory.setStoreName(store.getName());
+        stockCategory.setStoreId(store.getId());
+        stockCategory.setStoreSn(storeSn);
         stockCategoryService.save(stockCategory);
         return "1";
     }

@@ -6,6 +6,8 @@ import com.zslin.basic.repository.SpecificationOperator;
 import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.kaoqin.model.Worker;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.stock.dto.GoodsDto;
 import com.zslin.stock.model.Preenter;
 import com.zslin.stock.model.PreenterDetail;
@@ -61,19 +63,24 @@ public class WeixinStockPreenterController {
     @Autowired
     private StockNoticeTools stockNoticeTools;
 
+    @Autowired
+    private IStoreDao storeDao;
+
     @GetMapping(value = "listApply")
-    public String listApply(Model model, Integer page, HttpServletRequest request) {
+    public String listApply(Model model, String storeSn, Integer page, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         Page<Preenter> datas = preenterService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
-                new SpecificationOperator("operatorOpenid", "=", openid)),
+                new SpecificationOperator("operatorOpenid", "eq", openid),
+                new SpecificationOperator("storeSn", "eq", storeSn)),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
         return "weixin/stock/preenter/listApply";
     }
 
     @GetMapping(value="list")
-    public String list(Model model, Integer page, HttpServletRequest request) {
-        Page<Preenter> datas = preenterService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
+    public String list(Model model, String storeSn, Integer page, HttpServletRequest request) {
+        Page<Preenter> datas = preenterService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+                new SpecificationOperator("storeSn", "eq", storeSn)),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
         return "weixin/stock/preenter/listApply";
@@ -105,7 +112,7 @@ public class WeixinStockPreenterController {
     }
 
     @PostMapping(value = "applyPost")
-    public @ResponseBody String applyPost(String datas, Integer days, String batchNo, String isCheck, HttpServletRequest request) {
+    public @ResponseBody String applyPost(String datas, String storeSn, Integer days, String batchNo, String isCheck, HttpServletRequest request) {
         boolean isAdd = (batchNo == null || "".equals(batchNo));
         String openid = SessionTools.getOpenid(request);
         Worker worker = stockWxTools.getLoginWorker(openid);
@@ -119,7 +126,11 @@ public class WeixinStockPreenterController {
             ga.setCreateDay(DateTools.date2Str(new Date()));
             ga.setCreateLong(System.currentTimeMillis());
             ga.setCreateTime(DateTools.date2Str(new Date(), "HH:mm:ss"));
-            Integer no = goodsNoTools.generatePreenterNo();
+            Store store = storeDao.findBySn(storeSn);
+            ga.setStoreName(store.getName());
+            ga.setStoreId(store.getId());
+            ga.setStoreSn(storeSn);
+            Integer no = goodsNoTools.generatePreenterNo(storeSn);
             ga.setNo(no);
             ga.setBatchNo(goodsNoTools.buildApplyBatchNo(no));
             ga.setStatus("0");
@@ -272,11 +283,14 @@ public class WeixinStockPreenterController {
     }
 
     @GetMapping(value = "apply")
-    public String apply(Model model, HttpServletRequest request) {
+    public String apply(Model model, String storeSn, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
 //        Worker w = stockWxTools.getLoginWorker(openid);
         if(stockWxTools.hasAuth(StockWxTools.BUYER, openid)) {
-            List<StockGoods> list = stockGoodsService.findAll(SimpleSortBuilder.generateSort("locationType_a", "cateId_a"));
+            List<StockGoods> list = stockGoodsService.findAll(
+                    ParamFilterUtil.getInstance().buildSearch(model, request,
+                            new SpecificationOperator("storeSn", "eq", storeSn)),
+                    SimpleSortBuilder.generateSort("locationType_a", "cateId_a"));
             buildStockGoods(list, model);
             return "weixin/stock/preenter/apply";
         } else {

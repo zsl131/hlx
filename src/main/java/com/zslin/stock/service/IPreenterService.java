@@ -14,8 +14,8 @@ public interface IPreenterService extends BaseRepository<Preenter, Integer>, Jpa
 
     Preenter findByBatchNo(String batchNo);
 
-    @Query("SELECT MAX(no) FROM Preenter")
-    Integer maxNo();
+    @Query("SELECT MAX(no) FROM Preenter WHERE storeSn=?1")
+    Integer maxNo(String storeSn);
 
     @Query("UPDATE Preenter set status=?2 WHERE batchNo=?1")
     @Modifying

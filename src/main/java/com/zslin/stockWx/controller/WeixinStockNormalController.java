@@ -20,8 +20,8 @@ public class WeixinStockNormalController {
     private IStockGoodsService stockGoodsService;
 
     @GetMapping(value = "index")
-    public String index(Model model, HttpServletRequest request) {
-        model.addAttribute("goodsList", stockGoodsService.findAllShow());
+    public String index(Model model, String storeSn, HttpServletRequest request) {
+        model.addAttribute("goodsList", stockGoodsService.findAllShow(storeSn));
         return "weixin/stock/home/indexNormal";
     }
 }

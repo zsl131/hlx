@@ -2,8 +2,11 @@ package com.zslin.stockWx.controller;
 
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
+import com.zslin.basic.repository.SpecificationOperator;
 import com.zslin.basic.tools.PinyinToolkit;
 import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.stock.model.StockCategory;
 import com.zslin.stock.model.StockGoods;
 import com.zslin.stock.service.IStockCategoryService;
@@ -37,8 +40,11 @@ public class WeixinStockGoodsController {
     @Autowired
     private GoodsNoTools goodsNoTools;
 
+    @Autowired
+    private IStoreDao storeDao;
+
     @GetMapping(value = "list")
-    public String list(Model model, Integer page, HttpServletRequest request) {
+    public String list(Model model, String storeSn, Integer page, HttpServletRequest request) {
         try {
             String cateIdStr = request.getParameter("filter_cateId");
             if(cateIdStr!=null && !"".equals(cateIdStr)) {
@@ -48,11 +54,12 @@ public class WeixinStockGoodsController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Page<StockGoods> datas = stockGoodsService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
+        Page<StockGoods> datas = stockGoodsService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+                new SpecificationOperator("storeSn", "eq", storeSn)),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
-        List<StockCategory> list1 = stockCategoryService.listByLocationType("1");
-        List<StockCategory> list2 = stockCategoryService.listByLocationType("2");
-        List<StockCategory> list3 = stockCategoryService.listByLocationType("3");
+        List<StockCategory> list1 = stockCategoryService.listByLocationTypeAndStoreSn("1", storeSn);
+        List<StockCategory> list2 = stockCategoryService.listByLocationTypeAndStoreSn("2", storeSn);
+        List<StockCategory> list3 = stockCategoryService.listByLocationTypeAndStoreSn("3", storeSn);
         model.addAttribute("list1", list1);
         model.addAttribute("list2", list2);
         model.addAttribute("list3", list3);
@@ -61,7 +68,7 @@ public class WeixinStockGoodsController {
     }
 
     @RequestMapping(value="add", method=RequestMethod.POST)
-    public @ResponseBody String add(Integer cateId, String name, String unit, String remark, Integer warnAmount, String status) {
+    public @ResponseBody String add(String storeSn, Integer cateId, String name, String unit, String remark, Integer warnAmount, String status) {
         StockCategory sc = stockCategoryService.findOne(cateId);
         StockGoods sg = new StockGoods();
         sg.setNameFull(PinyinToolkit.cn2Spell(name, ""));
@@ -76,7 +83,11 @@ public class WeixinStockGoodsController {
         sg.setAmount(0); //初次添加数量都为0 ，如有数量应从入库添加
         sg.setCateName(sc.getName());
         sg.setLocationType(sc.getLocationType());
-        Integer orderNo = goodsNoTools.generateOrderNo();
+        Integer orderNo = goodsNoTools.generateOrderNo(storeSn);
+        Store store = storeDao.findBySn(storeSn);
+        sg.setStoreName(store.getName());
+        sg.setStoreId(store.getId());
+        sg.setStoreSn(storeSn);
         sg.setOrderNo(orderNo);
         sg.setNo(goodsNoTools.buildNo(sg.getLocationType(), orderNo));
 

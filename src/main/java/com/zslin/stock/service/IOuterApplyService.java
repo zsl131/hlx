@@ -14,8 +14,8 @@ public interface IOuterApplyService extends BaseRepository<OuterApply, Integer>,
 
     OuterApply findByBatchNo(String batchNo);
 
-    @Query("SELECT MAX(no) FROM OuterApply")
-    Integer maxNo();
+    @Query("SELECT MAX(no) FROM OuterApply WHERE storeSn=?1")
+    Integer maxNo(String storeSn);
 
     @Query("UPDATE OuterApply set status=?2 WHERE batchNo=?1")
     @Modifying

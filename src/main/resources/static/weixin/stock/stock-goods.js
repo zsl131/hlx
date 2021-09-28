@@ -19,6 +19,15 @@ $(function() {
     setCategoryContent(1, $("#filter-div").find(".weui-bar__item_on").html());
 })
 
+function gotoList() {
+    var storeSn = $("input[name='curStoreSn']").val();
+    window.location.href = "/wx/stock/stockGoods/list?storeSn="+storeSn;
+}
+function gotoIndex() {
+    var storeSn = $("input[name='curStoreSn']").val();
+    window.location.href = "/wx/stock/index?storeSn="+storeSn;
+}
+
 function setCategoryContent(locationType, title) {
     var html = $(("#list"+locationType)).html();
     $("#filter-div").find(".weui-tab__panel").html(html);
@@ -79,6 +88,8 @@ function modifyGoods(obj) {
 
 function addGoods() {
     if(containAuth("10")) {
+        var storeSn = $("input[name='curStoreSn']").val();
+        console.log("===========>"+storeSn)
         var cateId = $("input[name='category-input']").attr("cateId");
         var cateName = $("input[name='category-input']").attr("cateName");
         if(!cateId || cateId=='' || cateId<0) {
@@ -96,8 +107,9 @@ function addGoods() {
                 var remark = $(modifyDialog).find("input[name='remark']").val();
                 var warnAmount = $(modifyDialog).find("input[name='warnAmount']").val();
                 var status = "1";
+
                 //Integer cateId, String name, String unit, String remark, Integer warnAmount, String status
-                $.post("/wx/stock/stockGoods/add", {cateId: cateId, name: name, unit: unit, remark: remark, warnAmount: warnAmount, status: status}, function(res) {
+                $.post("/wx/stock/stockGoods/add", {storeSn: storeSn, cateId: cateId, name: name, unit: unit, remark: remark, warnAmount: warnAmount, status: status}, function(res) {
                     if(res=='1') {
                         showToast("修改成功");
                         reloadWin();

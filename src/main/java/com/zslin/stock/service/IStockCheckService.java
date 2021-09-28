@@ -14,8 +14,8 @@ public interface IStockCheckService extends BaseRepository<StockCheck, Integer>,
 
     StockCheck findByBatchNo(String batchNo);
 
-    @Query("SELECT MAX(no) FROM StockCheck")
-    Integer maxNo();
+    @Query("SELECT MAX(no) FROM StockCheck WHERE storeSn=?1")
+    Integer maxNo(String storeSn);
 
     @Query("UPDATE StockCheck set status=?2 WHERE batchNo=?1")
     @Modifying

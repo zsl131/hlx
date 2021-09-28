@@ -1,6 +1,7 @@
 package com.zslin.admin.controller;
 
 import com.zslin.web.service.IAccountService;
+import com.zslin.weixin.tools.ModifyFinanceDetailTools;
 import com.zslin.wx.tools.ExchangeTools;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +25,15 @@ public class AdminTempController {
 
     @Autowired
     private IAccountService accountService;
+
+    @Autowired
+    private ModifyFinanceDetailTools modifyFinanceDetailTools;
+
+    @GetMapping(value = "processDetail")
+    public String processDetail(Integer id) {
+        String res = modifyFinanceDetailTools.process(id);
+        return "ModifyFinanceDetailTools  Result:  "+res;
+    }
 
     @GetMapping(value = "listWxUsers")
     public String listWxUsers(HttpServletRequest request) {

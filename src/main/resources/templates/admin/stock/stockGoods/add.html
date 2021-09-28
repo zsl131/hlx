@@ -20,6 +20,16 @@
 			<form method="POST" th:object="${stockGoods}" onsubmit="return checkData()" id="dataForm">
 				<div class="form-group form-group-lg">
 					<div class="input-group">
+						<div class="input-group-addon">所属店铺：</div>
+						<select class='filter_element form-control' opt="eq" name='storeSn'>
+							<option value="">==选择店铺==</option>
+							<option th:each="obj: ${storeList}" th:value="${obj.sn}" th:text="${obj.name}">冻库</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
 						<div class="input-group-addon">所处位置：</div>
 						<div class="form-control">
 							<input type="radio" name="locationType" value="1" id="location_1" th:checked="${stockGoods.locationType == '1'}?'checked'"/><label for="location_1">冻库</label>
@@ -32,7 +42,7 @@
 					<div class="input-group">
 						<div class="input-group-addon">所属分类：</div>
 						<select class="form-control category-select">
-							<option>请先选择“所处位置”</option>
+							<option>请先选择“所属店铺”和“所处位置”</option>
 						</select>
 					</div>
 				</div>
@@ -72,7 +82,7 @@
 				<button type="submit" class="btn btn-primary">确定提交</button>
 			</form>
 			<div id="categoryList" style="display:none">
-				<span th:each="cate: ${cateList}" th:attr="locationType=${cate.locationType}, cateId=${cate.id}, cateName=${cate.name}"></span>
+				<span th:each="cate: ${cateList}" th:attr="storeSn=${cate.storeSn}, locationType=${cate.locationType}, cateId=${cate.id}, cateName=${cate.name}"></span>
 			</div>
 		</div>
 	</body>

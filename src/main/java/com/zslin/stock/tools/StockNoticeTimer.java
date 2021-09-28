@@ -1,6 +1,8 @@
 package com.zslin.stock.tools;
 
 import com.zslin.basic.tools.DateTools;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.stock.model.StockGoods;
 import com.zslin.stock.service.IStockGoodsService;
 import com.zslin.stockWx.tools.StockWxTools;
@@ -27,19 +29,27 @@ public class StockNoticeTimer {
     @Autowired
     private StockWxTools stockWxTools;
 
+    @Autowired
+    private IStoreDao storeDao;
+
     /** 每天早上9点通知预警物品 */
     @Scheduled(cron = "0 0 9 * * ?")
     public void noticeWarnGoods() {
-        List<StockGoods> list = stockGoodsService.findByWarn();
-        if(list!=null && list.size()>0) {
-            String spe = "\\n";
-            List<String> openids = stockWxTools.getBuyerOpenids();
-            StringBuffer sb = new StringBuffer();
-            for(StockGoods sg : list) {
-                sb.append(sg.getName()).append("：").append(sg.getAmount()).append(sg.getUnit()).append(spe);
-                stockGoodsService.updateHasWarn("1", sg.getId()); //通知过后就需要设置为已通知，防止重复通知
+        List<Store> storeList = storeDao.findByStatus("1");
+
+        for(Store store: storeList) {
+            String storeSn = store.getSn();
+            List<StockGoods> list = stockGoodsService.findByWarn(storeSn);
+            if(list!=null && list.size()>0) {
+                String spe = "\\n";
+                List<String> openids = stockWxTools.getBuyerOpenids();
+                StringBuffer sb = new StringBuffer();
+                for(StockGoods sg : list) {
+                    sb.append(sg.getName()).append("：").append(sg.getAmount()).append(sg.getUnit()).append(spe);
+                    stockGoodsService.updateHasWarn("1", sg.getId()); //通知过后就需要设置为已通知，防止重复通知
+                }
+                eventTools.eventRemind(openids, "库存预警通知", "库存预警通知", DateTools.date2Str(new Date(), "yyyyMMdd"), sb.toString(), "/wx/stock/listWarn?storeSn="+storeSn);
             }
-            eventTools.eventRemind(openids, "库存预警通知", "库存预警通知", DateTools.date2Str(new Date(), "yyyyMMdd"), sb.toString(), "/wx/stock/listWarn");
         }
     }
 }

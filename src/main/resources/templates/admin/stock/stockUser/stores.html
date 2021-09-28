@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="fragments/adminModel">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<script type="text/javascript" src="/basic/js-lib/bootstrap-treeview.min.js"></script>
+
+<title>为仓管员指定店铺</title>
+</head>
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="header lighter smaller blue">
+			<h3><i class="icon-key"></i>&nbsp;仓管员指定 <small th:text="${stockUser.name}+'['+${stockUser.phone}+']'"></small></h3>
+			<div th:replace="admin/stock/stockUser/nav :: content" th:remove="tag"></div>
+		</div>
+		<div class="widget-box">
+			<div class="widget-header header-color-blue2">
+				<h4 class="lighter smaller">在店铺名前面打钩则表示授权（共有【<b th:text="${#lists.size(storeList)}"></b>】个角色）</h4>
+			</div>
+
+			<div class="list-group" th:each="obj : ${storeList}">
+					<a href="javascript:" class="list-group-item">
+						<label>
+							<input class="ace ace-checkbox-2 single-store-box" th:id="'store_'+${obj.id}" type="checkbox" />
+							<span class="lbl" th:text="|${obj.name}-【${obj.sn}】|">&nbsp;${obj.name}</span>
+						</label>
+					</a>
+			</div>
+			<input type="hidden" id="curStores" th:value="${storeIds}"/>
+			<input type="hidden" id="curUserId" th:value="${stockUser.id}"/>
+		</div>
+		<script type="text/javascript" src="/back-admin/myself/user_stores.js"></script>
+	</div>
+</body>
+</html>

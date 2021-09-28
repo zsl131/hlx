@@ -2,6 +2,7 @@ package com.zslin.stockWx.controller;
 
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
+import com.zslin.basic.repository.SpecificationOperator;
 import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.kaoqin.model.Worker;
@@ -61,8 +62,9 @@ public class WeixinStockCheckController {
     private StockNoticeTools stockNoticeTools;
 
     @GetMapping(value = "list")
-    public String list(Model model, Integer page, HttpServletRequest request) {
-        Page<StockCheck> datas = stockCheckService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
+    public String list(Model model, String storeSn, Integer page, HttpServletRequest request) {
+        Page<StockCheck> datas = stockCheckService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+                new SpecificationOperator("storeSn", "eq", storeSn)),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
         return "weixin/stock/stockCheck/list";
@@ -77,7 +79,7 @@ public class WeixinStockCheckController {
     }
 
     @PostMapping(value = "postAddCheck")
-    public @ResponseBody String postAddCheck(Integer workerId, HttpServletRequest request) {
+    public @ResponseBody String postAddCheck(Integer workerId, String storeSn, HttpServletRequest request) {
         Worker w = workerService.findOne(workerId);
         Worker worker = stockWxTools.getLoginWorker(SessionTools.getOpenid(request));
         StockCheck sc = new StockCheck();
@@ -89,7 +91,7 @@ public class WeixinStockCheckController {
         sc.setCreateDay(DateTools.date2Str(new Date()));
         sc.setCreateLong(System.currentTimeMillis());
         sc.setCreateTime(DateTools.date2Str(new Date(), "HH:mm:ss"));
-        Integer no = goodsNoTools.generateApplyNo();
+        Integer no = goodsNoTools.generateApplyNo(storeSn);
         sc.setNo(no);
         sc.setBatchNo(goodsNoTools.buildApplyBatchNo(no));
         sc.setStatus("0");

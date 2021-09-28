@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface IStockCategoryService extends BaseRepository<StockCategory, Integer>, JpaSpecificationExecutor<StockCategory> {
 
-    @Query("FROM StockCategory sc WHERE sc.locationType=?1")
-    List<StockCategory> listByLocationType(String locationType);
+    @Query("FROM StockCategory sc WHERE sc.locationType=?1 AND sc.storeSn=?2")
+    List<StockCategory> listByLocationTypeAndStoreSn(String locationType, String storeSn);
 }

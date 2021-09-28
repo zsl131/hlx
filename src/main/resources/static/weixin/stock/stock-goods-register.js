@@ -142,14 +142,15 @@ function submitApplyDatas(thisObj) {
         showDialog("未设置任何物品，不可提交入库 ", "<b class='fa fa-warning'></b> 系统提示");
     } else {
         var isCheck = $("input[name='is-check']").val();
+        var storeSn = $("input[name='curStoreSn']").val(); //店铺SN
         var html = '<h4>此次入库总数量为：<b style="color:#F00">'+totalCount+'</b></h4>是否已设置完成并确定提交入库信息呢？';
         var applyDialog = confirmDialog(html, "<b class='fa fa-question-circle'></b> 系统提示", function() {
             $(thisObj).attr("disabled", true);
-            $.post("/wx/stock/goodsRegister/applyPost", {datas: datas}, function(res) {
+            $.post("/wx/stock/goodsRegister/applyPost", {storeSn: storeSn, datas: datas}, function(res) {
                 if(res == '1') {
                     delCookie(dataCookieName);
                     showToast("入库成功");
-                    window.location.href = '/wx/stock/goodsRegister/listApply';
+                    window.location.href = '/wx/stock/goodsRegister/listApply?storeSn='+storeSn;
                 }
             }, "json");
             applyDialog.remove();

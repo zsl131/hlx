@@ -10,6 +10,15 @@
                 </div>
 
                 <div class="input-group">
+                    <span class="input-group-addon">店铺</span>
+                    <select class='filter_element form-control' opt="eq" name='filter_storeSn'>
+                        <option value="">=全部=</option>
+
+                        <option th:each="obj: ${storeList}" th:value="${obj.sn}" th:text="${obj.name}">冻库</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
                     <span class="input-group-addon">位置</span>
                     <select class='filter_element form-control' opt="eq" name='filter_locationType'>
                         <option value="">=全部=</option>

@@ -15,73 +15,79 @@
         <div class="page">
             <div class="page__hd">
                 <h1 class="page__title">库存管理系统</h1>
-                <p class="page__desc" th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">加载更多</p>
+                <p class="page__desc" th:text="|${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}（${store.name}）|">加载更多</p>
             </div>
             <div class="page__bd">
-                <div class="" th:if="${loginWorker eq null or loginWorker.operator eq null or loginWorker.operator eq ''}">
+                <div class="" th:if="${storeUser eq null or #lists.size(storeList) le 0}">
                     <div>
                         抱歉的告诉您，此功能我们只对店铺管理人员开放。即将自动跳转到<a href="/weixin/index" class="auto-redirect" time="3">首页</a>。
                     </div>
                 </div>
-                <div th:unless="${loginWorker eq null or loginWorker.operator eq null or loginWorker.operator eq ''}">
+                <div th:unless="${storeUser eq null or #lists.size(storeList) le 0}">
                     <div class="page">
+                        <div style="padding-bottom: 10px;">
+                            <select class="form-control" name="storeSn">
+                                <option th:each="obj: ${storeList}" th:selected="${store.sn eq obj.sn?true:false}" th:value="${obj.sn}" th:text="${obj.name}"></option>
+                            </select>
+                        </div>
+
                         <div class="weui-grids">
-                            <a href="/wx/stock/stockCategory/list" class="weui-grid">
+                            <a th:href="|/wx/stock/stockCategory/list?storeSn=${store.sn}|" class="weui-grid">
                                 <div class="weui-grid__icon">
                                     <b class="fa fa-cubes" style="font-size:2em;"></b>
                                 </div>
                                 <p class="weui-grid__label">物品类别</p>
                             </a>
-                            <a href="/wx/stock/stockGoods/list" class="weui-grid">
+                            <a th:href="|/wx/stock/stockGoods/list?storeSn=${store.sn}|" class="weui-grid">
                                 <div class="weui-grid__icon">
                                     <b class="fa fa-gift" style="font-size:2em;"></b>
                                 </div>
                                 <p class="weui-grid__label">物品管理</p>
                             </a>
-                            <a href="/wx/stock/outerApply/apply" class="weui-grid">
+                            <a th:href="|/wx/stock/outerApply/apply?storeSn=${store.sn}|" class="weui-grid">
                                 <div class="weui-grid__icon">
                                     <b class="fa fa-share-square-o" style="font-size:2em;"></b>
                                 </div>
                                 <p class="weui-grid__label">出库登记</p>
                             </a>
-                            <a href="/wx/stock/outerApply/listApply" class="weui-grid">
+                            <a th:href="|/wx/stock/outerApply/listApply?storeSn=${store.sn}|" class="weui-grid">
                                 <div class="weui-grid__icon">
                                     <b class="fa fa-list-ul" style="font-size:2em;"></b>
                                 </div>
                                 <p class="weui-grid__label">出库记录</p>
                             </a>
-                            <a href="/wx/stock/goodsRegister/apply" class="weui-grid">
+                            <a th:href="|/wx/stock/goodsRegister/apply?storeSn=${store.sn}|" class="weui-grid">
                                 <div class="weui-grid__icon">
                                     <b class="fa fa-plus-circle" style="font-size:2em;"></b>
                                 </div>
                                 <p class="weui-grid__label">入库登记</p>
                             </a>
-                            <a href="/wx/stock/goodsRegister/listApply" class="weui-grid">
+                            <a th:href="|/wx/stock/goodsRegister/listApply?storeSn=${store.sn}|" class="weui-grid">
                                 <div class="weui-grid__icon">
                                     <b class="fa fa-list-ul" style="font-size:2em;"></b>
                                 </div>
                                 <p class="weui-grid__label">入库记录</p>
                             </a>
-                            <a href="/wx/stock/goodsApply/apply" class="weui-grid">
+                            <a th:href="|/wx/stock/goodsApply/apply?storeSn=${store.sn}|" class="weui-grid">
                                 <div class="weui-grid__icon">
                                     <b class="fa fa-shopping-basket" style="font-size:2em;"></b>
                                 </div>
                                 <p class="weui-grid__label">物品申购</p>
                             </a>
-                            <a href="/wx/stock/goodsApply/listApply" class="weui-grid">
+                            <a th:href="|/wx/stock/goodsApply/listApply?storeSn=${store.sn}|" class="weui-grid">
                                 <div class="weui-grid__icon">
                                     <b class="fa fa-list-ul" style="font-size:2em;"></b>
                                 </div>
                                 <p class="weui-grid__label">申购记录</p>
                             </a>
-                            <a href="/wx/stock/stockCheck/list" class="weui-grid">
+                            <a th:href="|/wx/stock/stockCheck/list?storeSn=${store.sn}|" class="weui-grid">
                                 <div class="weui-grid__icon">
                                     <b class="fa fa-search-plus" style="font-size:2em;"></b>
                                 </div>
                                 <p class="weui-grid__label">库存盘点</p>
                             </a>
 
-                            <a href="/wx/stock/listWarn" class="weui-grid">
+                            <a th:href="|/wx/stock/listWarn?storeSn=${store.sn}|" class="weui-grid">
                                 <div class="weui-grid__icon">
                                     <b class="fa fa-warning" style="font-size:2em;"></b>
                                 </div>
@@ -93,7 +99,7 @@
                                 </div>
                                 <p class="weui-grid__label">我的任务</p>
                             </a>-->
-                            <a href="/wx/stock/preenter/apply" class="weui-grid">
+                            <a th:href="|/wx/stock/preenter/apply?storeSn=${store.sn}|" class="weui-grid">
                                 <div class="weui-grid__icon">
                                     <b class="fa fa-pencil-square-o" style="font-size:2em;"></b>
                                 </div>

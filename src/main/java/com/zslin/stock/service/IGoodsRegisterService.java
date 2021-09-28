@@ -12,6 +12,6 @@ public interface IGoodsRegisterService extends BaseRepository<GoodsRegister, Int
 
     GoodsRegister findByBatchNo(String batchNo);
 
-    @Query("SELECT MAX(no) FROM GoodsRegister")
-    Integer maxNo();
+    @Query("SELECT MAX(no) FROM GoodsRegister WHERE storeSn=?1")
+    Integer maxNo(String storeSn);
 }

@@ -144,6 +144,7 @@ function submitApplyDatas() {
         showDialog("未选任何物品，不可提交预录入", "<b class='fa fa-warning'></b> 系统提示");
     } else {
         var isCheck = $("input[name='is-check']").val();
+        var storeSn = $("input[name='curStoreSn']").val();
         needDays = (needDays==null||isNaN(needDays))?4:needDays;
         var html = '<h4>此次预入库总数量为：<b style="color:#F00">'+totalCount+'</b></h4>'+
                 '<div class="form-group form-group-lg"><div class="input-group"><div class="input-group-addon">预计</div><input name="days" type="number" class="form-control text-center" placeholder="输入天数" value="'+needDays+'"/><div class="input-group-addon">天后到货</div></div></div>' +
@@ -154,7 +155,7 @@ function submitApplyDatas() {
             if(days<0) {
                 showDialog("<b class='fa fa-warning'></b> 请输入预计到货天数，方便通知店员收货", "<b class='fa fa-info'></b> 系统提示");
             } else {
-                $.post("/wx/stock/preenter/applyPost", {datas: datas, days:days, batchNo: batchNo, isCheck: isCheck}, function(res) {
+                $.post("/wx/stock/preenter/applyPost", {storeSn: storeSn, datas: datas, days:days, batchNo: batchNo, isCheck: isCheck}, function(res) {
                     if(res == '1') {
                         delCookie(dataCookieName);
                         showToast("提交成功，等待收货");

@@ -240,7 +240,7 @@
                         </div>
                     </a>
 
-                    <a class="weui-cell weui-cell_access" href="/wx/stock/index" th:if="${account.type eq '2' || account.type eq '5' || account.type eq '10'}">
+                    <a class="weui-cell weui-cell_access" href="/wx/stock/index" th:if="${(account.type eq '2' || account.type eq '5' || account.type eq '10') || (stockUser ne null && stockUser.status eq '1' && stockUser.storeSns ne null && stockUser.storeSns ne '')}">
                         <div class="weui-cell__hd"><i class="list-icon fa fa-cube"></i></div>
                         <div class="weui-cell__bd">
                             <span>库存管理</span>

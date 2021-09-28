@@ -19,6 +19,8 @@ import com.zslin.multi.model.MoneybagDetail;
 import com.zslin.sms.tools.RandomTools;
 import com.zslin.sms.tools.SmsConfig;
 import com.zslin.sms.tools.SmsTools;
+import com.zslin.stock.model.StockUser;
+import com.zslin.stock.service.IStockUserService;
 import com.zslin.web.model.*;
 import com.zslin.web.service.*;
 import com.zslin.weixin.annotation.HasTemplateMessage;
@@ -132,6 +134,9 @@ public class WeixinAccountController {
     @Autowired
     private SendTemplateMessageTools sendTemplateMessageTools;
 
+    @Autowired
+    private IStockUserService stockUserService;
+
     //修改密码
     @PostMapping(value = "setPassword")
     public @ResponseBody String setPassword(String password, HttpServletRequest request) {
@@ -198,6 +203,8 @@ public class WeixinAccountController {
             model.addAttribute("hasError", true);
             model.addAttribute("message", "请取消关注后再重新关注");
         } else {
+            StockUser stockUser = stockUserService.findByPhone(account.getPhone());
+            model.addAttribute("stockUser", stockUser); //获取仓管人员
             FinancePersonal personal = financePersonalDao.findByOpenid(openid);
             model.addAttribute("personal", personal); //获取财务人员
             model.addAttribute("hadError", false);

@@ -7,6 +7,8 @@ import com.zslin.basic.repository.SpecificationOperator;
 import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.kaoqin.model.Worker;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.stock.dto.GoodsDto;
 import com.zslin.stock.model.OuterApply;
 import com.zslin.stock.model.OuterApplyDetail;
@@ -62,19 +64,24 @@ public class WeixinStockOuterApplyController {
     @Autowired
     private StockNoticeTools stockNoticeTools;
 
+    @Autowired
+    private IStoreDao storeDao;
+
     @GetMapping(value = "listApply")
-    public String listApply(Model model, Integer page, HttpServletRequest request) {
+    public String listApply(Model model, String storeSn, Integer page, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         Page<OuterApply> datas = outerApplyService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
-                new SpecificationOperator("applyOpenid", "=", openid)),
+                new SpecificationOperator("applyOpenid", "eq", openid),
+                new SpecificationOperator("storeSn", "eq", storeSn)),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
         return "weixin/stock/outerApply/listApply";
     }
 
     @GetMapping(value="list")
-    public String list(Model model, Integer page, HttpServletRequest request) {
-        Page<OuterApply> datas = outerApplyService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
+    public String list(Model model, String storeSn, Integer page, HttpServletRequest request) {
+        Page<OuterApply> datas = outerApplyService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+                new SpecificationOperator("storeSn", "eq", storeSn)),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
         return "weixin/stock/outerApply/listApply";
@@ -107,7 +114,7 @@ public class WeixinStockOuterApplyController {
     }
 
     @PostMapping(value = "applyPost")
-    public @ResponseBody String applyPost(String datas, String batchNo, String isCheck, HttpServletRequest request) {
+    public @ResponseBody String applyPost(String datas, String batchNo, String storeSn, String isCheck, HttpServletRequest request) {
         boolean isAdd = (batchNo == null || "".equals(batchNo));
         String openid = SessionTools.getOpenid(request);
         Worker worker = stockWxTools.getLoginWorker(openid);
@@ -121,7 +128,13 @@ public class WeixinStockOuterApplyController {
             ga.setCreateDay(DateTools.date2Str(new Date()));
             ga.setCreateLong(System.currentTimeMillis());
             ga.setCreateTime(DateTools.date2Str(new Date(), "HH:mm:ss"));
-            Integer no = goodsNoTools.generateOuterApplyNo();
+
+            Store store = storeDao.findBySn(storeSn);
+            ga.setStoreName(store.getName());
+            ga.setStoreId(store.getId());
+            ga.setStoreSn(storeSn);
+
+            Integer no = goodsNoTools.generateOuterApplyNo(storeSn);
             ga.setNo(no);
             ga.setBatchNo(goodsNoTools.buildApplyBatchNo(no));
             ga.setStatus("0");
@@ -270,14 +283,22 @@ public class WeixinStockOuterApplyController {
         }
         model.addAttribute("apply", ga);
         List<StockGoods> list = stockGoodsService.findAll(new SimpleSpecificationBuilder<>("amount", ">", "0").generate(), SimpleSortBuilder.generateSort("locationType_a", "cateId_a"));
+        /*List<StockGoods> list = stockGoodsService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+                new SpecificationOperator("storeSn", "eq", storeSn),
+                new SpecificationOperator("amount", "gt", "0")),
+                SimpleSortBuilder.generateSort("locationType_a", "cateId_a"));*/
         buildStockGoods(list, model);
         model.addAttribute("isCheck", isCheck);
         return "weixin/stock/outerApply/apply";
     }
 
     @GetMapping(value = "apply")
-    public String apply(Model model, HttpServletRequest request) {
-        List<StockGoods> list = stockGoodsService.findAll(new SimpleSpecificationBuilder<>("amount", ">", "0").generate(), SimpleSortBuilder.generateSort("locationType_a", "cateId_a"));
+    public String apply(Model model, String storeSn, HttpServletRequest request) {
+//        List<StockGoods> list = stockGoodsService.findAll(new SimpleSpecificationBuilder<>("amount", ">", "0").generate(), SimpleSortBuilder.generateSort("locationType_a", "cateId_a"));
+        List<StockGoods> list = stockGoodsService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+                new SpecificationOperator("storeSn", "eq", storeSn),
+                new SpecificationOperator("amount", "gt", 0)),
+                SimpleSortBuilder.generateSort("locationType_a", "cateId_a"));
         buildStockGoods(list, model);
         return "weixin/stock/outerApply/apply";
     }

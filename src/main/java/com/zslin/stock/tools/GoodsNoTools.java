@@ -32,8 +32,8 @@ public class GoodsNoTools {
     private IStockCheckService stockCheckService;
 
     /** 生成物品编号 */
-    public Integer generateOrderNo() {
-        Integer maxOrderNo = stockGoodsService.maxOrderNo();
+    public Integer generateOrderNo(String storeSn) {
+        Integer maxOrderNo = stockGoodsService.maxOrderNo(storeSn);
         maxOrderNo = (maxOrderNo == null)?0:maxOrderNo;
         return maxOrderNo+1;
     }
@@ -50,36 +50,36 @@ public class GoodsNoTools {
     }
 
     /** 生成申购编号 */
-    public Integer generateApplyNo() {
-        Integer maxNo = goodsApplyService.maxNo();
+    public Integer generateApplyNo(String storeSn) {
+        Integer maxNo = goodsApplyService.maxNo(storeSn);
         maxNo = (maxNo == null)?0:maxNo;
         return maxNo + 1;
     }
 
     /** 生成库出申购编号 */
-    public Integer generateOuterApplyNo() {
-        Integer maxNo = outerApplyService.maxNo();
+    public Integer generateOuterApplyNo(String storeSn) {
+        Integer maxNo = outerApplyService.maxNo(storeSn);
         maxNo = (maxNo == null)?0:maxNo;
         return maxNo + 1;
     }
 
     /** 生成入库编号 */
-    public Integer generateGoodsRegisterNo() {
-        Integer maxNo = goodsRegisterService.maxNo();
+    public Integer generateGoodsRegisterNo(String storeSn) {
+        Integer maxNo = goodsRegisterService.maxNo(storeSn);
         maxNo = (maxNo == null)?0:maxNo;
         return maxNo + 1;
     }
 
     /** 生成预录入编号 */
-    public Integer generatePreenterNo() {
-        Integer maxNo = preenterService.maxNo();
+    public Integer generatePreenterNo(String storeSn) {
+        Integer maxNo = preenterService.maxNo(storeSn);
         maxNo = (maxNo == null)?0:maxNo;
         return maxNo + 1;
     }
 
     /** 生成预录入编号 */
-    public Integer generateGoodsCheckNo() {
-        Integer maxNo = stockCheckService.maxNo();
+    public Integer generateGoodsCheckNo(String storeSn) {
+        Integer maxNo = stockCheckService.maxNo(storeSn);
         maxNo = (maxNo == null)?0:maxNo;
         return maxNo + 1;
     }

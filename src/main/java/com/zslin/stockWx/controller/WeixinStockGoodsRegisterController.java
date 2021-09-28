@@ -6,6 +6,8 @@ import com.zslin.basic.repository.SpecificationOperator;
 import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.kaoqin.model.Worker;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.stock.dto.GoodsDto;
 import com.zslin.stock.model.GoodsRegister;
 import com.zslin.stock.model.GoodsRegisterDetail;
@@ -61,11 +63,15 @@ public class WeixinStockGoodsRegisterController {
     @Autowired
     private StockNoticeTools stockNoticeTools;
 
+    @Autowired
+    private IStoreDao storeDao;
+
     @GetMapping(value = "listApply")
-    public String listApply(Model model, Integer page, HttpServletRequest request) {
+    public String listApply(Model model, String storeSn, Integer page, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         Page<GoodsRegister> datas = goodsRegisterService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request
-                ,new SpecificationOperator("applyOpenid", "=", openid)
+                ,new SpecificationOperator("applyOpenid", "eq", openid),
+                new SpecificationOperator("storeSn", "eq", storeSn)
                 ),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
@@ -73,8 +79,9 @@ public class WeixinStockGoodsRegisterController {
     }
 
     @GetMapping(value="list")
-    public String list(Model model, Integer page, HttpServletRequest request) {
-        Page<GoodsRegister> datas = goodsRegisterService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
+    public String list(Model model, String storeSn, Integer page, HttpServletRequest request) {
+        Page<GoodsRegister> datas = goodsRegisterService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+                new SpecificationOperator("storeSn", "eq", storeSn)),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
         return "weixin/stock/goodsRegister/listApply";
@@ -100,7 +107,7 @@ public class WeixinStockGoodsRegisterController {
     }
 
     @PostMapping(value = "applyPost")
-    public @ResponseBody String applyPost(String datas, HttpServletRequest request) {
+    public @ResponseBody String applyPost(String datas, String storeSn, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         Worker worker = stockWxTools.getLoginWorker(openid);
         GoodsRegister ga = new GoodsRegister();
@@ -111,7 +118,11 @@ public class WeixinStockGoodsRegisterController {
         ga.setCreateDay(DateTools.date2Str(new Date()));
         ga.setCreateLong(System.currentTimeMillis());
         ga.setCreateTime(DateTools.date2Str(new Date(), "HH:mm:ss"));
-        Integer no = goodsNoTools.generateGoodsRegisterNo();
+        Store store = storeDao.findBySn(storeSn);
+        ga.setStoreName(store.getName());
+        ga.setStoreId(store.getId());
+        ga.setStoreSn(storeSn);
+        Integer no = goodsNoTools.generateGoodsRegisterNo(storeSn);
         ga.setNo(no);
         ga.setBatchNo(goodsNoTools.buildApplyBatchNo(no));
         ga.setApplyDatas(datas);
@@ -181,8 +192,11 @@ public class WeixinStockGoodsRegisterController {
     }
 
     @GetMapping(value = "apply")
-    public String apply(Model model, HttpServletRequest request) {
-        List<StockGoods> list = stockGoodsService.findAll(SimpleSortBuilder.generateSort("locationType_a", "cateId_a"));
+    public String apply(Model model, String storeSn, HttpServletRequest request) {
+        List<StockGoods> list = stockGoodsService.findAll(
+                ParamFilterUtil.getInstance().buildSearch(model, request,
+                        new SpecificationOperator("storeSn", "eq", storeSn)),
+                SimpleSortBuilder.generateSort("locationType_a", "cateId_a"));
         buildStockGoods(list, model);
         return "weixin/stock/goodsRegister/apply";
     }

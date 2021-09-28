@@ -1,6 +1,18 @@
 $(function() {
     autoRedirect();
+    setStoreSn();
+    $("select[name='storeSn']").change(function() {
+        setStoreSn();
+        var sn = $(this).val();
+        window.location.href = "/wx/stock/index?storeSn="+sn;
+    })
 });
+
+function setStoreSn() {
+    var sn = $("select[name='storeSn']").find("option:selected").val();
+//    console.log("===========>"+sn);
+    sessionStorage.setItem("curStoreSn", sn);
+}
 
 function autoRedirect() {
     $(".auto-redirect").each(function() {

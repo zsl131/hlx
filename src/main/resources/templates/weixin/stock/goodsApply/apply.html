@@ -15,6 +15,8 @@
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
+    <th:block th:with="curStoreSn=${#httpServletRequest.getParameter('storeSn')}">
+        <input name="curStoreSn" th:value="${curStoreSn}" type="hidden"/>
     <div class="">
         <div class="page">
             <input name="batch-no" th:if="${apply ne null}" th:value="${apply.batchNo}" th:attr="datas=${apply.datas}" type="hidden"/>
@@ -88,6 +90,7 @@
         </div>
     </div>
     <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
+    </th:block>
 </div>
 </body>
 </html>

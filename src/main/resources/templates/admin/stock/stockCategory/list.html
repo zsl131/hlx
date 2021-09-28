@@ -26,6 +26,7 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
+						<th>店铺</th>
 						<th>位置</th>
 						<th>名称</th>
 						<th>拼音</th>
@@ -34,6 +35,7 @@
 				</thead>
 
 				<tr th:each="obj : ${datas}">
+					<td th:text="|${obj.storeName}-${obj.storeSn}|"></td>
 					<td th:switch="${obj.locationType}">
 						<span th:case="1">冻库</span>
 						<span th:case="2">仓库</span>

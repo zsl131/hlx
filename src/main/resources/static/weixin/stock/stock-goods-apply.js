@@ -157,14 +157,15 @@ function submitApplyDatas(thisObj) {
         showDialog("未选任何物品，不可提交申购", "<b class='fa fa-warning'></b> 系统提示");
     } else {
         var isVerify = $("input[name='is-verify']").val();
+        var storeSn = $("input[name='curStoreSn']").val();
         var html = '<h4>此次申购总数量为：<b style="color:#F00">'+totalCount+'</b></h4>是否已选择完成并确定提交申购申请呢？';
         var applyDialog = confirmDialog(html, "<b class='fa fa-question-circle'></b> 系统提示", function() {
             $(thisObj).attr("disabled", true);
-            $.post("/wx/stock/goodsApply/applyPost", {datas: datas, batchNo: batchNo, isVerify: isVerify}, function(res) {
+            $.post("/wx/stock/goodsApply/applyPost", {storeSn: storeSn, datas: datas, batchNo: batchNo, isVerify: isVerify}, function(res) {
                 if(res == '1') {
                     delCookie(dataCookieName);
                     showToast("申购成功，等待审核");
-                    window.location.href = '/wx/stock/goodsApply/listApply';
+                    window.location.href = '/wx/stock/goodsApply/listApply?storeSn='+storeSn;
                 }
             }, "json");
             applyDialog.remove();

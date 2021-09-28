@@ -15,8 +15,8 @@ import java.util.List;
  */
 public interface IStockGoodsService extends BaseRepository<StockGoods, Integer>, JpaSpecificationExecutor<StockGoods> {
 
-    @Query("SELECT MAX(orderNo) FROM StockGoods")
-    Integer maxOrderNo();
+    @Query("SELECT MAX(orderNo) FROM StockGoods WHERE storeSn=?1")
+    Integer maxOrderNo(String storeSn);
 
     @Query("UPDATE StockGoods s SET s.status=?1 WHERE s.id=?2")
     @Modifying
@@ -37,8 +37,8 @@ public interface IStockGoodsService extends BaseRepository<StockGoods, Integer>,
     @Query("SELECT new com.zslin.stock.dto.GoodsDto(id, amount) FROM StockGoods WHERE id in (?1)")
     List<GoodsDto> listByIds(Integer... ids);
 
-    @Query("FROM StockGoods WHERE amount>0")
-    List<StockGoods> findByCanOuter();
+    @Query("FROM StockGoods WHERE amount>0 AND storeSn=?1")
+    List<StockGoods> findByCanOuter(String storeSn);
 
     /** 用于盘点 */
     @Query("UPDATE StockGoods s SET s.amount=?2 WHERE s.id=?1")
@@ -47,14 +47,14 @@ public interface IStockGoodsService extends BaseRepository<StockGoods, Integer>,
     void updateAmount(Integer id, Integer amount);
 
     /** 获取需要预警的物品 */
-    @Query("FROM StockGoods WHERE hasWarn='0' AND amount<=warnAmount")
-    List<StockGoods> findByWarn();
+    @Query("FROM StockGoods WHERE hasWarn='0' AND amount<=warnAmount AND storeSn=?1")
+    List<StockGoods> findByWarn(String storeSn);
 
     /** 获取需要预警的物品 */
-    @Query("FROM StockGoods WHERE amount<=warnAmount")
-    List<StockGoods> findAllWarn();
+    @Query("FROM StockGoods WHERE amount<=warnAmount AND storeSn=?1")
+    List<StockGoods> findAllWarn(String storeSn);
 
     /** 获取所有物品，用于显示给客人看的 */
-    @Query("FROM StockGoods WHERE status='1'")
-    List<StockGoods> findAllShow();
+    @Query("FROM StockGoods WHERE status='1' AND storeSn=?1")
+    List<StockGoods> findAllShow(String storeSn);
 }

@@ -22,13 +22,16 @@ function addCategory(locationType) {
     } else if(locationType=='2') {
         locationTypeStr = "仓库";
     }
+    var storeSn = sessionStorage.getItem("curStoreSn");
+//    console.log("======>"+storeSn)
+
     var html = '<div class="dialog-html-div"><div class="form-group form-group-lg">'+
                 '<input name="categoryName" type="text" class="form-control" placeholder="输入分类名称"/>' +
                 '</div>'+
                 '</div>';
     var addDialog = confirmDialog(html, "<b class='fa fa-plus'></b> 添加分类到："+locationTypeStr, function() {
         var categoryName = $(addDialog).find("input[name='categoryName']").val();
-        $.post("/wx/stock/stockCategory/add", {locationType: locationType, categoryName:categoryName}, function(res) {
+        $.post("/wx/stock/stockCategory/add", {locationType: locationType, storeSn: storeSn, categoryName:categoryName}, function(res) {
             if(res=='1') {
                 showToast("添加成功");
                 reloadWin();

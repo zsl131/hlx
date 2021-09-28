@@ -14,8 +14,8 @@ public interface IGoodsApplyService extends BaseRepository<GoodsApply, Integer>,
 
     GoodsApply findByBatchNo(String batchNo);
 
-    @Query("SELECT MAX(no) FROM GoodsApply")
-    Integer maxNo();
+    @Query("SELECT MAX(no) FROM GoodsApply WHERE storeSn=?1")
+    Integer maxNo(String storeSn);
 
     @Query("UPDATE GoodsApply set status=?2 WHERE batchNo=?1")
     @Modifying
