@@ -14,6 +14,8 @@
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
+    <th:block th:with="curStoreSn=${#httpServletRequest.getParameter('storeSn')}">
+        <input name="curStoreSn" th:value="${curStoreSn}" type="hidden"/>
     <div class="">
         <div class="page">
             <input name="batch-no" th:if="${apply ne null}" th:value="${apply.batchNo}" th:attr="datas=${apply.applyDatas}" type="hidden"/>
@@ -26,6 +28,7 @@
                             <div class="weui-navbar">
                                 <div class="weui-navbar__item weui-bar__item_on">
                                     <b class="title">
+                                        <span th:text="|${curStoreSn}-|"></span>
                                         <span th:if="${isCheck eq '1'}" th:remove="tag">出库核对</span>
                                         <span th:unless="${isCheck eq '1'}" th:remove="tag">出库登记</span>
                                          (已选：<b class="total-count number">0</b> )
@@ -86,6 +89,7 @@
         </div>
     </div>
     <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
+    </th:block>
 </div>
 </body>
 </html>

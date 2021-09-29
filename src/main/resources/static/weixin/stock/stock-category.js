@@ -22,7 +22,8 @@ function addCategory(locationType) {
     } else if(locationType=='2') {
         locationTypeStr = "仓库";
     }
-    var storeSn = sessionStorage.getItem("curStoreSn");
+//    var storeSn = sessionStorage.getItem("curStoreSn");
+    var storeSn = $("input[name='curStoreSn']").val();
 //    console.log("======>"+storeSn)
 
     var html = '<div class="dialog-html-div"><div class="form-group form-group-lg">'+

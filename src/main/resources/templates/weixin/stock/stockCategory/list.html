@@ -12,11 +12,13 @@
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
+    <th:block th:with="curStoreSn=${#httpServletRequest.getParameter('storeSn')}">
+        <input name="curStoreSn" th:value="${curStoreSn}" type="hidden"/>
     <div class="">
         <div class="page">
             <input name="loginWorker" th:value="${session.loginWorker.operator}" type="hidden"/>
             <div class="page__hd">
-                <h3 class="page__title" th:text="|&nbsp;店铺：${#httpServletRequest.getParameter('storeSn')}|">库存管理系统</h3>
+                <h3 class="page__title" th:text="|&nbsp;${curStoreSn}-|">库存管理系统</h3>
             </div>
             <div class="page__bd">
                 <div class="page">
@@ -76,6 +78,7 @@
             </a>
         </div>
     </div>
+    </th:block>
 </div>
 </body>
 </html>

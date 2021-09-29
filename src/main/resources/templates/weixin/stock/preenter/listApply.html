@@ -13,6 +13,7 @@
 </head>
 <body>
     <div th:fragment="content" th:remove="tag">
+        <th:block th:with="curStoreSn=${#httpServletRequest.getParameter('storeSn')}">
         <input name="loginWorker" th:value="${session.loginWorker.operator}" type="hidden"/>
         <div class="page">
             <div class="page__bd">
@@ -21,7 +22,7 @@
                         <div class="weui-tab">
                             <div class="weui-navbar">
                                 <div class="weui-navbar__item weui-bar__item_on">
-                                    <b class="title">物品预录入 ( <b th:text="${datas.totalElements}">0</b> )</b>
+                                    <b class="title"><span th:text="|${curStoreSn}-|"></span>物品预录入 ( <b th:text="${datas.totalElements}">0</b> )</b>
                                 </div>
                             </div>
                             <div class="weui-tab__panel">
@@ -52,6 +53,7 @@
                 </div>
             </div>
         </div>
+        </th:block>
     </div>
     <div th:include="fragments/page-wx :: pager" style="margin:10px 10px 10px 0px;float:right;"></div>
     <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>

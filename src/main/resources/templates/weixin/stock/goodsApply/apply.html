@@ -29,6 +29,7 @@
                             <div class="weui-navbar">
                                 <div class="weui-navbar__item weui-bar__item_on">
                                     <b class="title">
+                                        <span th:text="|${curStoreSn}-|"></span>
                                         <span th:if="${isVerify eq '1'}" th:remove="tag">审核申购</span>
                                         <span th:unless="${isVerify eq '1'}" th:remove="tag">申购物品</span>
                                          (已选：<b class="total-count number">0</b> )

@@ -86,7 +86,7 @@
                         <div class="weui-tab">
                             <div class="weui-navbar">
                                 <div class="weui-navbar__item weui-bar__item_on">
-                                    <b class="title">库存物品（<span th:text="${datas.totalElements}" th:remove="tag"></span>）</b>
+                                    <b class="title"><span th:text="|${curStoreSn}-|"></span>库存物品（<span th:text="${datas.totalElements}" th:remove="tag"></span>）</b>
                                     <span class="filter-href" style="float:right; padding-right:15px;">筛选<b class="fa fa-filter"></b></span>
                                 </div>
                             </div>
