@@ -26,9 +26,12 @@
                 <div th:unless="${storeUser eq null or #lists.size(storeList) le 0}">
                     <div class="page">
                         <div style="padding-bottom: 10px;">
-                            <select class="form-control" name="storeSn">
+                            <!--<select class="form-control" name="storeSn">
                                 <option th:each="obj: ${storeList}" th:selected="${store.sn eq obj.sn?true:false}" th:value="${obj.sn}" th:text="${obj.name}"></option>
-                            </select>
+                            </select>-->
+                            <a th:href="|/wx/stock/index?storeSn=${obj.sn}|" th:each="obj : ${storeList}"
+                               style="margin-right:10px" th:class="|btn ${store.sn eq obj.sn?'btn-danger':'btn-default'}|" th:text="${obj.name}">
+                            </a>
                         </div>
 
                         <div class="weui-grids">

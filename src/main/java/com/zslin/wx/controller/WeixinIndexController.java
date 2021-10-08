@@ -3,7 +3,9 @@ package com.zslin.wx.controller;
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.repository.SimpleSpecificationBuilder;
+import com.zslin.basic.repository.SpecificationOperator;
 import com.zslin.basic.tools.DateTools;
+import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.client.service.IOrdersService;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.web.service.*;
@@ -51,7 +53,9 @@ public class WeixinIndexController {
         storeSn = (storeSn==null||"".equals(storeSn.trim()))?"hlx":storeSn;
         model.addAttribute("categoryList", categoryService.findByOrder(storeSn)); //分类
         model.addAttribute("galleryList", galleryService.findShow()); //微信画廊
-        model.addAttribute("ordersList", buffetOrderService.findAll(SimplePageBuilder.generate(0, 6, SimpleSortBuilder.generateSort("id_d")))); //最新订单
+        model.addAttribute("ordersList", buffetOrderService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+                new SpecificationOperator("status", "in", "2,4,5")),
+                SimplePageBuilder.generate(0, 6, SimpleSortBuilder.generateSort("id_d")))); //最新订单
         model.addAttribute("ordersCount", buffetOrderService.queryCount(ClientFileTools.HLX_SN));
         model.addAttribute("ordersCountYestoday", buffetOrderService.queryCount(ClientFileTools.HLX_SN, DateTools.plusDay(-1, "yyyy-MM-dd")));
         model.addAttribute("ordersCountToday", buffetOrderService.queryCount(ClientFileTools.HLX_SN, DateTools.plusDay(0, "yyyy-MM-dd")));
