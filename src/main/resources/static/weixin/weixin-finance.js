@@ -127,7 +127,7 @@ function checkForm() {
     var title = $("input[name='title']").val();
     var price = parseFloat($("input[name='price']").val());
     var amount = parseFloat($("input[name='amount']").val());
-    var targetDay = $("input[name='targetName']").val();
+    var targetDay = $("input[name='targetDay']").val();
 
     if(!storeName) {showDialog("请选择店铺", "系统提示"); return false;}
     else if(!cateId) {showDialog("请选择类别", "系统提示"); return false;}
