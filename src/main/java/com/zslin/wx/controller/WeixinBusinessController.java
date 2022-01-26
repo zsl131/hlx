@@ -106,7 +106,7 @@ public class WeixinBusinessController {
         model.addAttribute("store", storeDao.findBySn(storeSn));
         IncomeDto incomeDto = incomeService.queryByMonth(storeSn, month);
         Double payMoney = NormalTools.retain2Decimal(financeDetailDao.findTotalMoney(storeSn, month));
-        Double monthSurplus = NormalTools.retain2Decimal(incomeDto==null?0:incomeDto.getTotalMoney() - payMoney); //本月结余
+        Double monthSurplus = NormalTools.retain2Decimal((incomeDto==null?0:incomeDto.getTotalMoney()) - payMoney); //本月结余
         model.addAttribute("payMoney", payMoney);
         model.addAttribute("incomeDto", incomeDto);
         model.addAttribute("monthSurplus", monthSurplus);
