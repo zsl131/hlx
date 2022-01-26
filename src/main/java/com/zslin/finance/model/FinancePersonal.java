@@ -49,4 +49,16 @@ public class FinancePersonal {
     private String storeSn;
 
     private String storeName;
+
+    /** 是否股东，1-表示可以查看财务信息 */
+    private String isPartner = "0";
+
+    /** 股东所参与的店铺 */
+    private String partStores = "";
+
+    /** 是否收银员 */
+    private String isCasher = "0";
+
+    /** 可收银的店铺 */
+    private String cashStores = "";
 }

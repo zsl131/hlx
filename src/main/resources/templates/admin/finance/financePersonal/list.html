@@ -32,6 +32,8 @@
 						<th>电话</th>
 						<th>昵称</th>
 						<th>类别</th>
+						<th>股东</th>
+						<th>收银</th>
 						<th>收货员</th>
 						<th>操作</th>
 					</tr>
@@ -55,6 +57,18 @@
 							<span th:case="1">报账人员</span>
 							<b th:case="2" class="red">审核人员</b>
 							<b th:case="3" class="blue">财务人员</b>
+						</span>
+					</td>
+					<td>
+						<span th:switch="${obj.isPartner}">
+							<b th:case="0" class="red">非股东</b>
+							<b th:case="1" class="blue">股东（<b th:text="${obj.partStores}"></b>）</b>
+						</span>
+					</td>
+					<td>
+						<span th:switch="${obj.isCasher}">
+							<b th:case="0" class="red">非收银</b>
+							<b th:case="1" class="blue">收银（<b th:text="${obj.cashStores}"></b>）</b>
 						</span>
 					</td>
 					<td>

@@ -61,6 +61,10 @@ public class FinanceDetail {
     /** 指定财务日期 */
     private String targetDay;
 
+    private String targetYear;
+
+    private String targetMonth;
+
     private String createDay;
 
     private String createTime;
@@ -74,6 +78,9 @@ public class FinanceDetail {
     private String verifyPhone;
 
     private String verifySignPath;
+
+    /** 财务对应日期，格式：yyyy-MM-dd */
+    private String finDay;
 
     /**
      * 状态，-1-取消；0-未提交审核；1-审核中；2-审核通过；3-驳回；

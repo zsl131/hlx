@@ -2,9 +2,13 @@ package com.zslin.basic.tools;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -62,6 +66,33 @@ public class NormalTools {
         return getNow(pattern);
     }
 
+    public static String plusMonth(Integer amount, String pattern) {
+//        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMM");
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, amount);
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        String res = sdf.format(cal.getTime());
+        return res;
+    }
+
+    public static String preMonth() {
+//        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMM");
+       return plusMonth(-1, "yyyyMM");
+    }
+
+    public static String preMonthByMonth(String month) {
+        try {
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+            Date date = sdf.parse(month);
+            cal.setTime(date);
+            cal.add(Calendar.MONTH, -1);
+            return sdf.format(cal.getTime());
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
     /**
      * 生成两位小数的数字
      * @param d double类型的数字
@@ -98,6 +129,18 @@ public class NormalTools {
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(len<0?2:len, RoundingMode.HALF_UP);
         return bd.floatValue();
+    }
+
+    /**
+     * 保留2位小数，四舍五入
+     * @param value 需要转换的数值
+     * @return
+     */
+    public static Double retain2Decimal(Number value) {
+        if(value==null) {return 0d;}
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        return Double.parseDouble(df.format(value));
     }
 
     public static boolean isNull(String val) {

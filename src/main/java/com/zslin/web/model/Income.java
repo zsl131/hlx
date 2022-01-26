@@ -1,5 +1,7 @@
 package com.zslin.web.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 /**
@@ -8,6 +10,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "t_income")
+@Data
 public class Income {
 
     @Id
@@ -95,219 +98,8 @@ public class Income {
 
     private String nickname;
 
-    public String getCreateTime() {
-        return createTime;
-    }
+    private String token;
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getOpenid() {
-        return openid;
-    }
-
-    public void setOpenid(String openid) {
-        this.openid = openid;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public Integer getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(Integer storeId) {
-        this.storeId = storeId;
-    }
-
-    public String getStoreName() {
-        return storeName;
-    }
-
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
-    }
-
-    public String getStoreSn() {
-        return storeSn;
-    }
-
-    public void setStoreSn(String storeSn) {
-        this.storeSn = storeSn;
-    }
-
-    public Integer getDeskCount() {
-        return deskCount;
-    }
-
-    public void setDeskCount(Integer deskCount) {
-        this.deskCount = deskCount;
-    }
-
-    public Integer getPeopleCount() {
-        return peopleCount;
-    }
-
-    public void setPeopleCount(Integer peopleCount) {
-        this.peopleCount = peopleCount;
-    }
-
-    public String getFromClient() {
-        return fromClient;
-    }
-
-    public void setFromClient(String fromClient) {
-        this.fromClient = fromClient;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getComeDay() {
-        return comeDay;
-    }
-
-    public void setComeDay(String comeDay) {
-        this.comeDay = comeDay;
-    }
-
-    public String getComeYear() {
-        return comeYear;
-    }
-
-    public void setComeYear(String comeYear) {
-        this.comeYear = comeYear;
-    }
-
-    public String getComeMonth() {
-        return comeMonth;
-    }
-
-    public void setComeMonth(String comeMonth) {
-        this.comeMonth = comeMonth;
-    }
-
-    public String getCreateDay() {
-        return createDay;
-    }
-
-    public void setCreateDay(String createDay) {
-        this.createDay = createDay;
-    }
-
-    public Float getCash() {
-        return cash;
-    }
-
-    public void setCash(Float cash) {
-        this.cash = cash;
-    }
-
-    public Float getWeixin() {
-        return weixin;
-    }
-
-    public void setWeixin(Float weixin) {
-        this.weixin = weixin;
-    }
-
-    public Float getAlipay() {
-        return alipay;
-    }
-
-    public void setAlipay(Float alipay) {
-        this.alipay = alipay;
-    }
-
-    public Float getMeituan() {
-        return meituan;
-    }
-
-    public void setMeituan(Float meituan) {
-        this.meituan = meituan;
-    }
-
-    public Float getMarket() {
-        return market;
-    }
-
-    public void setMarket(Float market) {
-        this.market = market;
-    }
-
-    public Float getFfan() {
-        return ffan;
-    }
-
-    public void setFfan(Float ffan) {
-        this.ffan = ffan;
-    }
-
-    public Float getMember() {
-        return member;
-    }
-
-    public void setMember(Float member) {
-        this.member = member;
-    }
-
-    public Float getOther() {
-        return other;
-    }
-
-    public void setOther(Float other) {
-        this.other = other;
-    }
-
-    public Integer getNoonTicket() {
-        return noonTicket;
-    }
-
-    public void setNoonTicket(Integer noonTicket) {
-        this.noonTicket = noonTicket;
-    }
-
-    public Integer getNightTicket() {
-        return nightTicket;
-    }
-
-    public void setNightTicket(Integer nightTicket) {
-        this.nightTicket = nightTicket;
-    }
-
-    public Integer getTenTicket() {
-        return tenTicket;
-    }
-
-    public void setTenTicket(Integer tenTicket) {
-        this.tenTicket = tenTicket;
-    }
-
-    public Double getTotalMoney() {
-        return totalMoney;
-    }
-
-    public void setTotalMoney(Double totalMoney) {
-        this.totalMoney = totalMoney;
-    }
+    /** 凭证地址 */
+    private String ticketPath;
 }

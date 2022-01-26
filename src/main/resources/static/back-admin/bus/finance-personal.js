@@ -14,11 +14,64 @@ $(function() {
 
 //console.log("--------------")
     $("input[name='storeSn']").change(function() {
-        console.log($(this).val());
         var name = $(this).parent("span").find("label").html();
         $("input[name='storeName']").val(name);
     })
+
+    $("input[name='partStore']").change(function() {
+//        console.log($(this).val());
+        /*var name = $(this).parent("span").find("label").html();
+        $("input[name='storeName']").val(name);*/
+        rebuildPartStore();
+    })
+    $("input[name='cashStore']").change(function() {
+    //        console.log($(this).val());
+            /*var name = $(this).parent("span").find("label").html();
+            $("input[name='storeName']").val(name);*/
+            rebuildCashStore();
+        })
+    initPartStore();
 })
+
+function initPartStore() {
+    var sns = $("input[name='partStores']").val();
+    sns.split(";").map((item) => {
+//        console.log(item)
+        $("input[name='partStore'][value='"+item+"']").attr("checked", true);
+    })
+
+    var csns = $("input[name='cashStores']").val();
+        csns.split(";").map((item) => {
+    //        console.log(item)
+            $("input[name='cashStore'][value='"+item+"']").attr("checked", true);
+        })
+}
+
+function rebuildCashStore() {
+    var res = "";
+    $("input[name='cashStore']:checked").each(function() {
+        var storeSn = $(this).val();
+        res += storeSn+";";
+        console.log($(this).val());
+//        console.log($(this).attr("checked"))
+        var name = $(this).parent("span").find("label").html();
+        $("input[name='storeName']").val(name);
+    })
+    $("input[name='cashStores']").val(res);
+}
+
+function rebuildPartStore() {
+    var res = "";
+    $("input[name='partStore']:checked").each(function() {
+        var storeSn = $(this).val();
+        res += storeSn+";";
+        console.log($(this).val());
+//        console.log($(this).attr("checked"))
+        var name = $(this).parent("span").find("label").html();
+        $("input[name='storeName']").val(name);
+    })
+    $("input[name='partStores']").val(res);
+}
 
 function checkData() {
     var name = $("input[name='name']").val();

@@ -127,12 +127,14 @@ function checkForm() {
     var title = $("input[name='title']").val();
     var price = parseFloat($("input[name='price']").val());
     var amount = parseFloat($("input[name='amount']").val());
+    var targetDay = $("input[name='targetName']").val();
 
     if(!storeName) {showDialog("请选择店铺", "系统提示"); return false;}
     else if(!cateId) {showDialog("请选择类别", "系统提示"); return false;}
     else if(!title) {showDialog("请输入名称", "系统提示"); return false;}
     else if(!price || price<=0) {showDialog("请认真输入单价", "系统提示"); return false;}
     else if(!amount || amount<=0) {showDialog("请认真输入数量", "系统提示"); return false;}
+    else if(!targetDay || targetDay.length!=8) {showDialog("请选择所属日期", "系统提示"); return false;}
     $(".submit-btn").attr("disabled", "disabled");
     return true;
 }

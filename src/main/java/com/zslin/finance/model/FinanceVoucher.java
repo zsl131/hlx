@@ -19,6 +19,8 @@ public class FinanceVoucher {
     /** 对应的申请ID */
     private Integer detailId;
 
+    private String targetToken;
+
     /** 对应的照片路径 */
     private String picPath;
 

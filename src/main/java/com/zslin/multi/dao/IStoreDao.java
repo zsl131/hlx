@@ -15,4 +15,7 @@ public interface IStoreDao extends BaseRepository<Store, Integer>, JpaSpecificat
 
     @Query("FROM Store s WHERE s.id IN ?1 AND s.status='1'")
     List<Store> findByIds(List<Integer> ids);
+
+    @Query("FROM Store s WHERE s.sn IN ?1")
+    List<Store> findBySns(String [] sns);
 }

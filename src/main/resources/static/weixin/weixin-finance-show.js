@@ -195,9 +195,9 @@ function addPersonal() {
         var phone = $(addDialog).find("input[name='phone']").val();
         var openid = $(addDialog).find("input[name='openid']").val();
 
-        console.log(name)
-        console.log(phone)
-        console.log(openid)
+//        console.log(name)
+//        console.log(phone)
+//        console.log(openid)
         if(!name) {showDialog("请输入姓名", "操作提示");}
         else if(!phone) {showDialog("请输入电话", "操作提示");}
         else if(!openid) {showDialog("请选择人员", "操作提示");}

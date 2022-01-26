@@ -1,37 +1,52 @@
 package com.zslin.wx.controller;
 
+import com.zslin.basic.qiniu.model.QiniuConfig;
+import com.zslin.basic.qiniu.tools.MyFileTools;
+import com.zslin.basic.qiniu.tools.QiniuConfigTools;
+import com.zslin.basic.qiniu.tools.QiniuTools;
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.repository.SpecificationOperator;
+import com.zslin.basic.tools.ConfigTools;
 import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.finance.dao.IFinancePersonalDao;
+import com.zslin.finance.dao.IFinanceVoucherDao;
+import com.zslin.finance.imgTools.ImageTextTools;
 import com.zslin.finance.model.FinancePersonal;
+import com.zslin.finance.model.FinanceVoucher;
 import com.zslin.multi.dao.IStoreDao;
 import com.zslin.multi.model.Store;
+import com.zslin.sms.tools.RandomTools;
 import com.zslin.web.model.Account;
 import com.zslin.web.model.Income;
 import com.zslin.web.service.IAccountService;
 import com.zslin.web.service.IIncomeService;
+import com.zslin.wx.dto.UploadResult;
 import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.IncomeNoticeTools;
 import com.zslin.wx.tools.SessionTools;
+import net.coobird.thumbnailator.Thumbnails;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by 钟述林 393156105@qq.com on 2017/8/30 10:58.
@@ -51,6 +66,18 @@ public class WeixinIncomeController {
 
     @Autowired
     private IFinancePersonalDao financePersonalDao;
+
+    @Autowired
+    private IFinanceVoucherDao financeVoucherDao;
+
+    @Autowired
+    private ConfigTools configTools;
+
+    @Autowired
+    private QiniuTools qiniuTools;
+
+    @Autowired
+    private QiniuConfigTools qiniuConfigTools;
 
     @Autowired
     private IStoreDao storeDao;
@@ -104,11 +131,41 @@ public class WeixinIncomeController {
     }
 
     @GetMapping(value = "add")
-    public String add(Model model, HttpServletRequest request) {
+    public String add(Model model, String day, String storeSn, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         FinancePersonal personal = financePersonalDao.findByOpenid(openid);
-        model.addAttribute("income", new Income());
-        List<Store> storeList = null;
+        if(personal==null || !"1".equals(personal.getIsCasher())) {
+            return "redirect:/wx/business/error?errCode=-1";
+        }
+        day = (day==null || "".equals(day))?NormalTools.curDate("yyyyMMdd"):day;
+
+        List<Store> storeList ;
+        Income income = null;
+        try {
+            String storeSns = personal.getCashStores();
+            storeList = storeDao.findBySns(storeSns.split(";"));
+            if(storeList!=null && storeList.size()>0) {
+                storeSn = (storeSn==null || "".equals(storeSn.trim()))?storeList.get(0).getSn():storeSn;
+                model.addAttribute("curStoreSn", storeSn);
+            }
+        } catch (Exception e) {
+            storeList = new ArrayList<>();
+        }
+        if(storeSn!=null) {
+            income = incomeService.findByComeDay(storeSn, day, "1");
+        }
+        if(income==null) {
+            income = new Income();
+            income.setToken(RandomTools.randomString(8).toUpperCase());
+        } else {
+            if(income.getToken()==null || "".equals(income.getToken().trim())) {
+                income.setToken(RandomTools.randomString(8).toUpperCase());
+            }
+        }
+        model.addAttribute("income", income);
+        model.addAttribute("storeList", storeList);
+
+        /*List<Store> storeList = null;
         if(personal==null || personal.getStoreSn()==null || "".equals(personal.getStoreSn())) {
             storeList = storeDao.findByStatus("1");
         } else {
@@ -118,14 +175,17 @@ public class WeixinIncomeController {
             s.setSn(personal.getStoreSn());
             storeList.add(s);
         }
-        model.addAttribute("storeList", storeList);
+        model.addAttribute("storeList", storeList);*/
+        model.addAttribute("day", day);
         model.addAttribute("personal", personal);
 
         return "weixin/income/add";
     }
 
     @PostMapping(value="add")
-    public String add(Model model, Income income, HttpServletRequest request) {
+    public String add(Model model, Income income, String storeSn, HttpServletRequest request) {
+//        System.out.println("==============="+storeSn);
+        System.out.println(income);
         Float totalMoney = income.getCash()+income.getAlipay()+income.getFfan()+income.getMarket()+income.getMeituan()+income.getMember()+income.getOther()+income.getWeixin();
         BigDecimal bg = new BigDecimal(totalMoney);
         income.setTotalMoney(bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
@@ -139,6 +199,11 @@ public class WeixinIncomeController {
         income.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
         income.setCreateTime(NormalTools.curDatetime());
 
+        FinanceVoucher fv = financeVoucherDao.findByTargetToken(income.getToken());
+        if(fv!=null) {
+            income.setTicketPath(fv.getPicPath());
+        }
+
         try {
             String openid = SessionTools.getOpenid(request);
             Account account = accountService.findByOpenid(openid);
@@ -147,6 +212,7 @@ public class WeixinIncomeController {
         } catch (Exception e) {
 //            e.printStackTrace();
         }
+
         if("1".equals(income.getType())) { //如果是营业收入，需要判断是否已经添加
             Income oldIn = incomeService.findByComeDay(income.getStoreSn(), comeDay, income.getType());
             if(oldIn!=null) {
@@ -189,7 +255,80 @@ public class WeixinIncomeController {
         in.setComeDay(comeDay);
         in.setComeMonth(comeMonth);
         in.setComeYear(comeYear);
+
         incomeService.save(in);
         return "redirect:/wx/income/list";
+    }
+
+    @PostMapping(value = "upload")
+    public @ResponseBody
+    UploadResult upload(HttpServletRequest request, String objId, String token, String title, @RequestParam("file") MultipartFile[] files) {
+        if(files!=null && files.length>=1) {
+            BufferedOutputStream bw = null;
+            try {
+                String fileName = files[0].getOriginalFilename();
+                if(fileName!=null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
+
+                    File outFile = new File(configTools.getFilePath("income") + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
+
+                    FinanceVoucher fv = new FinanceVoucher();
+                    fv.setCreateDay(NormalTools.curDate());
+                    fv.setCreateTime(NormalTools.curDatetime());
+                    fv.setCreateLong(System.currentTimeMillis());
+                    fv.setTargetToken(token);
+                    boolean hasId = false;
+                    int id = 0;
+                    try {
+                        id = Integer.parseInt(objId);
+                        fv.setDetailId(Integer.parseInt(objId));
+                        if(id>0) {hasId = true;}
+                    } catch (Exception e) {
+
+                    }
+                    //fv.setPicPath(outFile.getAbsolutePath().replace(configTools.getFilePath(), "/").replaceAll("\\\\", "/"));
+                    FileUtils.copyInputStreamToFile(files[0].getInputStream(), outFile);
+                    Thumbnails.of(outFile).size(1300, 1300).toFile(outFile); //修改尺寸
+
+                    String md5 = MyFileTools.getFileMd5(outFile); //文件MD5值
+                    /*FinanceVoucher oldVoucher = financeVoucherDao.findByMd5(md5); //通过MD5获取对象
+                    if(oldVoucher!=null) {
+                        outFile.deleteOnExit();
+                        outFile.delete();
+                        String detailTitle = financeDetailDao.findTitle(oldVoucher.getDetailId()); //获取报账名称
+                        return new UploadResult("-5", "在【"+detailTitle+"】报账中于["+oldVoucher.getCreateTime()+"]已经上传过此凭证");
+//                        return "-5"; //表示md5已经存在
+                    }*/
+                    fv.setFileMd5(md5);
+
+                    try { ImageTextTools.writeText(outFile.getAbsolutePath(), "ID:"+objId+"（"+title+"）"); } catch (Exception e) { }
+
+                    QiniuConfig qiniuConfig = qiniuConfigTools.getQiniuConfig();
+                    String key = "income_"+objId+"_"+System.currentTimeMillis()+ MyFileTools.getFileType(outFile.getName());
+                    String url = qiniuConfig.getUrl() + "/" + key;
+                    FileInputStream fis = new FileInputStream(outFile);
+                    qiniuTools.upload(fis, key);
+                    fv.setPicPath(url);
+
+                    outFile.deleteOnExit();
+                    outFile.delete();
+
+                    financeVoucherDao.save(fv);
+                    if(hasId) {
+                        incomeService.updateTicketPath(url, id);
+                    }
+                    return new UploadResult("1", url);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if(bw!=null) {bw.close();}
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return new UploadResult("1", "上传成功");
     }
 }

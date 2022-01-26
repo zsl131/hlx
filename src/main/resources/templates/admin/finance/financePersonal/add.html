@@ -46,7 +46,7 @@
 					<div class="input-group">
 						<div class="input-group-addon">类别：</div>
 						<div class="form-control">
-							<input type="radio" name="type" value="0" id="type_0" th:checked="${financePersonal.type == '0'}?'checked'"/><label for="type_0">签收人员</label>
+							<input type="radio" name="type" value="0" id="type_0" th:checked="${financePersonal.type == '0'}?'checked'"/><label for="type_0">不设置</label>
 							<input type="radio" name="type" value="1" id="type_1" th:checked="${financePersonal.type == '1'}?'checked'"/><label for="type_1">报账人员</label>
 							<input type="radio" name="type" value="2" id="type_2" th:checked="${financePersonal.type == '2'}?'checked'"/><label for="type_2">审核人员</label>
 							<input type="radio" name="type" value="3" id="type_3" th:checked="${financePersonal.type == '3'}?'checked'"/><label for="type_3">财务人员</label>
@@ -59,6 +59,46 @@
 						<div class="form-control">
 							<input type="radio" name="markFlag" value="0" id="markFlag_0" th:checked="${financePersonal.markFlag == '0'}?'checked'"/><label for="markFlag_0">非签收人员</label>
 							<input type="radio" name="markFlag" value="1" id="markFlag_1" th:checked="${financePersonal.markFlag == '1'}?'checked'"/><label for="markFlag_1">签收人员</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">股东：</div>
+						<div class="form-control">
+							<input type="radio" name="isPartner" value="0" id="isPartner_0" th:checked="${financePersonal.isPartner == '0'}?'checked'"/><label for="isPartner_0">不是股东人员</label>
+							<input type="radio" name="isPartner" value="1" id="isPartner_1" th:checked="${financePersonal.isPartner == '1'}?'checked'"/><label for="isPartner_1">是股东人员</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="input-group">
+						<div class="input-group-addon">股东店铺</div>
+						<div class="form-control store-list-div">
+							<span th:each="store: ${storeList}"><input type="checkbox" name="partStore" th:value="${store.sn}" th:id="'psn_'+${store.id}"/><label th:for="'psn_'+${store.id}" th:text="${store.name}">汉丽轩</label>&nbsp;&nbsp;&nbsp;</span>
+							<input name="partStores" type="hidden"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group form-group-lg">
+					<div class="input-group">
+						<div class="input-group-addon">收银登记：</div>
+						<div class="form-control">
+							<input type="radio" name="isCasher" value="0" id="isCasher_0" th:checked="${personal.isCasher == '0'}?'checked'"/><label for="isCasher_0">不可登记收入</label>
+							<input type="radio" name="isCasher" value="1" id="isCasher_1" th:checked="${personal.isCasher == '1'}?'checked'"/><label for="isCasher_1">可登记收入</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="input-group">
+						<div class="input-group-addon">收银店铺</div>
+						<div class="form-control store-list-div">
+							<span th:each="store: ${storeList}"><input type="checkbox" name="cashStore" th:value="${store.sn}" th:id="'csn_'+${store.id}"/><label th:for="'csn_'+${store.id}" th:text="${store.name}">汉丽轩</label>&nbsp;&nbsp;&nbsp;</span>
+							<input name="cashStores" type="hidden" th:value="${personal.cashStores}"/>
 						</div>
 					</div>
 				</div>

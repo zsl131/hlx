@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>经营入账</title>
+    <script src="/jedate-new/jedate.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/jedate-new/skin/jedate.css"/>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-finance.css"/>
+    <script type="text/javascript" src="/back-admin/bus/my-date.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-business.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            jeDate('.target-month',{
+                isinitVal:true, //初始化日期
+                festival: true, //显示农历
+                isClear:false,
+                maxDate: curDate(),
+                format: 'YYYYMM',
+                donefun: function(obj){
+                    //this    而this指向的都是当前实例
+        //            console.log(obj.elem);     //得到当前输入框的ID
+                    console.log(obj.val);      //得到日期生成的值，如：2017-06-16
+                    var storeSn = $("input[name='curStoreSn']").val();
+                    window.location.href = "/wx/business/addDetail?storeSn="+storeSn+"&month="+obj.val;
+                }
+            })
+        })
+    </script>
+    <style>
+        .readonly-div {
+            background:#F6F6F6;
+        }
+    </style>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="container">
+        <div class="header lighter smaller blue">
+            <h3><i class="fa fa-plus"></i>&nbsp;经营入账</h3>
+        </div>
+
+        <form method="POST" th:object="${detail}" id="dataForm" onsubmit="return checkForm()" enctype="multipart/form-data">
+            <input name="storeName" type="hidden"/>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">店铺</div>
+                    <div class="form-control readonly-div" th:text="${store.name}" style="color:#F00; font-weight:bold;"></div>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">月份</div>
+                    <div >
+                        <input name="targetMonth" th:value="${curMonth}" class="form-control target-month" autocomplete="off" placeholder="所属月份，格式：yyyyMM"/>
+                        <!--<a th:href="|/wx/business/addDetail?storeSn=${storeSn}&month=${m}|" th:class="${curMonth eq m ?'btn btn-primary':'btn btn-default'}" role="button"style="margin: 5px;" th:each="m: ${monthList}" th:value="${m}" th:text="${m}"></a>-->
+                    </div>
+                </div>
+                <!--<div class="dark" style="color:#888">选择入账月份</div>-->
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">本月收入</div>
+                    <div class="form-control readonly-div got-money" th:text="|${incomeDto eq null?0:incomeDto.totalMoney} 元|" style="color:blue; font-weight:bold;"></div>
+                    <div class="input-group-addon">
+                        <b th:text="|${incomeDto eq null?'0':incomeDto.days} 天|" style="color:#F00">天数</b>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">本月支出</div>
+                    <div class="form-control readonly-div pay-money" th:text="|${payMoney} 元|" style="color:#F00; font-weight:bold;"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">本月结余</div>
+                    <div class="form-control readonly-div surplus-money" th:text="|${monthSurplus} 元|" style="color:#000; font-weight:bold;"></div>
+                    <div class="input-group-addon">
+                        <b th:if="${monthSurplus gt 0}" style="color:blue">盈利</b>
+                        <b th:if="${monthSurplus eq 0}" style="color:#820">持平</b>
+                        <b th:if="${monthSurplus lt 0}" style="color:#F00">亏损</b>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">本月分账</div>
+                    <div class="">
+                        <input class="form-control rebuild-obj" type="number" name="settleMoney" th:value="${detail.settleMoney}" placeholder="本月分账金额"/>
+                    </div>
+                </div>
+            </div>-->
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">上月结余</div>
+                    <div class="">
+                        <input class="form-control rebuild-obj" type="number" name="preMonthMoney" th:value="${(detail.preMonthMoney ne null and detail.preMonthMoney ne 0)?detail.preMonthMoney:(preDetail ne null?preDetail.accountMoney : 0.0)}" placeholder="上月结余金额"/>
+                    </div>
+                </div>
+            </div>
+
+            <input name="gotMoney" type="hidden" th:value="${incomeDto eq null?0:incomeDto.totalMoney}"/>
+            <input name="paidMoney" type="hidden" th:value="${payMoney}"/>
+            <input name="curStoreSn" type="hidden" th:value="${storeSn}"/>
+
+            <input type="hidden" name="token" value="${session.token}"/>
+            <button type="button" class="btn btn-primary submit-btn">确定提交</button>
+            <span style="padding-left: 10px;">账户结余：<b class="cur-surplus-money">0</b>&nbsp;元</span>
+        </form>
+
+        <input type="hidden" name="checkSign" value="1"/>
+        <input name="personalType" type="hidden" th:value="${personal.type}"/>
+        <input th:value="|${personal.signPath}?r=${#numbers.formatDecimal(T(java.lang.Math).random()*10000,1,0)}|" name="signPath" type="hidden"/>
+
+    </div>
+</div>
+</body>
+</html>

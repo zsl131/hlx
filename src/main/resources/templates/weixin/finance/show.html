@@ -90,8 +90,8 @@
                             <span th:switch="${detail.voucherStatus}">
                                 <b th:case="0" class="">未到财务检查阶段</b>
                                 <b th:case="1" class="" style="color:#820">待审核</b>
-                                <b th:case="2" class="blue" style="color:#00F">【<span th:text="${detail.voucherReason}"></span>】检查完毕，已存档</b>
-                                <b th:case="3" class="red" style="color:#F00">驳回【<span th:text="${detail.voucherReason}"></span>】</b>
+                                <b th:case="2" class="blue" style="color:#00F">[<b th:text="${detail.voucherName}"></b>]<span th:text="${detail.voucherDay}"></span>审查<br/>【<span th:text="${detail.voucherReason}"></span>】已存档</b>
+                                <b th:case="3" class="red" style="color:#F00">[<b th:text="${detail.voucherName}"></b>]<span th:text="${detail.voucherDay}"></span>审查<br/>驳回【<span th:text="${detail.voucherReason}"></span>】</b>
                             </span>
                         </span>
                     </div>

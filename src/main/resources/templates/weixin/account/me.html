@@ -161,7 +161,7 @@
                             <span th:text="${ownCount}"></span>
                         </div>
                     </a>-->
-                    <a class="weui-cell weui-cell_access" href="/wx/income/add" th:if="${account.type eq '10'}">
+                    <a class="weui-cell weui-cell_access" href="/wx/income/add" th:if="${personal ne null && personal.isCasher eq '1'}">
                         <div class="weui-cell__hd"><i class="list-icon fa fa-plus"></i></div>
                         <div class="weui-cell__bd">
                             <span>添加收入</span>
@@ -264,6 +264,16 @@
                         <div class="weui-cell__hd"><i class="list-icon fa fa-cny"></i></div>
                         <div class="weui-cell__bd">
                             <span>财务管理</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span>点击进入</span>
+                        </div>
+                    </a>
+
+                    <a class="weui-cell weui-cell_access" href="/wx/business/index" th:if="${personal ne null and personal.isPartner eq '1'}">
+                        <div class="weui-cell__hd"><i class="list-icon fa fa-cny"></i></div>
+                        <div class="weui-cell__bd">
+                            <span>经营情况</span>
                         </div>
                         <div class="weui-cell__ft">
                             <span>点击进入</span>

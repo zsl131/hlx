@@ -104,6 +104,46 @@ public class WeixinFinanceController {
 
     private static final String PATH_PRE = "finance";
 
+    /** 股东查看财务信息 */
+    @GetMapping(value = "partner")
+    public String partner(Model model, String storeSn, HttpServletRequest request) {
+
+        String openid = SessionTools.getOpenid(request);
+
+        Account account = accountService.findByOpenid(openid);
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+
+        model.addAttribute("account", account);
+        model.addAttribute("personal", personal);
+        if(personal!=null && "1".equals(personal.getIsPartner())) {
+
+            List<Store> storeList = null;
+            if(personal.getStoreSn() == null || "".equals(personal.getStoreSn())) {
+                storeList = storeDao.findByStatus("1");
+            } else {
+                storeList = new ArrayList<>();
+                Store s = new Store();
+                s.setName(personal.getStoreName());
+                s.setSn(personal.getStoreSn());
+                storeList.add(s);
+            }
+            storeSn = (storeSn==null || "".equals(storeSn.trim()))?storeList.get(0).getSn():storeSn;
+
+
+            model.addAttribute("storeSn", storeSn);
+            model.addAttribute("storeList", storeList);
+            Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+                    new SpecificationOperator("status", "ne", "-1", "and"),
+                    new SpecificationOperator("storeSn", "eq", storeSn)),
+                    SimplePageBuilder.generate(0, SimpleSortBuilder.generateSort("id_d")));
+            model.addAttribute("datas", datas);
+        } else {
+            return "redirect:/weixin/index";
+        }
+
+        return "weixin/finance/partner";
+    }
+
     @GetMapping(value = "index")
     public String index(Model model, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
@@ -347,8 +387,11 @@ public class WeixinFinanceController {
         model.addAttribute("account", account);
         model.addAttribute("personal", personal);
         model.addAttribute("storeList", storeList);
+        model.addAttribute("finDay", NormalTools.curDate());
         model.addAttribute("categoryList", financeCategoryDao.findAll());
-        model.addAttribute("detail", new FinanceDetail());
+        fd = new FinanceDetail();
+        fd.setTargetDay(NormalTools.curDate("yyyyMMdd"));
+        model.addAttribute("detail", fd);
         return "weixin/finance/add";
     }
 
@@ -377,6 +420,10 @@ public class WeixinFinanceController {
         detail.setUserSignPath(personal.getSignPath());*/
         detail.setTotalMoney(NormalTools.numberPoint(detail.getPrice()*detail.getAmount(), 2));
 
+        String targetDay = detail.getTargetDay();
+        detail.setTargetYear(buildYear(targetDay));
+        detail.setTargetMonth(buildMonth(targetDay));
+
         detail.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
         detail.setCreateLong(System.currentTimeMillis());
         detail.setCreateTime(NormalTools.curDate("yyyy-MM-dd HH:mm:ss"));
@@ -385,6 +432,13 @@ public class WeixinFinanceController {
         verifyRecordTools.save(FinanceVerifyRecord.TYPE_NOTHING, "报账申请", "报账申请", detail, financePersonalDao.findByOpenid(detail.getUserOpenid()));
 
         return "redirect:/wx/finance/show?id="+detail.getId();
+    }
+
+    private String buildYear(String day) {
+        return day.substring(0, 4);
+    }
+    private String buildMonth(String day) {
+        return day.substring(0, 6);
     }
 
     @GetMapping(value = "show")

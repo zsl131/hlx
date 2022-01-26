@@ -95,6 +95,10 @@ public class AdminFinancePersonalController {
             c.setMarkFlag(personal.getMarkFlag());
             c.setStoreName(personal.getStoreName());
             c.setStoreSn(personal.getStoreSn());
+            c.setIsPartner(personal.getIsPartner());
+            c.setPartStores(personal.getPartStores());
+            c.setIsCasher(personal.getIsCasher());
+            c.setCashStores(personal.getCashStores());
             financePersonalDao.save(c);
         }
         return "redirect:/admin/financePersonal/list";

@@ -28,13 +28,13 @@
 
         <div class="weui-cells" style="margin-top:0px;">
             <div class="weui-cell">
-                <div class="weui-cell__hd">合计</div>
+                <div class="weui-cell__hd">合计收入</div>
                 <div class="weui-cell__bd">&nbsp;</div>
                 <div class="weui-cell__ft">
                     <span th:text="|${#numbers.formatDecimal(income.totalMoney, 0, 2)} 元|" style="color:#00F;"></span>
                 </div>
             </div>
-            <div class="weui-cell">
+            <!--<div class="weui-cell">
                 <div class="weui-cell__hd">现金</div>
                 <div class="weui-cell__bd">&nbsp;</div>
                 <div class="weui-cell__ft">
@@ -75,7 +75,7 @@
                 <div class="weui-cell__ft">
                     <span th:text="|${income.other} 元|"></span>
                 </div>
-            </div>
+            </div>-->
             <div class="weui-cell">
                 <div class="weui-cell__hd">登记员</div>
                 <div class="weui-cell__bd">&nbsp;</div>
@@ -102,6 +102,11 @@
                 <div class="weui-cell__bd">&nbsp;</div>
                 <div class="weui-cell__ft">
                     <span th:text="|${income.peopleCount} 人|"></span>
+                </div>
+            </div>
+            <div class="weui-cell" th:if="${income.ticketPath ne null and income.ticketPath ne ''}">
+                <div class="weui-cell__ft">
+                    <img th:src="${income.ticketPath}" style="width: 100%;"/>
                 </div>
             </div>
         </div>

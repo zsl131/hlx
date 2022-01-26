@@ -7,8 +7,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>添加收入</title>
-    <script src="/js/jedate/jquery.jedate.min.js"></script>
-    <link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
+    <script src="/jedate-new/jedate.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/jedate-new/skin/jedate.css"/>
     <script src="/back-admin/bus/my-date.js"></script>
     <script src="/back-admin/bus/admin-income.js"></script>
 
@@ -25,9 +25,9 @@
         });
 
         function checkForm() {
-            var storeSn = $("input[name='storeSn']:checked").val();
-            if(!storeSn) {showDialog("请选择店铺", "操作提示"); return false;}
-            console.log(storeSn);
+            //var storeSn = $("input[name='storeSn']:checked").val();
+            //if(!storeSn) {showDialog("请选择店铺", "操作提示"); return false;}
+            //console.log(storeSn);
             var cash = $("input[name='cash']").val();
             if(cash<=0) {
                 showDialog("请输入金额", "系统提示");
@@ -44,26 +44,28 @@
         </div>
 
         <form method="POST" th:object="${income}" onsubmit="return checkForm();" id="dataForm" enctype="multipart/form-data">
-            <input name="storeName" value="汉丽轩" type="hidden"/>
+            <ul class="nav nav-tabs" style="margin-bottom:12px;">
+                <li role="presentation" th:each="s: ${storeList}" th:class="${s.sn eq curStoreSn ? 'active':''}"><a th:href="'/wx/income/add?storeSn='+${s.sn}" th:text="${s.name}">Home</a></li>
+            </ul>
+
+            <!--<input name="storeName" value="汉丽轩" type="hidden"/>-->
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon">收入日期：</div>
-                    <input type='text' th:value="${income.comeDay}" class='form-control income-day' name="comeDay"/>
+                    <input type='text' th:value="${(income.comeDay eq null or income.comeDay eq '')?day:income.comeDay}" id="income-day" onchange="changeDate(this)" autocomplete="off" class='form-control income-day' name="comeDay"/>
                 </div>
             </div>
 
-            <div class="form-group">
+            <!--<div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon">店铺</div>
                     <div class="form-control">
                         <span th:each="store: ${storeList}"><input type="radio" name="storeSn" th:value="${store.sn}" th:id="'sn_'+${store.id}"/><label th:for="'sn_'+${store.id}" th:text="${store.name}">汉丽轩</label>&nbsp;&nbsp;&nbsp;</span>
-                        <!--<input type="radio" name="storeSn" value="hlx" id="sn_1" checked="checked"/><label for="sn_1">汉丽轩</label>
-                        <input type="radio" name="storeSn" value="qwzw-auto" id="sn_2"/><label for="sn_2">签王之王</label>-->
                     </div>
                 </div>
-            </div>
+            </div>-->
 
-            <div class="form-group">
+            <!--<div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon">类别</div>
                     <div class="form-control">
@@ -71,8 +73,9 @@
                         <input type="radio" name="status" value="2" id="type_2" th:checked="${income.type == '2'}?'checked'"/><label for="type_2">其他收入</label>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
+            <input type="hidden" name="type" value="1"/>
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon">人数：</div>
@@ -92,8 +95,29 @@
                     <input name="totalMoney" type="text" disabled="disabled" style="font-weight:bold; color:#F00" class="form-control" th:value="${income.totalMoney}" placeholder="单位元" />
                 </div>
             </div>
+            <div class="dar" th:if="${income.id gt 0}" style="padding-bottom: 10px;">于<span th:text="${income.createTime}" style="padding:0px 8px; color:#F00;"></span>登记过</div>
 
-            <input type="hidden" name="token" value="${session.token}"/>
+            <div class="form-group">
+                <div class="weui-uploader__bd">
+                    <div class="show-img-div">
+                    <ul class="weui-uploader__files" th:if="${income.ticketPath ne null and income.ticketPath ne ''}">
+                        <!-- 显示凭证 -->
+                        <li class="weui-uploader__file single-voucher" th:attr="path=${income.ticketPath}" th:style="'background-image: url('+${income.ticketPath}+');margin-top: 10px;'"></li>
+                    </ul>
+                    </div>
+                    <!-- 如果财务没有审核通过，都可以上传凭证 -->
+                    <div class="weui-uploader__input-box">
+                        <input class="weui-uploader__input uploader-btn" type="file" accept="image/*"/>
+                    </div>
+                </div>
+                <div class="alert alert-warning upload-remind-div" style="display: none;">正在上传，请耐心等待...</div>
+            </div>
+
+            <input type="hidden" name="token" th:value="${session.token}"/>
+            <input type="hidden" name="objId" th:value="${income.id}"/>
+            <input type="hidden" name="comeToken" th:value="${income.token}"/>
+            <input type="hidden" name="curStoreSn" th:value="${curStoreSn}"/>
+            <input type="hidden" name="tempPath"/>
             <button type="submit" class="btn btn-primary">确定提交</button>
         </form>
     </div>

@@ -15,7 +15,9 @@ import com.zslin.card.service.ICardCheckService;
 import com.zslin.card.tools.CardNoTools;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.RestdayTools;
+import com.zslin.finance.dao.IFinanceDetailDao;
 import com.zslin.finance.imgTools.ImageTextTools;
+import com.zslin.finance.model.FinanceDetail;
 import com.zslin.finance.model.Supplier;
 import com.zslin.kaoqin.dto.DayDto;
 import com.zslin.kaoqin.dto.MonthDto;
@@ -23,7 +25,9 @@ import com.zslin.kaoqin.model.Clockin;
 import com.zslin.kaoqin.service.IClockinService;
 import com.zslin.kaoqin.tools.*;
 import com.zslin.multi.dao.IMoneybagDetailDao;
+import com.zslin.multi.dao.IStoreDao;
 import com.zslin.multi.model.MoneybagDetail;
+import com.zslin.multi.model.Store;
 import com.zslin.multi.tools.MoneyBagTools;
 import com.zslin.multi.tools.WaitTableNoTools;
 import com.zslin.sms.tools.RandomTools;
@@ -128,6 +132,50 @@ public class NormalTest {
 
     @Autowired
     private IMoneybagDetailDao moneybagDetailDao;
+
+    @Autowired
+    private IStoreDao storeDao;
+
+    @Autowired
+    private IFinanceDetailDao financeDetailDao;
+
+    @Test
+    public void test61() {
+        List<FinanceDetail> list = financeDetailDao.findDetailByStoreSn("hlx", "202110");
+        for(FinanceDetail d: list) {
+            System.out.println(d);
+        }
+    }
+
+    @Test
+    public void test60() {
+        System.out.println(NormalTools.preMonthByMonth("202201"));
+        System.out.println(NormalTools.preMonthByMonth("202112"));
+        System.out.println(NormalTools.preMonthByMonth("202102"));
+
+        System.out.println(incomeService.queryByMonth("hlx", "202112"));
+        System.out.println(incomeService.queryByMonth("hlx", "202111"));
+        System.out.println(incomeService.queryByMonth("hlx", "202110"));
+        Double d = incomeService.totalMoney("hlx", "202110");
+        System.out.println(d);
+        System.out.println(NormalTools.retain2Decimal(d));
+        System.out.println(NormalTools.retain2Decimal(352198.52026));
+    }
+
+    @Test
+    public void test59() {
+        System.out.println(financeDetailDao.findTotalMoney("hlx", "202112"));
+        System.out.println(financeDetailDao.findTotalMoney("hlx", "202111"));
+    }
+
+    @Test
+    public void test58() {
+        String day = "hlx;lms;";
+
+        List<Store> list = storeDao.findBySns(day.split(";"));
+        System.out.println(list);
+        System.out.println(NormalTools.preMonth());
+    }
 
     @Test
     public void test57() {

@@ -12,6 +12,18 @@
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-finance.css"/>
     <script type="text/javascript" src="/back-admin/bus/my-date.js"></script>
     <script type="text/javascript" src="/weixin/weixin-finance.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $(".target-day").jeDate({
+                isinitVal:true, //初始化日期
+                festival: true, //显示农历
+                isClear:false,
+                maxDate: curDate(),
+        //        skinCell:'jedatered',
+                format: 'YYYYMMDD'
+            });
+        })
+    </script>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
@@ -66,6 +78,16 @@
                         <input name="amount" onkeyup="buildMoney()" step="0.01" type="number" class="form-control" placeholder="数量"/>
                     </div>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">日期</div>
+                    <div class="category-div">
+                        <input name="targetDay" class="form-control target-day" th:value="${detail.targetDay}" placeholder="所属日期，格式：yyyyMMdd"/>
+                    </div>
+                </div>
+                <div class="dark" style="color:#888">如果此账不属于今天，请选择所属日期</div>
             </div>
 
             <input name="userId" type="hidden" th:value="${personal.id}"/>

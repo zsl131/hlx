@@ -34,11 +34,11 @@ public class NoticeTimer {
         //通知对象：管理员与股东
         List<String> openids = accountTools.getOpenid(AccountTools.ADMIN, AccountTools.PARTNER);
         String content = hlxTools.queryFinanceByTimer(ClientFileTools.HLX_SN);
-        eventTools.eventRemind(openids, "汉丽轩-营业通知", "自动", DateTools.date2Str(new Date(), "yyyyMMdd"), content, "");
+        eventTools.eventRemind(openids, "渔喜渔川-营业通知", "自动", DateTools.date2Str(new Date(), "yyyyMMdd"), content, "");
 
-        String contentQwzw = hlxTools.queryFinanceByTimer(ClientFileTools.QWZW_SN);
+        /*String contentQwzw = hlxTools.queryFinanceByTimer(ClientFileTools.QWZW_SN);
         //只发部分人员
-        eventTools.eventRemind(AccountTools.defaultAdmins(), "签王之王-营业通知", "自动", DateTools.date2Str(new Date(), "yyyyMMdd"), contentQwzw, "");
+        eventTools.eventRemind(AccountTools.defaultAdmins(), "签王之王-营业通知", "自动", DateTools.date2Str(new Date(), "yyyyMMdd"), contentQwzw, "");*/
 //        System.out.println("current time : "+ sdf.format(new Date()));
 //        System.out.println(content);
     }
@@ -49,11 +49,11 @@ public class NoticeTimer {
         //通知对象：管理员与股东
         List<String> openids = accountTools.getOpenid(AccountTools.ADMIN, AccountTools.PARTNER);
         String content = hlxTools.calDay(ClientFileTools.HLX_SN);
-        eventTools.eventRemind(openids, "汉丽轩-当天营业通知", "自动统计", DateTools.date2Str(new Date(), "yyyyMMdd"), content, "");
+        eventTools.eventRemind(openids, "渔喜渔川-当天营业通知", "自动统计", DateTools.date2Str(new Date(), "yyyyMMdd"), content, "");
 
-        String contentQwzw = hlxTools.calDay(ClientFileTools.QWZW_SN);
+        /*String contentQwzw = hlxTools.calDay(ClientFileTools.QWZW_SN);
         //只发部分人员
-        eventTools.eventRemind(AccountTools.defaultAdmins(), "签王之王-当天营业通知", "自动统计", DateTools.date2Str(new Date(), "yyyyMMdd"), contentQwzw, "");
+        eventTools.eventRemind(AccountTools.defaultAdmins(), "签王之王-当天营业通知", "自动统计", DateTools.date2Str(new Date(), "yyyyMMdd"), contentQwzw, "");*/
 //        System.out.println("current time : "+ sdf.format(new Date()));
 //        System.out.println(content);
     }
