@@ -8,9 +8,11 @@ $(function() {
         //console.log(e);
         var files = e.target.files;
         //console.log(files)
-        for(var i=0;i<files.length; i++) {
+        uploadImage(files, detailId, storeName+"："+detailTitle, 0);
+        /*for(var i=0;i<files.length; i++) {
             uploadImage(files[i], detailId, storeName+"："+detailTitle);
-        }
+        }*/
+        //alert("上传完成"); window.location.reload();
     })
 
     $(".cancel-btn").click(function() {
@@ -258,14 +260,16 @@ function submitApply(detailId) {
     }, "json");
 }
 
-function uploadImage(file, detailId, title) {
+function uploadImage(files, detailId, title, index) {
 //console.log(file)
+    var file = files[index];
     var formData = new FormData();
     formData.append("file", file);
     formData.append("objId", detailId);
     formData.append("title", title);
     //选择文件后，需要显示提示信息
     $(".upload-remind-div").css("display", "block");
+    $(".upload-remind-div").html("正在上传"+(index+1)+"/"+files.length+"，请稍候...");
     $.ajax({
         url: "/wx/finance/upload",
         data: formData,
@@ -277,14 +281,20 @@ function uploadImage(file, detailId, title) {
         success: function(res) {
             var code = res.code;
             if(code=='1') {
-                alert("上传成功"); window.location.reload();
+                //alert("上传成功"); window.location.reload();
             } else if(code=='-5') {
-                alert(res.msg+"。你太坏了，居然想重复上传"); window.location.reload();
+                alert(res.msg+"。你太坏了，居然想重复上传"); //window.location.reload();
             }
             //console.log("suc", res);
         },
         complete: function(res) {
             //console.log("complete", res);
+            index ++;
+            if(files.length>index) {
+                uploadImage(files, detailId, title, index);
+            } else {
+                alert("上传完成"); window.location.reload();
+            }
         }
     })
 }

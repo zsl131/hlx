@@ -127,7 +127,7 @@
                         </ul>
                         <!-- 如果财务没有审核通过，都可以上传凭证 -->
                         <div class="weui-uploader__input-box" th:if="${(detail.status eq '0' or detail.status eq '3' or detail.voucherStatus ne '2') and detail.userOpenid eq openid}">
-                            <input class="weui-uploader__input uploader-btn" type="file" accept="image/*"/>
+                            <input class="weui-uploader__input uploader-btn" multiple="multiple" type="file" accept="image/*"/>
                         </div>
                     </div>
                     <div class="alert alert-warning upload-remind-div" style="display: none;">正在上传，请耐心等待...</div>

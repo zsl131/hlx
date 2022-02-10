@@ -113,7 +113,7 @@
                 <div class="alert alert-warning upload-remind-div" style="display: none;">正在上传，请耐心等待...</div>
             </div>
 
-            <input type="hidden" name="token" th:value="${session.token}"/>
+            <input type="hidden" name="token" th:value="${income.token}"/>
             <input type="hidden" name="objId" th:value="${income.id}"/>
             <input type="hidden" name="comeToken" th:value="${income.token}"/>
             <input type="hidden" name="curStoreSn" th:value="${curStoreSn}"/>

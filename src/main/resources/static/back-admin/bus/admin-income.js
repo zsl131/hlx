@@ -26,10 +26,10 @@ $(function() {
         var objId = $("input[name='objId']").val();
         var token = $("input[name='comeToken']").val();
         var title = $("#income-day").val();
-        console.log(objId, token);
-        console.log("========", title)
+//        console.log(objId, token);
+//        console.log("========", title)
         var files = e.target.files;
-        console.log(files)
+//        console.log(files)
         for(var i=0;i<files.length; i++) {
             uploadImage(files[i], objId, title, token);
         }

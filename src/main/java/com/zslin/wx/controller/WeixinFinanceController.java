@@ -278,6 +278,10 @@ public class WeixinFinanceController {
         FinancePersonal personal = financePersonalDao.findByOpenid(openid);
         if(personal!=null && (FinancePersonal.TYPE_BOSS.equals(personal.getType()) || FinancePersonal.TYPE_VOUCHER.equals(personal.getType()) || AccountTools.isOwnAdmin(openid))) {
 
+            String keyword = request.getParameter("filter_title");
+            keyword = (keyword==null?"":keyword.replace("like-", ""));
+            model.addAttribute("keyword", keyword);
+
             Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
                     SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
             model.addAttribute("datas", datas);

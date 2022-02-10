@@ -185,7 +185,7 @@ public class WeixinIncomeController {
     @PostMapping(value="add")
     public String add(Model model, Income income, String storeSn, HttpServletRequest request) {
 //        System.out.println("==============="+storeSn);
-        System.out.println(income);
+//        System.out.println(income);
         Float totalMoney = income.getCash()+income.getAlipay()+income.getFfan()+income.getMarket()+income.getMeituan()+income.getMember()+income.getOther()+income.getWeixin();
         BigDecimal bg = new BigDecimal(totalMoney);
         income.setTotalMoney(bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());

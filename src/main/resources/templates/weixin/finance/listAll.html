@@ -8,6 +8,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>报账列表</title>
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-finance.css"/>
+    <script>
+        $(function() {
+            $(".search-btn").click(function() {
+                var keyword = $("input[name='keyword']").val();
+                //console.log("=========", keyword)
+                window.location.href = "/wx/finance/listAll?filter_title=like-"+keyword;
+            });
+        })
+    </script>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
@@ -17,6 +26,14 @@
         </div>
 
         <div class="weui-cells fin-main-box">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">搜索：</div>
+                    <input type='text' th:value="${keyword}" placeholder="名称" class='form-control keyword' name="keyword"/>
+                    <span class="input-group-addon search-btn">查询</span>
+                </div>
+            </div>
+
             <div th:if="${datas.totalElements le 0}">
                 <h2 style="width:100%; text-align:center; color:#F00;">暂无数据</h2>
             </div>
