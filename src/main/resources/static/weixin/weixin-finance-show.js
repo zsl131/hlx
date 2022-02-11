@@ -1,4 +1,5 @@
 var curPersonalId = 0;
+
 $(function() {
     var detailId = $("input[name='detailId']").val();
     var detailTitle = $("input[name='detailTitle']").val();
