@@ -8,8 +8,11 @@ import com.zslin.basic.qiniu.tools.MyFileTools;
 import com.zslin.basic.qiniu.tools.QiniuTools;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.service.IAppConfigService;
+import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.tools.SecurityUtil;
+import com.zslin.business.dto.BusinessDto;
+import com.zslin.business.tools.BusinessTools;
 import com.zslin.card.dto.CardCheckDto;
 import com.zslin.card.service.ICardCheckService;
 import com.zslin.card.tools.CardNoTools;
@@ -138,6 +141,23 @@ public class NormalTest {
 
     @Autowired
     private IFinanceDetailDao financeDetailDao;
+
+    @Autowired
+    private BusinessTools businessTools;
+
+    @Test
+    public void test63() {
+        List<BusinessDto> list = businessTools.buildDto("hlx", "202111", 0d);
+        list.forEach(System.out::println);
+    }
+
+    @Test
+    public void test62() {
+        System.out.println(DateTools.queryCurrentMonthLength("202201"));
+        System.out.println(DateTools.queryCurrentMonthLength("202202"));
+        System.out.println(DateTools.queryCurrentMonthLength("202203"));
+        System.out.println(DateTools.queryCurrentMonthLength("202204"));
+    }
 
     @Test
     public void test61() {

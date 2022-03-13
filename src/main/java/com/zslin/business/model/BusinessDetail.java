@@ -50,4 +50,7 @@ public class BusinessDetail {
 
     /** 本月分账金额 */
     private Double settleMoney=0d;
+
+    /** 是否公开；0-不公开；1-公开 */
+    private String status = "0";
 }

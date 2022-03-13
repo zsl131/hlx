@@ -1,0 +1,71 @@
+.detail-div {
+    border: 1px #0f436d solid;
+}
+.single-detail {
+    border-bottom: 1px #ddd solid; position: relative; padding-bottom: 12px;
+}
+
+.single-detail-day {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 30px solid #0f436d;
+    border-right: 30px solid transparent; text-align: center;
+}
+.single-detail-day b {
+    position: absolute; top: -30px; left: 2px; font-size: 12px; font-weight: normal; color:#FFF;
+}
+
+.income-div {
+    display: flex; line-height: 40px; border-bottom: 3px #ddd dotted;
+}
+.income-div .data-label {
+    margin-left: 40px; color:#666; padding-right: 10px;
+}
+.income-div .data-value {
+    flex: 1;
+}
+.income-div .data-value i {
+    font-size: 12px; padding: 0px 6px; color:#ddd; font-style: normal;
+}
+.plus-money {
+    color:#db7050;
+}
+.minus-money {
+    color:#333;
+}
+.amount-b {
+    color:#777; font-weight: normal;
+}
+
+.surplus-div {
+    line-height: 40px; text-align: right; color:#222; padding-right: 12px;
+}
+.surplus-div .data-label {
+    padding-right: 8px;
+}
+
+
+.paid-detail {
+    width: 90%; margin-left: 10%; margin-top: 10px;
+}
+.single-paid {
+
+}
+.no-data {
+    text-align: center; color:#999;
+}
+.single-paid a {
+    display: flex; border-bottom: 1px #ddd solid; padding: 5px 3px; color:#333; text-decoration: none;
+}
+.single-paid .paid-title {
+    flex: 1; color:#666;
+}
+.single-paid .paid-money {
+    padding:0px 5px; color:#222;
+}
+
+.detail-btn {
+    color:#820; padding-left: 6px; font-size: 12px; padding-top: 3px;
+}
+

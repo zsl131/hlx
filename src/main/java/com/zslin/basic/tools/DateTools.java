@@ -1,6 +1,9 @@
 package com.zslin.basic.tools;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -74,5 +77,33 @@ public class DateTools {
 
     public static String formatDate(Date date) {
         return date2Str(date, "yyyy-MM-dd HH:mm:ss") ;
+    }
+
+    /**
+     * 计算一个月有多少天
+     * @param month 格式如：yyyyMM
+     * @return
+     */
+    public static int queryDayOfMoney(String month) {
+        int year = Integer.parseInt(month.substring(0, 4));
+        int m = Integer.parseInt(month.substring(4, 6));
+        LocalDate localDate = LocalDate.of(year, m, 1);
+        //System.out.println(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        return localDate.lengthOfMonth();
+    }
+
+    /**
+     * 计算当月已过的天数
+     * @param month 月份，格式如：yyyyMM
+     * @return
+     */
+    public static int queryCurrentMonthLength(String month) {
+        LocalDate now = LocalDate.now();
+        String curMonth = now.format(DateTimeFormatter.ofPattern("yyyyMM"));
+        if(month.equals(curMonth)) { //如果当前月
+            return now.getDayOfMonth();
+        } else {
+            return queryDayOfMoney(month);
+        }
     }
 }

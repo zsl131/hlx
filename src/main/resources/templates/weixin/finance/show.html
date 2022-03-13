@@ -43,7 +43,7 @@
         <input th:value="${detail.title}" type="hidden" name="detailTitle"/>
         <input th:value="${detail.storeName}" type="hidden" name="storeName"/>
 
-        <div>
+        <div style="margin-bottom: 20px;">
             <div th:if="${(detail.status eq '0' or detail.status eq '3') and detail.userOpenid eq openid}" class="alert alert-danger">请认真上传凭证信息，照片需要【竖直拍摄】！</div>
 
             <div class="weui-form-preview">
@@ -273,7 +273,9 @@
                     <span class="weui-form-preview__btn weui-form-preview__btn_default" style="color:#F00">不能审核自己的申请，请联系他人审核</span>
                 </div>-->
             </div>
+
         </div>
+        <span style="padding: 5px 15px; border-radius: 5px; background:#eee; color:#666;" onclick="javascript: history.back(-1)">返回</span>
     </div>
 </div>
 </body>

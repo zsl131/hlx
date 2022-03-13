@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="/jedate-new/jedate.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/jedate-new/skin/jedate.css"/>
+    <script type="text/javascript" src="/back-admin/bus/my-date.js"></script>
+    <script type="text/javascript" src="/weixin/money-tools.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-business-show.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-search-finance.js"></script>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-business.css"/>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+    <script type="text/javascript">
+        $(function() {
+            jeDate('.target-month',{
+                isinitVal:true, //初始化日期
+                festival: true, //显示农历
+                isClear:false,
+                maxDate: curDate(),
+                format: 'YYYYMM',
+                donefun: function(obj){
+                    //this    而this指向的都是当前实例
+        //            console.log(obj.elem);     //得到当前输入框的ID
+                    console.log(obj.val);      //得到日期生成的值，如：2017-06-16
+                    var storeSn = $("input[name='curStoreSn']").val();
+                    //var preMonthMoney = $("input[name='preMonthMoney']").val();
+                    window.location.href = "/wx/business/showByBoss?storeSn="+storeSn+"&month="+obj.val;
+                }
+            })
+        })
+    </script>
+    <style>
+    </style>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="container">
+        <div class="page">
+            <input name="curStoreSn" type="hidden" th:value="${storeSn}"/>
+            <div class="page__hd" style="padding-bottom: 10px;">
+                <h1 class="page__title">经营详情：<b th:text="${store.name}"></b></h1>
+                <!--<p class="page__desc" th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">加载更多</p>-->
+            </div>
+            <div class="page__bd">
+                <div class="" th:if="${personal eq null or personal.name eq null or personal.name eq ''}">
+                    <div>
+                        抱歉的告诉您，此功能我们只对店铺投资人员开放。即将自动跳转到<a href="/wx/account/me" class="auto-redirect" time="3">首页</a>。
+                    </div>
+                </div>
+                <div th:unless="${personal eq null or personal.name eq null or personal.name eq ''}">
+                    <div class="page">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">月份</div>
+                                <div >
+                                    <input name="targetMonth" th:value="${month}" class="form-control target-month" autocomplete="off" placeholder="所属月份，格式：yyyyMM"/>
+                                </div>
+
+                                <div class="input-group-addon">上月结余</div>
+                                <div class="">
+                                    <input class="form-control rebuild-obj" type="number" name="preMonthMoney" th:value="${preMonthMoney}" placeholder="上月结余金额"/>
+                                </div>
+                            </div>
+                            <!--<div class="dark" style="color:#888">选择入账月份</div>-->
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">筛选</div>
+                                <div class="">
+                                    <input class="form-control" name="keyword" placeholder="输入关键字查询报账信息" />
+                                </div>
+                                <div class="input-group-addon">
+                                    <b class="search-amount-b">0</b>条匹配
+                                </div>
+                            </div>
+                            <!--<div class="dark" style="color:#888">选择入账月份</div>-->
+                        </div>
+
+                        <!--<div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">上月结余</div>
+                                <div class="">
+                                    <input class="form-control rebuild-obj" type="number" name="preMonthMoney" th:value="${(detail ne null and detail.preMonthMoney ne null and detail.preMonthMoney ne 0)?detail.preMonthMoney:(preDetail ne null?preDetail.accountMoney : 0.0)}" placeholder="上月结余金额"/>
+                                </div>
+                            </div>
+                        </div>-->
+
+                        <!--<div class="single-data">
+                            <div class="month-div"><span th:text="${#strings.substring(detail.targetMonth, 0, 4)+'年'+#strings.substring(detail.targetMonth, 4, 6)+'月'}"></span>
+                                <b th:if="${detail.surplusMoney eq 0}">持平</b><b class="money1" th:if="${detail.surplusMoney gt 0}">盈利</b><b class="money-1" th:if="${detail.surplusMoney lt 0}">亏损</b>
+                                <span class="account-surplus">当月账面结余：<b th:class="${detail.accountMoney ge 0?'money1':'money-1'}" th:text="|${detail.accountMoney} 元|"></b></span>
+                            </div>
+                        </div>-->
+                        <!--<ul class="nav nav-tabs content-div">
+                            <li role="presentation" class="active single-li" targetCls="income-div"><a href="javascript: void(0)">收入：<b th:text="|${detail.gotMoney}|"></b></a></li>
+                            <li role="presentation" class="single-li" targetCls="paid-div"><a href="javascript: void(0)">支出：<b th:text="|${detail.paidMoney}|"></b></a></li>
+                        </ul>-->
+                    </div>
+
+                    <div class="detail-div">
+                        <div class="single-detail" th:each="dto: ${businessDtoList}">
+                            <span class="single-detail-day"><b class="" th:text="${dto.justDay}"></b></span>
+                            <div class="income-div"><span class="data-label">收入</span><span class="data-value"><b class="plus-money" th:text="'+ ' + ${dto.gotMoney} + '元'"></b><i>|</i><b class="amount-b" th:text="|${#lists.size(dto.incomeList)} 笔|"></b></span>
+                                <a th:href="|/wx/business/incomeDetail?storeSn=${storeSn}&day=${dto.day}|"><span class="detail-btn" style="padding: 0px 3px 0px 3px">详情></span></a>
+                            </div>
+
+                            <div class="paid-detail">
+                                <div class="single-detail no-data" th:if="${#lists.size(dto.financeList) le 0}"> 无支出</div>
+                                <div class="single-paid" th:each="paid : ${dto.financeList}">
+                                    <a class="" th:href="|/wx/finance/show?id=${paid.id}|">
+                                        <div class="paid-title" th:attr="fdTitle=${paid.title}" th:text="${paid.title}"></div>
+                                        <div class="paid-money" th:text="|- ${paid.totalMoney} 元|"></div>
+                                        <div class="detail-btn">详情></div>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="surplus-div"><span class="data-label">当前结余</span><span class="data-value"><b th:text="${dto.surplusMoney} + '元'"></b></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
+</div>
+</body>
+</html>

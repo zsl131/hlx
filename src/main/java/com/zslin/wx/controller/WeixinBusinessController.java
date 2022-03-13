@@ -3,11 +3,14 @@ package com.zslin.wx.controller;
 import com.zslin.basic.repository.SimplePageBuilder;
 import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.repository.SpecificationOperator;
+import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.business.dao.IBusinessDetailDao;
+import com.zslin.business.dto.BusinessDto;
 import com.zslin.business.model.BusinessDetail;
+import com.zslin.business.tools.BusinessTools;
 import com.zslin.finance.dao.IFinanceDetailDao;
 import com.zslin.finance.dao.IFinancePersonalDao;
 import com.zslin.finance.model.FinanceDetail;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,11 +60,68 @@ public class WeixinBusinessController {
     @Autowired
     private IIncomeService incomeService;
 
+    @Autowired
+    private BusinessTools businessTools;
+
+    /** 只供老板查询，用于公布前对账 */
+    @GetMapping(value = "showByBoss")
+    public String showByBoss(Model model, String storeSn, String month, Double preMonthMoney, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+
+        //Account account = accountService.findByOpenid(openid);
+        month = (month==null || "".equals(month))? NormalTools.preMonth():month;
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+
+        if(!FinancePersonal.TYPE_BOSS.equals(personal.getType())) {
+            return "redirect:/wx/business/error?errCode=-2";
+        }
+
+        //上月明细，主要用于获取上月结余
+        BusinessDetail detail = businessDetailDao.findByStoreSnAndTargetMonth(storeSn, month);
+
+//        System.out.println("参数： "+preMonthMoney);
+//        System.out.println("detail: "+detail);
+
+        double lastSurplusMoney = (detail==null || detail.getPreMonthMoney()==null)?0d:detail.getPreMonthMoney();
+//        System.out.println("===lastSurplusMoney==="+ lastSurplusMoney);
+        preMonthMoney = preMonthMoney==null?lastSurplusMoney:preMonthMoney;
+        List<BusinessDto> businessDtoList = businessTools.buildDto(storeSn, month, preMonthMoney);
+        //IncomeDto incomeDto = incomeService.queryByMonth(storeSn, month);
+        //List<Income> incomeList = incomeService.findByMonth(storeSn, month);
+        //List<FinanceDetail> financeDetailList = financeDetailDao.findDetailByStoreSn(storeSn, month);
+//        model.addAttribute("financeList", financeDetailList);
+//        model.addAttribute("incomeDto", incomeDto);
+//        model.addAttribute("incomeList", incomeList);
+
+        model.addAttribute("businessDtoList", businessDtoList);
+        model.addAttribute("detail", detail);
+        model.addAttribute("personal", personal);
+        model.addAttribute("month", month);
+        model.addAttribute("storeSn", storeSn);
+        model.addAttribute("preMonthMoney", preMonthMoney);
+        model.addAttribute("store", storeDao.findBySn(storeSn));
+
+        return "weixin/business/showByBoss";
+    }
+
+    @GetMapping(value = "incomeDetail")
+    public String incomeDetail(Model model, String storeSn, String day, HttpServletRequest rerquest) {
+        List<Income> incomeList = incomeService.findByComeDay(storeSn, day);
+        List<FinanceDetail> financeDetailList = financeDetailDao.findDetailByStoreSnAndTargetDay(storeSn, day);
+
+        model.addAttribute("incomeList", incomeList);
+        model.addAttribute("financeDetailList", financeDetailList);
+        model.addAttribute("day", day);
+        model.addAttribute("storeSn", storeSn);
+        model.addAttribute("store", storeDao.findBySn(storeSn));
+        return "weixin/business/incomeDetail";
+    }
+
     @GetMapping(value = "show")
     public String show(Integer id, Model model, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
 
-        Account account = accountService.findByOpenid(openid);
+        //Account account = accountService.findByOpenid(openid);
 //        month = (month==null || "".equals(month))? NormalTools.preMonth():month;
         FinancePersonal personal = financePersonalDao.findByOpenid(openid);
         if(personal == null || !"1".equals(personal.getIsPartner())) {
@@ -106,7 +167,7 @@ public class WeixinBusinessController {
         model.addAttribute("store", storeDao.findBySn(storeSn));
         IncomeDto incomeDto = incomeService.queryByMonth(storeSn, month);
         Double payMoney = NormalTools.retain2Decimal(financeDetailDao.findTotalMoney(storeSn, month));
-        Double monthSurplus = NormalTools.retain2Decimal((incomeDto==null?0:incomeDto.getTotalMoney()) - payMoney); //本月结余
+        Double monthSurplus = NormalTools.retain2Decimal(((incomeDto==null || incomeDto.getTotalMoney()==null)?0:incomeDto.getTotalMoney()) - payMoney); //本月结余
         model.addAttribute("payMoney", payMoney);
         model.addAttribute("incomeDto", incomeDto);
         model.addAttribute("monthSurplus", monthSurplus);

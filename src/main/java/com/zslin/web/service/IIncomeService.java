@@ -37,6 +37,9 @@ public interface IIncomeService extends BaseRepository<Income, Integer>, JpaSpec
     @Query("FROM Income WHERE storeSn=?1 AND comeDay=?2 AND type=?3")
     Income findByComeDay(String storeSn, String comeDay, String type);
 
+    @Query("FROM Income WHERE storeSn=?1 AND comeDay=?2 ")
+    List<Income> findByComeDay(String storeSn, String comeDay);
+
     @Query("FROM Income i WHERE i.storeSn=?1 AND i.comeMonth=?2")
     List<Income> findByMonth(String storeSn, String comeMonth);
 

@@ -64,7 +64,7 @@
                 <div th:unless="${personal eq null or personal.name eq null or personal.name eq ''}">
                     <div class="page">
 
-                        <a th:href="'/wx/business/addDetail?storeSn='+${curStoreSn}" th:if="${personal.type eq '2'}" class="btn btn-success" style="color:#FFF; margin-bottom: 12px;"><span class="fa fa-calculator" style="color:#FFF"></span> 经营入账</a>
+                        <a th:href="'/wx/business/showByBoss?storeSn='+${curStoreSn}" th:if="${personal.type eq '2'}" class="btn btn-success" style="color:#FFF; margin-bottom: 12px;"><span class="fa fa-calculator" style="color:#FFF"></span> 经营入账</a>
 
                         <div th:if="${datas ne null and datas.totalElements gt 0}">
                             <div th:each="obj : ${datas}" th:remove="tag">

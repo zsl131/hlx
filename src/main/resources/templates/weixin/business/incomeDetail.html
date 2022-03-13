@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript" src="/weixin/money-tools.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-business-show.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-money.js"></script>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-business.css"/>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+    <style>
+        .fa {
+            color:#7a4171;
+        }
+        .weui-grid__label {
+            color:#7a4171;
+        }
+        .single-data {
+            width: 100%; margin-bottom: 12px;
+        }
+        .month-div {
+            padding-left: 12px; color:#999; padding-bottom: 8px; margin-top: 10px; border-bottom: 1px #ddd dotted;
+        }
+        .account-surplus {
+            float:right;
+        }
+        b.money1 {
+            color:blue;
+        }
+        b.money-1 {
+            color:#F00;
+        }
+        .money-con-div {
+            padding-top: 12px;
+        }
+        .money-p {
+            padding-left: 12px;
+        }
+        .single-data-bottom {
+            padding-bottom: 12px; padding-left: 12px; border-top: 1px #ddd dotted; padding-top: 12px;
+        }
+        .month-span {
+            float: right;
+        }
+
+        .single-income {
+            border-bottom: 1px #ddd solid; display: flex; line-height: 40px;
+        }
+        .single-income .income-day {
+            flex: 1; color:#666; padding-left: 5px;
+        }
+        .single-income .income-money {
+            flex: 1; text-align: right; padding-right: 10px; font-weight: bold;
+        }
+        .income-opt {
+            font-size: 22px; line-height: 40px; margin-right: 12px; color:#999;
+        }
+        .upper-money {
+            padding: 12px 5px 0px 5px;
+        }
+
+        .single-span {
+            color:#555; font-size: 8px;
+        }
+        .single-span span {
+            font-size: 12px;
+        }
+        .paid-href .single-income {
+            border-bottom: none; line-height: 24px;
+        }
+        .paid-href .income-opt {
+            line-height: 24px;
+        }
+        .paid-href {
+            width: 100%; color:#333; text-decoration: none;
+        }
+        .paid-personal {
+            width: 100%; border-bottom: 1px #ddd solid; padding-bottom: 10px;
+        }
+        .paid-div-title {
+            width: 100%; background: #01a24f; padding-left: 12px; color:#FFF; line-height: 35px; margin-bottom: 12px; margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="container">
+        <div class="page">
+            <input name="curStoreSn" type="hidden" th:value="${storeSn}"/>
+            <div class="page__hd" style="padding-bottom: 10px;">
+                <h1 class="page__title">经营详情：<b th:text="${store.name}"></b></h1>
+                <!--<p class="page__desc" th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">加载更多</p>-->
+            </div>
+            <div class="page__bd">
+                <div class="page" style="padding-bottom: 12px;">
+                    <div class="" th:each="income: ${incomeList}">
+                        <div class="paid-div-title" style="background:#d98200">收入明细：+<b class="need-rebuild-money" th:attr="money=${income.totalMoney}" len="2" th:text="${income.totalMoney}"></b>元</div>
+                        <img th:if="${income.ticketPath ne null and income.ticketPath ne ''}" th:src="${income.ticketPath}" style="width: 100%"/>
+                        <span th:if="${income.ticketPath eq null or income.ticketPath eq ''}" style="text-align: center; color:#F00; width: 100%;">未上传收入凭证</span>
+                    </div>
+
+
+                    <div class="paid-div-title">支出明细：</div>
+                    <div th:if="${#lists.size(financeDetailList) le 0}" style="color:#F00;">无支出记录</div>
+                    <div th:each="fd: ${financeDetailList}">
+                        <a th:href="|/wx/finance/show?id=${fd.id}|" class="paid-href">
+                            <p class="single-income" >
+                                <span class="income-day" th:text="|${#strings.substring(fd.targetDay, 0, 4)}-${#strings.substring(fd.targetDay, 4, 6)}-${#strings.substring(fd.targetDay, 6, 8)}|"></span>
+                                <span style="color:#333;"><span th:text="${fd.username}"></span><span style="font-size: 10px; color:#888; padding-left: 3px;">报账：</span><span class="income-money" th:text="|${fd.totalMoney}|"></span></span>
+                                <span class="income-opt fa fa-angle-right"></span>
+                            </p>
+                            <p class="" th:text="|${fd.title}|"></p>
+                            <p class="paid-personal">
+                                <!--<span class="single-span">报账人：<span th:text="${fd.username}"></span></span>-->
+                                <span class="single-span">审核员：<span th:text="${fd.verifyName}"></span></span>
+                                <span class="single-span">，收货人：<span th:text="${fd.confirmName}"></span></span>
+                                <span class="single-span">，财务：<span th:text="${fd.voucherName}"></span></span>
+                            </p>
+                        </a>
+                    </div>
+                </div>
+
+                <span style="padding: 5px 15px; border-radius: 5px; background:#eee; color:#666;" onclick="javascript: history.back(-1)">返回</span>
+            </div>
+        </div>
+    </div>
+    <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
+</div>
+</body>
+</html>
