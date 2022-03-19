@@ -81,7 +81,7 @@ public class NormalTools {
     }
 
     public static String preMonthByMonth(String month) {
-        try {
+        /* try {
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
             Date date = sdf.parse(month);
@@ -89,6 +89,31 @@ public class NormalTools {
             cal.add(Calendar.MONTH, -1);
             return sdf.format(cal.getTime());
         } catch (Exception e) {
+            return "";
+        }*/
+        return otherMonthByMonth(month, -1);
+    }
+
+    //获取下一个月
+    public static String nextMonthByMonth(String month) {
+        return otherMonthByMonth(month, 1);
+    }
+
+    /**
+     * 通过朋份获取其他月份
+     * @param month 格式：yyyyMM
+     * @param amount 增量 1：下一个月；-1：上一个月
+     * @return
+     */
+    public static String otherMonthByMonth(String month, int amount) {
+        try {
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+            Date date = sdf.parse(month);
+            cal.setTime(date);
+            cal.add(Calendar.MONTH, amount);
+            return sdf.format(cal.getTime());
+        } catch (ParseException e) {
             return "";
         }
     }

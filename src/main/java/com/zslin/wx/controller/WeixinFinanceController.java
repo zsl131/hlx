@@ -12,6 +12,7 @@ import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.tools.PinyinToolkit;
 import com.zslin.basic.utils.ParamFilterUtil;
+import com.zslin.business.tools.BusinessTools;
 import com.zslin.finance.dao.IFinanceCategoryDao;
 import com.zslin.finance.dao.IFinanceDetailDao;
 import com.zslin.finance.dao.IFinancePersonalDao;
@@ -910,6 +911,7 @@ public class WeixinFinanceController {
                     .append("收货人：").append(fd.getConfirmName()).append(sep)
                     .append("财务人：").append(personal.getName()).append(sep);
             eventTools.eventRemind(fd.getUserOpenid(), "报账凭证齐全通知", "财务报账", NormalTools.curDatetime(), remark.toString(), "/wx/finance/show?id="+id);
+            rebuildBusiness(fd); //重构
         } else if("3".equals(status)) { //如果是确认未收货，通过报账人
             StringBuilder remark = new StringBuilder();
             remark.append("报账人：").append(fd.getUsername()).append(sep)
@@ -933,6 +935,22 @@ public class WeixinFinanceController {
 
         verifyRecordTools.save(FinanceVerifyRecord.TYPE_VOUCHER, "财务审核", reason, fd, personal);
         return "1";
+    }
+
+    @Autowired
+    private BusinessTools businessTools;
+
+    private synchronized void rebuildBusiness(FinanceDetail fd) {
+        System.out.println("===============WeixinFinanceController================");
+        System.out.println(fd);
+        System.out.println("===============WeixinFinanceController================");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //凭证齐全后，需要重构财务数据
+                businessTools.rebuildBusinessDetailForLoop(fd.getStoreSn(), fd.getTargetMonth());
+            }
+        }).start();
     }
 
     /** 删除凭证 */

@@ -146,8 +146,28 @@ public class NormalTest {
     private BusinessTools businessTools;
 
     @Test
+    public void test65() {
+        businessTools.rebuildBusinessDetailForLoop("hlx", "202110");
+    }
+
+    @Test
+    public void test64() {
+        String month = "202202";
+        System.out.println("=========amount next======"+NormalTools.nextMonthByMonth(month));
+        System.out.println("=========amount pre======"+NormalTools.preMonthByMonth(month));
+        System.out.println("=========amount 1======"+NormalTools.otherMonthByMonth(month, 1));
+        System.out.println("=========amount 2======"+NormalTools.otherMonthByMonth(month, 2));
+        System.out.println("=========amount 3======"+NormalTools.otherMonthByMonth(month, 3));
+        System.out.println("=========amount -1======"+NormalTools.otherMonthByMonth(month, -1));
+        System.out.println("=========amount -2======"+NormalTools.otherMonthByMonth(month, -2));
+        System.out.println("=========amount -3======"+NormalTools.otherMonthByMonth(month, -3));
+        System.out.println("=========amount -4======"+NormalTools.otherMonthByMonth(month, -4));
+    }
+
+    @Test
     public void test63() {
         List<BusinessDto> list = businessTools.buildDto("hlx", "202111", 0d);
+        System.out.println(businessTools.buildMoney(list));
         list.forEach(System.out::println);
     }
 

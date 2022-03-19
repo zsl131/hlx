@@ -69,3 +69,12 @@
     color:#820; padding-left: 6px; font-size: 12px; padding-top: 3px;
 }
 
+.money-show-div {
+    padding-bottom: 12px;
+}
+.money-show-div p {
+    line-height: 30px; margin: 0px; width: 100%;
+}
+.money-show-div p b {
+    padding: 0px 5px;
+}
