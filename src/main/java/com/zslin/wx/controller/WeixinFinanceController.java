@@ -941,9 +941,9 @@ public class WeixinFinanceController {
     private BusinessTools businessTools;
 
     private synchronized void rebuildBusiness(FinanceDetail fd) {
-        System.out.println("===============WeixinFinanceController================");
-        System.out.println(fd);
-        System.out.println("===============WeixinFinanceController================");
+//        System.out.println("===============WeixinFinanceController================");
+//        System.out.println(fd);
+//        System.out.println("===============WeixinFinanceController================");
         new Thread(new Runnable() {
             @Override
             public void run() {

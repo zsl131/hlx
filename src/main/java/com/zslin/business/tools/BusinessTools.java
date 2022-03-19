@@ -42,9 +42,9 @@ public class BusinessTools {
      * @param month 发生变化的月份
      */
     public void rebuildBusinessDetailForLoop(String storeSn, String month) {
-        System.out.println("===========BusinessTools.rebuildBusinessDetailForLoop===========");
-        System.out.println("storeSn: "+storeSn+"，month: "+month);
-        System.out.println("===========BusinessTools.rebuildBusinessDetailForLoop===========");
+//        System.out.println("===========BusinessTools.rebuildBusinessDetailForLoop===========");
+//        System.out.println("storeSn: "+storeSn+"，month: "+month);
+//        System.out.println("===========BusinessTools.rebuildBusinessDetailForLoop===========");
         //获取对应的Detail数据
         BusinessDetail detail = businessDetailDao.findByStoreSnAndTargetMonth(storeSn, month);
         int amount = 1;
