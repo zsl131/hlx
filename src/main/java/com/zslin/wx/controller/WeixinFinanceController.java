@@ -521,6 +521,7 @@ public class WeixinFinanceController {
             File outFile = new File(configTools.getFilePath(PATH_PRE) + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
 
             FinanceVoucher fv = new FinanceVoucher();
+            fv.setTargetType(FinanceVoucher.TARGET_TYPE_FIN);
             fv.setCreateDay(NormalTools.curDate());
             fv.setCreateTime(NormalTools.curDatetime());
             fv.setCreateLong(System.currentTimeMillis());
@@ -532,9 +533,9 @@ public class WeixinFinanceController {
             String md5 = MyFileTools.getFileMd5(outFile); //文件MD5值
             FinanceVoucher oldVoucher = financeVoucherDao.findByMd5(md5); //通过MD5获取对象
             if(oldVoucher!=null) {
-                outFile.deleteOnExit();
-                outFile.delete();
-                String detailTitle = financeDetailDao.findTitle(oldVoucher.getDetailId()); //获取报账名称
+                //outFile.deleteOnExit();
+                //outFile.delete();
+                //String detailTitle = financeDetailDao.findTitle(oldVoucher.getDetailId()); //获取报账名称
                 //return new UploadResult("-5", "在【"+detailTitle+"】报账中于["+oldVoucher.getCreateTime()+"]已经上传过此凭证");
 //                        return "-5"; //表示md5已经存在
             }
