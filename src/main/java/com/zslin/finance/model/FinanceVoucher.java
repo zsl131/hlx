@@ -12,6 +12,10 @@ import javax.persistence.*;
 @Data
 public class FinanceVoucher {
 
+    public static final String TARGET_TYPE_FIN = "1";
+
+    public static final String TARGET_TYPE_INCOME = "2";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -20,6 +24,9 @@ public class FinanceVoucher {
     private Integer detailId;
 
     private String targetToken;
+
+    /** 类型； 1-财务；2-入账 */
+    private String targetType;
 
     /** 对应的照片路径 */
     private String picPath;

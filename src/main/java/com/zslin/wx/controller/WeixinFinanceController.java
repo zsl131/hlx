@@ -450,7 +450,7 @@ public class WeixinFinanceController {
         model.addAttribute("personal", financePersonalDao.findByOpenid(openid));
         model.addAttribute("openid", openid);
         model.addAttribute("detail", detail);
-        model.addAttribute("voucherList", financeVoucherDao.findByDetailId(id));
+        model.addAttribute("voucherList", financeVoucherDao.findByTargetTypeAndDetailId(FinanceVoucher.TARGET_TYPE_FIN, id));
         return "weixin/finance/show";
     }
 
@@ -466,6 +466,7 @@ public class WeixinFinanceController {
                     File outFile = new File(configTools.getFilePath(PATH_PRE) + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
 
                     FinanceVoucher fv = new FinanceVoucher();
+                    fv.setTargetType(FinanceVoucher.TARGET_TYPE_FIN);
                     fv.setCreateDay(NormalTools.curDate());
                     fv.setCreateTime(NormalTools.curDatetime());
                     fv.setCreateLong(System.currentTimeMillis());

@@ -31,7 +31,7 @@ public class FinanceCancelTools {
      * @param id detailId
      */
     public void cancel(Integer id) {
-        List<FinanceVoucher> voucherList = financeVoucherDao.findByDetailId(id);
+        List<FinanceVoucher> voucherList = financeVoucherDao.findByTargetTypeAndDetailId(FinanceVoucher.TARGET_TYPE_FIN, id);
         for(FinanceVoucher voucher : voucherList) {
             String path = voucher.getPicPath();
             if(MyFileTools.isRemoteFile(path)) {

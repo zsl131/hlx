@@ -272,6 +272,7 @@ public class WeixinIncomeController {
                     File outFile = new File(configTools.getFilePath("income") + UUID.randomUUID().toString()+ NormalTools.getFileType(fileName));
 
                     FinanceVoucher fv = new FinanceVoucher();
+                    fv.setTargetType(FinanceVoucher.TARGET_TYPE_INCOME);
                     fv.setCreateDay(NormalTools.curDate());
                     fv.setCreateTime(NormalTools.curDatetime());
                     fv.setCreateLong(System.currentTimeMillis());

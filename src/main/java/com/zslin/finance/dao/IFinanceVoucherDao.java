@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IFinanceVoucherDao extends BaseRepository<FinanceVoucher, Integer>, JpaSpecificationExecutor<FinanceVoucher> {
 
-    List<FinanceVoucher> findByDetailId(Integer detailId);
+    List<FinanceVoucher> findByTargetTypeAndDetailId(String targetType, Integer detailId);
 
     @Query("FROM FinanceVoucher f WHERE f.detailId IN (?1)")
     List<FinanceVoucher> findByIds(Integer [] ids);
