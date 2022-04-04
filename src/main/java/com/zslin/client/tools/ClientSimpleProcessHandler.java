@@ -163,13 +163,6 @@ public class ClientSimpleProcessHandler {
         if("2".equals(o.getStatus()) && "9".equalsIgnoreCase(o.getType())) {
             List<String> openids = accountTools.getOpenid(AccountTools.ADMIN);
 
-//            String day = NormalTools.curDate("yyyy-MM-dd");
-
-//            Integer halfAm = buffetOrderDetailService.queryCount(day, "66666"); //午餐半票人数
-//            Integer fullAm = buffetOrderDetailService.queryCount(day, "88888"); //午餐全票人数
-//            Integer halfPm = buffetOrderDetailService.queryCount(day, "77777"); //晚餐半票人数
-//            Integer fullPm = buffetOrderDetailService.queryCount(day, "99999"); //晚餐全票人数
-
             //当有友情价是discountReason必须存老板手机号码
             boolean res = eventTools.eventRemind(openids,"伙时抵价通知【"+o.getStoreSn()+"】", "有顾客使用伙时购票", NormalTools.curDate("yyyy-MM-dd HH:mm"),
                     "/wx/buffetOrders/show?no="+o.getNo(),
@@ -178,6 +171,17 @@ public class ClientSimpleProcessHandler {
                     new EventRemarkDto("伙时编号", o.getDiscountReason()),
                     new EventRemarkDto("", "点击查看可确认！"));
 
+        } else if("2".equals(o.getStatus()) && "18".equalsIgnoreCase(o.getType())) {
+//            System.out.println("===========八拼团=========");
+            List<String> openids = accountTools.getOpenid(AccountTools.ADMIN);
+
+            //当有友情价是discountReason必须存老板手机号码
+            boolean res = eventTools.eventRemind(openids,"八拼团抵价通知【"+o.getStoreSn()+"】", "有顾客使用八拼团购票", NormalTools.curDate("yyyy-MM-dd HH:mm"),
+                    "/wx/buffetOrders/show?no="+o.getNo(),
+                    new EventRemarkDto("订单编号", o.getNo()),
+                    new EventRemarkDto("用餐人数", o.getCommodityCount()+""),
+                    new EventRemarkDto("八拼团券码", o.getDiscountReason()),
+                    new EventRemarkDto("", "点击查看可确认！"));
         }
     }
 

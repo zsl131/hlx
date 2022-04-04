@@ -60,6 +60,7 @@
                 </div>
             </div>
 
+            <input type="hidden" name="targetDay" class="form-control target-day" th:value="${detail.targetDay}"/>
             <input type="hidden" name="token" value="${session.token}"/>
             <button type="submit" class="btn btn-primary submit-btn">确定提交</button>
             <span style="padding-left: 10px;">单笔合计：<b class="total-money" style="color:#F00" th:text="${detail.totalMoney}">0</b>&nbsp;元</span>

@@ -81,6 +81,10 @@
                         <span class="weui-form-preview__value" th:text="${detail.createTime}"></span>
                     </div>
                     <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">所属日期</label>
+                        <span class="weui-form-preview__value" th:text="${detail.targetDay}"></span>
+                    </div>
+                    <div class="weui-form-preview__item">
                         <label class="weui-form-preview__label">审核状态</label>
                         <span class="weui-form-preview__value">
                             <span th:switch="${detail.status}">

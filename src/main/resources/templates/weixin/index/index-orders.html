@@ -5,7 +5,7 @@
         <div th:fragment="content">
             <div class="area-title" style="height: auto;"><i class="fa fa-gavel"></i> 最新订单
                 <p style="line-height: 22px;">渔喜渔川（今：<b th:text="${ordersCountToday}"></b>，昨：<b th:text="${ordersCountYestoday}"></b>，共：<b th:text="${ordersCount}"></b> 人次）</p>
-                <p style="line-height: 22px;">签王之王（今：<b th:text="${ordersCountToday_qwzw}"></b>，昨：<b th:text="${ordersCountYestoday_qwzw}"></b>，共：<b th:text="${ordersCount_qwzw}"></b> 人次）</p>
+                <!--<p style="line-height: 22px;">签王之王（今：<b th:text="${ordersCountToday_qwzw}"></b>，昨：<b th:text="${ordersCountYestoday_qwzw}"></b>，共：<b th:text="${ordersCount_qwzw}"></b> 人次）</p>-->
             </div>
             <div class="orders-area">
             <div class="single-order" th:each="orders : ${ordersList}">
@@ -19,6 +19,7 @@
                     <span th:case="6">卡券</span>
                     <span th:case="9">伙时</span>
                     <span th:case="20">抖音</span>
+                    <span th:case="18">八拼团</span>
                 </span>
                 （<b th:text="${orders.commodityCount}"></b> 人）
                 <span class="order-time" th:text="${orders.createTime}"></span>

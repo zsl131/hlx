@@ -44,9 +44,13 @@
 
 				<tr th:each="obj : ${datas}">
 					<td th:text="${obj.storeName}"></td>
-					<td><span data-toggle="tooltip" data-placement="top" title="单价" th:text="${obj.price}"></span>*
+					<td>
+						<p>
+						<span data-toggle="tooltip" data-placement="top" title="单价" th:text="${obj.price}"></span>*
 						<span data-toggle="tooltip" data-placement="top" title="数量" th:text="${obj.amount}"></span>=
 						<span data-toggle="tooltip" data-placement="top" title="总额" th:text="${obj.totalMoney}"></span>
+						</p>
+						<p>所属日期：<span th:text="${obj.targetDay}"></span></p>
 					</td>
 					<td>
 						[<b th:text="${obj.cateName}"></b>]

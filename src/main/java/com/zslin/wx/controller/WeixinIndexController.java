@@ -60,9 +60,9 @@ public class WeixinIndexController {
         model.addAttribute("ordersCountYestoday", buffetOrderService.queryCount(ClientFileTools.HLX_SN, DateTools.plusDay(-1, "yyyy-MM-dd")));
         model.addAttribute("ordersCountToday", buffetOrderService.queryCount(ClientFileTools.HLX_SN, DateTools.plusDay(0, "yyyy-MM-dd")));
 
-        model.addAttribute("ordersCount_qwzw", buffetOrderService.queryCount(ClientFileTools.QWZW_SN));
-        model.addAttribute("ordersCountYestoday_qwzw", buffetOrderService.queryCount(ClientFileTools.QWZW_SN, DateTools.plusDay(-1, "yyyy-MM-dd")));
-        model.addAttribute("ordersCountToday_qwzw", buffetOrderService.queryCount(ClientFileTools.QWZW_SN, DateTools.plusDay(0, "yyyy-MM-dd")));
+//        model.addAttribute("ordersCount_qwzw", buffetOrderService.queryCount(ClientFileTools.QWZW_SN));
+//        model.addAttribute("ordersCountYestoday_qwzw", buffetOrderService.queryCount(ClientFileTools.QWZW_SN, DateTools.plusDay(-1, "yyyy-MM-dd")));
+//        model.addAttribute("ordersCountToday_qwzw", buffetOrderService.queryCount(ClientFileTools.QWZW_SN, DateTools.plusDay(0, "yyyy-MM-dd")));
 
         SimpleSpecificationBuilder builder = new SimpleSpecificationBuilder("status", "eq", "1");
 //        model.addAttribute("feedbackList", feedbackService.findAll(builder.generate(), SimplePageBuilder.generate(0, 6, SimpleSortBuilder.generateSort("id_d")))); //最新反馈
