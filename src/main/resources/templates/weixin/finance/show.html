@@ -11,16 +11,29 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.min.css" crossorigin="anonymous">
     <link href="/js-lib/fileupload/css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" crossorigin="anonymous"/>
-    <!--<link href="/js-lib/fileupload/themes/explorer-fas/theme.css" media="all" rel="stylesheet" type="text/css"/>-->
-    <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>-->
     <script src="/js-lib/fileupload/js/plugins/piexif.js" type="text/javascript"></script>
     <script src="/js-lib/fileupload/js/plugins/sortable.js" type="text/javascript"></script>
     <script src="/js-lib/fileupload/js/fileinput.min.js" type="text/javascript"></script>
     <script src="/js-lib/fileupload/js/locales/zh.js" type="text/javascript"></script>
 
+    <script src="/js/jedate/jquery.jedate.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/js/jedate/skin/jedate.css"/>
+    <script type="text/javascript" src="/back-admin/bus/my-date.js"></script>
+
     <script type="text/javascript" src="/weixin/weixin-finance-show.js"></script>
     <script type="text/javascript" src="/weixin/weixin-finance.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $(".target-day").jeDate({
+                isinitVal:true, //初始化日期
+                festival: true, //显示农历
+                isClear:false,
+                maxDate: curDate(),
+                //        skinCell:'jedatered',
+                format: 'YYYYMMDD'
+            });
+        })
+    </script>
     <style>
         .clearfix {
             display: none;
@@ -35,7 +48,7 @@
 <div th:fragment="content" th:remove="tag">
     <input type="hidden" name="checkSign" value="1"/>
     <input th:value="|${personal.signPath}?r=${#numbers.formatDecimal(T(java.lang.Math).random()*10000,1,0)}|" name="signPath" type="hidden"/>
-    <div class="container">
+    <div class="container" style="padding-bottom: 20px;">
         <div class="header lighter smaller blue">
             <h3><i class="fa fa-plus"></i>&nbsp;报账申请-详情</h3>
         </div>
@@ -82,7 +95,12 @@
                     </div>
                     <div class="weui-form-preview__item">
                         <label class="weui-form-preview__label">所属日期</label>
-                        <span class="weui-form-preview__value" th:text="${detail.targetDay}"></span>
+                        <span class="weui-form-preview__value" >
+                            <span th:if="${personal.type eq '2'}">
+                                <b class="btn btn-info modify-day" th:attr="objId=${detail.id},targetDay=${detail.targetDay}"><i class="fa fa-edit"></i><b th:text="${detail.targetDay}"></b></b>
+                            </span>
+                            <span th:unless="${personal.type eq '2'}" th:remove="tag" th:text="${detail.targetDay}"></span>
+                        </span>
                     </div>
                     <div class="weui-form-preview__item">
                         <label class="weui-form-preview__label">审核状态</label>
@@ -279,7 +297,7 @@
             </div>
 
         </div>
-        <span style="padding: 5px 15px; border-radius: 5px; background:#eee; color:#666;" onclick="javascript: history.back(-1)">返回</span>
+        <span style="padding: 5px 15px; border-radius: 5px; background:#eee; color:#666; margin-bottom: 20px;" onclick="javascript: history.back(-1)">返回</span>
     </div>
 </div>
 </body>

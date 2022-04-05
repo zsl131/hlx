@@ -12,6 +12,19 @@
     <link type="text/css" rel="stylesheet" href="/weixin/weixin-finance.css"/>
     <script type="text/javascript" src="/back-admin/bus/my-date.js"></script>
     <script type="text/javascript" src="/weixin/weixin-finance.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $(".target-day").jeDate({
+                isinitVal:true, //初始化日期
+                festival: true, //显示农历
+                isClear:false,
+                maxDate: curDate(),
+                //        skinCell:'jedatered',
+                format: 'YYYYMMDD'
+            });
+        })
+    </script>
 </head>
 <body>
 <div th:fragment="content" th:remove="tag">
@@ -60,7 +73,17 @@
                 </div>
             </div>
 
-            <input type="hidden" name="targetDay" class="form-control target-day" th:value="${detail.targetDay}"/>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">日期</div>
+                    <div class="category-div">
+                        <input name="targetDay" class="form-control target-day" th:value="${detail.targetDay}" placeholder="所属日期，格式：yyyyMMdd"/>
+                    </div>
+                </div>
+                <div class="dark" style="color:#F00">如果此账不属于今天，请选择所属日期</div>
+            </div>
+
+            <!--<input type="hidden" name="targetDay" class="form-control target-day" th:value="${detail.targetDay}"/>-->
             <input type="hidden" name="token" value="${session.token}"/>
             <button type="submit" class="btn btn-primary submit-btn">确定提交</button>
             <span style="padding-left: 10px;">单笔合计：<b class="total-money" style="color:#F00" th:text="${detail.totalMoney}">0</b>&nbsp;元</span>

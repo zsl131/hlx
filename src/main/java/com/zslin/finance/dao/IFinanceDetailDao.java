@@ -86,4 +86,9 @@ public interface IFinanceDetailDao extends BaseRepository<FinanceDetail, Integer
 
     @Query("SELECT SUM(f.totalMoney) FROM FinanceDetail f WHERE f.storeSn=?1 AND f.targetMonth=?2 AND f.voucherStatus='2'")
     Double findTotalMoney(String storeSn, String targetMonth);
+
+    @Query("UPDATE FinanceDetail f SET f.targetDay=?1, f.targetMonth=?2, f.targetYear=?3 WHERE f.id=?4")
+    @Transactional
+    @Modifying
+    void modifyTargetDay(String targetDay, String targetMonth, String targetYear, Integer id);
 }

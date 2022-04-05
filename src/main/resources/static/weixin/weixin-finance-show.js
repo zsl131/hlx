@@ -159,6 +159,42 @@ $(function() {
             }, "static");
         }, "json");
     })
+
+    $(".modify-day").click(function() {
+        const day = $(this).attr("targetDay");
+        const objId = $(this).attr("objId");
+        // console.log(day, objId)
+        var html = '<div class="form-group">\n' +
+            '                <div class="input-group">\n' +
+            '                    <div class="input-group-addon">日期</div>\n' +
+            '                    <div class="category-div">\n' +
+            '                        <input name="targetDay" class="form-control modify-target-day" value="'+day+'" placeholder="所属日期，格式：yyyyMMdd"/>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '            </div>';
+        var dayDialog = confirmDialog(html, "收货人员管理", function() {
+            const targetDay = $(dayDialog).find("input[name='targetDay']").val();
+            if(targetDay.length!==8) {alert("日期格式不对");}
+            else {
+                $.post("/wx/finance/modifyTargetDay", {day: targetDay, id: objId}, function(res) {
+                    if(res===1) {
+                        alert("修改成功");
+                    } else {
+                        alert("修改失败");
+                    }
+                    window.location.reload();
+                }, "json");
+            }
+        }, "static");
+        $(".modify-target-day").jeDate({
+            isinitVal:true, //初始化日期
+            festival: true, //显示农历
+            isClear:false,
+            maxDate: curDate(),
+            //        skinCell:'jedatered',
+            format: 'YYYYMMDD'
+        });
+    });
 })
 
 function setPersonal(obj) {

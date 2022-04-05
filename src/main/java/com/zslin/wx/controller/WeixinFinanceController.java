@@ -649,12 +649,27 @@ public class WeixinFinanceController {
             oldD.setTotalMoney(NormalTools.numberPoint(detail.getPrice()*detail.getAmount(), 2));
             oldD.setTitle(detail.getTitle());
             oldD.setCateId(detail.getCateId());
+            String targetDay = detail.getTargetDay();
+            oldD.setTargetYear(buildYear(targetDay));
+            oldD.setTargetMonth(buildMonth(targetDay));
+            oldD.setTargetDay(targetDay);
             oldD.setCateName(detail.getCateName());
             financeDetailDao.save(oldD);
-        } else {
-
         }
         return "redirect:/wx/finance/show?id="+detail.getId();
+    }
+
+    @PostMapping(value = "modifyTargetDay")
+    public @ResponseBody String modifyTargetDay(String day, Integer id) {
+        try {
+            String year = buildYear(day);
+            String month = buildMonth(day);
+            financeDetailDao.modifyTargetDay(day, month, year, id);
+        } catch (Exception e) {
+//            e.printStackTrace();
+            return "-1";
+        }
+        return "1";
     }
 
     /** 取消申请 */
