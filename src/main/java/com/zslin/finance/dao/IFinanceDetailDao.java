@@ -25,7 +25,8 @@ public interface IFinanceDetailDao extends BaseRepository<FinanceDetail, Integer
     void updatePrintFlag(String flag, Integer [] ids);
 
     /** 只有status为0或3时才能取消，即状态为申请或驳回状态 */
-    @Query("UPDATE FinanceDetail f SET f.status='-1' WHERE f.status IN ('0', '3') AND f.id=?1")
+//    @Query("UPDATE FinanceDetail f SET f.status='-1' WHERE f.status IN ('0', '3') AND f.id=?1")
+    @Query("UPDATE FinanceDetail f SET f.status='-1' WHERE f.id=?1")
     @Modifying
     @Transactional
     void cancel(Integer id);
@@ -86,6 +87,12 @@ public interface IFinanceDetailDao extends BaseRepository<FinanceDetail, Integer
 
     @Query("SELECT SUM(f.totalMoney) FROM FinanceDetail f WHERE f.storeSn=?1 AND f.targetMonth=?2 AND f.voucherStatus='2'")
     Double findTotalMoney(String storeSn, String targetMonth);
+
+    @Query(value = "SELECT COUNT(f.id) FROM FinanceDetail f WHERE f.storeSn=?1 AND f.targetMonth=?2 AND f.status!='-1' AND f.voucherStatus!='2'")
+    Long findNoEndCount(String storeSn, String targetMonth);
+
+    @Query(value = "FROM FinanceDetail f WHERE f.storeSn=?1 AND f.targetMonth=?2 AND f.status!='-1' AND f.voucherStatus!='2'")
+    List<FinanceDetail> findNoEnd(String storeSn, String targetMonth);
 
     @Query("UPDATE FinanceDetail f SET f.targetDay=?1, f.targetMonth=?2, f.targetYear=?3 WHERE f.id=?4")
     @Transactional

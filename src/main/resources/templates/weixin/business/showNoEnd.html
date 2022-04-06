@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>报账-未完成列表</title>
+    <link type="text/css" rel="stylesheet" href="/weixin/weixin-finance.css"/>
+    <script type="text/javascript" src="/weixin/weixin-finance-end.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-show-no-end.js"></script>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div  th:if="${list ne null}">
+        <div class="header lighter smaller blue">
+            <h3> &nbsp;&nbsp;<i class="fa fa-list"></i>&nbsp;报账-未完成列表（<b th:text="${#lists.size(list)}"></b>）</h3>
+        </div>
+
+        <div class="container">
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon">筛选</div>
+                <div class="">
+                    <input class="form-control" name="keyword" placeholder="输入关键字查询报账信息" />
+                </div>
+                <div class="input-group-addon">
+                    <b class="search-amount-b">0</b>条匹配
+                </div>
+            </div>
+            <!--<div class="dark" style="color:#888">选择入账月份</div>-->
+        </div>
+        </div>
+
+        <div class="weui-cells fin-main-box">
+            <div th:each="obj : ${list}" th:remove="tag">
+                <div class="fin-list">
+                    <div class="fin-title">
+                        <span th:text="${obj.storeName}"></span>[<span class="fin-dark" th:text="${obj.cateName}"></span>]<span class="fin-dark obj-title" th:attr="fdTitle=${obj.title}" th:text="${obj.title}"></span>
+                    </div>
+                    <div class="fin-body">
+                        <p>金额：￥<b th:text="${obj.price}"></b>*<b th:text="${obj.amount}"></b>=￥<b th:text="${obj.totalMoney}"></b></p>
+                        <p>审核：
+                            <span th:switch="${obj.status}" th:remove="tag">
+                                <b th:case="0">未提交审核</b>
+                                <b th:case="-1" style="color:#820">已取消</b>
+                                <b th:case="1" style="color:#ed7800">待审核</b>
+                                <span th:case="2" style="color:#00F"><b th:text="${obj.verifyName}"></b>于<span class="fin-dark" th:text="${obj.verifyDay}"></span>审核通过</span>
+                                <span th:case="3" style="color:#F00">被<b th:text="${obj.verifyName}"></b>驳回(<span class="fin-dark" th:text="${obj.verifyReason}"></span>)</span>
+                            </span>
+                        </p>
+                        <p>收货：
+                            <span th:switch="${obj.confirmStatus}" th:remove="tag">
+                                <b th:case="0">未指定收货</b>
+                                <span th:case="1" style="color:#ed7800">等待[<b th:text="${obj.confirmName}"></b>]确认收货</span>
+                                <span th:case="2" style="color:#00F"><b th:text="${obj.confirmName}"></b>于<span class="fin-dark" th:text="${obj.confirmDay}"></span>确认收货</span>
+                                <span th:case="3" style="color:#F00"><b th:text="${obj.confirmName}"></b>确认未收货(<span class="fin-dark" th:text="${obj.confirmReason}"></span>)</span>
+                            </span>
+                        </p>
+                        <p>财务：
+                            <span th:switch="${obj.voucherStatus}" th:remove="tag">
+                                <b th:case="0">-</b>
+                                <b th:case="1" style="color:#ed7800">等待查阅</b>
+                                <span th:case="2" style="color:#00F"><b th:text="${obj.voucherName}"></b>于<span class="fin-dark" th:text="${obj.voucherDay}"></span>查阅合格</span>
+                                <span th:case="3" style="color:#F00"><b th:text="${obj.voucherName}"></b>查阅不合格(<span class="fin-dark" th:text="${obj.voucherReason}"></span>)</span>
+                            </span>
+                        </p>
+                        <p>账务所属日期：<span th:text="${obj.targetDay}"></span></p>
+                    </div>
+                    <div class="fin-footer">
+                        <div class="fin-footer-left">
+                            <b th:text="${obj.username}"></b>申请于<span th:text="${obj.createDay}"></span>
+                        </div>
+                        <div class="fin-footer-right" th:if="${obj.status eq '1' or obj.confirmStatus eq '1' or obj.voucherStatus eq '1'}"><a class="btn btn-link notice-btn" th:attr="objId=${obj.id}">再次提醒</a></div>
+                    </div>
+                    <div class="fin-footer" style="display: flex">
+                        <a class="btn btn-danger cancel-finance" th:attr="objId=${obj.id}, objTitle=${obj.title}" href="javascript:void(0)">点击取消报账</a>
+                        <a class="btn btn-info" th:href="'/wx/finance/show?id='+${obj.id}">点击详情</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

@@ -136,12 +136,6 @@ public class WeixinBusinessController {
             }
         }
         List<BusinessDto> businessDtoList = businessTools.buildDto(storeSn, month, preMonthMoney);
-        //IncomeDto incomeDto = incomeService.queryByMonth(storeSn, month);
-        //List<Income> incomeList = incomeService.findByMonth(storeSn, month);
-        //List<FinanceDetail> financeDetailList = financeDetailDao.findDetailByStoreSn(storeSn, month);
-//        model.addAttribute("financeList", financeDetailList);
-//        model.addAttribute("incomeDto", incomeDto);
-//        model.addAttribute("incomeList", incomeList);
 
         model.addAttribute("moneyDto", businessTools.buildMoney(businessDtoList));
         model.addAttribute("businessDtoList", businessDtoList);
@@ -150,9 +144,17 @@ public class WeixinBusinessController {
         model.addAttribute("month", month);
         model.addAttribute("storeSn", storeSn);
         model.addAttribute("preMonthMoney", preMonthMoney);
+        model.addAttribute("noEndCount", financeDetailDao.findNoEndCount(storeSn, month));
         model.addAttribute("store", storeDao.findBySn(storeSn));
 
         return "weixin/business/showByBoss";
+    }
+
+    @GetMapping(value = "showNoEnd")
+    public String showNoEnd(Model model, String storeSn, String month) {
+        List<FinanceDetail> list = financeDetailDao.findNoEnd(storeSn, month);
+        model.addAttribute("list", list);
+        return "weixin/business/showNoEnd";
     }
 
     @GetMapping(value = "incomeDetail")

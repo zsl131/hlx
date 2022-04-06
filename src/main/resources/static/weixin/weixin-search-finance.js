@@ -3,7 +3,6 @@ $(function() {
 
     $(".rebuild-obj").blur(function() {
         let money = parseFloat($(this).val());
-        console.log(money, "----------")
         if(isNaN(money)) {money = 0;}
         const storeSn = $("input[name='curStoreSn']").val();
         const month = $("input[name='targetMonth']").val();
@@ -15,19 +14,47 @@ $(function() {
 function onSearch(obj) {
     const key = $(obj).val();
     // doSearch(obj)
-    //console.log(key);
+    // console.log(key);
+    $(".single-detail-div").removeAttr("hasKey");
+
+    if(key) {
+        $(".income-div").each(function() {
+            $(this).css("display", "none");
+        })
+        $(".no-data").parents(".single-detail-div").css("display", "none");
+    } else {
+        $(".income-div").each(function() {
+            $(this).css("display", "block");
+        })
+        $(".no-data").parents(".single-detail-div").css("display", "block");
+        $(".single-detail-div").css("display", "block");
+        $(".single-paid").css("display", "block");
+    }
 
     let amount = 0;
-    $(".paid-title").each(function () {
-        const title = $(this).attr("fdTitle");
+    $(".single-paid").each(function () {
+        const titleObj = $(this).find(".paid-title");
+        const parentObj = $(this).parents(".single-detail-div");
+        const title = $(titleObj).attr("fdTitle");
         if(key && title.indexOf(key)>=0) {
-            $(this).html(buildTitle(title, key));
+            $(titleObj).html(buildTitle(title, key));
             amount ++;
+            $(this).css("display", "block");
+            $(parentObj).css("display", "block");
+            $(parentObj).attr("hasKey", "1");
         } else {
-            $(this).html(title);
+            if(key) {
+                $(titleObj).html(title);
+                $(this).css("display", "none");
+                if(parentObj.attr("hasKey")!=='1') {
+                    $(parentObj).css("display", "none")
+                }
+            }
         }
         if(!key) {
-            $(this).html(title);
+            $(titleObj).html(title);
+        } else {
+
         }
     })
     $(".search-amount-b").html(amount);

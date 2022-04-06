@@ -86,6 +86,7 @@
                             <p>本月总收入：<b th:text="${moneyDto.gotMoney}"></b>元</p>
                             <p>本月总支出：<b th:text="${moneyDto.paidMoney}"></b>元</p>
                             <p>当前结余：<b class="need-rebuild-money" th:attr="money=${preMonthMoney+moneyDto.gotMoney - moneyDto.paidMoney}" th:text="${preMonthMoney+moneyDto.gotMoney - moneyDto.paidMoney}"></b>元</p>
+                            <p style="color: #F00;" th:if="${noEndCount gt 0}">未完结的报账：<b th:text="${noEndCount}"></b>条，<a th:href="|/wx/business/showNoEnd?storeSn=${storeSn}&month=${month}|">查点查看</a></p>
                         </div>
 
                         <div class="form-group" th:if="${personal ne null and personal.type eq '2'}">
@@ -96,30 +97,10 @@
                                 <b th:if="${detail ne null and detail.status ne '1'}" style="color:#F00;">未公布</b>
                             </span>
                         </div>
-
-                        <!--<div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-addon">上月结余</div>
-                                <div class="">
-                                    <input class="form-control rebuild-obj" type="number" name="preMonthMoney" th:value="${(detail ne null and detail.preMonthMoney ne null and detail.preMonthMoney ne 0)?detail.preMonthMoney:(preDetail ne null?preDetail.accountMoney : 0.0)}" placeholder="上月结余金额"/>
-                                </div>
-                            </div>
-                        </div>-->
-
-                        <!--<div class="single-data">
-                            <div class="month-div"><span th:text="${#strings.substring(detail.targetMonth, 0, 4)+'年'+#strings.substring(detail.targetMonth, 4, 6)+'月'}"></span>
-                                <b th:if="${detail.surplusMoney eq 0}">持平</b><b class="money1" th:if="${detail.surplusMoney gt 0}">盈利</b><b class="money-1" th:if="${detail.surplusMoney lt 0}">亏损</b>
-                                <span class="account-surplus">当月账面结余：<b th:class="${detail.accountMoney ge 0?'money1':'money-1'}" th:text="|${detail.accountMoney} 元|"></b></span>
-                            </div>
-                        </div>-->
-                        <!--<ul class="nav nav-tabs content-div">
-                            <li role="presentation" class="active single-li" targetCls="income-div"><a href="javascript: void(0)">收入：<b th:text="|${detail.gotMoney}|"></b></a></li>
-                            <li role="presentation" class="single-li" targetCls="paid-div"><a href="javascript: void(0)">支出：<b th:text="|${detail.paidMoney}|"></b></a></li>
-                        </ul>-->
                     </div>
 
                     <div class="detail-div" th:if="${personal ne null and (personal.type eq '2' or (detail ne null and detail.status eq '1'))}">
-                        <div class="single-detail" th:each="dto: ${businessDtoList}">
+                        <div class="single-detail-div" th:each="dto: ${businessDtoList}">
                             <span class="single-detail-day"><b class="" th:text="${dto.justDay}"></b></span>
                             <div class="income-div"><span class="data-label">收入</span><span class="data-value"><b class="plus-money" th:text="'+ ' + ${dto.gotMoney} + '元'"></b><i>|</i><b class="amount-b" th:text="|${#lists.size(dto.incomeList)} 笔|"></b></span>
                                 <a th:href="|/wx/business/incomeDetail?storeSn=${storeSn}&day=${dto.day}|"><span class="detail-btn" style="padding: 0px 3px 0px 3px">详情></span></a>
