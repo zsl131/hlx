@@ -28,6 +28,9 @@
             //var storeSn = $("input[name='storeSn']:checked").val();
             //if(!storeSn) {showDialog("请选择店铺", "操作提示"); return false;}
             //console.log(storeSn);
+            /*const data = $("#dataForm").serialize();
+            console.log(data)
+            return false;*/
             var cash = $("input[name='cash']").val();
             if(cash<=0) {
                 showDialog("请输入金额", "系统提示");
@@ -56,24 +59,6 @@
                 </div>
             </div>
 
-            <!--<div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-addon">店铺</div>
-                    <div class="form-control">
-                        <span th:each="store: ${storeList}"><input type="radio" name="storeSn" th:value="${store.sn}" th:id="'sn_'+${store.id}"/><label th:for="'sn_'+${store.id}" th:text="${store.name}">汉丽轩</label>&nbsp;&nbsp;&nbsp;</span>
-                    </div>
-                </div>
-            </div>-->
-
-            <!--<div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-addon">类别</div>
-                    <div class="form-control">
-                        <input type="radio" name="status" value="1" id="type_1" th:checked="${income.type == '1'}?'checked'"/><label for="type_1">营业收入</label>
-                        <input type="radio" name="status" value="2" id="type_2" th:checked="${income.type == '2'}?'checked'"/><label for="type_2">其他收入</label>
-                    </div>
-                </div>
-            </div>-->
 
             <input type="hidden" name="type" value="1"/>
             <div class="form-group">
@@ -117,6 +102,8 @@
             <input type="hidden" name="objId" th:value="${income.id}"/>
             <input type="hidden" name="comeToken" th:value="${income.token}"/>
             <input type="hidden" name="curStoreSn" th:value="${curStoreSn}"/>
+            <input type="hidden" name="storeSn" th:value="${curStoreSn}" th:if="${param.storeSn eq null}"/>
+
             <input type="hidden" name="tempPath"/>
             <button type="submit" class="btn btn-primary">确定提交</button>
         </form>

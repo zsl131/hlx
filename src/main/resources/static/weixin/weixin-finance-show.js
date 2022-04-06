@@ -1,10 +1,23 @@
 var curPersonalId = 0;
-
+let image_array = [];
+let current_url = '';
+function initImageArray() {
+    let index = 0;
+    $(".single-voucher").each(function() {
+        const objId = $(this).attr("voucherId");
+        let url = $(this).css("background-image");
+        //console.log(url)
+        url = url.substring(5, url.length-2);
+        // console.log("->"+url, objId)
+        image_array.push({index: index, id: objId, url: url});
+        index ++;
+    });
+}
 $(function() {
     var detailId = $("input[name='detailId']").val();
     var detailTitle = $("input[name='detailTitle']").val();
     var storeName = $("input[name='storeName']").val();
-
+    initImageArray(); //初始化图片
     $(".uploader-btn").change(function(e) {
         //console.log(e);
         var files = e.target.files;
@@ -41,17 +54,36 @@ $(function() {
         var status = $(this).attr("status");
         var voucherStatus = $(this).attr("voucherStatus");
         var isOwn = $(this).attr("isOwn");
-        console.log(isOwn=='true')
+        //console.log(isOwn=='true')
         //console.log(voucherStatus)
         var voucherId = $(this).attr("voucherId");
         //console.log(url, status)
         var html = "<img src='"+url+"' style='width:100%'/>";
+        let canDelete = false;
         if((voucherStatus=='0' || voucherStatus == '1' || voucherStatus=='3') && isOwn=='true') {
             //如果状态是等提交或驳回，可删除凭证
             html += '<p style="margin: 9px;"><button onClick="deleteVoucher('+voucherId+')" class="btn btn-danger">删除凭证</button></p>';
+            canDelete = true;
         }
-        showDialog(html, "凭证查阅");
+
+        /*weui.gallery(url, {
+            className: 'custom-classname',
+            onDelete: function(){
+                deleteVoucher(voucherId);
+            }
+        })*/
+
+        current_url = url; //当前图片地址
+        showWeuiImg(0, canDelete);
+        dragImg(canDelete);
+
+        //showDialog(html, "凭证查阅");
     });
+
+
+    $("#show-img-div").click(function() {
+        $(this).css("display", "none")
+    })
 
     //驳回申请
     $(".reject-btn").click(function() {
@@ -196,6 +228,59 @@ $(function() {
         });
     });
 })
+
+function dragImg(canDelete) {
+    const imgObj = $("#show-img-div");
+    let startX = 0;
+    $(imgObj).on("touchstart", function (e) {
+        startX = e.originalEvent.changedTouches[0].pageX
+    });
+
+    $(imgObj).on("touchend", function(e) {
+        const moveEndX = e.originalEvent.changedTouches[0].pageX;
+        //const moveEndY = e.originalEvent.changedTouches[0].pageY;
+        //console.log(moveEndX, startX)
+        const flagAmount = 10;
+        if(moveEndX - startX>flagAmount) {//往右滑动，获取前一条数据
+            //console.log("========")
+            showWeuiImg(-1, canDelete);
+        } else if(startX-moveEndX>flagAmount) { //往左
+            //console.log("+++++++++++")
+            showWeuiImg(1, canDelete);
+        }
+    })
+}
+// let current_gallery ;
+function showWeuiImg(flag, canDelete) {
+    console.log(canDelete)
+    const imgObj = buildImgObj(flag);
+    //console.log(imgObj)
+    current_url = imgObj.url;
+
+    const showObj = $("#show-img-div");
+    $(showObj).css("display", "block")
+    let html = '<img src="'+current_url+'" style="width: 100%"/>';
+    if(canDelete) {
+        html += '<p><span class="delete-btn delete-voucher-btn" objId="'+imgObj.id+'"><i class="fa fa-trash"></i></span></p>'
+    }
+    $(showObj).find(".img-span").html(html);
+
+    $(".delete-voucher-btn").click(function(e) {
+        const voucherId = $(this).attr("objId");
+        // alert(voucherId)
+        deleteVoucher(voucherId);
+        e.stopPropagation();
+    })
+}
+
+function buildImgObj(flag) {
+    // console.log(image_array)
+    const curIndex = image_array.findIndex((item) => item.url===current_url);
+    let targetIndex = curIndex + flag;
+    if(targetIndex<0) {targetIndex = 0; showDialog("已经是第一张了");}
+    else if(targetIndex>image_array.length-1) {targetIndex = image_array.length - 1; showDialog("已经是最后张了");}
+    return image_array[targetIndex];
+}
 
 function setPersonal(obj) {
     var objId = $(obj).attr("objId");
