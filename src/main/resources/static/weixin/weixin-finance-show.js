@@ -232,27 +232,35 @@ $(function() {
 function dragImg(canDelete) {
     const imgObj = $("#show-img-div");
     let startX = 0;
+    let startY = 0;
     $(imgObj).on("touchstart", function (e) {
         startX = e.originalEvent.changedTouches[0].pageX
+        startY = e.originalEvent.changedTouches[0].pageY
     });
 
     $(imgObj).on("touchend", function(e) {
         const moveEndX = e.originalEvent.changedTouches[0].pageX;
-        //const moveEndY = e.originalEvent.changedTouches[0].pageY;
-        //console.log(moveEndX, startX)
-        const flagAmount = 10;
-        if(moveEndX - startX>flagAmount) {//往右滑动，获取前一条数据
-            //console.log("========")
-            showWeuiImg(-1, canDelete);
-        } else if(startX-moveEndX>flagAmount) { //往左
-            //console.log("+++++++++++")
-            showWeuiImg(1, canDelete);
+        const moveEndY = e.originalEvent.changedTouches[0].pageY;
+
+        const amountY = Math.abs(moveEndY-startY);
+        // console.log("Y值 "+amountY)
+        // console.log(moveEndX, startX)
+        // console.log(moveEndX - startX)
+        if(amountY<30) { //如果上下移动小于30，则表示是左右移动
+            const flagAmount = 30;
+            if(moveEndX - startX>flagAmount) {//往右滑动，获取前一条数据
+                //console.log("========")
+                showWeuiImg(-1, canDelete);
+            } else if(startX-moveEndX>flagAmount) { //往左
+                //console.log("+++++++++++")
+                showWeuiImg(1, canDelete);
+            }
         }
     })
 }
 // let current_gallery ;
 function showWeuiImg(flag, canDelete) {
-    console.log(canDelete)
+    // console.log(canDelete)
     const imgObj = buildImgObj(flag);
     //console.log(imgObj)
     current_url = imgObj.url;

@@ -52,7 +52,7 @@
 						</p>
 						<p>所属日期：<span th:text="${obj.targetDay}"></span></p>
 					</td>
-					<td>
+					<td th:title="|detailId: ${obj.id}|">
 						[<b th:text="${obj.cateName}"></b>]
 						<span th:text="${obj.title}"></span>
 					</td>
