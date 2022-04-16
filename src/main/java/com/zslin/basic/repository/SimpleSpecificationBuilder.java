@@ -31,7 +31,9 @@ public class SimpleSpecificationBuilder<T> {
     public SimpleSpecificationBuilder add(SpecificationOperator... ops) {
         if(ops==null || ops.length<=0) {return this;}
         for(SpecificationOperator so : ops) {
-            opers.add(so);
+            if(so!=null) {
+                opers.add(so);
+            }
         }
         return this;
     }

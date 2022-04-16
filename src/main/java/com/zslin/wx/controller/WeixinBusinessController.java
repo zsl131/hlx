@@ -293,7 +293,9 @@ public class WeixinBusinessController {
             }
             if(storeSn!=null && !"".equals(storeSn)) {
                 Page<BusinessDetail> datas = businessDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
-                        new SpecificationOperator("storeSn", "eq", storeSn)),
+                        new SpecificationOperator("storeSn", "eq", storeSn),
+                        FinancePersonal.TYPE_BOSS.equals(personal.getType())?null:
+                        new SpecificationOperator("status", "eq", "1")),
                         SimplePageBuilder.generate(page, 33, SimpleSortBuilder.generateSort("targetMonth_d")));
                 model.addAttribute("datas", datas);
             }
@@ -301,9 +303,18 @@ public class WeixinBusinessController {
         } else {
             return "redirect:/wx/business/error?errCode=-1";
         }
-
-
         return "weixin/business/index";
+    }
+
+    @PostMapping(value = "publish")
+    @ResponseBody
+    public String publish(Integer id) {
+        try {
+            businessDetailDao.updateStatus("1", id);
+            return "1";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
     @GetMapping(value = "error")

@@ -7,6 +7,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script type="text/javascript" src="/weixin/stock/stock-index.js"></script>
+    <script type="text/javascript" src="/weixin/weixin-business-index.js"></script>
     <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
     <style>
         .fa {
@@ -16,13 +17,14 @@
             color:#7a4171;
         }
         .single-data {
-            width: 100%; border-bottom: 1px #ddd solid;
+            width: 100%; border-bottom: 1px #ddd solid; margin-bottom: 10px;
         }
         .month-div {
             padding-left: 12px; color:#999; padding-bottom: 8px; margin-top: 10px; border-bottom: 1px #ddd dotted;
+            background:#F8F8F8; padding-top: 8px;
         }
         .account-surplus {
-            float:right;
+            float:right; padding-right: 9px;
         }
         b.money1 {
             color:blue;
@@ -76,7 +78,7 @@
                                 </a>-->
                                 <div class="single-data">
                                     <div class="month-div"><span th:text="${#strings.substring(obj.targetMonth, 0, 4)+'年'+#strings.substring(obj.targetMonth, 4, 6)+'月'}"></span>
-                                        <span class="account-surplus">当月账面结余：<b th:class="${obj.accountMoney ge 0?'money1':'money-1'}" th:text="|${obj.accountMoney} 元|"></b></span>
+                                        <span class="account-surplus">当月账面结余：<b th:class="${obj.accountMoney ge 0?'money1':'money-1'}" th:text="|${obj.surplusMoney} 元|"></b></span>
                                     </div>
                                     <div class="money-con-div">
                                         <p class="money-p">当月收入：<b class="money1" th:text="|${obj.gotMoney} 元|"></b></p>
@@ -87,7 +89,11 @@
                                     </div>
                                     <div class="single-data-bottom">
                                         <span class="month-flag">本月经营：<b th:if="${obj.surplusMoney eq 0}">持平</b><b class="money1" th:if="${obj.surplusMoney gt 0}">盈利</b><b class="money-1" th:if="${obj.surplusMoney lt 0}">亏损</b></span>
-                                        <span class="month-span"><a th:href="|/wx/business/show?id=${obj.id}|" class="btn btn-info">查看详情>></a></span>
+                                        <span class="month-span"><a th:href="|/wx/business/show?id=${obj.id}|" class="btn btn-small btn-info">查看详情>></a></span>
+                                    </div>
+                                    <div class="single-data-bottom" th:if="${personal.type eq '2'}">
+                                        <span class="">状态：<b style="color:#F00" th:if="${obj.status eq '0'}">未公布</b><b style="color:#0080FF" th:if="${obj.status eq '1'}">已公布</b></span>
+                                        <span class="month-span" th:if="${obj.status eq '0'}"><button onclick="publishBusiness(this)" th:attr="objId=${obj.id}" type="button" class="btn btn-small btn-danger">点击公布>> </button></span>
                                     </div>
                                 </div>
                             </div>
