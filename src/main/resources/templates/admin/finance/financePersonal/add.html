@@ -87,8 +87,8 @@
 					<div class="input-group">
 						<div class="input-group-addon">收银登记：</div>
 						<div class="form-control">
-							<input type="radio" name="isCasher" value="0" id="isCasher_0" th:checked="${personal.isCasher == '0'}?'checked'"/><label for="isCasher_0">不可登记收入</label>
-							<input type="radio" name="isCasher" value="1" id="isCasher_1" th:checked="${personal.isCasher == '1'}?'checked'"/><label for="isCasher_1">可登记收入</label>
+							<input type="radio" name="isCasher" value="0" id="isCasher_0" th:checked="${financePersonal.isCasher == '0'}?'checked'"/><label for="isCasher_0">不可登记收入</label>
+							<input type="radio" name="isCasher" value="1" id="isCasher_1" th:checked="${financePersonal.isCasher == '1'}?'checked'"/><label for="isCasher_1">可登记收入</label>
 						</div>
 					</div>
 				</div>
@@ -98,7 +98,7 @@
 						<div class="input-group-addon">收银店铺</div>
 						<div class="form-control store-list-div">
 							<span th:each="store: ${storeList}"><input type="checkbox" name="cashStore" th:value="${store.sn}" th:id="'csn_'+${store.id}"/><label th:for="'csn_'+${store.id}" th:text="${store.name}">汉丽轩</label>&nbsp;&nbsp;&nbsp;</span>
-							<input name="cashStores" type="hidden" th:value="${personal.cashStores}"/>
+							<input name="cashStores" type="hidden" th:value="${financePersonal.cashStores}"/>
 						</div>
 					</div>
 				</div>
