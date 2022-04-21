@@ -64,12 +64,20 @@ public class WeixinStockController {
         }
     }*/
 
+    @GetMapping(value = "noConfig")
+    public String noConfig() {
+        return "weixin/stock/home/noConfig";
+    }
+
     @GetMapping(value = "index")
     public String index(Model model, String storeSn, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         try {
             Account account = accountService.findByOpenid(openid);
             StockUser stockUser = stockUserService.findByPhone(account.getPhone());
+            if(stockUser==null) {
+                return "redirect:/wx/stock/noConfig";
+            }
             List<Store> storeList = storeDao.findByIds(stockUserService.listStoreIds(stockUser.getId()));
             Store store ;
             if(storeSn!=null && !"".equals(storeSn)) {store = storeDao.findBySn(storeSn); if(store==null) {store = storeList.get(0);}}

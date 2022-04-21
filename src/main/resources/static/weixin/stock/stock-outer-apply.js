@@ -150,11 +150,12 @@ function submitApplyDatas(thisObj) {
         var html = '<h4>此次出库总数量为：<b style="color:#F00">'+totalCount+'</b></h4>是否已选择完成并确定提交出库申请呢？';
         var applyDialog = confirmDialog(html, "<b class='fa fa-question-circle'></b> 系统提示", function() {
             $(thisObj).attr("disabled", true);
-            $.post("/wx/stock/outerApply/applyPost", {datas: datas, batchNo: batchNo, isCheck: isCheck}, function(res) {
+            const curStoreSn = $("input[name='curStoreSn']").val();
+            $.post("/wx/stock/outerApply/applyPost", {datas: datas, storeSn: curStoreSn, batchNo: batchNo, isCheck: isCheck}, function(res) {
                 if(res == '1') {
                     delCookie(dataCookieName);
                     showToast("提交出库申请成功，等待核对");
-                    window.location.href = '/wx/stock/outerApply/listApply';
+                    window.location.href = '/wx/stock/outerApply/listApply?storeSn='+curStoreSn;
                 } else {
                     showToast(res);
                 }

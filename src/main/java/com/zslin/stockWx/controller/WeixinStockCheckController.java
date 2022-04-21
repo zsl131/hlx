@@ -7,6 +7,8 @@ import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.kaoqin.model.Worker;
 import com.zslin.kaoqin.service.IWorkerService;
+import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Store;
 import com.zslin.stock.dto.GoodsDto;
 import com.zslin.stock.model.StockCheck;
 import com.zslin.stock.model.StockCheckDetail;
@@ -61,6 +63,9 @@ public class WeixinStockCheckController {
     @Autowired
     private StockNoticeTools stockNoticeTools;
 
+    @Autowired
+    private IStoreDao storeDao;
+
     @GetMapping(value = "list")
     public String list(Model model, String storeSn, Integer page, HttpServletRequest request) {
         Page<StockCheck> datas = stockCheckService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
@@ -91,13 +96,20 @@ public class WeixinStockCheckController {
         sc.setCreateDay(DateTools.date2Str(new Date()));
         sc.setCreateLong(System.currentTimeMillis());
         sc.setCreateTime(DateTools.date2Str(new Date(), "HH:mm:ss"));
-        Integer no = goodsNoTools.generateApplyNo(storeSn);
+        Integer no = goodsNoTools.generateGoodsCheckNo(storeSn);
         sc.setNo(no);
         sc.setBatchNo(goodsNoTools.buildApplyBatchNo(no));
         sc.setStatus("0");
         sc.setVerifyName(w.getName());
         sc.setVerifyPhone(w.getPhone());
         sc.setVerifyOpenid(w.getOpenid());
+
+        Store store = storeDao.findBySn(storeSn);
+        if(store!=null) {
+            sc.setStoreId(store.getId());
+            sc.setStoreName(store.getName());
+            sc.setStoreSn(storeSn);
+        }
 
         stockCheckService.save(sc);
         stockNoticeTools.noticeStockCheckSubmit(sc.getBatchNo(), w.getOpenid()); //发起通知

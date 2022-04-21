@@ -11,7 +11,7 @@ $(function() {
         $(".has-matched").each(function() {
             var display = $(this).css("display");
             if(display == 'none') {
-                $(this).css("display", "block");
+                $(this).css("display", "flex");
             } else {
                 $(this).css("display", "none");
             }

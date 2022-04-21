@@ -23,7 +23,7 @@
                             <div class="weui-navbar">
                                 <div class="weui-navbar__item weui-bar__item_on">
                                     <b class="title"><span th:text="|${curStoreSn}-|"></span>盘点记录 ( <b th:text="${datas.totalElements}">0</b> )</b>
-                                    <a href="/wx/stock/stockCheck/addCheck" style="float:right; padding-right:15px;">发起盘点 <b class="fa fa-balance-scale"></b></a>
+                                    <a th:href="|/wx/stock/stockCheck/addCheck?storeSn=${curStoreSn}|" style="float:right; padding-right:15px;">发起盘点 <b class="fa fa-balance-scale"></b></a>
                                 </div>
                             </div>
                             <div class="weui-tab__panel">

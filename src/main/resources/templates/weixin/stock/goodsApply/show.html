@@ -56,7 +56,7 @@
                     </div>
                     <div class="weui-form-preview__ft">
                         <a th:if="${goodsApply.status eq '0'}" class="weui-form-preview__btn weui-form-preview__btn_default auth-operator" auth="1-10" href="javascript:;" onclick="updateStatus('-1')">驳回申购</a>
-                        <a th:if="${goodsApply.status eq '0'}" type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" th:href="|/wx/stock/goodsApply/modifyApply?batchNo=${goodsApply.batchNo}&amp;isVerify=1|">修改</a>
+                        <a th:if="${goodsApply.status eq '0'}" type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary" th:href="|/wx/stock/goodsApply/modifyApply?batchNo=${goodsApply.batchNo}&storeSn=${goodsApply.storeSn}&amp;isVerify=1|">修改</a>
                         <button th:if="${goodsApply.status eq '0'}" type="submit" class="weui-form-preview__btn weui-form-preview__btn_primary auth-operator" auth="1-10" onclick="updateStatus('1')">通过申购</button>
                     </div>
                 </div>

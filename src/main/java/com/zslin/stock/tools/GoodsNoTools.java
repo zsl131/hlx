@@ -77,7 +77,7 @@ public class GoodsNoTools {
         return maxNo + 1;
     }
 
-    /** 生成预录入编号 */
+    /** 生成盘点编号 */
     public Integer generateGoodsCheckNo(String storeSn) {
         Integer maxNo = stockCheckService.maxNo(storeSn);
         maxNo = (maxNo == null)?0:maxNo;

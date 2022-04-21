@@ -183,7 +183,7 @@
                         <div class="weui-uploader__input-box1" style="width: 100%; " th:if="${personal.type eq '2' or ((detail.status eq '0' or detail.status eq '3' or detail.voucherStatus ne '2') and detail.userOpenid eq openid)}">
                             <!--<input class="weui-uploader__input uploader-btn" multiple="multiple" type="file" accept="image/*"/>-->
 
-                            <input id="file-upload1" class="file" type="file" multiple="multiple" />
+                            <input id="file-upload1" class="file" type="file" multiple="multiple" capture="camera"/>
 
                             <script type="text/javascript">
                                 //alert("-------");

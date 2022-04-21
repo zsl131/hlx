@@ -35,7 +35,7 @@ public interface IWorkerService extends BaseRepository<Worker, Integer>, JpaSpec
     void updateStatus(String status, Integer id);
 
     /** 查询拥有库存权限的员工 */
-    @Query("FROM Worker WHERE operator LIKE '%-%'")
+    @Query("FROM Worker WHERE status='1' AND operator LIKE '%-%'")
     List<Worker> findOperators();
 
     @Query("FROM Worker WHERE canSendCard='1' AND status='1'")
