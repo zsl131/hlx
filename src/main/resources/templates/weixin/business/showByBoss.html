@@ -111,7 +111,7 @@
                                 <div class="single-paid" th:each="paid : ${dto.financeList}">
                                     <a class="" th:href="|/wx/finance/show?id=${paid.id}|">
                                         <div class="paid-title" th:attr="fdTitle=${paid.title}" th:text="${paid.title}"></div>
-                                        <div class="paid-money" th:text="|- ${paid.totalMoney} 元|"></div>
+                                        <div class="paid-money" th:text="|- ${#numbers.formatDecimal(paid.totalMoney,1,'COMMA',2,'POINT')} 元|"></div>
                                         <div class="detail-btn">详情></div>
                                     </a>
                                 </div>
