@@ -247,11 +247,11 @@ public class PDFTools {
             table.addCell(pdfCell);
         }
         Integer totalCount = 0;
-        Float totalMoney = 0f;
+        Double totalMoney = 0d;
         int len = 0;
         for(FinanceDetail fd : detailList) {
             len ++;
-            Float total = fd.getTotalMoney(); //小计金额
+            Double total = fd.getTotalMoney(); //小计金额
             Integer count = buildVoucherLen(voucherList, fd.getId()); //TODO 单据张数，暂时设置为0
             String [] data = {rebuildDate(fd.getCreateDay()), fd.getTitle(), formatMoney(fd.getPrice()), fd.getAmount()+"", formatMoney(fd.getTotalMoney()), count+"", ""};
             totalCount += count; totalMoney += total;
@@ -448,7 +448,7 @@ public class PDFTools {
         return pdfCell;
     }
 
-    private PdfPCell buildTotalMoneyNum(float totalMoney) {
+    private PdfPCell buildTotalMoneyNum(double totalMoney) {
         PdfPCell pdfCell = new PdfPCell(); //表格的单元格
         pdfCell.setMinimumHeight(TABLE_HEIGHT);
         pdfCell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -460,7 +460,7 @@ public class PDFTools {
         return pdfCell;
     }
 
-    private PdfPCell buildTotalMoney(float totalMoney) {
+    private PdfPCell buildTotalMoney(double totalMoney) {
         totalMoney = Float.parseFloat(formatMoney(totalMoney)); //转换成2位小数
         PdfPCell pdfCell = new PdfPCell(); //表格的单元格
         pdfCell.setRowspan(1);
@@ -487,7 +487,7 @@ public class PDFTools {
         return pdfCell;
     }
 
-    private String formatMoney(float d) {
+    private String formatMoney(double d) {
         DecimalFormat df = new DecimalFormat("#.00");
         return df.format(d);
     }

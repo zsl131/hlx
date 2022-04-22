@@ -150,10 +150,10 @@ public class NormalTools {
      * @param len 保留几们数据
      * @return
      */
-    public static Float numberPoint(float value, int len) {
+    public static Double numberPoint(double value, int len) {
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(len<0?2:len, RoundingMode.HALF_UP);
-        return bd.floatValue();
+        return bd.doubleValue();
     }
 
     /**

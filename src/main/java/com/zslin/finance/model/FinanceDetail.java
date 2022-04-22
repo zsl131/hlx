@@ -154,12 +154,12 @@ public class FinanceDetail {
     /** 标记，1-进账；-1-报账 */
     private String flag="-1";
 
-    private Float price;
+    private Double price;
 
     /** 数量，有可能有小数，如称重产品 */
     private Float amount;
 
-    private Float totalMoney;
+    private Double totalMoney;
 
     /** 提交标记 */
     private String stepFlag = "0";
