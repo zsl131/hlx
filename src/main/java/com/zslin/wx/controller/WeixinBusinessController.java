@@ -11,9 +11,11 @@ import com.zslin.business.dao.IBusinessDetailDao;
 import com.zslin.business.dao.IBusinessLookRecordDao;
 import com.zslin.business.dto.BusinessDto;
 import com.zslin.business.dto.BusinessMoneyDto;
+import com.zslin.business.dto.IncomeTicketDto;
 import com.zslin.business.model.BusinessDetail;
 import com.zslin.business.model.BusinessLookRecord;
 import com.zslin.business.tools.BusinessTools;
+import com.zslin.business.tools.IncomeTicketTools;
 import com.zslin.finance.dao.IFinanceDetailDao;
 import com.zslin.finance.dao.IFinancePersonalDao;
 import com.zslin.finance.model.FinanceDetail;
@@ -109,6 +111,15 @@ public class WeixinBusinessController {
 //        System.out.println(businessDtoList);
 
         return "1";
+    }
+
+    /** 检测入账凭证是否正常 */
+    @GetMapping(value = "checkStatus")
+    public String checkStatus(Model model, String storeSn, String month) {
+        List<Income> incomeList = incomeService.findByMonth(storeSn, month);
+        List<IncomeTicketDto> dtoList = IncomeTicketTools.checkStatus(incomeList);
+        model.addAttribute("dtoList", dtoList);
+        return "weixin/business/checkStatus";
     }
 
     /** 只供老板查询，用于公布前对账 */

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/weixinModel">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">昭通汉丽轩</title>
+    <script type="text/javascript">
+        $(function() {
+            $(".err-count").html('（'+$(".single-status[status!='1']").length+'）');
+            $("#check-status").change(function() {
+                const hide = $(this).is(":checked");
+                if(hide) {
+                    $(".single-status[status='1']").css("display", "none");
+                } else {
+                    $(".single-status[status='1']").css("display", "flex")
+                }
+            })
+        })
+    </script>
+    <style>
+        .single-status {
+            border-bottom: 1px #ddd solid; display: flex; line-height: 28px;
+        }
+        .single-status div {
+            flex: 1;
+        }
+        .status-div {
+            text-align: right;
+        }
+        .status-div b {
+            font-size: 14px;
+        }
+        .visit-error {
+            color:#d24603;
+        }
+        .upload-error {
+            color:#F00
+        }
+        .ok {
+            color:#0080FF;
+        }
+        .err-count {
+            color:#F00;
+        }
+    </style>
+</head>
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="container">
+        <div class="page">
+            <div class="page__hd" style="padding-bottom: 10px;">
+                <h1 class="page__title">入账凭证情况</h1>
+                <!--<p class="page__desc" th:text="${session.appConfig ne null?session.appConfig.appName:'汉丽轩'}">加载更多</p>-->
+                <p class="page__desc">
+                    <input type="checkbox" id="check-status" /><label for="check-status">只显示异常数据<i class="err-count"></i></label>
+                </p>
+            </div>
+            <div class="page__bd">
+                <div th:each="dto: ${dtoList}" class="single-status" th:attr="status=${dto.status}">
+                    <div th:text="${dto.targetDay}"></div>
+                    <div class="status-div">
+                        <b th:if="${dto.status eq '-1'}" class="visit-error">无法访问</b>
+                        <b th:if="${dto.status eq '0'}" class="upload-error">未上传</b>
+                        <b th:if="${dto.status eq '1'}" class="ok">正常</b>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="weixin/index/index-footer :: content" th:remove="tag"></div>
+</div>
+</body>
+</html>

@@ -96,6 +96,9 @@
                                 <b th:if="${detail ne null}">已保存</b>，<b th:if="${detail ne null and detail.status eq '1'}" style="color:#0080FF">已公布</b>
                                 <b th:if="${detail ne null and detail.status ne '1'}" style="color:#F00;">未公布</b>
                             </span>
+                            <p style="margin-top: 12px;">
+                                <a th:href="|/wx/business/checkStatus?storeSn=${storeSn}&month=${month}|" class="detail-btn">点击检测入账凭证完整度，可能有点慢>> </a>
+                            </p>
                         </div>
                     </div>
 

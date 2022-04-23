@@ -12,7 +12,9 @@ import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.tools.SecurityUtil;
 import com.zslin.business.dto.BusinessDto;
+import com.zslin.business.dto.IncomeTicketDto;
 import com.zslin.business.tools.BusinessTools;
+import com.zslin.business.tools.IncomeTicketTools;
 import com.zslin.card.dto.CardCheckDto;
 import com.zslin.card.service.ICardCheckService;
 import com.zslin.card.tools.CardNoTools;
@@ -144,6 +146,22 @@ public class NormalTest {
 
     @Autowired
     private BusinessTools businessTools;
+
+    @Test
+    public void test67() {
+        List<Income> incomeList = incomeService.findByMonth("hlx", "202201");
+        System.out.println(incomeList);
+        List<IncomeTicketDto> dtoList = IncomeTicketTools.checkStatus(incomeList);
+        System.out.println(dtoList);
+    }
+
+    @Test
+    public void test66() {
+        System.out.println(IncomeTicketTools.checkUrlConnection("https://img.zslin.com/income_1752_1643298011984.jpg"));
+        System.out.println(IncomeTicketTools.checkUrlConnection("https://img.zslin.com/income_1752_1643298011984.png"));
+        System.out.println(IncomeTicketTools.checkUrlConnection("https://img.zslin.com/Company_de792c1c-462d-4b7b-8bee-64ffa10e81c4.jpg"));
+        System.out.println(IncomeTicketTools.checkUrlConnection("https://img.zslin.com/income_1779_1643296095994.jpg"));
+    }
 
     @Test
     public void test65() {
