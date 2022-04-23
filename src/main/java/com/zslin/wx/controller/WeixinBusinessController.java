@@ -8,9 +8,11 @@ import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.business.dao.IBusinessDetailDao;
+import com.zslin.business.dao.IBusinessLookRecordDao;
 import com.zslin.business.dto.BusinessDto;
 import com.zslin.business.dto.BusinessMoneyDto;
 import com.zslin.business.model.BusinessDetail;
+import com.zslin.business.model.BusinessLookRecord;
 import com.zslin.business.tools.BusinessTools;
 import com.zslin.finance.dao.IFinanceDetailDao;
 import com.zslin.finance.dao.IFinancePersonalDao;
@@ -64,6 +66,9 @@ public class WeixinBusinessController {
 
     @Autowired
     private BusinessTools businessTools;
+
+    @Autowired
+    private IBusinessLookRecordDao businessLookRecordDao;
 
     @PostMapping(value = "saveDetail")
     public @ResponseBody
@@ -147,7 +152,27 @@ public class WeixinBusinessController {
         model.addAttribute("noEndCount", financeDetailDao.findNoEndCount(storeSn, month));
         model.addAttribute("store", storeDao.findBySn(storeSn));
 
+        try {
+            addRecord(detail, personal);
+        } catch (Exception e) {
+        }
+
         return "weixin/business/showByBoss";
+    }
+
+    /** 保存浏览记录 */
+    private void addRecord(BusinessDetail detail, FinancePersonal personal) {
+        BusinessLookRecord record = new BusinessLookRecord();
+        record.setName(personal.getName());
+        record.setCreateDate(NormalTools.curDate());
+        record.setPhone(personal.getPhone());
+        record.setCreateLong(System.currentTimeMillis());
+        record.setCreateTime(NormalTools.curDatetime());
+        record.setStoreName(detail.getStoreName());
+        record.setStoreSn(detail.getStoreSn());
+        record.setTargetYear(detail.getTargetYear());
+        record.setTargetMonth(detail.getTargetMonth());
+        businessLookRecordDao.save(record);
     }
 
     @GetMapping(value = "showNoEnd")
