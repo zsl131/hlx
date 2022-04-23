@@ -61,9 +61,9 @@
                                     <input name="targetMonth" th:value="${month}" class="form-control target-month" autocomplete="off" placeholder="所属月份，格式：yyyyMM"/>
                                 </div>
 
-                                <div class="input-group-addon">上月结余</div>
-                                <div class="">
-                                    <input class="form-control rebuild-obj" type="number" th:disabled="${personal eq null or personal.type ne '2'}" name="preMonthMoney" th:value="${preMonthMoney}" placeholder="上月结余金额"/>
+                                <div class="input-group-addon" th:if="${personal ne null and (personal.type eq '2' or (detail ne null and detail.status eq '1'))}">上月结余</div>
+                                <div class="" th:if="${personal ne null and (personal.type eq '2' or (detail ne null and detail.status eq '1'))}">
+                                    <input class="form-control rebuild-obj" type="number" th:disabled="${personal eq null or personal.type ne '2' }" name="preMonthMoney" th:value="${preMonthMoney}" placeholder="上月结余金额"/>
                                 </div>
                             </div>
                             <!--<div class="dark" style="color:#888">选择入账月份</div>-->
@@ -121,7 +121,7 @@
                         </div>
                     </div>
                     <div class="alert alert-danger" th:unless="${personal ne null and (personal.type eq '2' or (detail ne null and detail.status eq '1'))}">
-                        财务资料整理中，请过几天再查阅
+                        财务数据不存在或资料整理完善中，请过几天再查阅
                     </div>
                 </div>
             </div>

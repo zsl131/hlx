@@ -89,7 +89,7 @@
                                     </div>
                                     <div class="single-data-bottom">
                                         <span class="month-flag">本月经营：<b th:if="${obj.surplusMoney eq 0}">持平</b><b class="money1" th:if="${obj.surplusMoney gt 0}">盈利</b><b class="money-1" th:if="${obj.surplusMoney lt 0}">亏损</b></span>
-                                        <span class="month-span"><a th:href="|/wx/business/show?id=${obj.id}|" class="btn btn-small btn-info">查看详情>></a></span>
+                                        <span class="month-span"><a th:href="|/wx/business/showByBoss?storeSn=${obj.storeSn}&month=${obj.targetMonth}|" class="btn btn-small btn-info">查看详情>></a></span>
                                     </div>
                                     <div class="single-data-bottom" th:if="${personal.type eq '2'}">
                                         <span class="">状态：<b style="color:#F00" th:if="${obj.status eq '0'}">未公布</b><b style="color:#0080FF" th:if="${obj.status eq '1'}">已公布</b></span>
