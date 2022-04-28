@@ -69,8 +69,8 @@ public class WeixinStockGoodsRegisterController {
     @GetMapping(value = "listApply")
     public String listApply(Model model, String storeSn, Integer page, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
-        Page<GoodsRegister> datas = goodsRegisterService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request
-                ,new SpecificationOperator("applyOpenid", "eq", openid),
+        Page<GoodsRegister> datas = goodsRegisterService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
+//                new SpecificationOperator("applyOpenid", "eq", openid),
                 new SpecificationOperator("storeSn", "eq", storeSn)
                 ),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));

@@ -71,7 +71,7 @@ public class WeixinStockOuterApplyController {
     public String listApply(Model model, String storeSn, Integer page, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         Page<OuterApply> datas = outerApplyService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
-                new SpecificationOperator("applyOpenid", "eq", openid),
+//                new SpecificationOperator("applyOpenid", "eq", openid),
                 new SpecificationOperator("storeSn", "eq", storeSn)),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
