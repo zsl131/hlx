@@ -314,10 +314,10 @@ function addPersonal() {
                 '<div class="form-group">'+
                     '<div class="input-group">'+
                         '<div class="input-group-addon">人员</div>'+
-                        '<input name="query" class="form-control" placeholder="输入昵称或电话后点查询按钮" />'+
+                        '<input name="query" class="form-control" placeholder="输入电话后点查询按钮" />'+
                         '<span class="input-group-addon" onclick="searchAccount()" style="cursor:pointer;">查询用户</span>'+
                     '</div>'+
-                    '<div class="alert alert-info">被添加人员需要关注公众号</div>'+
+                    '<div class="alert alert-info">被添加人员需要关注公众号并绑定手机号码</div>'+
                 '</div>'+
                 '<div class="showAccounts"></div>'+
                 '<input name="openid" type="hidden"/>'+

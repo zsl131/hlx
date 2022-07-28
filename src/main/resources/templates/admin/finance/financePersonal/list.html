@@ -40,9 +40,9 @@
 				</thead>
 
 				<tr th:each="obj : ${datas}">
-					<td>
-						<span th:if="${obj.storeSn eq null or obj.storeSn eq ''}" class="red">未设置</span>
-						<span th:if="${obj.storeSn ne null and obj.storeSn ne ''}" th:text="${obj.storeName}"></span>
+					<td th:text="${(obj.storeName eq null or obj.storeName eq '')?'未设置':obj.storeName}">
+						<!--<span th:if="${obj.storeSn eq null or obj.storeSn eq ''}" class="red">未设置</span>
+						<span th:if="${obj.storeSn ne null and obj.storeSn ne ''}" th:text="${obj.storeName}"></span>-->
 					</td>
 					<td>
 						<img th:if="${obj.signPath ne null && obj.signPath ne ''}" th:src="${obj.signPath}" style="width: 100px"/>

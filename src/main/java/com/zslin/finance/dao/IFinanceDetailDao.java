@@ -3,6 +3,8 @@ package com.zslin.finance.dao;
 import com.zslin.basic.repository.BaseRepository;
 import com.zslin.finance.dto.FinanceDetailDto;
 import com.zslin.finance.model.FinanceDetail;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +20,9 @@ public interface IFinanceDetailDao extends BaseRepository<FinanceDetail, Integer
 
     @Query("FROM FinanceDetail f WHERE f.id IN (?1)")
     List<FinanceDetail> findByIds(Integer[] ids);
+
+    @Query("FROM FinanceDetail f WHERE f.title LIKE %?1% AND find_in_set(f.storeSn, ?2)>0")
+    Page<FinanceDetail> findAllByTitle(String title, String storeSn, Pageable pageable);
 
     @Query("UPDATE FinanceDetail f SET f.printFlag=?1 WHERE f.id IN (?2)")
     @Modifying
@@ -41,16 +46,16 @@ public interface IFinanceDetailDao extends BaseRepository<FinanceDetail, Integer
     void updateStatus(String status, Integer id);
 
     /** 获取待审核条数 */
-    @Query("SELECT COUNT(f.id) FROM FinanceDetail f WHERE f.status = '1'")
-    Integer findVerifyCount();
+    @Query("SELECT COUNT(f.id) FROM FinanceDetail f WHERE f.status = '1' and find_in_set(f.storeSn, ?1)>0")
+    Integer findVerifyCount(String storeSns);
 
     /** 获取待财务审核条数 */
-    @Query("SELECT COUNT(f.id) FROM FinanceDetail f WHERE f.voucherStatus = '1'")
-    Integer findVoucherCount();
+    @Query("SELECT COUNT(f.id) FROM FinanceDetail f WHERE f.voucherStatus = '1' and find_in_set(f.storeSn, ?1)>0")
+    Integer findVoucherCount(String storeSns);
 
     /** 获取待确认收货条数 */
-    @Query("SELECT COUNT(f.id) FROM FinanceDetail f WHERE f.confirmStatus = '1' AND f.confirmOpenid=?1")
-    Integer findConfirmCount(String openid);
+    @Query("SELECT COUNT(f.id) FROM FinanceDetail f WHERE f.confirmStatus = '1' AND f.confirmOpenid=?1 AND find_in_set(f.storeSn, ?2)>0")
+    Integer findConfirmCount(String openid, String storeSns);
 
     /** 获取待审核 */
     @Query("FROM FinanceDetail f WHERE f.status = '1'")

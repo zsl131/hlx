@@ -39,6 +39,9 @@
         .upload-error {
             color:#F00
         }
+        .no-record {
+            color: #c4034a;
+        }
         .ok {
             color:#0080FF;
         }
@@ -64,6 +67,7 @@
                     <div class="status-div">
                         <b th:if="${dto.status eq '-1'}" class="visit-error">无法访问</b>
                         <b th:if="${dto.status eq '0'}" class="upload-error">未上传</b>
+                        <b th:if="${dto.status eq '-2'}" class="no-record">未登记</b>
                         <b th:if="${dto.status eq '1'}" class="ok">正常</b>
                     </div>
                 </div>

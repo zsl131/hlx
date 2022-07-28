@@ -2,34 +2,44 @@ $(function() {
     //console.log("--=-=-=---")
     $("input[name='storeSn']").change(function() {
         var name = $(this).parent("span").find("label").html();
-        //console.log($(this).val())
+        // console.log($(this).val())
         //console.log(name)
         $("input[name='storeName']").val(name);
     })
 
     $("input[name='cateName']").focus(function() {
-        var personalType = $("input[name='personalType']").val(); //人员类型
-        var html = '<div class="category-list-div">';
-        $(".all-category").find("span").each(function() {
-            html += '<button class="btn btn-default" style="margin:5px 3px;" onclick="clickCategory(this)" cateId="'+$(this).attr("cateId")+'">'+$(this).html()+'</button>';
-        });
-        html += '</div>';
-
-        if(personalType=='2') {
-            html += '<p><button class="btn btn-danger" onclick="addCategory()">添加新类别</button></p>';
+        var storeSn = $("input[name='storeSn']:checked").val();
+        if(!storeSn) {
+            showDialog("请先选择店铺", "操作提示"); return false;
         }
+        $.post("/weixin/finance/category/queryCategory", {storeSn: storeSn}, function(cateList) {
+            var personalType = $("input[name='personalType']").val(); //人员类型
+            var html = '<div class="category-list-div">';
+            /*$(".all-category").find("span").each(function() {
+                html += '<button class="btn btn-default" style="margin:5px 3px;" onclick="clickCategory(this)" cateId="'+$(this).attr("cateId")+'">'+$(this).html()+'</button>';
+            });*/
+            cateList.map((item) => {
+                html += '<button class="btn btn-default" style="margin:5px 3px;" onclick="clickCategory(this)" cateId="'+item.id+'">'+item.name+'</button>';
+            })
+            html += '</div>';
 
-
-        var dialog = confirmDialog(html, "选择类别", function() {
-            var choiceObj = $(dialog).find(".category-list-div").find("button.btn-primary")[0];
-            //console.log(choiceObj);
-            if(!choiceObj) {
-                showDialog("请选择类别后再点确定");
-            } else {
-                choiceCate($(choiceObj));
-                $(dialog).remove();
+            if(personalType=='2') {
+                html += '<p><button class="btn btn-danger" onclick="addCategory()">添加新类别</button></p>';
             }
-        }, "static");
+
+
+            var dialog = confirmDialog(html, "选择类别", function() {
+                var choiceObj = $(dialog).find(".category-list-div").find("button.btn-primary")[0];
+                //console.log(choiceObj);
+                if(!choiceObj) {
+                    showDialog("请选择类别后再点确定");
+                } else {
+                    choiceCate($(choiceObj));
+                    $(dialog).remove();
+                }
+            }, "static");
+        });
+
         //showDialog("-------");
     });
 
@@ -62,7 +72,8 @@ function addCategory() {
         if(!name) {
             showDialog("请输入类别名称");
         } else {
-            $.post("/wx/finance/addCategory", {name: name}, function(res) {
+            var storeSn = $("input[name='storeSn']:checked").val();
+            $.post("/wx/finance/addCategory", {name: name, storeSn: storeSn}, function(res) {
                 //console.log(res)
                 if(!res.id || res.id == null) {showDialog("已经存在相似的名称，请更换后重新添加", "系统提示");}
                 else {

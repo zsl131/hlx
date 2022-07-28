@@ -3,12 +3,14 @@ package com.zslin.finance.controller;
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.annotations.Token;
 import com.zslin.basic.repository.SimplePageBuilder;
+import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.basic.tools.PinyinToolkit;
 import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.finance.dao.IFinanceCategoryDao;
 import com.zslin.finance.model.FinanceCategory;
+import com.zslin.multi.dao.IStoreDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -25,12 +27,16 @@ public class AdminFinanceCategoryController {
     @Autowired
     private IFinanceCategoryDao financeCategoryDao;
 
+    @Autowired
+    private IStoreDao storeDao;
+
     @GetMapping(value = "list")
     @AdminAuth(name = "财务类别管理", orderNum = 1, type = "1", icon = "fa fa-desktop")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<FinanceCategory> datas = financeCategoryDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
-                SimplePageBuilder.generate(page));
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
+        model.addAttribute("storeList", storeDao.findByStatus("1"));
         return "admin/finance/financeCategory/list";
     }
 
@@ -39,7 +45,7 @@ public class AdminFinanceCategoryController {
     @RequestMapping(value="add", method= RequestMethod.GET)
     public String add(Model model, HttpServletRequest request) {
         model.addAttribute("financeCategory", new FinanceCategory());
-
+        model.addAttribute("storeList", storeDao.findByStatus("1"));
         return "admin/finance/financeCategory/add";
     }
 
@@ -60,7 +66,7 @@ public class AdminFinanceCategoryController {
     public String update(Model model, @PathVariable Integer id, HttpServletRequest request) {
         FinanceCategory c = financeCategoryDao.findOne(id);
         model.addAttribute("category", c);
-
+        model.addAttribute("storeList", storeDao.findByStatus("1"));
         return "admin/finance/financeCategory/update";
     }
 

@@ -2,10 +2,7 @@ package com.zslin.basic.repository;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 /**
@@ -61,7 +58,50 @@ public class SimpleSpecification<T> implements Specification<T> {
         return resultPre;
     }
 
+    private Expression<T>[] buildExpression(Root<T> root, CriteriaBuilder criteriaBuilder, String [] params) {
+        Expression<T>[] res = new Expression[params.length];
+        for(int i=0;i<params.length;i++) {
+            res[i] = buildExpression(root, criteriaBuilder, params[i]);
+        }
+        return res;
+    }
+
+    private Expression buildExpression(Root<T> root, CriteriaBuilder criteriaBuilder, String param) {
+        if(param.startsWith(SpecificationOperator.FUNCTION_FIELD_PRE)) {
+            param = param.replace(SpecificationOperator.FUNCTION_FIELD_PRE, "");
+            return root.get(param);
+        } else {
+            param = param.replace(SpecificationOperator.FUNCTION_VALUE_PRE, "");
+            return criteriaBuilder.literal(param);
+        }
+    }
+
+    private Predicate buildFunction(Root<T> root,CriteriaBuilder criteriaBuilder, SpecificationOperator op) {
+        if(!isFunction(op)) {return null;}
+        String oper = op.getOper();
+        if(EQUAL.equalsIgnoreCase(oper)) {
+            return criteriaBuilder.equal(criteriaBuilder.function(op.getFunction(), op.getFunReturnClass(), buildExpression(root, criteriaBuilder, op.getFunParams())), op.getValue());
+        } if(GRATE_EQUAL.equalsIgnoreCase(oper)) {
+            return criteriaBuilder.ge(criteriaBuilder.function(op.getFunction(), op.getFunReturnClass(), buildExpression(root, criteriaBuilder, op.getFunParams())), (Number)op.getValue());
+        } else if(LESS_EQUAL.equalsIgnoreCase(oper)) {
+            return criteriaBuilder.le(criteriaBuilder.function(op.getFunction(), op.getFunReturnClass(), buildExpression(root, criteriaBuilder, op.getFunParams())), (Number)op.getValue());
+        } else if(GRATE_THEN.equalsIgnoreCase(oper)) {
+            return criteriaBuilder.gt(criteriaBuilder.function(op.getFunction(), op.getFunReturnClass(), buildExpression(root, criteriaBuilder, op.getFunParams())), (Number)op.getValue());
+        } else if(LESS_THEN.equalsIgnoreCase(oper)) {
+            return criteriaBuilder.lt(criteriaBuilder.function(op.getFunction(), op.getFunReturnClass(), buildExpression(root, criteriaBuilder, op.getFunParams())), (Number)op.getValue());
+        } else {
+            return null;
+        }
+    }
+
+    private boolean isFunction(SpecificationOperator op) {
+        return op.getFunction()!=null && !"".equals(op.getFunction().trim());
+    }
+
     private Predicate generatePredicate(Root<T> root,CriteriaBuilder criteriaBuilder, SpecificationOperator op) {
+        Predicate res = null;
+        if(isFunction(op)) {res = buildFunction(root, criteriaBuilder, op);}
+        if(res!=null) {return res;}
         /*
         * 根据不同的操作符返回特定的查询*/
         if(EQUAL.equalsIgnoreCase(op.getOper())) {
@@ -71,6 +111,7 @@ public class SimpleSpecification<T> implements Specification<T> {
         } else if(LESS_EQUAL.equalsIgnoreCase(op.getOper())) {
             return criteriaBuilder.le(root.get(op.getKey()),(Number)op.getValue());
         } else if(GRATE_THEN.equalsIgnoreCase(op.getOper())) {
+//            return criteriaBuilder.gt(criteriaBuilder.function("", Integer.class, criteriaBuilder.literal(""), root.get(op.getKey())), (Number)op.getValue());
             return criteriaBuilder.gt(root.get(op.getKey()),(Number)op.getValue());
         } else if(LESS_THEN.equalsIgnoreCase(op.getOper())) {
             return criteriaBuilder.lt(root.get(op.getKey()),(Number)op.getValue());

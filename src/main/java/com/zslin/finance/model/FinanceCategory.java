@@ -14,6 +14,9 @@ public class FinanceCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    /** 适用于哪些店铺 */
+    private String storeSns;
+
     private String name;
 
     private String remark;

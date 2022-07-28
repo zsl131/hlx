@@ -48,6 +48,8 @@ public class FinancePersonal {
 
     private String storeSn;
 
+    private String storeSns;
+
     private String storeName;
 
     /** 是否股东，1-表示可以查看财务信息 */

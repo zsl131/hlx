@@ -24,6 +24,10 @@ $(function() {
         $("input[name='storeName']").val(name);*/
         rebuildPartStore();
     })
+
+    $("input[name='singleStore']").change(function() {
+        rebuildStore();
+    })
     $("input[name='cashStore']").change(function() {
     //        console.log($(this).val());
             /*var name = $(this).parent("span").find("label").html();
@@ -41,10 +45,16 @@ function initPartStore() {
     })
 
     var csns = $("input[name='cashStores']").val();
-        csns.split(";").map((item) => {
-    //        console.log(item)
-            $("input[name='cashStore'][value='"+item+"']").attr("checked", true);
-        })
+    csns.split(";").map((item) => {
+//        console.log(item)
+        $("input[name='cashStore'][value='"+item+"']").attr("checked", true);
+    })
+
+    var stores = $("input[name='storeSns']").val();
+    stores.split(",").map((item) => {
+//        console.log(item)
+        $("input[name='singleStore'][value='"+item+"']").attr("checked", true);
+    })
 }
 
 function rebuildCashStore() {
@@ -67,10 +77,24 @@ function rebuildPartStore() {
         res += storeSn+";";
         console.log($(this).val());
 //        console.log($(this).attr("checked"))
-        var name = $(this).parent("span").find("label").html();
-        $("input[name='storeName']").val(name);
+//         var name = $(this).parent("span").find("label").html();
+//         $("input[name='storeName']").val(name);
     })
     $("input[name='partStores']").val(res);
+}
+
+function rebuildStore() {
+    let res = "";
+    let names = "";
+    $("input[name='singleStore']:checked").each(function() {
+        var storeSn = $(this).val();
+        res += storeSn+",";
+//        console.log($(this).attr("checked"))
+        var name = $(this).parent("span").find("label").html();
+        names += name + ";"
+    })
+    $("input[name='storeSns']").val(res);
+    $("input[name='storeName']").val(names);
 }
 
 function checkData() {

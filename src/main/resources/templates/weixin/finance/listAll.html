@@ -43,7 +43,7 @@
                         <span th:text="${obj.storeName}"></span>[<span class="fin-dark" th:text="${obj.cateName}"></span>]<span class="fin-dark" th:text="${obj.title}"></span>
                     </div>
                     <div class="fin-body">
-                        <p>金额：￥<b th:text="${obj.price}"></b>*<b th:text="${obj.amount}"></b>=￥<b th:text="${obj.totalMoney}"></b></p>
+                        <p>金额：￥<b th:text="${#numbers.formatDecimal(obj.price, 1, 'COMMA', 2, 'POINT')}"></b>*<b th:text="${obj.amount}"></b>=￥<b th:text="${#numbers.formatDecimal(obj.totalMoney, 1, 'COMMA', 2, 'POINT')}"></b></p>
                         <p>审核：
                             <span th:switch="${obj.status}" th:remove="tag">
                                 <b th:case="0">未提交审核</b>

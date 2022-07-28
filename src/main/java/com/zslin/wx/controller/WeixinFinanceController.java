@@ -4,9 +4,7 @@ import com.zslin.basic.qiniu.model.QiniuConfig;
 import com.zslin.basic.qiniu.tools.MyFileTools;
 import com.zslin.basic.qiniu.tools.QiniuConfigTools;
 import com.zslin.basic.qiniu.tools.QiniuTools;
-import com.zslin.basic.repository.SimplePageBuilder;
-import com.zslin.basic.repository.SimpleSortBuilder;
-import com.zslin.basic.repository.SpecificationOperator;
+import com.zslin.basic.repository.*;
 import com.zslin.basic.tools.ConfigTools;
 import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
@@ -47,7 +45,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -117,7 +118,7 @@ public class WeixinFinanceController {
 
             List<Store> storeList = null;
             if(personal.getStoreSn() == null || "".equals(personal.getStoreSn())) {
-                storeList = storeDao.findByStatus("1");
+                storeList = storeDao.findByStatus("1", personal.getStoreSns());
             } else {
                 storeList = new ArrayList<>();
                 Store s = new Store();
@@ -149,6 +150,7 @@ public class WeixinFinanceController {
         Account account = accountService.findByOpenid(openid);
         FinancePersonal personal = financePersonalDao.findByOpenid(openid);
 
+        String storeSns = personal.getStoreSns();
         model.addAttribute("account", account);
         model.addAttribute("personal", personal);
         if(personal!=null) {
@@ -159,14 +161,14 @@ public class WeixinFinanceController {
             String type = personal.getType();
             if (FinancePersonal.TYPE_BOSS.equals(type)) { //如果是老板，显示待审核条数
                 model.addAttribute("isBoss", "1");
-                model.addAttribute("needCount", financeDetailDao.findVerifyCount());
+                model.addAttribute("needCount", financeDetailDao.findVerifyCount(storeSns));
             } else if(FinancePersonal.TYPE_VOUCHER.equals(type)) { //如果是财务人员，则显示待财务审核条数
                 model.addAttribute("isVoucher", "1");
-                model.addAttribute("needCount", financeDetailDao.findVoucherCount());
+                model.addAttribute("needCount", financeDetailDao.findVoucherCount(storeSns));
             }
             if("1".equals(personal.getMarkFlag())) { //如果是收货人员，则显示待确认收货条数
                 model.addAttribute("isMark", "1");
-                model.addAttribute("confirmCount", financeDetailDao.findConfirmCount(openid));
+                model.addAttribute("confirmCount", financeDetailDao.findConfirmCount(openid, storeSns));
             }
             model.addAttribute("isOwn", AccountTools.isOwnAdmin(openid));  //判断是否是我自己
         }
@@ -195,7 +197,7 @@ public class WeixinFinanceController {
 
         List<Store> storeList = null;
         if(personal==null || personal.getStoreSn()==null || "".equals(personal.getStoreSn())) {
-            storeList = storeDao.findByStatus("1");
+            storeList = storeDao.findByStatus("1", personal.getStoreSns());
         } else {
             storeList = new ArrayList<>();
             Store s = new Store();
@@ -229,8 +231,8 @@ public class WeixinFinanceController {
         }
 
         List<Store> storeList = null;
-        if(personal==null || personal.getStoreSn()==null || "".equals(personal.getStoreSn())) {
-            storeList = storeDao.findByStatus("1");
+        if(personal==null || personal.getStoreSns()==null || "".equals(personal.getStoreSns())) {
+            storeList = storeDao.findByStatus("1", personal.getStoreSns());
         } else {
             storeList = new ArrayList<>();
             Store s = new Store();
@@ -275,13 +277,15 @@ public class WeixinFinanceController {
 
         FinancePersonal personal = financePersonalDao.findByOpenid(openid);
         if(personal!=null && (FinancePersonal.TYPE_BOSS.equals(personal.getType()) || FinancePersonal.TYPE_VOUCHER.equals(personal.getType()) || AccountTools.isOwnAdmin(openid))) {
-
+            String storeSns = personal.getStoreSns();
             String keyword = request.getParameter("filter_title");
             keyword = (keyword==null?"":keyword.replace("like-", ""));
             model.addAttribute("keyword", keyword);
 
-            Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
+            Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request, buildFunSo(storeSns)),
                     SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
+            /*Page<FinanceDetail> datas = financeDetailDao.findAllByTitle(keyword, storeSns,
+                    SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));*/
             model.addAttribute("datas", datas);
 
 //        model.addAttribute("detailList", financeDetailDao.findVerify());
@@ -301,10 +305,10 @@ public class WeixinFinanceController {
             return "redirect:/wx/finance/index";
         }
 
+        String storeSns = personal.getStoreSns();
         SpecificationOperator so = new SpecificationOperator("status", "eq", "1");
 
-        Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
-                so),
+        Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request, so, buildFunSo(storeSns)),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
 
@@ -322,17 +326,24 @@ public class WeixinFinanceController {
             return "redirect:/wx/finance/index";
         }
 
+        String storeSns = personal.getStoreSns();
         Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
                 new SpecificationOperator("status", "ne", "2", "and"),
                 new SpecificationOperator("confirmStatus", "ne", "2", "or"),
                 new SpecificationOperator("voucherStatus", "ne", "2", "or"),
                 new SpecificationOperator("status", "ne", "-1", "and"),
-                new SpecificationOperator("userOpenid", "eq", openid, "and")),
+                new SpecificationOperator("userOpenid", "eq", openid, "and"),
+                buildFunSo(storeSns)),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
 
 //        model.addAttribute("detailList", financeDetailDao.findVerify());
         return "weixin/finance/listNoEnd";
+    }
+
+    private SpecificationOperator buildFunSo(String storeSns) {
+        return new SpecificationOperator(SimpleSpecification.GRATE_THEN, 0, FunctionConstant.FIND_IN_SET, Integer.class,
+                SpecificationOperator.buildFunctionFieldParam("storeSn"), SpecificationOperator.buildFunctionValueParam(storeSns));
     }
 
     /** 获取待财务审核列表 */
@@ -344,10 +355,11 @@ public class WeixinFinanceController {
         if(personal==null || !FinancePersonal.TYPE_VOUCHER.equals(personal.getType())) { //如果不是财务管理人员或不是财务
             return "redirect:/wx/finance/index";
         }
+        String storeSns = personal.getStoreSns();
         SpecificationOperator so = new SpecificationOperator("voucherStatus", "eq", "1");
 
         Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
-                so),
+                so, buildFunSo(storeSns)),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
         return "weixin/finance/listVoucher";
@@ -367,16 +379,29 @@ public class WeixinFinanceController {
 
         Page<FinanceDetail> datas = financeDetailDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
                 new SpecificationOperator("confirmStatus", "eq", "1", "and"),
-                new SpecificationOperator("confirmOpenid", "eq", openid, "and")),
+                new SpecificationOperator("confirmOpenid", "eq", openid, "and"),
+                buildFunSo(personal.getStoreSns())),
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
 //        model.addAttribute("detailList", financeDetailDao.findConfirm(openid));
         return "weixin/finance/listConfirm";
     }
 
+    private String [] buildStoreArray(String storeSns) {
+        String [] array = storeSns.split(",");
+        return array;
+    }
+
+    private boolean hasExists(String sn, String [] array) {
+        boolean res = false;
+        for(String s: array) {
+            if(s.equalsIgnoreCase(sn)) {res = true; break;}
+        }
+        return res;
+    }
+
     @GetMapping(value = "add")
     public String add(Model model, HttpServletRequest request) {
-        List<Store> storeList = storeDao.findByStatus("1");
         String openid = SessionTools.getOpenid(request);
 
         FinanceDetail fd = financeDetailDao.findOne(openid);
@@ -385,6 +410,14 @@ public class WeixinFinanceController {
         }
         Account account = accountService.findByOpenid(openid);
         FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+
+        String personStoreSn = personal.getStoreSns();
+        List<Store> storeList = storeDao.findByStatus("1", personStoreSn);
+        /*if(personStoreSn!=null && !"".equals(personStoreSn.trim())) {
+            String [] storeSnArray = buildStoreArray(personStoreSn);
+//            storeList.removeIf(s -> !s.getSn().equalsIgnoreCase(personStoreSn));
+            storeList.removeIf(s -> !hasExists(s.getSn(), storeSnArray));
+        }*/
 
         model.addAttribute("account", account);
         model.addAttribute("personal", personal);
@@ -399,12 +432,13 @@ public class WeixinFinanceController {
 
     /** 添加分类 */
     @PostMapping(value = "addCategory")
-    public @ResponseBody FinanceCategory addCategory(String name) {
-        List<FinanceCategory> cateList = financeCategoryDao.listByName(name);
+    public @ResponseBody FinanceCategory addCategory(String name, String storeSn) {
+        List<FinanceCategory> cateList = financeCategoryDao.listByName(storeSn, name);
         if(cateList!=null && cateList.size()>0) {return new FinanceCategory(); } //表示已经存在相似或相同的名称
         else {
             FinanceCategory cate = new FinanceCategory();
             cate.setName(name);
+            cate.setStoreSns(storeSn);
             cate.setFirstSpell(PinyinToolkit.cn2FirstSpell(name));
             cate.setLongSpell(PinyinToolkit.cn2Spell(name, ""));
             financeCategoryDao.save(cate);
@@ -685,6 +719,7 @@ public class WeixinFinanceController {
     @TemplateMessageAnnotation(name = "催促审批提醒", keys = "申请人-申请类型-日期-申请事由-备注")
     public @ResponseBody String notice(Integer id) {
         FinanceDetail fd = financeDetailDao.findOne(id);
+        String storeSn = fd.getStoreSn();
         List<String> openidList = null;
         StringBuffer remark = new StringBuffer();
         boolean needNotice = false;
@@ -699,7 +734,7 @@ public class WeixinFinanceController {
 //                .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep);
 
         if("1".equals(fd.getStatus())) { //可通知审核
-            openidList = financePersonalDao.findByType(FinancePersonal.TYPE_BOSS);
+            openidList = financePersonalDao.findByType(storeSn, FinancePersonal.TYPE_BOSS);
             needNotice = true;
             title = "你是不是忘记审核我了？";
         } else if("1".equals(fd.getConfirmStatus())) { //通知收货人
@@ -708,7 +743,7 @@ public class WeixinFinanceController {
             needNotice = true;
             title = "请尽快检查物品是否收到！";
         } else if("1".equals(fd.getVoucherStatus())) { //通知财务人员
-            openidList = financePersonalDao.findByType(FinancePersonal.TYPE_VOUCHER);
+            openidList = financePersonalDao.findByType(storeSn, FinancePersonal.TYPE_VOUCHER);
             needNotice = true;
             title = "请尽快检查凭证哦！";
         }
@@ -746,6 +781,7 @@ public class WeixinFinanceController {
         String openid = SessionTools.getOpenid(request); //获取当前用户的Openid
         FinancePersonal personal = financePersonalDao.findByOpenid(openid);
         FinanceDetail fd = financeDetailDao.findOne(id); //申请对象
+        String storeSn = fd.getStoreSn();
         String sep = "\\n";
         if("1".equals(status)) { //如果是设置审核中，则需要通知审核人员，报账人自己操作，提交到审核阶段
             //System.out.println("WeixinFinanceController.updateStatus"+verifyOpenids);
@@ -758,7 +794,7 @@ public class WeixinFinanceController {
 //                        .append("单价：").append(fd.getPrice()).append(sep)
 //                        .append("数量：").append(fd.getAmount()).append(sep)
 //                        .append("金额：").append(fd.getTotalMoney()).append(" 元").append(sep);
-                List<String> verifyOpenids = financePersonalDao.findByType(FinancePersonal.TYPE_BOSS);
+                List<String> verifyOpenids = financePersonalDao.findByType(fd.getStoreSn(), FinancePersonal.TYPE_BOSS);
 
                 sendTemplateMessageTools.send2Wx(verifyOpenids, "报销提醒", "/wx/finance/show?id=" + id, "新报账来了...",
                         TemplateMessageTools.field("报销科目", "【"+fd.getStoreName()+"】"+fd.getTitle()),
@@ -787,7 +823,7 @@ public class WeixinFinanceController {
                             TemplateMessageTools.field("报销金额", fd.getPrice()+"元*"+fd.getAmount()+"＝"+fd.getTotalMoney()+"元"),
                             TemplateMessageTools.field("报账人："+fd.getUsername()+sep+"报账日期："+fd.getCreateTime()+sep+"审核人："+personal.getName()));
                 } else if(!"2".equals(fd.getVoucherStatus())) { //如果财务人员没有审核通过，则提交到财务审核
-                    List<String> voucherOpenids = financePersonalDao.findByType(FinancePersonal.TYPE_VOUCHER);
+                    List<String> voucherOpenids = financePersonalDao.findByType(storeSn, FinancePersonal.TYPE_VOUCHER);
                     fd.setVoucherStatus("1");
                     /*StringBuilder remark = new StringBuilder();
                     remark.append("报账人：").append(fd.getUsername()).append(sep)
@@ -865,10 +901,11 @@ public class WeixinFinanceController {
         String openid = SessionTools.getOpenid(request); //获取当前用户的Openid
         FinancePersonal personal = financePersonalDao.findByOpenid(openid); //操作员
         FinanceDetail fd = financeDetailDao.findOne(id); //申请对象
+        String storeSn = fd.getStoreSn();
         String sep = "\\n";
         if("2".equals(status)) { //如果是确认收货，通知财务审核
             reason = "确认收货";
-            List<String> verifyOpenids = financePersonalDao.findByType(FinancePersonal.TYPE_VOUCHER); //财务人员
+            List<String> verifyOpenids = financePersonalDao.findByType(storeSn, FinancePersonal.TYPE_VOUCHER); //财务人员
             StringBuilder remark = new StringBuilder();
             remark.append("报账人：").append(fd.getUsername()).append(sep)
                     .append("对应店铺：").append(fd.getStoreName()).append(sep)

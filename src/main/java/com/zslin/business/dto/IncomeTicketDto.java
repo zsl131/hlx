@@ -14,7 +14,7 @@ public class IncomeTicketDto {
     private String targetDay;
 
     /**
-     * 状态 0-未上传；-1-无法访问；1-正常
+     * 状态 0-未上传；-1-无法访问；-2-未登记收入；1-正常
      */
     private String status = "1";
 

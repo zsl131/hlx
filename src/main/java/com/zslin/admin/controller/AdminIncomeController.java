@@ -50,7 +50,7 @@ public class AdminIncomeController {
                 SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("comeDay_d")));
         model.addAttribute("datas", datas);
 
-        List<Store> storeList = storeDao.findAll();
+        List<Store> storeList = storeDao.findByStatus("1");
         model.addAttribute("storeList", storeList);
         return "admin/income/list";
     }

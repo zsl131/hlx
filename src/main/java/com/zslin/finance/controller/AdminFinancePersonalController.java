@@ -99,6 +99,7 @@ public class AdminFinancePersonalController {
             c.setPartStores(personal.getPartStores());
             c.setIsCasher(personal.getIsCasher());
             c.setCashStores(personal.getCashStores());
+            c.setStoreSns(personal.getStoreSns());
             financePersonalDao.save(c);
         }
         return "redirect:/admin/financePersonal/list";

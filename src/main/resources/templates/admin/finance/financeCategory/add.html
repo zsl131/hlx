@@ -20,6 +20,14 @@
 			<form method="POST" th:object="${financeCategory}" id="dataForm" >
 				<div class="form-group form-group-lg">
 					<div class="input-group">
+						<div class="input-group-addon">店铺：</div>
+						<div class="form-control">
+							<span th:each="store:${storeList}"><input type="radio" name="storeSns" th:value="${store.sn}" th:id="|sn_${store.sn}|" th:checked="${financeCategory.storeSns == store.sn}?'checked'"/><label th:for="|sn_${store.sn}|" th:text="${store.name}">报账人员</label></span>
+						</div>
+					</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="input-group">
 						<div class="input-group-addon">名称：</div>
 						<input name="name" type="text" class="form-control" th:value="${financeCategory.name}" placeholder="请输入名称" />
 					</div>

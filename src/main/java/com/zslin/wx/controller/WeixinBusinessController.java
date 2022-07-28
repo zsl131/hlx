@@ -117,7 +117,7 @@ public class WeixinBusinessController {
     @GetMapping(value = "checkStatus")
     public String checkStatus(Model model, String storeSn, String month) {
         List<Income> incomeList = incomeService.findByMonth(storeSn, month);
-        List<IncomeTicketDto> dtoList = IncomeTicketTools.checkStatus(incomeList);
+        List<IncomeTicketDto> dtoList = IncomeTicketTools.checkStatus(storeSn, month, incomeList);
         model.addAttribute("dtoList", dtoList);
         return "weixin/business/checkStatus";
     }
@@ -318,8 +318,10 @@ public class WeixinBusinessController {
             List<Store> storeList ;
 
             try {
-                String storeSns = personal.getPartStores();
-                storeList = storeDao.findBySns(storeSns.split(";"));
+//                String storeSns = personal.getPartStores();
+//                storeList = storeDao.findBySns(storeSns.split(";"));
+
+                storeList = storeDao.findByStatus("1", personal.getStoreSns());
                 if(storeList!=null && storeList.size()>0) {
                     storeSn = (storeSn==null || "".equals(storeSn.trim()))?storeList.get(0).getSn():storeSn;
                     model.addAttribute("curStoreSn", storeSn);

@@ -90,14 +90,15 @@ public class WeixinIncomeController {
         if((a!=null && AccountTools.isPartner(a.getType())) || personal!=null) { //只有股东或财务人员才可以看
             String month = request.getParameter("filter_comeMonth");
             String sn = request.getParameter("filter_storeSn");
+            String storeSns = personal.getStoreSns();
 
-            System.out.println("========sn="+sn);
-            System.out.println("++++++++storeSN="+storeSn);
+//            System.out.println("========sn="+sn);
+//            System.out.println("++++++++storeSN="+storeSn);
 
             if(sn!=null && sn.indexOf("-")>=0 && (storeSn==null ||"".equals(storeSn))) {storeSn = sn.substring(sn.indexOf("-")+1);}
-            System.out.println("++++2++++storeSN="+storeSn);
+//            System.out.println("++++2++++storeSN="+storeSn);
             storeSn = (storeSn ==null || "".equals(storeSn.trim()))? ClientFileTools.HLX_SN:storeSn;
-            System.out.println("++++3++++storeSN="+storeSn);
+//            System.out.println("++++3++++storeSN="+storeSn);
             Page<Income> datas = incomeService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
                     new SpecificationOperator("storeSn", "eq", storeSn)),
                     SimplePageBuilder.generate(page, 33, SimpleSortBuilder.generateSort("comeDay_d")));
@@ -114,7 +115,7 @@ public class WeixinIncomeController {
             model.addAttribute("month", month);
             model.addAttribute("storeName", ClientFileTools.BUILD_STORE_NAME(storeSn)); //店铺名称
             model.addAttribute("storeSn", storeSn);
-            model.addAttribute("storeList", storeDao.findByStatus("1"));
+            model.addAttribute("storeList", storeDao.findByStatus("1", storeSns));
         }
         return "weixin/income/list";
     }

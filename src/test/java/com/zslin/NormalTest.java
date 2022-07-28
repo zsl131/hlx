@@ -1,7 +1,9 @@
 package com.zslin;
 
 import com.zslin.admin.dto.MyTicketDto;
+import com.zslin.basic.db.dao.IDBBackupDao;
 import com.zslin.basic.db.dto.DBConfig;
+import com.zslin.basic.db.model.DBBackup;
 import com.zslin.basic.db.tools.ExportDBTools;
 import com.zslin.basic.model.AppConfig;
 import com.zslin.basic.qiniu.tools.MyFileTools;
@@ -20,8 +22,10 @@ import com.zslin.card.service.ICardCheckService;
 import com.zslin.card.tools.CardNoTools;
 import com.zslin.client.tools.ClientFileTools;
 import com.zslin.client.tools.RestdayTools;
+import com.zslin.finance.dao.IFinanceCategoryDao;
 import com.zslin.finance.dao.IFinanceDetailDao;
 import com.zslin.finance.imgTools.ImageTextTools;
+import com.zslin.finance.model.FinanceCategory;
 import com.zslin.finance.model.FinanceDetail;
 import com.zslin.finance.model.Supplier;
 import com.zslin.kaoqin.dto.DayDto;
@@ -147,12 +151,57 @@ public class NormalTest {
     @Autowired
     private BusinessTools businessTools;
 
+    @Autowired
+    private IDBBackupDao backupDao;
+
+    @Autowired
+    private IFinanceCategoryDao financeCategoryDao;
+
+    @Test
+    public void test70() {
+        String pattern = "yyyyMMdd";
+        System.out.println(DateTools.buildOneMonthDay("202204", pattern));
+        System.out.println(DateTools.buildOneMonthDay("202205", pattern));
+        System.out.println(DateTools.buildOneMonthDay("202206", pattern));
+        System.out.println(DateTools.buildOneMonthDay("202207", pattern));
+        System.out.println(DateTools.buildOneMonthDay("202208", pattern));
+    }
+
+    @Test
+    public void test69() {
+        List<FinanceCategory> list = financeCategoryDao.queryCategoryByStoreSn("hlx");
+        list.forEach(System.out::println);
+    }
+
+    @Test
+    public void test68() {
+        String month = DateTools.plusDay(-35, "yyyy-MM-dd");
+        System.out.println(month);
+        List<DBBackup> list = backupDao.findByMouth(month);
+        for(DBBackup db: list) {
+            System.out.println(db);
+        }
+    }
+
     @Test
     public void test67() {
-        List<Income> incomeList = incomeService.findByMonth("hlx", "202201");
-        System.out.println(incomeList);
-        List<IncomeTicketDto> dtoList = IncomeTicketTools.checkStatus(incomeList);
+        /*List<Income> incomeList = incomeService.findByMonth("hlx", "202203");
+//        System.out.println(incomeList);
+        List<IncomeTicketDto> dtoList = IncomeTicketTools.checkStatus("hlx", "202203", incomeList);
         System.out.println(dtoList);
+        System.out.println("==========>" + dtoList.size());*/
+        printIncome("hlx", "202204");
+        printIncome("hlx", "202205");
+        printIncome("hlx", "202206");
+        printIncome("hlx", "202207");
+    }
+
+    private void printIncome(String storeSn, String month) {
+        List<Income> incomeList = incomeService.findByMonth(storeSn, month);
+//        System.out.println(incomeList);
+        List<IncomeTicketDto> dtoList = IncomeTicketTools.checkStatus(storeSn, month, incomeList);
+        System.out.println(dtoList);
+        System.out.println("==========>" + dtoList.size());
     }
 
     @Test

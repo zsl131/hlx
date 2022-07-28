@@ -4,8 +4,10 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 日期工具类
@@ -90,6 +92,24 @@ public class DateTools {
         LocalDate localDate = LocalDate.of(year, m, 1);
         //System.out.println(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         return localDate.lengthOfMonth();
+    }
+
+    public static String buildDay(String month, int day, String pattern) {
+        Calendar cal = Calendar.getInstance();
+        int year = Integer.parseInt(month.substring(0, 4));
+        int m = Integer.parseInt(month.substring(4, 6));
+        cal.set(year, m-1, day);
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        return sdf.format(cal.getTime());
+    }
+
+    public static List<String> buildOneMonthDay(String month, String pattern) {
+        int dayAmount = queryDayOfMoney(month);
+        List<String> res = new ArrayList<>();
+        for(int i=1;i<=dayAmount;i++) {
+            res.add(buildDay(month, i, pattern));
+        }
+        return res;
     }
 
     /**

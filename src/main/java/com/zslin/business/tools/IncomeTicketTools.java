@@ -1,5 +1,6 @@
 package com.zslin.business.tools;
 
+import com.zslin.basic.tools.DateTools;
 import com.zslin.business.dto.IncomeTicketDto;
 import com.zslin.web.model.Income;
 import org.apache.http.client.config.RequestConfig;
@@ -17,8 +18,8 @@ import java.util.List;
  */
 public class IncomeTicketTools {
 
-    public static List<IncomeTicketDto> checkStatus(List<Income> incomeList) {
-        List<IncomeTicketDto> res = new ArrayList<>();
+    public static List<IncomeTicketDto> checkStatus(String storeSn, String month, List<Income> incomeList) {
+        List<IncomeTicketDto> existsIncomes = new ArrayList<>();
         for(Income income: incomeList) {
             String status = "1";
             String url = income.getTicketPath();
@@ -28,7 +29,21 @@ public class IncomeTicketTools {
                 String staCode = checkUrlConnection(url);
                 if(!"200".equals(staCode)) {status = "-1";}
             }
-            res.add(new IncomeTicketDto(income.getStoreSn(), income.getComeDay(), status));
+            existsIncomes.add(new IncomeTicketDto(income.getStoreSn(), income.getComeDay(), status));
+        }
+        List<IncomeTicketDto> res = new ArrayList<>();
+        List<String> monthDays = DateTools.buildOneMonthDay(month, "yyyyMMdd");
+        for(String day: monthDays) {
+            boolean exists = false;
+            for(IncomeTicketDto dto: existsIncomes) {
+                if(day.equals(dto.getTargetDay())) {
+                    res.add(dto);
+                    exists = true; break;
+                }
+            }
+            if(!exists) {
+                res.add(new IncomeTicketDto(storeSn, day, "-2"));
+            }
         }
         return res;
     }

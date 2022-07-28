@@ -7,7 +7,7 @@
 
                 <div class="input-group">
                     <span class="input-group-addon">店铺</span>
-                    <select class='filter_element form-control' opt="eq" name='filter_storeSn'>
+                    <select class='filter_element form-control' opt="like" name='filter_storeSns'>
                         <option value="">=全部=</option>
                         <option th:each="store : ${storeList}" th:value="${store.sn}" th:text="${store.name}"></option>
                     </select>

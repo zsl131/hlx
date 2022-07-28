@@ -20,7 +20,7 @@
 
 	<form method="POST" th:object="${personal}" id="dataForm" >
 		<input type="hidden" name="storeName" th:value="${personal.storeName}"/>
-		<div class="form-group form-group-lg">
+		<!--<div class="form-group form-group-lg">
 			<div class="input-group">
 				<div class="input-group-addon">店铺：</div>
 				<div class="form-control">
@@ -28,7 +28,18 @@
 					<span th:each="store:${storeList}"><input type="radio" name="storeSn" th:value="${store.sn}" th:id="|sn_${store.sn}|" th:checked="${personal.storeSn == store.sn}?'checked'"/><label th:for="|sn_${store.sn}|" th:text="${store.name}">报账人员</label></span>
 				</div>
 			</div>
+		</div>-->
+
+		<div class="form-group">
+			<div class="input-group">
+				<div class="input-group-addon">店铺</div>
+				<div class="form-control store-list-div">
+					<span th:each="store: ${storeList}"><input type="checkbox" name="singleStore" th:value="${store.sn}" th:id="'store_'+${store.id}"/><label th:for="'store_'+${store.id}" th:text="${store.name}">汉丽轩</label>&nbsp;&nbsp;&nbsp;</span>
+					<input name="storeSns" type="hidden" th:value="${personal.storeSns}"/>
+				</div>
+			</div>
 		</div>
+
 		<div class="form-group form-group-lg">
 			<div class="input-group">
 				<div class="input-group-addon">姓名：</div>

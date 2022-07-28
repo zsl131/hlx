@@ -5,6 +5,7 @@ import com.zslin.basic.db.dto.DBConfig;
 import com.zslin.basic.db.dto.MySqlInfo;
 import com.zslin.basic.db.model.DBBackup;
 import com.zslin.basic.qiniu.tools.QiniuTools;
+import com.zslin.basic.tools.DateTools;
 import com.zslin.basic.tools.NormalTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 @Component
 public class ExportDBTools {
@@ -42,12 +44,23 @@ public class ExportDBTools {
             save(f.getName()); //保存到数据库
             f.delete(); //上传完成后，删除文件
             f.deleteOnExit();
+            deleteOldData();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    /** 只保留5天的数据 */
+    private void deleteOldData() {
+        String month = DateTools.plusDay(-5, "yyyy-MM-dd");
+        List<DBBackup> list = dbBackupDao.findByMouth(month);
+        for(DBBackup back: list) {
+            qiniuTools.deleteFile(back.getName());
+            dbBackupDao.delete(back);
         }
     }
 

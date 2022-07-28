@@ -4,9 +4,11 @@ import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.tools.NormalTools;
 import com.zslin.multi.dao.IMoneybagDao;
 import com.zslin.multi.dao.IMoneybagDetailDao;
+import com.zslin.multi.dao.IMoneybagSearchRecordDao;
 import com.zslin.multi.dao.IStoreDao;
 import com.zslin.multi.model.Moneybag;
 import com.zslin.multi.model.MoneybagDetail;
+import com.zslin.multi.model.MoneybagSearchRecord;
 import com.zslin.multi.model.Store;
 import com.zslin.weixin.annotation.HasTemplateMessage;
 import com.zslin.weixin.annotation.TemplateMessageAnnotation;
@@ -41,6 +43,9 @@ public class WeixinMoneybagController {
     private IStoreDao storeDao;
 
     @Autowired
+    private IMoneybagSearchRecordDao moneybagSearchRecordDao;
+
+    @Autowired
     private EventTools eventTools;
 
     @Autowired
@@ -58,7 +63,26 @@ public class WeixinMoneybagController {
             bag.setName("未检索到会员信息，请检查手机号码是否正确");
             return bag;
         } //未检索到会员信息
-        else {return bag;}
+        addRecord(bag, phone);
+        return bag;
+    }
+
+    private void addRecord(Moneybag bag, String phone) {
+        try {
+            new Thread(() -> {
+                MoneybagSearchRecord msr = new MoneybagSearchRecord();
+                if(bag!=null && bag.getId()!=null && bag.getId()>0)  {
+                    msr.setName(bag.getName());
+                }
+                msr.setCreateDay(NormalTools.curDate());
+                msr.setCreateTime(NormalTools.curDatetime());
+                msr.setCreateLong(System.currentTimeMillis());
+                msr.setPhone(phone);
+                moneybagSearchRecordDao.save(msr);
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @GetMapping(value = "addDetail")
