@@ -295,7 +295,7 @@ public class ClientSimpleProcessHandler {
         try {storeName = jsonObj.getString("storeName"); } catch (Exception e) { }
         if(storeName==null || "".equals(storeName.trim())) {storeName = ClientFileTools.HLX_NAME; }
 
-        Income income = incomeService.findByComeDay(sn, day, "1");
+        Income income = incomeService.findComeDayForSell(sn, day);
         if(income==null) {
             income = new Income();
             income.setComeDay(day);

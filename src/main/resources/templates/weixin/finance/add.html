@@ -16,7 +16,7 @@
         $(function() {
             $(".target-day").jeDate({
                 isinitVal:true, //初始化日期
-                festival: true, //显示农历
+                festival: false, //显示农历
                 isClear:false,
                 maxDate: curDate(),
         //        skinCell:'jedatered',
@@ -33,12 +33,12 @@
         </div>
 
         <form method="POST" th:object="${detail}" id="dataForm" onsubmit="return checkForm()" enctype="multipart/form-data">
-            <input name="storeName" type="hidden"/>
+            <input name="storeName" type="hidden" th:value="${detail.storeName}"/>
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon">店铺</div>
                     <div class="form-control">
-                        <span th:each="store: ${storeList}"><input type="radio" name="storeSn" th:checked="${store.sn eq personal.storeSn?true:false}" th:value="${store.sn}" th:id="'sn_'+${store.id}"/><label th:for="'sn_'+${store.id}" th:text="${store.name}">汉丽轩</label>&nbsp;&nbsp;&nbsp;</span>
+                        <span th:each="store: ${storeList}"><input type="radio" name="storeSn" th:checked="${store.sn eq detail.storeSn?true:false}" th:value="${store.sn}" th:id="'sn_'+${store.id}"/><label th:for="'sn_'+${store.id}" th:text="${store.name}">汉丽轩</label>&nbsp;&nbsp;&nbsp;</span>
                     </div>
                 </div>
             </div>

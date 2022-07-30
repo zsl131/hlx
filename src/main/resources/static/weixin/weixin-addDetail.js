@@ -7,7 +7,7 @@ function checkBag() {
     else if(!phone || phone.length!=11) {alert("请认真输入顾客手机号码");}
     //else if(!password || password.length!=4) {alert("请认真输入密码，4位纯数字");}
     else {
-        $.post("/weixin/moneybag/queryBag", {phone: phone}, function(bag) {
+        $.post("/wx/moneybag/queryBag", {phone: phone}, function(bag) {
             if(!bag.id) {alert(bag.name);}
 
             else {
@@ -26,7 +26,7 @@ function checkBag() {
 function showDetail(phone) {
     //console.log("phone:::"+phone);
     var msgDialog = showDialog("正在查询，请稍候...", "操作提示");
-    $.post("/weixin/moneybag/showDetail", {phone: phone}, function(res) {
+    $.post("/wx/moneybag/showDetail", {phone: phone}, function(res) {
         $(msgDialog).remove();
         var html = '';
         for(var i=0;i<res.length;i++) {
@@ -78,12 +78,12 @@ function submitDetail() {
     else if(pwd.length!=4) {alert("请输入密码");}
     else {
         $(".submit-btn").attr("disabled", "disabled");
-        $.post("/weixin/moneybag/addDetail", {sn: sn, bagId: bagId, money: money, password: pwd, dealMoney: dealMoney}, function(res) {
+        $.post("/wx/moneybag/addDetail", {sn: sn, bagId: bagId, money: money, password: pwd, dealMoney: dealMoney}, function(res) {
             if(res=='-1') {alert("没有找到会员信息"); setDisabled(false); }
             else if(res=='-2') {alert("没有找到店铺信息"); setDisabled(false); }
             else if(res=='-3') {alert("账户余额不足"); setDisabled(false); }
             else if(res=='-10') {alert("密码不正确"); setDisabled(false); }
-            else {alert("扣款成功"); window.location.href = "/weixin/moneybag/index?sn="+sn;}
+            else {alert("扣款成功"); window.location.href = "/wx/moneybag/index?sn="+sn;}
         }, "json");
     }
 }

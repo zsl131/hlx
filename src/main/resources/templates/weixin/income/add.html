@@ -11,6 +11,23 @@
     <link type="text/css" rel="stylesheet" href="/jedate-new/skin/jedate.css"/>
     <script src="/back-admin/bus/my-date.js"></script>
     <script src="/back-admin/bus/admin-income.js"></script>
+    <style type="text/css">
+        .other-income-title {
+            border-bottom: 1px #ddd solid; padding-bottom: 6px;
+        }
+        .single-income-div {
+            display: flex; height: 100px; border-bottom: 1px #ddd solid; margin:6px 0px; padding: 6px 0px;
+        }
+        .single-income-div div.root-div {
+            flex: 1;
+        }
+        .single-income-div div.ticket-span {
+            overflow: hidden;
+        }
+        .single-income-div div.ticket-span img {
+            width: 100%; height: 100%;
+        }
+    </style>
 
     <script type="text/javascript">
         $(function() {
@@ -22,6 +39,11 @@
                 //var name = sn=="hlx"?"汉丽轩":"签王之王";
                 $("input[name='storeName']").val(name);
             });
+
+            $(".ticket-img").click(function() {
+                const src = $(this).attr("src");
+                showDialog("<img src='"+src+"' style='width: 100%'/>", "收入凭据")
+            })
         });
 
         function checkForm() {
@@ -36,6 +58,7 @@
                 showDialog("请输入金额", "系统提示");
                 return false;
             }
+            $(".submit-btn").attr("disabled", true);
         }
     </script>
 </head>
@@ -59,8 +82,17 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">类别</div>
+                    <div class="form-control">
+                        <input type="radio" name="type" value="1" id="type_1" th:checked="${income.type == '1'}?'checked'"/><label for="type_1">营业收入</label>
+                        <input type="radio" name="type" value="2" id="type_2" th:checked="${income.type == '2'}?'checked'"/><label for="type_2">其他收入</label>
+                    </div>
+                </div>
+            </div>
 
-            <input type="hidden" name="type" value="1"/>
+            <!--<input type="hidden" name="type" value="1"/>-->
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon">人数：</div>
@@ -105,8 +137,26 @@
             <input type="hidden" name="storeSn" th:value="${curStoreSn}" th:if="${param.storeSn eq null}"/>
 
             <input type="hidden" name="tempPath"/>
-            <button type="submit" class="btn btn-primary">确定提交</button>
+            <button type="submit" class="btn btn-primary submit-btn">确定提交</button>
         </form>
+
+        <div class="alert alert-success" th:if="${incomeList ne null and #lists.size(incomeList) gt 0}" style="margin: 12px 0">
+            <p class="other-income-title"><b>其他收入记录(<i th:text="${(income.comeDay eq null or income.comeDay eq '')?day:income.comeDay}" th:remove="tag"></i>)：</b></p>
+            <div th:each="single: ${incomeList}" class="single-income-div">
+                <div class="root-div money-span">
+                    <p>+<b th:text="${single.totalMoney}"></b></p>
+                    <p th:text="${single.createTime}" style="font-size: 12px;"></p>
+                    <p th:text="${(single.phone ne null and single.phone ne '')?single.phone:single.nickname}" style="font-size: 12px;"></p>
+                </div>
+                <div class="root-div ticket-span"><img class="ticket-img" th:src="${single.ticketPath}"/></div>
+            </div>
+        </div>
+
+        <div class="alert alert-info" style="margin: 12px 0px;">
+            <p><b>说明：</b></p>
+            <p><b>营业收入：</b>一天只有一条记录，多次提交会覆盖已有的信息</p>
+            <p><b>其他收入：</b>每提交一次都会作为一条新收入累计到总收入中</p>
+        </div>
     </div>
 </div>
 </body>

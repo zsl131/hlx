@@ -49,7 +49,7 @@
 
                     </div>
                     <div class="weui-cell__ft">
-                        <span th:text="|${#numbers.formatDecimal(obj.totalMoney, 0, 2)} 元|"></span>
+                        <span><span th:text="${obj.type eq '1'?'营业收入':'其他收入'}" style="font-size: 12px;"></span><span th:text="|${#numbers.formatDecimal(obj.totalMoney, 0, 2)} 元|"></span></span>
                     </div>
                 </a>
             </div>

@@ -166,7 +166,9 @@ $(function() {
     });
 
     $(".choice-personal-btn").click(function() {
-        $.post("/wx/finance/listPersonal",{}, function(res) {
+        const storeSn = $("input[name='storeSn']").val();
+        // console.log("storeSn", storeSn)
+        $.post("/wx/finance/listPersonal",{storeSn: storeSn}, function(res) {
             //console.log(res)
             var html = '<p class="personal-list">';
             for(var i=0;i<res.length;i++) {
@@ -204,7 +206,7 @@ $(function() {
             '                    </div>\n' +
             '                </div>\n' +
             '            </div>';
-        var dayDialog = confirmDialog(html, "收货人员管理", function() {
+        var dayDialog = confirmDialog(html, "设置归属日期", function() {
             const targetDay = $(dayDialog).find("input[name='targetDay']").val();
             if(targetDay.length!==8) {alert("日期格式不对");}
             else {
@@ -220,7 +222,7 @@ $(function() {
         }, "static");
         $(".modify-target-day").jeDate({
             isinitVal:true, //初始化日期
-            festival: true, //显示农历
+            festival: false, //显示农历
             isClear:false,
             maxDate: curDate(),
             //        skinCell:'jedatered',
@@ -334,7 +336,8 @@ function addPersonal() {
         else if(!phone) {showDialog("请输入电话", "操作提示");}
         else if(!openid) {showDialog("请选择人员", "操作提示");}
         else {
-            $.post("/wx/finance/savePersonal", {name: name, phone: phone, openid: openid}, function(res) {
+            const storeSn = $("input[name='storeSn']").val();
+            $.post("/wx/finance/savePersonal", {name: name, phone: phone, storeSn: storeSn, openid: openid}, function(res) {
                 if("0"==res) {
                     alert("该微信用户已被添加");
                 } else if("1"==res) {

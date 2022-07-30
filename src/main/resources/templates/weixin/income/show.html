@@ -34,6 +34,13 @@
                     <span th:text="|${#numbers.formatDecimal(income.totalMoney, 0, 2)} 元|" style="color:#00F;"></span>
                 </div>
             </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">收入类别</div>
+                <div class="weui-cell__bd">&nbsp;</div>
+                <div class="weui-cell__ft">
+                    <span th:text="${income.type eq '1'?'营业收入':'其他收入'}"></span>
+                </div>
+            </div>
             <!--<div class="weui-cell">
                 <div class="weui-cell__hd">现金</div>
                 <div class="weui-cell__bd">&nbsp;</div>

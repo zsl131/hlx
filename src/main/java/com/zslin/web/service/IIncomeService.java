@@ -35,7 +35,11 @@ public interface IIncomeService extends BaseRepository<Income, Integer>, JpaSpec
     Integer totalDeskCount(String storeSn, String comeMonth);
 
     @Query("FROM Income WHERE storeSn=?1 AND comeDay=?2 AND type=?3")
-    Income findByComeDay(String storeSn, String comeDay, String type);
+    List<Income> findByComeDay(String storeSn, String comeDay, String type);
+
+    /** 获取某店铺某天的营业收入 */
+    @Query("FROM Income WHERE storeSn=?1 AND comeDay=?2 AND type='1'")
+    Income findComeDayForSell(String storeSn, String comeDay);
 
     @Query("FROM Income WHERE storeSn=?1 AND comeDay=?2 ")
     List<Income> findByComeDay(String storeSn, String comeDay);

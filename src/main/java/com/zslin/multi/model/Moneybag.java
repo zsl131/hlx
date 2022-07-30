@@ -59,4 +59,8 @@ public class Moneybag {
 
     /** 生日审核标记：0-未审核；-1-驳回；1-通过 */
     private String birthStatus = "0";
+
+    private String optName;
+
+    private String optPhone;
 }

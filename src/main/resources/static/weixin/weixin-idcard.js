@@ -29,7 +29,7 @@ function uploadIdPic(obj) {
 
     $(".birthday-input").jeDate({
         isinitVal:false, //初始化日期
-        festival: true, //显示农历
+        festival: false, //显示农历
         isClear:false,
         maxDate: curDate(),
 //        skinCell:'jedatered',

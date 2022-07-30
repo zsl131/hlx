@@ -1,7 +1,7 @@
 $(function() {
     jeDate('#income-day',{
-        isinitVal:true, //初始化日期
-        festival: true, //显示农历
+        isinitVal:false, //初始化日期
+        festival: false, //显示农历
         isClear:false,
         maxDate: curDate(),
         format: 'YYYYMMDD',
@@ -10,6 +10,7 @@ $(function() {
 //            console.log(obj.elem);     //得到当前输入框的ID
 //            console.log(obj.val);      //得到日期生成的值，如：2017-06-16
             var storeSn = $("input[name='curStoreSn']").val();
+            // var type = $("input[name='type']:checked").val();
 //            console.log(storeSn)
             window.location.href = "/wx/income/add?storeSn="+storeSn+"&day="+obj.val;
         }
@@ -46,6 +47,15 @@ $(function() {
             showDialog("<image src='"+url+"' style='width: 100%'/>", "凭证")
         }
     })
+
+    $("input[name='type']").change(function() {
+       const val = $(this).val();
+
+        var storeSn = $("input[name='curStoreSn']").val();
+        var comeDay = $("input[name='comeDay']").val();
+//            console.log(storeSn)
+        window.location.href = "/wx/income/add?storeSn="+storeSn+"&day="+comeDay+"&curType="+val;
+    });
 });
 
 function resetTotalMoney() {

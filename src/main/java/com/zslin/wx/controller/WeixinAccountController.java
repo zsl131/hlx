@@ -31,10 +31,7 @@ import com.zslin.weixin.tools.SendTemplateMessageTools;
 import com.zslin.weixin.tools.TemplateMessageTools;
 import com.zslin.wx.dbtools.ScoreAdditionalDto;
 import com.zslin.wx.dbtools.ScoreTools;
-import com.zslin.wx.tools.AccountTools;
-import com.zslin.wx.tools.EventTools;
-import com.zslin.wx.tools.QrTools;
-import com.zslin.wx.tools.SessionTools;
+import com.zslin.wx.tools.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -221,12 +218,17 @@ public class WeixinAccountController {
             model.addAttribute("chargeCount", memberChargeService.findCount(openid)); //充值次数
 
             if (AccountTools.isPartner(account.getType())) {
-                model.addAttribute("friendOrdersCount", buffetOrderService.findFriendCount(account.getPhone())); //友情折扣的次数
-                Double incomeMoney = incomeService.totalMoney(ClientFileTools.HLX_SN, NormalTools.curDate("yyyyMM"));
-                model.addAttribute("incomeMoney", incomeMoney == null ? 0 : incomeMoney);
+                String storeSns = personal.getStoreSns();
+                String storeSn = FinanceTools.getFirstStoreSn(storeSns);
 
-                Double incomeMoney2 = incomeService.totalMoney(ClientFileTools.QWZW_SN, NormalTools.curDate("yyyyMM"));
-                model.addAttribute("incomeMoney_qwzw", incomeMoney2 == null ? 0 : incomeMoney2);
+                model.addAttribute("friendOrdersCount", buffetOrderService.findFriendCount(account.getPhone())); //友情折扣的次数
+                if(FinanceTools.isNotNull(storeSn)) {
+                    Double incomeMoney = incomeService.totalMoney(storeSn, NormalTools.curDate("yyyyMM"));
+                    model.addAttribute("incomeMoney", incomeMoney == null ? 0 : incomeMoney);
+//
+//                    Double incomeMoney2 = incomeService.totalMoney(ClientFileTools.QWZW_SN, NormalTools.curDate("yyyyMM"));
+//                    model.addAttribute("incomeMoney_qwzw", incomeMoney2 == null ? 0 : incomeMoney2);
+                }
             }
         }
         return "weixin/account/me";

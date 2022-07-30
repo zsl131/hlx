@@ -97,7 +97,9 @@
             <div class="page__bd">
                 <div class="page" style="padding-bottom: 12px;">
                     <div class="" th:each="income: ${incomeList}">
-                        <div class="paid-div-title" style="background:#d98200">收入明细：+<b class="need-rebuild-money" th:attr="money=${income.totalMoney}" len="2" th:text="${income.totalMoney}"></b>元</div>
+                        <div class="paid-div-title" style="background:#d98200">收入明细：+<b class="need-rebuild-money" th:attr="money=${income.totalMoney}" len="2" th:text="${income.totalMoney}"></b>元，
+                            <span th:text="${income.type eq '1'?'营业收入':'其他收入'}" style="font-size: 12px;"></span>
+                        </div>
                         <img th:if="${income.ticketPath ne null and income.ticketPath ne ''}" th:src="${income.ticketPath}" style="width: 100%"/>
                         <span th:if="${income.ticketPath eq null or income.ticketPath eq ''}" style="text-align: center; color:#F00; width: 100%;">未上传收入凭证</span>
                     </div>

@@ -32,6 +32,7 @@ import com.zslin.weixin.tools.TemplateMessageTools;
 import com.zslin.wx.dto.UploadResult;
 import com.zslin.wx.tools.AccountTools;
 import com.zslin.wx.tools.EventTools;
+import com.zslin.wx.tools.FinanceTools;
 import com.zslin.wx.tools.SessionTools;
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.io.FileUtils;
@@ -178,7 +179,8 @@ public class WeixinFinanceController {
                 new SpecificationOperator("confirmStatus", "ne", "2", "or"),
                 new SpecificationOperator("voucherStatus", "ne", "2", "or"),
                 new SpecificationOperator("status", "ne", "-1", "and"),
-                new SpecificationOperator("userOpenid", "eq", openid, "and")),
+                new SpecificationOperator("userOpenid", "eq", openid, "and"),
+                buildFunSo(storeSns)),
                 SimplePageBuilder.generate(0, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("noEndCount", datas.getTotalElements()); //未完成条数
 
@@ -191,12 +193,14 @@ public class WeixinFinanceController {
         String openid = SessionTools.getOpenid(request);
 
         FinancePersonal personal = financePersonalDao.findByOpenid(openid);
-        if(personal==null) {
+        if(personal==null || personal.getStoreSns()==null || "".equals(personal.getStoreSns())) {
             return "redirect:/wx/account/me";
         }
 
-        List<Store> storeList = null;
-        if(personal==null || personal.getStoreSn()==null || "".equals(personal.getStoreSn())) {
+        String storeSns = personal.getStoreSns();
+
+        List<Store> storeList = storeDao.findByStatus("1", storeSns);
+        /*if(personal==null || personal.getStoreSn()==null || "".equals(personal.getStoreSn())) {
             storeList = storeDao.findByStatus("1", personal.getStoreSns());
         } else {
             storeList = new ArrayList<>();
@@ -204,9 +208,14 @@ public class WeixinFinanceController {
             s.setName(personal.getStoreName());
             s.setSn(personal.getStoreSn());
             storeList.add(s);
-        }
+        }*/
         storeSn = (storeSn==null || "".equals(storeSn.trim()))?storeList.get(0).getSn():storeSn;
         day = (day==null || "".equals(day.trim()))?NormalTools.curDate("yyyy-MM-dd"):day;
+
+        String redirectUrl = FinanceTools.authUrl(storeSns, storeSn);
+        if(redirectUrl!=null) {
+            return redirectUrl;
+        }
 
         model.addAttribute("storeList", storeList);
         List<FinanceDetailDto> dtoList = financeDetailDao.findDto(storeSn, day);
@@ -226,12 +235,13 @@ public class WeixinFinanceController {
         String openid = SessionTools.getOpenid(request);
 
         FinancePersonal personal = financePersonalDao.findByOpenid(openid);
-        if(personal==null) {
+        if(personal==null || personal.getStoreSns()==null || "".equals(personal.getStoreSns())) {
             return "redirect:/wx/account/me";
         }
 
-        List<Store> storeList = null;
-        if(personal==null || personal.getStoreSns()==null || "".equals(personal.getStoreSns())) {
+        String storeSns = personal.getStoreSns();
+        List<Store> storeList = storeDao.findByStatus("1", storeSns);
+        /*if(personal==null || personal.getStoreSns()==null || "".equals(personal.getStoreSns())) {
             storeList = storeDao.findByStatus("1", personal.getStoreSns());
         } else {
             storeList = new ArrayList<>();
@@ -239,9 +249,14 @@ public class WeixinFinanceController {
             s.setName(personal.getStoreName());
             s.setSn(personal.getStoreSn());
             storeList.add(s);
-        }
+        }*/
         storeSn = (storeSn==null || "".equals(storeSn.trim()))?storeList.get(0).getSn():storeSn;
         month = (month==null || "".equals(month.trim()))?NormalTools.curDate("yyyy-MM"):month;
+
+        String redirectUrl = FinanceTools.authUrl(storeSns, storeSn);
+        if(redirectUrl!=null) {
+            return redirectUrl;
+        }
 
         model.addAttribute("storeList", storeList);
         List<FinanceDetailDto> dtoList = financeDetailDao.findDtoByMonth(storeSn, month);
@@ -392,14 +407,6 @@ public class WeixinFinanceController {
         return array;
     }
 
-    private boolean hasExists(String sn, String [] array) {
-        boolean res = false;
-        for(String s: array) {
-            if(s.equalsIgnoreCase(sn)) {res = true; break;}
-        }
-        return res;
-    }
-
     @GetMapping(value = "add")
     public String add(Model model, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
@@ -425,6 +432,10 @@ public class WeixinFinanceController {
         model.addAttribute("finDay", NormalTools.curDate());
         model.addAttribute("categoryList", financeCategoryDao.findAll());
         fd = new FinanceDetail();
+        if(storeList.size()==1) {
+            fd.setStoreName(storeList.get(0).getName());
+            fd.setStoreSn(storeList.get(0).getSn());
+        }
         fd.setTargetDay(NormalTools.curDate("yyyyMMdd"));
         model.addAttribute("detail", fd);
         return "weixin/finance/add";
@@ -479,9 +490,17 @@ public class WeixinFinanceController {
 
     @GetMapping(value = "show")
     public String show(Model model, Integer id, HttpServletRequest request) {
-        FinanceDetail detail = financeDetailDao.findOne(id);
         String openid = SessionTools.getOpenid(request);
-        model.addAttribute("personal", financePersonalDao.findByOpenid(openid));
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        FinanceDetail detail = financeDetailDao.findOne(id);
+        if(detail==null) {
+            return "redirect:/wx/finance/index";
+        }
+        String redirectUrl = FinanceTools.authUrl(personal.getStoreSns(), detail.getStoreSn());
+        if(redirectUrl!=null) {
+            return redirectUrl;
+        }
+        model.addAttribute("personal", personal);
         model.addAttribute("openid", openid);
         model.addAttribute("detail", detail);
         model.addAttribute("voucherList", financeVoucherDao.findByTargetTypeAndDetailId(FinanceVoucher.TARGET_TYPE_FIN, id));
@@ -1027,14 +1046,15 @@ public class WeixinFinanceController {
 
     /** 获取收货人员 */
     @PostMapping(value = "listPersonal")
-    public @ResponseBody List<FinancePersonal> listPersonal(HttpServletRequest request) {
-        String openid = SessionTools.getOpenid(request);
-        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
-        String storeSn = personal.getStoreSn();
-        List<FinancePersonal> res ;
+    public @ResponseBody List<FinancePersonal> listPersonal(String storeSn, HttpServletRequest request) {
+//        String openid = SessionTools.getOpenid(request);
+//        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+//        String storeSns = personal.getStoreSns();
+        List<FinancePersonal> res = financePersonalDao.findByMarkFlag("1", storeSn);
+        /*List<FinancePersonal> res ;
         if(storeSn==null || "".equals(storeSn)) {
             res = financePersonalDao.findByMarkFlag("1");
-        } else {res = financePersonalDao.findByMarkFlagAndStoreSn("1", storeSn);}
+        } else {res = financePersonalDao.findByMarkFlagAndStoreSn("1", storeSn);}*/
         return res;
     }
 
@@ -1047,7 +1067,7 @@ public class WeixinFinanceController {
     }
 
     @PostMapping(value = "savePersonal")
-    public @ResponseBody String savePersonal(String name, String phone, String openid, HttpServletRequest request) {
+    public @ResponseBody String savePersonal(String name, String phone, String storeSn, String openid, HttpServletRequest request) {
         Account a = accountService.findByOpenid(openid);
         String curOpenid = SessionTools.getOpenid(request);
         FinancePersonal personal = financePersonalDao.findByOpenid(openid);
@@ -1058,6 +1078,7 @@ public class WeixinFinanceController {
         FinancePersonal curPersonal = financePersonalDao.findByOpenid(curOpenid); //当前用户
         personal.setMarkFlag("1");
         personal.setStoreSn(curPersonal.getStoreSn());
+        personal.setStoreSns(storeSn);
         personal.setStoreName(curPersonal.getStoreName());
         personal.setType("0");
         personal.setPhone(phone);

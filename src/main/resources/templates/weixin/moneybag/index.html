@@ -65,16 +65,16 @@
 
         <div class="row" style="margin-top: 20px;">
             <div class="col-md-6 col-sm-6 col-xs-6 need-center">
-                <a th:href="|/weixin/moneybag/addBag?sn=${sn}|" class="btn btn-primary btn-lg">充值</a>
+                <a th:href="|/wx/moneybag/addBag?sn=${sn}|" class="btn btn-primary btn-lg">充值</a>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 need-center">
-                <a th:href="|/weixin/moneybag/addDetail?sn=${sn}|" class="btn btn-danger btn-lg">消费</a>
+                <a th:href="|/wx/moneybag/addDetail?sn=${sn}|" class="btn btn-danger btn-lg">消费</a>
             </div>
         </div>
 
         <div class="row" style="margin-top: 20px;">
             <div class="col-md-12 col-sm-12 col-xs-12 need-center">
-                <a th:href="|/weixin/moneybag/listDetails?sn=${sn}&day=${day}|">收支详情</a>
+                <a th:href="|/wx/moneybag/listDetails?sn=${sn}&day=${day}|">收支详情</a>
             </div>
             <div class="col-md-12 col-sm-12 col-xs-12 need-center">
                 <a href="javascript:void(0)" class="btn btn-info btn-lg" onclick="onCal()">计算器</a>

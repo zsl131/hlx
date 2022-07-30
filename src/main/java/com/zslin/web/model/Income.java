@@ -98,6 +98,8 @@ public class Income {
 
     private String nickname;
 
+    private String phone;
+
     private String token;
 
     /** 凭证地址 */

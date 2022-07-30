@@ -1,25 +1,40 @@
 package com.zslin.wx.controller;
 
+import com.zslin.basic.repository.SimpleSortBuilder;
+import com.zslin.basic.tools.NormalTools;
+import com.zslin.finance.dao.IFinancePersonalDao;
+import com.zslin.finance.model.FinancePersonal;
 import com.zslin.multi.dao.IMoneybagDao;
 import com.zslin.multi.dao.IMoneybagDetailDao;
 import com.zslin.multi.dao.IMoneybagSearchRecordDao;
 import com.zslin.multi.dao.IStoreDao;
+import com.zslin.multi.model.Moneybag;
+import com.zslin.multi.model.MoneybagDetail;
+import com.zslin.multi.model.MoneybagSearchRecord;
+import com.zslin.multi.model.Store;
 import com.zslin.weixin.annotation.HasTemplateMessage;
+import com.zslin.weixin.annotation.TemplateMessageAnnotation;
 import com.zslin.weixin.tools.SendTemplateMessageTools;
+import com.zslin.weixin.tools.TemplateMessageTools;
 import com.zslin.wx.tools.AccountTools;
+import com.zslin.wx.tools.FinanceTools;
+import com.zslin.wx.tools.SessionTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
-@RequestMapping(value = "weixin/moneybag")
+@RequestMapping(value = "wx/moneybag")
 @HasTemplateMessage
-public class
-WeixinMoneybagController {
+public class WxMoneybagController {
 
     @Autowired
     private IMoneybagDao moneybagDao;
@@ -39,14 +54,13 @@ WeixinMoneybagController {
     @Autowired
     private SendTemplateMessageTools sendTemplateMessageTools;
 
-    @GetMapping(value = "index")
-    public String index(Model model, String day, String sn, HttpServletRequest request) {
-        return "redirect:/wx/moneybag/index?day="+day+"&sn="+sn;
-    }
+    @Autowired
+    private IFinancePersonalDao financePersonalDao;
 
-    /*@PostMapping(value = "queryBag")
+    @PostMapping(value = "queryBag")
     public @ResponseBody Moneybag queryBag(String phone) {
         Moneybag bag = moneybagDao.findByPhone(phone);
+//System.out.println(bag);
         if(bag==null) {
             bag = new Moneybag();
             bag.setName("未检索到会员信息，请检查手机号码是否正确");
@@ -75,28 +89,43 @@ WeixinMoneybagController {
     }
 
     @GetMapping(value = "addDetail")
-    public String addDetail(Model model, String sn) {
+    public String addDetail(Model model, String sn, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        String storeSns = personal.getStoreSns();
+        String targetUrl = FinanceTools.authUrl(storeSns, sn);
+        if(targetUrl!=null) {
+            return targetUrl;
+        }
         model.addAttribute("sn", sn);
         return "weixin/moneybag/addDetail";
     }
 
     @GetMapping(value = "addBag")
-    public String addBag(Model model, String sn) {
-
+    public String addBag(Model model, String sn, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        String storeSns = personal.getStoreSns();
+        String targetUrl = FinanceTools.authUrl(storeSns, sn);
+        if(targetUrl!=null) {
+            return targetUrl;
+        }
         model.addAttribute("sn", sn);
         return "weixin/moneybag/addBag";
     }
 
     @PostMapping(value = "addBag")
-    public @ResponseBody String addBag(String sn, String name, String phone, Float money) {
+    public @ResponseBody String addBag(String sn, String name, String phone, Float money, HttpServletRequest request) {
         Store store = storeDao.findBySn(sn);
         if(store==null) {return "-1"; } //无法创建会员信息，可能店铺信息出错
         Moneybag bag = moneybagDao.findByPhone(phone);
+        String openid = SessionTools.getOpenid(request);
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
         if(bag==null) {
-            bag = addBag(store, name, phone);
+            bag = addBag(store, name, phone, personal);
         }
         if(bag==null) {return "-1"; } //无法创建会员信息，可能店铺信息出错
-        addDetail(bag, store, money, "会员充值", 0f);
+        addDetail(bag, store, money, "会员充值", 0f, personal);
         noticeAdmin(bag, store, money);
         return "1";
     }
@@ -105,6 +134,15 @@ WeixinMoneybagController {
     private void noticeAdmin(Moneybag bag, Store store, Float money) {
         List<String> openids = buildOpenids();
         String sep = "\\n";
+        /*StringBuffer sb = new StringBuffer();
+        sb.append("变化类型：").append("会员充值").append(sep)
+                .append("会员姓名：").append(bag.getName()).append(sep)
+                .append("手机号码：").append(bag.getPhone()).append(sep)
+                .append("变化金额：").append(money).append(sep)
+                .append("当前余额：").append(bag.getMoney()).append(sep)
+                .append("操作店铺：").append(store.getName()).append(sep)
+                .append("如有疑问，请与店长联系。");
+        eventTools.eventRemind(openids, "有会员充值", buildFlagName("1"), DateTools.date2Str(new Date()), sb.toString(), "/wx/account/me");*/
 
         sendTemplateMessageTools.send2Wx(openids, "会员充值提醒", "", "有会员充值啦~",
                 TemplateMessageTools.field("店铺名称", store.getName()),
@@ -114,7 +152,7 @@ WeixinMoneybagController {
                 TemplateMessageTools.field("当前余额："+bag.getMoney()+" 元"+sep+"如果有疑问，请与店长联系。"));
     }
 
-    *//** 查看会员明细 *//*
+    /** 查看会员明细 */
     @PostMapping(value = "showDetail")
     public @ResponseBody List<MoneybagDetail> showDetail(String phone) {
         List<MoneybagDetail> detailList = moneybagDetailDao.findByPhone(phone, SimpleSortBuilder.generateSort("id_d"));
@@ -127,9 +165,9 @@ WeixinMoneybagController {
         return list;
     }
 
-    *//** 消费 *//*
+    /** 消费 */
     @PostMapping(value = "addDetail")
-    public @ResponseBody String addDetail(Integer bagId, String sn, Float money, String password, Float dealMoney) {
+    public @ResponseBody String addDetail(Integer bagId, String sn, Float money, String password, Float dealMoney, HttpServletRequest request) {
         Moneybag bag = moneybagDao.findOne(bagId);
         Store store = storeDao.findBySn(sn);
         if(bag==null) {return "-1";} //没有找到会员信息
@@ -137,15 +175,21 @@ WeixinMoneybagController {
         if(!password.equals(bag.getPassword())) {return "-10";} //密码不正确
         if(money>bag.getMoney()) {return "-3";} //账户余额不足
 
-        addDetail(bag, store, 0-money, store.getName()+"-消费", dealMoney);
+        String openid = SessionTools.getOpenid(request);
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        addDetail(bag, store, 0-money, store.getName()+"-消费", dealMoney, personal);
         return "1";
     }
 
     @TemplateMessageAnnotation(name = "会员消费提醒", keys = "会员卡号-店铺名称-消费金额")
-    private MoneybagDetail addDetail(Moneybag bag, Store store, Float money, String reason, Float dealMoney) {
+    private MoneybagDetail addDetail(Moneybag bag, Store store, Float money, String reason, Float dealMoney, FinancePersonal personal) {
+
         String flag = money>0?MoneybagDetail.FLAG_IN:MoneybagDetail.FLAG_OUT;
         Float surplus = bag.getMoney() + money; //当前剩余金额
         MoneybagDetail detail = new MoneybagDetail();
+        detail.setOptName(personal.getName());
+        detail.setOptPhone(personal.getPhone());
+
         detail.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
         detail.setCreateDate(NormalTools.curDate("yyyyMMdd"));
         detail.setCreateTime(NormalTools.curDate("yyyy-MM-dd HH:mm:ss"));
@@ -180,6 +224,14 @@ WeixinMoneybagController {
         String openid = accountTools.queryOpenid(bag.getPhone());
         if(openid!=null && !"".equals(openid)) {
             String sep = "\\n";
+            /*StringBuffer sb = new StringBuffer();
+            sb.append("变化类型：").append(buildFlagName(detail.getFlag())).append(sep)
+                    .append("变化金额：").append(money).append(" 元").append(sep)
+                    .append("可用余额：").append(surplus).append(money).append(" 元").append(sep)
+                    .append("冻结金额：").append(bag.getFreezeMoney()).append(money).append(" 元").append(sep)
+                    .append("操作店铺：").append(store.getName()).append(sep)
+                    .append("若非本人操作，请及联系我们！");
+            eventTools.eventRemind(openid, "会员账户发生变化", buildFlagName(detail.getFlag()), DateTools.date2Str(new Date()), sb.toString(), "/wx/account/money");*/
 
             //会员卡号-店铺名称-消费金额
             sendTemplateMessageTools.send2Wx(openid, "会员消费提醒", "/wx/account/money", "您的会员账户发生变化啦~",
@@ -197,7 +249,7 @@ WeixinMoneybagController {
         else {return  "消费扣款";}
     }
 
-    private Moneybag addBag(Store store, String name, String phone) {
+    private Moneybag addBag(Store store, String name, String phone, FinancePersonal personal) {
         Moneybag bag = null;
         if(store!=null) { //先初始化钱包，不能存入具体金额，金额在添加详情记录时修改
             bag = new Moneybag();
@@ -210,6 +262,8 @@ WeixinMoneybagController {
             bag.setStoreId(store.getId());
             bag.setStoreName(store.getName());
             bag.setStoreSn(store.getSn());
+            bag.setOptName(personal.getName());
+            bag.setOptPhone(personal.getPhone());
             moneybagDao.save(bag);
         }
         return bag;
@@ -217,6 +271,13 @@ WeixinMoneybagController {
 
     @GetMapping(value = "index")
     public String index(Model model, String day, String sn, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        String storeSns = personal.getStoreSns();
+        String targetUrl = FinanceTools.authUrl(storeSns, sn);
+        if(targetUrl!=null) {
+            return targetUrl;
+        }
         day = buildDay(day); //重构Day
 
         Integer count1 = moneybagDetailDao.queryCount(MoneybagDetail.FLAG_IN, sn, day); //充值笔数
@@ -240,7 +301,15 @@ WeixinMoneybagController {
     }
 
     @GetMapping(value = "listDetails")
-    public String listDetails(Model model, String sn, String day) {
+    public String listDetails(Model model, String sn, String day, HttpServletRequest request) {
+        String openid = SessionTools.getOpenid(request);
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        String storeSns = personal.getStoreSns();
+        String targetUrl = FinanceTools.authUrl(storeSns, sn);
+        if(targetUrl!=null) {
+            return targetUrl;
+        }
+
         day = buildDay(day); //重构Day
         List<MoneybagDetail> detailList = moneybagDetailDao.listByDay(day, sn, SimpleSortBuilder.generateSort("id_d"));
         model.addAttribute("detailList", detailList);
@@ -254,5 +323,5 @@ WeixinMoneybagController {
             day = NormalTools.curDate("yyyyMMdd");
         }
         return day;
-    }*/
+    }
 }

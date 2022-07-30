@@ -1,7 +1,7 @@
 $(function() {
     $("#startTime").jeDate({
         isinitVal:true, //初始化日期
-        festival: true, //显示农历
+        festival: false, //显示农历
         isClear:false,
         minDate: curDate(),
 //        skinCell:'jedatered',

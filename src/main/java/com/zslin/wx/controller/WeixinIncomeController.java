@@ -26,6 +26,7 @@ import com.zslin.web.service.IAccountService;
 import com.zslin.web.service.IIncomeService;
 import com.zslin.wx.dto.UploadResult;
 import com.zslin.wx.tools.AccountTools;
+import com.zslin.wx.tools.FinanceTools;
 import com.zslin.wx.tools.IncomeNoticeTools;
 import com.zslin.wx.tools.SessionTools;
 import net.coobird.thumbnailator.Thumbnails;
@@ -97,7 +98,7 @@ public class WeixinIncomeController {
 
             if(sn!=null && sn.indexOf("-")>=0 && (storeSn==null ||"".equals(storeSn))) {storeSn = sn.substring(sn.indexOf("-")+1);}
 //            System.out.println("++++2++++storeSN="+storeSn);
-            storeSn = (storeSn ==null || "".equals(storeSn.trim()))? ClientFileTools.HLX_SN:storeSn;
+            storeSn = (storeSn ==null || "".equals(storeSn.trim()))? FinanceTools.getFirstStoreSn(storeSns):storeSn;
 //            System.out.println("++++3++++storeSN="+storeSn);
             Page<Income> datas = incomeService.findAll(ParamFilterUtil.getInstance().buildSearch(model, request,
                     new SpecificationOperator("storeSn", "eq", storeSn)),
@@ -140,9 +141,10 @@ public class WeixinIncomeController {
     }
 
     @GetMapping(value = "add")
-    public String add(Model model, String day, String storeSn, HttpServletRequest request) {
+    public String add(Model model, String day, String storeSn, String curType, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        curType = (curType==null || "".equals(curType))?"1":curType;
         if(personal==null || !"1".equals(personal.getIsCasher())) {
             return "redirect:/wx/business/error?errCode=-1";
         }
@@ -150,6 +152,7 @@ public class WeixinIncomeController {
 
         List<Store> storeList ;
         Income income = null;
+        List<Income> incomeList = null;
         try {
             String storeSns = personal.getCashStores();
             storeList = storeDao.findBySns(storeSns.split(";"));
@@ -157,14 +160,22 @@ public class WeixinIncomeController {
                 storeSn = (storeSn==null || "".equals(storeSn.trim()))?storeList.get(0).getSn():storeSn;
                 model.addAttribute("curStoreSn", storeSn);
             }
+            if(!FinanceTools.hasAuth(storeSns, storeSn)) {
+                return "redirect:/wx/business/error?errCode=-1";
+            }
         } catch (Exception e) {
             storeList = new ArrayList<>();
         }
         if(storeSn!=null) {
-            income = incomeService.findByComeDay(storeSn, day, "1");
+            if("1".equals(curType)) {
+                income = incomeService.findComeDayForSell(storeSn, day);
+            } else {
+                incomeList = incomeService.findByComeDay(storeSn, day, curType);
+            }
         }
         if(income==null) {
             income = new Income();
+            income.setType(curType);
             income.setToken(RandomTools.randomString(8).toUpperCase());
         } else {
             if(income.getToken()==null || "".equals(income.getToken().trim())) {
@@ -173,6 +184,7 @@ public class WeixinIncomeController {
         }
         model.addAttribute("income", income);
         model.addAttribute("storeList", storeList);
+        model.addAttribute("incomeList", incomeList);
 
         /*List<Store> storeList = null;
         if(personal==null || personal.getStoreSn()==null || "".equals(personal.getStoreSn())) {
@@ -197,6 +209,11 @@ public class WeixinIncomeController {
         System.out.println(income);
         System.out.println(storeSn);
         System.out.println("====================");*/
+        String openid = SessionTools.getOpenid(request);
+        FinancePersonal personal = financePersonalDao.findByOpenid(openid);
+        if(personal==null || !"1".equals(personal.getIsCasher())) {
+            return "redirect:/wx/business/error?errCode=-1";
+        }
         Float totalMoney = income.getCash()+income.getAlipay()+income.getFfan()+income.getMarket()+income.getMeituan()+income.getMember()+income.getOther()+income.getWeixin();
         BigDecimal bg = new BigDecimal(totalMoney);
         income.setTotalMoney(bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
@@ -216,16 +233,17 @@ public class WeixinIncomeController {
         }
 
         try {
-            String openid = SessionTools.getOpenid(request);
-            Account account = accountService.findByOpenid(openid);
+            /*String openid = SessionTools.getOpenid(request);
+            Account account = accountService.findByOpenid(openid);*/
             income.setOpenid(openid);
-            income.setNickname(account.getNickname());
+            income.setPhone(personal.getPhone());
+            income.setNickname(personal.getName());
         } catch (Exception e) {
 //            e.printStackTrace();
         }
 
         if("1".equals(income.getType())) { //如果是营业收入，需要判断是否已经添加
-            Income oldIn = incomeService.findByComeDay(income.getStoreSn(), comeDay, income.getType());
+            Income oldIn = incomeService.findComeDayForSell(income.getStoreSn(), comeDay);
             if(oldIn!=null) {
                 oldIn.setDeskCount(income.getDeskCount());
                 oldIn.setPeopleCount(income.getPeopleCount());

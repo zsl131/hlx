@@ -72,4 +72,8 @@ public class MoneybagDetail {
 
     /** 消费应付金额 */
     private Float dealMoney = 0f;
+
+    private String optName;
+
+    private String optPhone;
 }
