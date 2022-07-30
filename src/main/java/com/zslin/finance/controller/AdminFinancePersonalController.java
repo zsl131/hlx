@@ -3,6 +3,7 @@ package com.zslin.finance.controller;
 import com.zslin.basic.annotations.AdminAuth;
 import com.zslin.basic.annotations.Token;
 import com.zslin.basic.repository.SimplePageBuilder;
+import com.zslin.basic.repository.SimpleSortBuilder;
 import com.zslin.basic.tools.TokenTools;
 import com.zslin.basic.utils.ParamFilterUtil;
 import com.zslin.finance.dao.IFinancePersonalDao;
@@ -37,7 +38,7 @@ public class AdminFinancePersonalController {
     @AdminAuth(name = "财务人员管理", orderNum = 1, type = "1", icon = "fa fa-user-circle-o")
     public String list(Model model, Integer page, HttpServletRequest request) {
         Page<FinancePersonal> datas = financePersonalDao.findAll(ParamFilterUtil.getInstance().buildSearch(model, request),
-                SimplePageBuilder.generate(page));
+                SimplePageBuilder.generate(page, SimpleSortBuilder.generateSort("id_d")));
         model.addAttribute("datas", datas);
         model.addAttribute("storeList", storeDao.findByStatus("1"));
         return "admin/finance/financePersonal/list";

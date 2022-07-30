@@ -35,7 +35,7 @@
 						<div class="input-group-addon">店铺</div>
 						<div class="form-control store-list-div">
 							<span th:each="store: ${storeList}"><input type="checkbox" name="singleStore" th:value="${store.sn}" th:id="'store_'+${store.id}"/><label th:for="'store_'+${store.id}" th:text="${store.name}">汉丽轩</label>&nbsp;&nbsp;&nbsp;</span>
-							<input name="storeSns" type="hidden1"/>
+							<input name="storeSns" type="hidden"/>
 						</div>
 					</div>
 				</div>

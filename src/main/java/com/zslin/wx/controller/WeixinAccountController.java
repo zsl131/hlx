@@ -218,7 +218,7 @@ public class WeixinAccountController {
             model.addAttribute("chargeCount", memberChargeService.findCount(openid)); //充值次数
 
             if (AccountTools.isPartner(account.getType())) {
-                String storeSns = personal.getStoreSns();
+                String storeSns = personal==null?"":personal.getStoreSns();
                 String storeSn = FinanceTools.getFirstStoreSn(storeSns);
 
                 model.addAttribute("friendOrdersCount", buffetOrderService.findFriendCount(account.getPhone())); //友情折扣的次数
