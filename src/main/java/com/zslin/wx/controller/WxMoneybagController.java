@@ -273,7 +273,7 @@ public class WxMoneybagController {
     public String index(Model model, String day, String sn, HttpServletRequest request) {
         String openid = SessionTools.getOpenid(request);
         FinancePersonal personal = financePersonalDao.findByOpenid(openid);
-        String storeSns = personal.getStoreSns();
+        String storeSns = personal==null?"":personal.getStoreSns();
         String targetUrl = FinanceTools.authUrl(storeSns, sn);
         if(targetUrl!=null) {
             return targetUrl;

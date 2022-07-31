@@ -7,6 +7,7 @@ import com.zslin.multi.dao.IStoreDao;
 import com.zslin.weixin.annotation.HasTemplateMessage;
 import com.zslin.weixin.tools.SendTemplateMessageTools;
 import com.zslin.wx.tools.AccountTools;
+import com.zslin.wx.tools.FinanceTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,6 +42,7 @@ WeixinMoneybagController {
 
     @GetMapping(value = "index")
     public String index(Model model, String day, String sn, HttpServletRequest request) {
+        day = FinanceTools.isNull(day)?"":day;
         return "redirect:/wx/moneybag/index?day="+day+"&sn="+sn;
     }
 

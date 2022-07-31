@@ -5,6 +5,8 @@ $(function() {
         // console.log($(this).val())
         //console.log(name)
         $("input[name='storeName']").val(name);
+        $("input[name='cateName']").val("");
+        $("input[name='cateId']").val("");
     })
 
     $("input[name='cateName']").focus(function() {
@@ -26,7 +28,6 @@ $(function() {
             if(personalType=='2') {
                 html += '<p><button class="btn btn-danger" onclick="addCategory()">添加新类别</button></p>';
             }
-
 
             var dialog = confirmDialog(html, "选择类别", function() {
                 var choiceObj = $(dialog).find(".category-list-div").find("button.btn-primary")[0];
