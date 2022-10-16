@@ -31,6 +31,7 @@
 						<th>顾客</th>
 						<th>消费/余额</th>
 						<th>日期</th>
+						<th>备注</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -48,6 +49,7 @@
 							<p>操作店铺：<span th:text="${obj.optStoreName}"></span></p>
 							<p>日期：<span th:text="${obj.createTime}"></span></p>
 						</td>
+						<td th:text="${obj.reason}"></td>
 						<td>
 							<button class="btn btn-danger" th:if="${obj.freezeFlag eq '1'}" th:attr="objId=${obj.id}" onclick="onUnfreeze(this)">手动解冻</button>
 							<span th:if="${obj.freezeFlag ne '1'}">-</span>

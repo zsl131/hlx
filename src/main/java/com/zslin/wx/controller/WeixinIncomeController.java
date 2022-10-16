@@ -227,9 +227,9 @@ public class WeixinIncomeController {
         income.setCreateDay(NormalTools.curDate("yyyy-MM-dd"));
         income.setCreateTime(NormalTools.curDatetime());
 
-        FinanceVoucher fv = financeVoucherDao.findByTargetToken(income.getToken());
-        if(fv!=null) {
-            income.setTicketPath(fv.getPicPath());
+        List<FinanceVoucher> fvs = financeVoucherDao.findByTargetToken(income.getToken());
+        if(fvs!=null && fvs.size()>0) {
+            income.setTicketPath(fvs.get(0).getPicPath());
         }
 
         try {
